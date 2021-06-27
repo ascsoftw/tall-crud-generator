@@ -1,0 +1,28 @@
+{
+    "name": "ascsoftw/tall-crud-generator",
+    "description": "Laravel Package to generate CRUD Files using TALL Stack",
+    "license": "MIT",
+    "keywords": ["Laravel", "CRUD", "Generator", "TALL", "Livewire"],
+    "autoload": {
+        "psr-4": {
+            "Ascsoftw\\TallCrudGenerator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AscSoftwares",
+            "email": "support@ascsoftwares.com"
+        }
+    ],
+    "require-dev": {
+        "livewire/livewire": "^2.5",
+        "orchestra/testbench": "^6.18"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ascsoftw\\TallCrudGenerator\\TallCrudGeneratorServiceProvider"
+            ]
+        }
+    }
+}

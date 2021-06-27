@@ -1,0 +1,16 @@
+<?php
+
+namespace [namespace];
+
+use Livewire\Component;
+use [modelPath];
+
+class [class] extends Component
+{
+[child_listeners][child_item][child_rules][child_validation_attributes][child_delete_vars][child_add_vars][child_edit_vars]
+
+    public function render()
+    {
+        return view('[view]');
+    }[child_delete_method][child_add_method][child_edit_method]
+}
