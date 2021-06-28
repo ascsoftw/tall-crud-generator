@@ -61,6 +61,7 @@ EOT;
         ##MODEL##::destroy($this->primaryKey);
         $this->confirmingItemDeletion = false;
         $this->primaryKey = '';
+        $this->reset(['item']);
         $this->emitTo('##COMPONENT_NAME##', 'refresh');
     }
 

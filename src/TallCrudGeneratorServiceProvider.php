@@ -20,21 +20,21 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
             TallCrudGeneratorCommand::class,
         ]);
 
-        Blade::component('tall-crud-generator::label', 'label');
-        Blade::component('tall-crud-generator::button', 'button');
-        Blade::component('tall-crud-generator::checkbox-wrapper', 'xcheckbox-wrapper');
-        Blade::component('tall-crud-generator::checkbox', 'checkbox');
-        Blade::component('tall-crud-generator::confirmation-dialog', 'confirmation-dialog');
-        Blade::component('tall-crud-generator::dialog-modal', 'dialog-modal');
-        Blade::component('tall-crud-generator::error-message', 'error-message');
-        Blade::component('tall-crud-generator::h2', 'h2');
-        Blade::component('tall-crud-generator::input', 'input');
-        Blade::component('tall-crud-generator::modal', 'modal');
-        Blade::component('tall-crud-generator::select', 'select');
-        Blade::component('tall-crud-generator::sort-icon', 'sort-icon');
-        Blade::component('tall-crud-generator::table-column', 'table-column');
-        Blade::component('tall-crud-generator::table', 'table');
-        Blade::component('tall-crud-generator::tag', 'tag');
+        Blade::component('tall-crud-generator::label', 'tall-crud-label');
+        Blade::component('tall-crud-generator::button', 'tall-crud-button');
+        Blade::component('tall-crud-generator::checkbox-wrapper', 'tall-crud-checkbox-wrapper');
+        Blade::component('tall-crud-generator::checkbox', 'tall-crud-checkbox');
+        Blade::component('tall-crud-generator::confirmation-dialog', 'tall-crud-confirmation-dialog');
+        Blade::component('tall-crud-generator::dialog-modal', 'tall-crud-dialog-modal');
+        Blade::component('tall-crud-generator::error-message', 'tall-crud-error-message');
+        Blade::component('tall-crud-generator::h2', 'tall-crud-h2');
+        Blade::component('tall-crud-generator::input', 'tall-crud-input');
+        Blade::component('tall-crud-generator::modal', 'tall-crud-modal');
+        Blade::component('tall-crud-generator::select', 'tall-crud-select');
+        Blade::component('tall-crud-generator::sort-icon', 'tall-crud-sort-icon');
+        Blade::component('tall-crud-generator::table-column', 'tall-crud-table-column');
+        Blade::component('tall-crud-generator::table', 'tall-crud-table');
+        Blade::component('tall-crud-generator::tag', 'tall-crud-tag');
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/tall-crud-generator')
