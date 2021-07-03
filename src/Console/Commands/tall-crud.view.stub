@@ -21,5 +21,5 @@
     <div class="mt-4">
         {{ $results->links() }}
     </div>
-[child_component]
+[child_component][flash_component]
 </div>

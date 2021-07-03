@@ -24,5 +24,8 @@
                 "Ascsoftw\\TallCrudGenerator\\TallCrudGeneratorServiceProvider"
             ]
         }
+    },
+    "require": {
+        "ascsoftw/livewire-toast": "^1.0"
     }
 }

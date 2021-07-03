@@ -62,4 +62,12 @@ trait WithBaseHtml
         }
         return $html;
     }
+
+
+    private function _getFlashComponentHtml()
+    {
+        return <<<'EOT'
+@livewire('livewire-toast')
+EOT;
+    }
 }

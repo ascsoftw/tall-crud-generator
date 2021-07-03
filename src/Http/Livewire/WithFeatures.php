@@ -100,4 +100,12 @@ trait WithFeatures
 
         return false;
     }
+
+    private function _isFlashMessageEnabled()
+    {
+        if ($this->flashMessages['enable']) {
+            return true;
+        }
+        return false;
+    }
 }

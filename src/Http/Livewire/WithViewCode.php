@@ -15,6 +15,7 @@ trait WithViewCode
         $return['table_header'] = $this->_generateTableHeader();
         $return['table_slot'] = $this->_generateTableSlot();
         $return['child_component'] = $this->_includeChildComponent();
+        $return['flash_component'] = $this->_includeFlashComponent();
         $return['child']['delete_modal'] = $this->_generateDeleteModal();
         $return['child']['add_modal'] = $this->_generateAddModal();
         $return['child']['edit_modal'] = $this->_generateEditModal();
@@ -89,6 +90,15 @@ trait WithViewCode
         if ($this->_isAddFeatureEnabled() || $this->_isEditFeatureEnabled() || $this->_isDeleteFeatureEnabled()) {
             $componentName = $this->_getChildComponentName();
             return $this->_indent(1) . "@livewire('$componentName')";
+        }
+
+        return '';
+    }
+
+    private function _includeFlashComponent()
+    {
+        if ($this->_isFlashMessageEnabled()) {
+            return $this->_indent(1) . $this->_getFlashComponentHtml();
         }
 
         return '';

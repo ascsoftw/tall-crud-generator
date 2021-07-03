@@ -1,5 +1,5 @@
 # tall-crud-generator
-Laravel Package to generate CRUD Files using TALL Stack
+Laravel Package to generate CRUD Files using TALL Stack. This is not an admin panel generator, it is a package that generates Livewire Components that supports CRUD Features without you having to write any single line of code.
 
 <p align="center">
   <img src="https://media.giphy.com/media/e4sld9tmOsDMMbBztN/giphy.gif">

@@ -17,6 +17,9 @@ class TallCrudGenerator extends Component
     use WithComponentCode;
     use WithTemplates;
 
+    public $totalSteps = 5;
+    public $step = 1;
+
     public $exitCode;
     public $isComplete = false;
     public $generatedCode;
@@ -59,6 +62,16 @@ class TallCrudGenerator extends Component
         ],
     ];
 
+    public $flashMessages = [
+        'enable' => 'true',
+        'text' => [
+            'add' => 'Record Added Successfully',
+            'edit' => 'Record Updated Successfully',
+            'delete' => 'Record Deleted Successfully',
+            'validation_error' => 'Please correct the Errors.',
+        ]
+    ];
+
     public $showAdvanced = false;
 
     protected $rules = [
@@ -78,8 +91,71 @@ class TallCrudGenerator extends Component
         return view('tall-crud-generator::livewire.tall-crud-generator');
     }
 
+    public function moveAhead()
+    {
+        switch ($this->step) {
+            case 1:
+                //Validate Model
+                $this->checkModel();
+                if (!$this->isValidModel) {
+                    return;
+                }
+                break;
+            case 2:
+                //Validate Step 2 Data
+                break;
+            case 3:
+                //Validate Step 3 Data
+                if (!$this->validateSettings()) {
+                    return;
+                }
+                break;
+            case 4:
+                //Validate Step 4 Data
+                $this->isComplete = false;
+                break;
+            case 5:
+                //Validate Step 5 Data
+                $this->validateOnly('componentName');
+                $this->_generateFiles();
+                return;
+                break;
+        }
+
+        $this->resetErrorBag();
+
+        //Increase Step
+        $this->step += 1;
+        $this->_validateStep();
+    }
+
+    public function moveBack()
+    {
+        $this->step -= 1;
+        $this->_validateStep();
+    }
+
+    private function _validateStep()
+    {
+        if ($this->step < 1) {
+            $this->step = 1;
+        }
+
+        if ($this->step > $this->totalSteps) {
+            $this->step = $this->totalSteps;
+        }
+
+        if ($this->step > 1 && !$this->isValidModel) {
+            $this->stp = 1;
+        }
+    }
+
     public function checkModel()
     {
+        if ($this->isValidModel) {
+            return;
+        }
+
         $this->validateOnly('modelPath');
 
         //check class exists
@@ -155,7 +231,6 @@ class TallCrudGenerator extends Component
 
     public function validateSettings()
     {
-        $this->isComplete = false;
         $this->resetValidation('fields');
 
         if (empty($this->fields)) {
@@ -170,31 +245,29 @@ class TallCrudGenerator extends Component
 
         if (!$this->_validateUniqueFields()) {
             $this->addError('fields', 'Please do not select a column more than once.');
-            return;
+            return false;
         }
 
         if (!$this->_validateEachRow()) {
-            return;
+            return false;
         }
 
         if (!$this->_validateDisplayColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Listing Column.');
-            return;
+            return false;
         }
 
         if (!$this->_validateCreateColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Create Column.');
-            return;
+            return false;
         }
 
         if (!$this->_validateEditColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Edit Column.');
-            return;
+            return false;
         }
 
-        $this->validateOnly('componentName');
-
-        $this->_generateFiles();
+        return true;
     }
 
     private function _generateFiles()

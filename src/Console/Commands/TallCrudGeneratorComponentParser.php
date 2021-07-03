@@ -111,6 +111,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[table_header\]/',
                     '/\[table_slot\]/',
                     '/\[child_component\]/',
+                    '/\[flash_component\]/',
                 ],
                 [
                     $props['advancedSettings']['title'],
@@ -120,6 +121,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['html']['table_header'],
                     $props['html']['table_slot'],
                     $props['html']['child_component'],
+                    $props['html']['flash_component'],
                 ],
                 $template
             );

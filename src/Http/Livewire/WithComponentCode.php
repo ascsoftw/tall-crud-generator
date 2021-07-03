@@ -176,10 +176,12 @@ trait WithComponentCode
             [
                 '##MODEL##',
                 '##COMPONENT_NAME##',
+                '##FLASH_MESSAGE##',
             ],
             [
                 $this->_getModelName(),
-                $this->componentName
+                $this->componentName,
+                $this->_getDeleteFlashCode(),
             ],
             $this->_getDeleteMethodTemplate()
         );
@@ -207,12 +209,14 @@ trait WithComponentCode
             [
                 '##MODEL##',
                 '##COMPONENT_NAME##',
-                '##CREATE_FIELDS##'
+                '##CREATE_FIELDS##',
+                '##FLASH_MESSAGE##',
             ],
             [
                 $this->_getModelName(),
                 $this->componentName,
                 $string,
+                $this->_getAddFlashCode(),
             ],
             $this->_getAddMethodTemplate()
         );
@@ -229,10 +233,12 @@ trait WithComponentCode
             [
                 '##MODEL##',
                 '##COMPONENT_NAME##',
+                '##FLASH_MESSAGE##',
             ],
             [
                 $this->_getModelName(),
-                $this->componentName
+                $this->componentName,
+                $this->_getEditFlashCode(),
             ],
             $this->_getEditMethodTemplate()
         );
@@ -284,5 +290,45 @@ trait WithComponentCode
                 );
         }
         return Str::replace('##ATTRIBUTES##', $string, $this->_getchildValidationAttributesTemplate());
+    }
+
+
+    private function _getAddFlashCode()
+    {
+        if (!$this->_isFlashMessageEnabled()) {
+            return '';
+        }
+
+        if (empty($this->flashMessages['text']['add'])) {
+            return '';
+        }
+
+        return Str::replace('##MESSAGE##', $this->flashMessages['text']['add'], $this->_getFlashTriggerTemplate());
+    }
+
+    private function _getEditFlashCode()
+    {
+        if (!$this->_isFlashMessageEnabled()) {
+            return '';
+        }
+
+        if (empty($this->flashMessages['text']['edit'])) {
+            return '';
+        }
+
+        return Str::replace('##MESSAGE##', $this->flashMessages['text']['edit'], $this->_getFlashTriggerTemplate());
+    }
+
+    private function _getDeleteFlashCode()
+    {
+        if (!$this->_isFlashMessageEnabled()) {
+            return '';
+        }
+
+        if (empty($this->flashMessages['text']['delete'])) {
+            return '';
+        }
+
+        return Str::replace('##MESSAGE##', $this->flashMessages['text']['delete'], $this->_getFlashTriggerTemplate());
     }
 }

@@ -62,7 +62,7 @@ EOT;
         $this->confirmingItemDeletion = false;
         $this->primaryKey = '';
         $this->reset(['item']);
-        $this->emitTo('##COMPONENT_NAME##', 'refresh');
+        $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
     }
 
 EOT;
@@ -85,7 +85,7 @@ EOT;
         ##MODEL##::create([##CREATE_FIELDS##
         ]);
         $this->confirmingItemCreation = false;
-        $this->emitTo('##COMPONENT_NAME##', 'refresh');
+        $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
     }
 
 EOT;
@@ -115,7 +115,7 @@ EOT;
         $this->item->save();
         $this->confirmingItemEdition = false;
         $this->primaryKey = '';
-        $this->emitTo('##COMPONENT_NAME##', 'refresh');
+        $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
     }
 
 EOT;
@@ -384,5 +384,13 @@ EOT;
             default:
                 return $this->_getInputFieldTemplate();
         }
+    }
+
+    private function _getFlashTriggerTemplate()
+    {
+        return <<<'EOT'
+
+        $this->emitTo('livewire-toast', 'show', '##MESSAGE##');
+EOT;
     }
 }
