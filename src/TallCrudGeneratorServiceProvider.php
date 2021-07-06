@@ -39,6 +39,7 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         Blade::component('tall-crud-generator::accordion-wrapper', 'tall-crud-accordion-wrapper');
         Blade::component('tall-crud-generator::wizard-step', 'tall-crud-wizard-step');
         Blade::component('tall-crud-generator::sort-fields-table', 'tall-crud-sort-fields-table');
+        Blade::component('tall-crud-generator::loading-indicator', 'tall-crud-loading-indicator');
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/tall-crud-generator')

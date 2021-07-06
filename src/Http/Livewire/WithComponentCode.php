@@ -199,8 +199,14 @@ trait WithComponentCode
         foreach ($fields as $field) {
             $string .= $this->_newLines(1, 3) .
                 Str::replace(
-                    '##COLUMN##',
-                    $field['column'],
+                    [
+                        '##COLUMN##',
+                        '##DEFAULT_VALUE##',
+                    ],
+                    [
+                        $field['column'],
+                        ($field['attributes']['type'] == 'checkbox' ) ? "0" : "''" 
+                    ],
                     $this->_getCreateFieldTemplate()
                 );
         }

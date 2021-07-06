@@ -18,9 +18,13 @@ EOT;
     {
         return <<<EOT
 
-            <div>
+            <div class="flex">
                 <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <span class="ml-3 mt-2" wire:loading.delay wire:target="q">
+                    <x:tall-crud-generator::loading-indicator />
+                </span>
             </div>
+
 EOT;
     }
 
@@ -94,7 +98,7 @@ EOT;
     private function _getCreateFieldTemplate()
     {
         return <<<'EOT'
-'##COLUMN##' => $this->item['##COLUMN##'], 
+'##COLUMN##' => $this->item['##COLUMN##'] ?? ##DEFAULT_VALUE##, 
 EOT;
     }
 
@@ -289,7 +293,7 @@ EOT;
 
         <x-slot name="footer">
             <x:tall-crud-generator::button wire:click="$set('confirmingItemDeletion', false)">##CancelBtnText##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="delete" wire:click="deleteItem()">##DeleteBtnText##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button mode="delete" wire:loading.attr="disabled" wire:click="deleteItem()">##DeleteBtnText##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::confirmation-dialog>
 
@@ -310,7 +314,7 @@ EOT;
 
         <x-slot name="footer">
             <x:tall-crud-generator::button wire:click="$set('confirmingItemCreation', false)">##CancelBtnText##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="add" wire:click="createItem()">##CreateBtnText##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="createItem()">##CreateBtnText##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::dialog-modal>
 
@@ -331,7 +335,7 @@ EOT;
 
         <x-slot name="footer">
             <x:tall-crud-generator::button wire:click="$set('confirmingItemEdition', false)">##CancelBtnText##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="add" wire:click="editItem()">##EditBtnText##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EditBtnText##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::dialog-modal>
 EOT;
