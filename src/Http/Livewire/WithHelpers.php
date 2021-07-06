@@ -173,4 +173,65 @@ trait WithHelpers
 
         return Str::studly(Str::replace('_', ' ', $column));
     }
+
+    private function _getListingFieldsToSort()
+    {
+
+        $order = 0;
+        $collection = collect();
+        if ($this->_needsPrimaryKeyInListing()) {
+            $collection->push(['field' => $this->modelProps['primary_key'], 'order' => ++$order]);
+        }
+
+        foreach ($this->fields as $f) {
+            if ($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) {
+                $collection->push(['field' => $f['column'], 'order' => ++$order]);
+            }
+        }
+
+        return $collection->all();
+    }
+
+    private function _getFormFieldsToSort($addForm = true)
+    {
+        $collection = collect($this->_getFormFields($addForm, !$addForm));
+        $map = $collection->map(function ($item, $key) {
+            return ['field' => $item['column'], 'order' => ++$key];
+        });
+        return $map->all();
+    }
+
+    private function _sortFieldsByOrder($fields)
+    {
+        if (is_array($fields)) {
+            $fields = collect($fields);
+        }
+        $sorted = $fields->sortBy('order');
+        return $sorted->values()->all();
+    }
+
+    private function _getSortedFormFields($addForm = true)
+    {
+        $sortFields = collect($this->_sortFieldsByOrder($this->sortFields[$addForm ? 'add' : 'edit']));
+        $collection = collect($this->_getFormFields($addForm, !$addForm));
+
+        return $sortFields->map(function ($i) use ($collection) {
+            return $collection->firstWhere('column', $i['field']);
+        });
+    }
+
+    private function _getSortedListingFields()
+    {
+
+        $sortFields = collect($this->_sortFieldsByOrder($this->sortFields['listing']));
+        $collection = collect($this->fields);
+
+        return $sortFields->map(function ($i) use ($collection) {
+            $item = $collection->firstWhere('column', $i['field']);
+            if (is_null($item)) {
+                return ['isPrimaryKey' => true];
+            }
+            return $item;
+        });
+    }
 }

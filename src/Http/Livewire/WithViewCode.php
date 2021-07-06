@@ -41,16 +41,17 @@ trait WithViewCode
 
     private function _generateTableHeader()
     {
+
+        $fields = $this->_getSortedListingFields();
         $return = [];
 
-        if ($this->_needsPrimaryKeyInListing()) {
-            $return[] = $this->_getHeaderHtml($this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']), $this->modelProps['primary_key'], true);
-        }
-
-        foreach ($this->fields as $f) {
-            if ($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) {
-                $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
+        foreach ($fields as $f) {
+            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
+                $return[] = $this->_getHeaderHtml($this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']), $this->modelProps['primary_key'], true);
+                continue;
             }
+
+            $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
         }
 
         if ($this->_needsActionColumn()) {
@@ -63,19 +64,19 @@ trait WithViewCode
     private function _generateTableSlot()
     {
         $return = [];
+        $fields = $this->_getSortedListingFields();
 
-        if ($this->_needsPrimaryKeyInListing()) {
-            $return[] = $this->_getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $this->modelProps['primary_key'], $this->_getTableColumnTemplate())
-            );
-        }
-
-        foreach ($this->fields as $f) {
-            if ($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) {
+        foreach ($fields as $f) {
+            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
                 $return[] = $this->_getTableColumnHtml(
-                    Str::replace('##COLUMN_NAME##', $f['column'], $this->_getTableColumnTemplate())
+                    Str::replace('##COLUMN_NAME##', $this->modelProps['primary_key'], $this->_getTableColumnTemplate())
                 );
+                continue;
             }
+
+            $return[] = $this->_getTableColumnHtml(
+                Str::replace('##COLUMN_NAME##', $f['column'], $this->_getTableColumnTemplate())
+            );
         }
 
         if ($this->_needsActionColumn()) {
@@ -129,7 +130,7 @@ trait WithViewCode
             return '';
         }
 
-        $fields = $this->_getFormFields(true, false);
+        $fields = $this->_getSortedFormFields(true);
         $string = '';
         foreach ($fields as $field) {
             $string .=
@@ -170,7 +171,7 @@ trait WithViewCode
         if (!$this->_isEditFeatureEnabled()) {
             return '';
         }
-        $fields = $this->_getFormFields(false, true);
+        $fields = $this->_getSortedFormFields(false);
         $string = '';
         foreach ($fields as $field) {
             $string .=

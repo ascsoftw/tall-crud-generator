@@ -17,17 +17,20 @@ class TallCrudGenerator extends Component
     use WithComponentCode;
     use WithTemplates;
 
-    public $totalSteps = 5;
+    public $totalSteps = 6;
     public $step = 1;
 
     public $exitCode;
     public $isComplete = false;
     public $generatedCode;
+
     public $modelPath = '';
     public $isValidModel = false;
     public $modelProps = [];
 
     public $fields = [];
+    public $sortFields = [];
+
     public $attributeKey;
     public $confirmingAttributes = false;
     public $attributes = [
@@ -68,7 +71,6 @@ class TallCrudGenerator extends Component
             'add' => 'Record Added Successfully',
             'edit' => 'Record Updated Successfully',
             'delete' => 'Record Deleted Successfully',
-            'validation_error' => 'Please correct the Errors.',
         ]
     ];
 
@@ -102,20 +104,27 @@ class TallCrudGenerator extends Component
                 }
                 break;
             case 2:
-                //Validate Step 2 Data
+                //Validate Features
                 break;
             case 3:
-                //Validate Step 3 Data
+                //Validate Fields
                 if (!$this->validateSettings()) {
                     return;
                 }
+
+                //Prepare for Next Step.
+                $this->_getSortFields();
                 break;
             case 4:
-                //Validate Step 4 Data
-                $this->isComplete = false;
+                //Validate Sort Fields
                 break;
             case 5:
-                //Validate Step 5 Data
+                //Validate Advanced Section
+                //Prepare for Next Step.
+                $this->isComplete = false;
+                break;
+            case 6:
+                //Validate Generate Files
                 $this->validateOnly('componentName');
                 $this->_generateFiles();
                 return;
@@ -268,6 +277,59 @@ class TallCrudGenerator extends Component
         }
 
         return true;
+    }
+
+    public function _getSortFields()
+    {
+        $this->sortFields['listing'] = $this->_getListingFieldsToSort();
+        $this->sortFields['add'] = $this->_getFormFieldsToSort(true);
+        $this->sortFields['edit'] = $this->_getFormFieldsToSort(false);
+    }
+
+    public function moveUp($field, $mode)
+    {
+        $collection = collect($this->sortFields[$mode]);
+        $f = $collection->firstWhere('field', $field);
+        $findOrder = $f['order'] - 1;
+
+        $map = $collection->map(function ($item) use ($findOrder, $field) {
+            if ($item['order'] == $findOrder) {
+                $item['order']++;
+                return $item;
+            }
+
+            if ($item['field'] == $field) {
+                $item['order']--;
+                return $item;
+            }
+
+            return $item;
+        });
+
+        $this->sortFields[$mode] = $this->_sortFieldsByOrder($map);
+    }
+
+    public function moveDown($field, $mode)
+    {
+        $collection = collect($this->sortFields[$mode]);
+        $f = $collection->firstWhere('field', $field);
+        $findOrder = $f['order'] + 1;
+
+        $map = $collection->map(function ($item) use ($findOrder, $field) {
+            if ($item['order'] == $findOrder) {
+                $item['order']--;
+                return $item;
+            }
+
+            if ($item['field'] == $field) {
+                $item['order']++;
+                return $item;
+            }
+
+            return $item;
+        });
+
+        $this->sortFields[$mode] = $this->_sortFieldsByOrder($map);
     }
 
     private function _generateFiles()

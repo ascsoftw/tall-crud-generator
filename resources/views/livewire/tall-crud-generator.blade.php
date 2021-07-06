@@ -5,13 +5,15 @@
     '1' => 'Select Model',
     '2' => 'Select Features',
     '3' => 'Select Fields',
-    '4' => 'Advanced Section',
-    '5' => 'Generate Files',
+    '4' => 'Sort Fields',
+    '5' => 'Advanced Section',
+    '6' => 'Generate Files',
     ];
     @endphp
 
+
     <div class="h-32 grid grid-rows-1 grid-flow-col gap-0">
-        @for ($i = 1; $i <= $totalSteps; $i++) <x:tall-crud-generator::wizard-step :active="$i <= $step" :current="$i == $step">
+        @for ($i = 1; $i <= $totalSteps; $i++) <x:tall-crud-generator::wizard-step :active="$i <= $step" :current="$i == $step" :isLast="$i == $totalSteps">
             {{$i}}
             <x-slot name="content">
                 {{$wizardHeadings[$i]}}
@@ -35,4 +37,3 @@
         <x:tall-crud-generator::button class="mr-4" wire:click="moveAhead">{{$step != $totalSteps ? 'Next' : 'Generate Files' }}</x:tall-crud-generator::button>
     </div>
 </div>
-
