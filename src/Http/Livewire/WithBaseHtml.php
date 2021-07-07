@@ -49,6 +49,11 @@ trait WithBaseHtml
         return $this->_getSearchBoxTemplate();
     }
 
+    private function _getPaginationDropdownHtml()
+    {
+        return $this->_getPaginationDropdownTemplate();
+    }
+
     private function _getSelectOptionsHtml($options)
     {
         $options = json_decode($options);

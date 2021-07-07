@@ -63,6 +63,10 @@ class TallCrudGenerator extends Component
             'cancel_button' => 'Cancel',
             'delete_button' => 'Delete',
         ],
+        'table_settings' => [
+            'show_pagination_dropdown' => true,
+            'records_per_page' => 15,
+        ]
     ];
 
     public $flashMessages = [

@@ -11,6 +11,7 @@ trait WithComponentCode
         $return = [];
         $return['sort'] = $this->_generateSortCode();
         $return['search'] = $this->_generateSearchCode();
+        $return['pagination'] = $this->_generatePaginationCode();
 
         $return['child_delete'] = $this->_generateDeleteCode();
         $return['child_add'] = $this->_generateAddCode();
@@ -51,6 +52,19 @@ trait WithComponentCode
             $return['method'] = $this->_getSearchingMethod();
         }
 
+        return $return;
+    }
+
+    private function _generatePaginationCode()
+    {
+        $return = [
+            'vars' => '',
+            'method' => ''
+        ];
+        if ($this->_isPaginationDropdownEnabled()) {
+            $return['vars'] = $this->_getPaginationVars();
+            $return['method'] = $this->_getPaginationDropdownMethod();
+        }
         return $return;
     }
 
@@ -163,6 +177,16 @@ trait WithComponentCode
     private function _getSearchingMethod()
     {
         return $this->_getSearchingMethodTemplate();
+    }
+
+    private function _getPaginationVars()
+    {
+        return Str::replace('##PER_PAGE##', $this->advancedSettings['table_settings']['records_per_page'], $this->_getPaginationVarsTemplate());
+    }
+
+    private function _getPaginationDropdownMethod()
+    {
+        return $this->_getPaginationDropdownMethodTemplate();
     }
 
     private function _getDeleteVars()

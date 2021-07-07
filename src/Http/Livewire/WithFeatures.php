@@ -103,9 +103,12 @@ trait WithFeatures
 
     private function _isFlashMessageEnabled()
     {
-        if ($this->flashMessages['enable']) {
-            return true;
-        }
-        return false;
+        return $this->flashMessages['enable'];
     }
+
+    private function _isPaginationDropdownEnabled()
+    {
+        return $this->advancedSettings['table_settings']['show_pagination_dropdown'];
+    }
+
 }

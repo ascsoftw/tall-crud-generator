@@ -12,6 +12,7 @@ trait WithViewCode
         $return['css_class'] = $this->_isSearchingEnabled() ? 'justify-between' : 'justify-end';
         $return['add_link'] = $this->_generateAddLink();
         $return['search_box'] = $this->_generateSearchBox();
+        $return['pagination_dropdown'] = $this->_generatePaginationDropdown();
         $return['table_header'] = $this->_generateTableHeader();
         $return['table_slot'] = $this->_generateTableSlot();
         $return['child_component'] = $this->_includeChildComponent();
@@ -26,7 +27,7 @@ trait WithViewCode
     {
         if ($this->_isAddFeatureEnabled()) {
             $string = Str::replace('##COMPONENT_NAME##', $this->_getChildComponentName(), $this->_getAddButtonTemplate());
-            return $this->_newLines(1, 3) . $this->_getButtonHtml($this->advancedSettings['text']['add_link'], 'add', $string);
+            return $this->_newLines(1, 2) . $this->_getButtonHtml($this->advancedSettings['text']['add_link'], 'add', $string);
         }
         return '';
     }
@@ -35,6 +36,14 @@ trait WithViewCode
     {
         if ($this->_isSearchingEnabled()) {
             return $this->_getSearchBoxHtml();
+        }
+        return '';
+    }
+
+    private function _generatePaginationDropdown()
+    {
+        if ($this->_isPaginationDropdownEnabled()) {
+            return $this->_getPaginationDropdownHtml();
         }
         return '';
     }

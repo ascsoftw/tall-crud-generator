@@ -67,5 +67,23 @@
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/2" wire:model.defer="flashMessages.text.delete" />
             </div>
         </x:tall-crud-generator::accordion-wrapper>
+
+        <x:tall-crud-generator::accordion-header @click="selected !== 3 ? selected = 3 : selected = null">
+            Table Settings
+        </x:tall-crud-generator::accordion-header>
+        <x:tall-crud-generator::accordion-wrapper x-ref="advancedTab3" x-bind:style="selected == 3 ? 'max-height: ' + $refs.advancedTab3.scrollHeight + 'px' : ''">
+            <x:tall-crud-generator::checkbox-wrapper>
+                <x:tall-crud-generator::label>Show Pagination Dropdown:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="advancedSettings.table_settings.show_pagination_dropdown" />
+            </x:tall-crud-generator::checkbox-wrapper>
+            <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                <x:tall-crud-generator::label>Records Per Page</x:tall-crud-generator::label>
+                <x:tall-crud-generator::select class="block mt-1 w-1/6" wire:model="advancedSettings.table_settings.records_per_page">
+                    @foreach([10, 15, 20, 50] as $p)
+                        <option value="{{$p}}">{{$p}}</option>
+                    @endforeach
+                </x:tall-crud-generator::select>
+            </x:tall-crud-generator::checkbox-wrapper>
+        </x:tall-crud-generator::accordion-wrapper>
     </div>
 </div>

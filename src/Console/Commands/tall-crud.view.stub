@@ -1,17 +1,17 @@
 <div class="mt-8">
-    <div class="text-2xl">
-        <div>[heading]</div> 
+    <div class="flex justify-between">
+        <div class="text-2xl">[heading]</div>[add_link] 
     </div>
 
     <div class="mt-6">
-        <div class="flex [css_class]">[search_box][add_link]
+        <div class="flex [css_class]">[search_box][pagination_dropdown]
         </div>
-        <x:tall-crud-generator::table class="mt-4">
+        <x:tall-crud-generator::table class="mt-4" wire:loading.class.delay="opacity-50">
             <x-slot name="header">
                 [table_header]
             </x-slot>
             @foreach($results as $result)
-                <tr class="hover:bg-gray-300" wire:loading.class="opacity-50">
+                <tr class="hover:bg-gray-300">
                     [table_slot]
                </tr>
             @endforeach

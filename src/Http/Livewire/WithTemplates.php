@@ -24,7 +24,19 @@ EOT;
                     <x:tall-crud-generator::loading-indicator />
                 </span>
             </div>
+EOT;
+    }
 
+    private function _getPaginationDropdownTemplate()
+    {
+        return <<<'EOT'
+
+            <x:tall-crud-generator::select class="block mt-1 w-1/12" wire:model="per_page">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </x:tall-crud-generator::select>
 EOT;
     }
 
@@ -164,6 +176,18 @@ EOT;
 EOT;
     }
 
+    private function _getPaginationDropdownMethodTemplate()
+    {
+        return <<<'EOT'
+
+
+    public function updatingPerPage() 
+    {
+        $this->resetPage();
+    }
+EOT;
+    }
+
     private function _getTableColumnTemplate()
     {
         return <<<'EOT'
@@ -220,6 +244,14 @@ EOT;
         return <<<'EOT'
 
     public $q;
+EOT;
+    }
+
+    private function _getPaginationVarsTemplate()
+    {
+        return <<<'EOT'
+
+    public $per_page = ##PER_PAGE##;
 EOT;
     }
 
