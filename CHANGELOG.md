@@ -10,9 +10,11 @@ All notable changes to this project will be documented in this file.
 - Optionally Display Dropdown to change no. of Records Per Page
 - Minor Bug Fixes
 
+
+## [1.0.1] - 2021-06-28
+- Prefix Blade Component with tall-crud so as to avoid conflicts
+- Reset the item after Delete Process
+
 ## [1.0.0] - 2021-06-27
 - Initial Release
 
-## [1.0.0] - 2021-06-28
-- Prefix Blade Component with tall-crud so as to avoid conflicts
-- Reset the item after Delete Process
