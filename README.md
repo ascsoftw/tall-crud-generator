@@ -70,7 +70,7 @@ This will publish the Views in `resources/views/vendor/tall-crud-generator` dire
 
 ## Features
 
-Following Features are supported:
+Following are some of the Features that are supported:
 - Pagination
 - Sorting
 - Searching
@@ -79,12 +79,16 @@ Following Features are supported:
 - Modal Delete
 - Validations
 - Form Field Type
+- Sorting Fields
+- Flash Messages
+- Configuring No. of Records Per Page
+- Dropdown to change no. of Records Per Page
 
 ## Roadmap
 
 Following Features are in the piepline:
 - Support Model Relations
-- Flash Messages
+- ~~Flash Messages~~
 - Select Dropdown from Related Field
 
 ## Troubleshooting
