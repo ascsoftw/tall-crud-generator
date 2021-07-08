@@ -40,19 +40,24 @@ trait WithHelpers
 
     private function _getDefaultSortableColumn()
     {
-        if ($this->_isPrimaryKeySortable()) {
+        if($this->_isPrimaryKeySortable()) {
             return $this->modelProps['primary_key'];
         }
 
-        $collection = collect($this->fields);
-        $field =  $collection->first(function ($f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) && $f['searchable']) {
+        $collection = collect($this->_getSortedListingFields());
+
+        $field = $collection->first(function($f) {
+            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
+                return false;
+            }
+            if($f['sortable']) {
                 return true;
             }
             return false;
         });
 
         return $field['column'];
+
     }
 
     private function _getSearchableColumns()

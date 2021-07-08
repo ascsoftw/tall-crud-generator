@@ -21,7 +21,7 @@ class [class] extends Component
         return view('[view]', [
             'results' => $results
         ]);
-    }[sort_method][search_method][pagination_method]
+    }[sort_method][search_method][pagination_dropdown_method]
 
     public function query()
     {

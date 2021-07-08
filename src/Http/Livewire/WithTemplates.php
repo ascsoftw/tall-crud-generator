@@ -31,7 +31,7 @@ EOT;
     {
         return <<<'EOT'
 
-            <x:tall-crud-generator::select class="block mt-1 w-1/12" wire:model="per_page">
+            <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>

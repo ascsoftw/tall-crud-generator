@@ -11,6 +11,7 @@ trait WithComponentCode
         $return = [];
         $return['sort'] = $this->_generateSortCode();
         $return['search'] = $this->_generateSearchCode();
+        $return['pagination_dropdown'] = $this->_generatePaginationDropdownCode();
         $return['pagination'] = $this->_generatePaginationCode();
 
         $return['child_delete'] = $this->_generateDeleteCode();
@@ -55,16 +56,26 @@ trait WithComponentCode
         return $return;
     }
 
-    private function _generatePaginationCode()
+    private function _generatePaginationDropdownCode()
     {
         $return = [
-            'vars' => '',
             'method' => ''
         ];
         if ($this->_isPaginationDropdownEnabled()) {
-            $return['vars'] = $this->_getPaginationVars();
+            // $return['vars'] = $this->_getPaginationVars();
             $return['method'] = $this->_getPaginationDropdownMethod();
         }
+        return $return;
+    }
+
+    private function _generatePaginationCode()
+    {
+        $return = [
+            'vars' => ''
+        ];
+
+        $return['vars'] = $this->_getPaginationVars();
+
         return $return;
     }
 
@@ -229,7 +240,7 @@ trait WithComponentCode
                     ],
                     [
                         $field['column'],
-                        ($field['attributes']['type'] == 'checkbox' ) ? "0" : "''" 
+                        ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
                     ],
                     $this->_getCreateFieldTemplate()
                 );

@@ -32,7 +32,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[search_query\]/',
                     '/\[search_vars\]/',
                     '/\[search_method\]/',
-                    '/\[pagination_method\]/',
+                    '/\[pagination_dropdown_method\]/',
                     '/\[pagination_vars\]/',
                 ],
                 [
@@ -47,7 +47,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['code']['search']['query'],
                     $props['code']['search']['vars'],
                     $props['code']['search']['method'],
-                    $props['code']['pagination']['method'],
+                    $props['code']['pagination_dropdown']['method'],
                     $props['code']['pagination']['vars'],
                 ],
                 $template
