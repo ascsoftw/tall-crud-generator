@@ -20,6 +20,7 @@ trait WithViewCode
         $return['child']['delete_modal'] = $this->_generateDeleteModal();
         $return['child']['add_modal'] = $this->_generateAddModal();
         $return['child']['edit_modal'] = $this->_generateEditModal();
+        // dd($return['child']['add_modal']);
         return $return;
     }
 
@@ -165,11 +166,13 @@ trait WithViewCode
                 '##CancelBtnText##',
                 '##CreateBtnText##',
                 '##FIELDS##',
+                '##BTM_FIELDS##'
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
                 $this->advancedSettings['text']['create_button'],
                 $string,
+                $this->_getBtmFields(true),
             ],
             $this->_getAddModalTemplate()
         );
@@ -206,11 +209,13 @@ trait WithViewCode
                 '##CancelBtnText##',
                 '##EditBtnText##',
                 '##FIELDS##',
+                '##BTM_FIELDS##',
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
                 $this->advancedSettings['text']['edit_button'],
                 $string,
+                $this->_getBtmFields(false),
             ],
             $this->_getEditModalTemplate()
         );
@@ -252,5 +257,48 @@ trait WithViewCode
         }
 
         return $this->_newLines(1, 6) . collect($return)->implode($this->_newLines(1, 6)) . $this->_newLines(1, 5);
+    }
+
+    private function _getBtmFields($isAdd= true)
+    {
+        if( $isAdd) {
+            if (!$this->_isBtmAddEnabled()) {
+                return '';
+            }
+        } else {
+            if (!$this->_isBtmEditEnabled()) {
+                return '';
+            }
+        }
+
+        $string = '';
+        foreach($this->belongsToManyRelations as $r) {
+            if( $isAdd && !$r['in_add']) {
+                continue;
+            }
+
+            if( !$isAdd && !$r['in_edit']) {
+                continue;
+            }
+
+            $string .= Str::replace(
+                [
+                    '##HEADING##',
+                    '##RELATION##',
+                    '##FIELDNAME##',
+                    '##DISPLAY_COLUMN##',
+                    '##RELATED_KEY##',
+                ],
+                [
+                    Str::studly($r['relationName']),
+                    $r['relationName'],
+                    $this->_getBtmFieldName($r['relationName']),
+                    $r['displayColumn'],
+                    $r['relatedKey'],
+                ],
+                $this->_getBtmFieldTemplate()
+            );
+        }
+        return $string;
     }
 }

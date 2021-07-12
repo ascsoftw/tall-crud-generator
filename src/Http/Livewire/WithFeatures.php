@@ -111,4 +111,29 @@ trait WithFeatures
         return $this->advancedSettings['table_settings']['show_pagination_dropdown'];
     }
 
+    private function _isBtmEnabled()
+    {
+        return count($this->belongsToManyRelations) > 0 ;
+    }
+
+    private function _isBtmAddEnabled()
+    {
+        $collection = collect($this->belongsToManyRelations);
+        $c = $collection->firstWhere('in_add', true);
+        if(is_null($c)) {
+            return false;
+        }
+        return true;
+    }
+
+    private function _isBtmEditEnabled()
+    {
+        $collection = collect($this->belongsToManyRelations);
+        $c = $collection->firstWhere('in_edit', true);
+        if(is_null($c)) {
+            return false;
+        }
+        return true;
+    }
+
 }

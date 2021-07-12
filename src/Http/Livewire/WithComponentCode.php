@@ -21,6 +21,9 @@ trait WithComponentCode
         $return['child_item'] = $this->_generateChildItem();
         $return['child_rules'] = $this->_generateChildRules();
         $return['child_validation_attributes'] = $this->_generateChildValidationAttributes();
+        $return['child_other_models'] = $this->_generateOtherModelsCode();
+        $return['child_btm_vars'] = $this->_getBtmVars();
+        // dd($return);
         return $return;
     }
 
@@ -252,12 +255,16 @@ trait WithComponentCode
                 '##COMPONENT_NAME##',
                 '##CREATE_FIELDS##',
                 '##FLASH_MESSAGE##',
+                '##BTM_INIT##',
+                '##BTM_ATTACH##',
             ],
             [
                 $this->_getModelName(),
                 $this->componentName,
                 $string,
                 $this->_getAddFlashCode(),
+                $this->_getBtmInitCode(),
+                $this->_getBtmAttachCode(),
             ],
             $this->_getAddMethodTemplate()
         );
@@ -273,13 +280,19 @@ trait WithComponentCode
         return Str::replace(
             [
                 '##MODEL##',
+                '##MODEL_VAR##',
                 '##COMPONENT_NAME##',
                 '##FLASH_MESSAGE##',
+                '##BTM_FETCH##',
+                '##BTM_UPDATE##',
             ],
             [
                 $this->_getModelName(),
+                Str::lower($this->_getModelName()),
                 $this->componentName,
                 $this->_getEditFlashCode(),
+                $this->_getBtmFetchCode(),
+                $this->_getBtmUpdateCode(),
             ],
             $this->_getEditMethodTemplate()
         );
@@ -333,6 +346,34 @@ trait WithComponentCode
         return Str::replace('##ATTRIBUTES##', $string, $this->_getchildValidationAttributesTemplate());
     }
 
+    private function _generateOtherModelsCode()
+    {
+        if (!$this->_isBtmEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach($this->belongsToManyRelations as $r) {
+            $string .= Str::replace('##MODEL##', $r['modelPath'], $this->_getOtherModelTemplate());
+        }
+
+        return $string;
+    }
+
+    private function _getBtmVars()
+    {
+        if (!$this->_isBtmEnabled()) {
+            return '';
+        }
+
+        $collect = collect();
+        foreach ($this->belongsToManyRelations as $r) {
+            $collect->push(Str::replace('##NAME##', $r['relationName'], $this->_getArrayTemplate()));
+            $collect->push(Str::replace('##NAME##', $this->_getBtmFieldName($r['relationName']), $this->_getArrayTemplate()));
+        }
+        return $this->_newLines() . implode($this->_newLines(), $collect->all());
+    }
+
 
     private function _getAddFlashCode()
     {
@@ -371,5 +412,126 @@ trait WithComponentCode
         }
 
         return Str::replace('##MESSAGE##', $this->flashMessages['text']['delete'], $this->_getFlashTriggerTemplate());
+    }
+
+    private function _getBtmInitCode()
+    {
+        if (!$this->_isBtmAddEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach($this->belongsToManyRelations as $r) {
+            if(!$r['in_add']) {
+                continue;
+            }
+
+            $string .= Str::replace(
+                [
+                    '##RELATION##',
+                    '##MODEL##',
+                    '##FIELDNAME##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->_getModelName($r['modelPath']),
+                    $this->_getBtmFieldName($r['relationName'])
+                ],
+                $this->_getBtmInitTemplate()
+            );
+        }
+
+        return $string;
+
+    }
+
+    private function _getBtmAttachCode()
+    {
+        if (!$this->_isBtmAddEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach($this->belongsToManyRelations as $r) {
+            if(!$r['in_add']) {
+                continue;
+            }
+
+            $string .= Str::replace(
+                [
+                    '##RELATION##',
+                    '##FIELDNAME##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->_getBtmFieldName($r['relationName'])
+                ],
+                $this->_getBtmAttachTemplate()
+            );
+        }
+
+        return $string . $this->_newLines(1);
+    }
+
+    private function _getBtmFetchCode()
+    {
+        if (!$this->_isBtmEditEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach($this->belongsToManyRelations as $r) {
+            if(!$r['in_edit']) {
+                continue;
+            }
+
+            $string .= Str::replace(
+                [
+                    '##RELATION##',
+                    '##FIELDNAME##',
+                    '##KEY##',
+                    '##MODEL##',
+                    '##MODEL_VAR##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->_getBtmFieldName($r['relationName']),
+                    $r['relatedKey'],
+                    $this->_getModelName($r['modelPath']),
+                    Str::lower($this->_getModelName()),
+                ],
+                $this->_getBtmFetchTemplate()
+            );
+        }
+
+        return $this->_newLines(1) . $string;
+    }
+
+    private function _getBtmUpdateCode()
+    {
+        if (!$this->_isBtmEditEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach($this->belongsToManyRelations as $r) {
+            if(!$r['in_edit']) {
+                continue;
+            }
+
+            $string .= Str::replace(
+                [
+                    '##RELATION##',
+                    '##FIELDNAME##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->_getBtmFieldName($r['relationName']),
+                ],
+                $this->_getBtmUpdateTemplate()
+            );
+        }
+
+        return $this->_newLines(1) . $string;
     }
 }

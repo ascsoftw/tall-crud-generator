@@ -3,6 +3,7 @@
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 use Exception;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Component;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ class TallCrudGenerator extends Component
     use WithComponentCode;
     use WithTemplates;
 
-    public $totalSteps = 6;
+    public $totalSteps = 7;
     public $step = 1;
 
     public $exitCode;
@@ -30,6 +31,18 @@ class TallCrudGenerator extends Component
 
     public $fields = [];
     public $sortFields = [];
+
+    public $belongsToManyRelation = [
+        'name' => '',
+        'is_valid' => false,
+        'relatedKey' => '',
+        'modelPath' => '',
+        'columns' => [],
+        'displayColumn' => '',
+        'in_add' => true,
+        'in_edit' => true,
+    ];
+    public $belongsToManyRelations = [];
 
     public $attributeKey;
     public $confirmingAttributes = false;
@@ -117,17 +130,23 @@ class TallCrudGenerator extends Component
                 }
 
                 //Prepare for Next Step.
-                $this->_getSortFields();
+                $this->resetRelationsForm();
                 break;
             case 4:
-                //Validate Sort Fields
+                //Relation Fields
+
+                //Prepare for Next Step.
+                $this->_getSortFields();
                 break;
             case 5:
+                //Validate Sort Fields
+                break;
+            case 6:
                 //Validate Advanced Section
                 //Prepare for Next Step.
                 $this->isComplete = false;
                 break;
-            case 6:
+            case 7:
                 //Validate Generate Files
                 $this->validateOnly('componentName');
                 $this->_generateFiles();
@@ -145,6 +164,11 @@ class TallCrudGenerator extends Component
     public function moveBack()
     {
         $this->step -= 1;
+        switch ($this->step) {
+            case 4:
+                $this->resetRelationsForm();
+                break;
+        }
         $this->_validateStep();
     }
 
@@ -161,6 +185,12 @@ class TallCrudGenerator extends Component
         if ($this->step > 1 && !$this->isValidModel) {
             $this->stp = 1;
         }
+    }
+
+    public function resetRelationsForm()
+    {
+        $this->belongsToManyRelation['name'] = '';
+        $this->belongsToManyRelation['is_valid'] = false;
     }
 
     public function checkModel()
@@ -283,7 +313,60 @@ class TallCrudGenerator extends Component
         return true;
     }
 
-    public function _getSortFields()
+    public function validateBelongsToManyRelation()
+    {
+        $this->resetValidation('belongsToManyRelation.name');
+        try {
+            $model = new $this->modelPath();
+            $relationName = $this->belongsToManyRelation['name'];
+            $relation = $model->{$relationName}();
+            if (!$relation instanceof BelongsToMany) {
+                $this->addError('belongsToManyRelation.name', 'Not a Belongs To Many Relation.');
+                return false;
+            }
+
+            $isValid = true;
+            foreach ($this->belongsToManyRelations as $k) {
+                if ($k['relationName'] == $this->belongsToManyRelation['name']) {
+                    $isValid = false;
+                    $this->addError('belongsToManyRelation.name', 'Relation Already Defined.');
+                    break;
+                }
+            }
+            if (!$isValid) {
+                return false;
+            }
+
+            $this->belongsToManyRelation['is_valid'] = true;
+            $this->belongsToManyRelation['relatedKey'] = $relation->getRelatedKeyName();
+            $this->belongsToManyRelation['modelPath'] = get_class($relation->getRelated());
+            $this->belongsToManyRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        } catch (Exception $e) {
+            $this->addError('belongsToManyRelation.name', 'Not a Valid Relation.');
+            return false;
+        }
+    }
+
+    public function addBelongsToManyRelation()
+    {
+        $this->belongsToManyRelations[] = [
+            'relationName' => $this->belongsToManyRelation['name'],
+            'relatedKey' => $this->belongsToManyRelation['relatedKey'],
+            'modelPath' => $this->belongsToManyRelation['modelPath'],
+            'displayColumn' => $this->belongsToManyRelation['displayColumn'],
+            'in_add' => $this->belongsToManyRelation['in_add'],
+            'in_edit' => $this->belongsToManyRelation['in_edit'],
+        ];
+        $this->resetRelationsForm();
+    }
+
+    public function deleteBelongsToManyRelation($i)
+    {
+        unset($this->belongsToManyRelations[$i]);
+        $this->belongsToManyRelations = array_values($this->belongsToManyRelations);
+    }
+
+    private function _getSortFields()
     {
         $this->sortFields['listing'] = $this->_getListingFieldsToSort();
         $this->sortFields['add'] = $this->_getFormFieldsToSort(true);

@@ -92,14 +92,14 @@ EOT;
     {
         $this->confirmingItemCreation = true;
         $this->resetErrorBag();
-        $this->reset(['item']);
+        $this->reset(['item']);##BTM_INIT##
     }
 
     public function createItem() 
     {
         $this->validate();
-        ##MODEL##::create([##CREATE_FIELDS##
-        ]);
+        $item = ##MODEL##::create([##CREATE_FIELDS##
+        ]);##BTM_ATTACH##
         $this->confirmingItemCreation = false;
         $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
     }
@@ -118,17 +118,17 @@ EOT;
     {
         return <<<'EOT'
  
-    public function showEditForm(##MODEL## $item)
+    public function showEditForm(##MODEL## $##MODEL_VAR##)
     {
         $this->resetErrorBag();
-        $this->item = $item;
-        $this->confirmingItemEdition = true;
+        $this->item = $##MODEL_VAR##;
+        $this->confirmingItemEdition = true;##BTM_FETCH##
     }
 
     public function editItem() 
     {
         $this->validate();
-        $this->item->save();
+        $this->item->save();##BTM_UPDATE##
         $this->confirmingItemEdition = false;
         $this->primaryKey = '';
         $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
@@ -341,7 +341,7 @@ EOT;
             Add Record
         </x-slot>
 
-        <x-slot name="content">##FIELDS##
+        <x-slot name="content">##FIELDS####BTM_FIELDS##
         </x-slot>
 
         <x-slot name="footer">
@@ -362,7 +362,7 @@ EOT;
             Edit Record
         </x-slot>
 
-        <x-slot name="content">##FIELDS##
+        <x-slot name="content">##FIELDS####BTM_FIELDS##
         </x-slot>
 
         <x-slot name="footer">
@@ -427,6 +427,79 @@ EOT;
         return <<<'EOT'
 
         $this->emitTo('livewire-toast', 'show', '##MESSAGE##');
+EOT;
+    }
+
+    private function _getArrayTemplate()
+    {
+        return <<<'EOT'
+    public $##NAME## = [];
+EOT;
+    }
+
+    private function _getBtmInitTemplate()
+    {
+        return <<<'EOT'
+
+
+        $this->##RELATION## = ##MODEL##::all();
+        $this->##FIELDNAME## = [];
+EOT;
+    }
+
+    private function _getBtmAttachTemplate()
+    {
+        return <<<'EOT'
+
+        $item->##RELATION##()->attach($this->##FIELDNAME##);
+EOT;
+    }
+
+    private function _getBtmFetchTemplate()
+    {
+        return <<<'EOT'
+
+        $this->##FIELDNAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function( $i) {
+            return (string)$i;
+        })->toArray();
+        $this->##RELATION## = ##MODEL##::all();
+
+EOT;
+    }
+
+    private function _getBtmUpdateTemplate()
+    {
+        return <<<'EOT'
+
+        $this->item->##RELATION##()->sync($this->##FIELDNAME##);
+        $this->##FIELDNAME## = [];
+
+EOT;
+    }
+
+    private function _getOtherModelTemplate()
+    {
+        return <<<'EOT'
+
+use ##MODEL##;
+EOT;
+    }
+
+    private function _getBtmFieldTemplate()
+    {
+
+        return <<<'EOT'
+
+
+            <h2 class="mt-4">##HEADING##</h2>
+            <div class="grid grid-cols-3">
+                @foreach( $##RELATION## as $c)
+                <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                    <x:tall-crud-generator::label>{{$c->##DISPLAY_COLUMN##}}</x:tall-crud-generator::label>
+                    <x:tall-crud-generator::checkbox value="{{ $c->##RELATED_KEY## }}" class="ml-2" wire:model.defer="##FIELDNAME##" />
+                </x:tall-crud-generator::checkbox-wrapper>
+                @endforeach
+            </div>
 EOT;
     }
 }

@@ -7,9 +7,12 @@ use Illuminate\Support\Str;
 
 trait WithHelpers
 {
-    private function _getModelName()
+    private function _getModelName($name = '')
     {
-        return Arr::last(Str::of($this->modelPath)->explode('\\')->all());
+        if(empty($name)) {
+            $name = $this->modelPath;
+        }
+        return Arr::last(Str::of($name)->explode('\\')->all());
     }
 
     private function _newLines($count = 1, $indent = 0)
@@ -167,6 +170,7 @@ trait WithHelpers
                 $columns[] = $f;
             }
         }
+
         return $columns;
     }
 
@@ -178,6 +182,11 @@ trait WithHelpers
 
         return Str::studly(Str::replace('_', ' ', $column));
     }
+
+    private function _getBtmFieldName( $relation )
+    {
+        return 'checked' . Str::studly($relation);
+    } 
 
     private function _getListingFieldsToSort()
     {

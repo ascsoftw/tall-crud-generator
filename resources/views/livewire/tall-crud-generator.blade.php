@@ -5,9 +5,10 @@
     '1' => 'Select Model',
     '2' => 'Select Features',
     '3' => 'Select Fields',
-    '4' => 'Sort Fields',
-    '5' => 'Advanced Section',
-    '6' => 'Generate Files',
+    '4' => 'Relations',
+    '5' => 'Sort Fields',
+    '6' => 'Advanced Section',
+    '7' => 'Generate Files',
     ];
     @endphp
 
