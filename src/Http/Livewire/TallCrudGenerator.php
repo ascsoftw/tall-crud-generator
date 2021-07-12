@@ -20,6 +20,7 @@ class TallCrudGenerator extends Component
 
     public $totalSteps = 7;
     public $step = 1;
+    public $selected = null;
 
     public $exitCode;
     public $isComplete = false;
@@ -107,6 +108,7 @@ class TallCrudGenerator extends Component
 
     public function render()
     {
+        $this->selected = null;
         return view('tall-crud-generator::livewire.tall-crud-generator');
     }
 

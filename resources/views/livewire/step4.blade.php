@@ -1,11 +1,11 @@
 <div>
-    <div x-data="{ selected: null}">
+    <div x-data="{ selected : @entangle('selected').defer}">
         @if($componentProps['create_add_modal'] || $componentProps['create_edit_modal'])
-        <x:tall-crud-generator::accordion-header @click="selected !== 1 ? selected = 1 : selected = null">
+        <x:tall-crud-generator::accordion-header tab="1">
             Belongs To Many
         </x:tall-crud-generator::accordion-header>
 
-        <x:tall-crud-generator::accordion-wrapper x-ref="advancedTab1" x-bind:style="selected == 1 ? 'max-height: ' + $refs.advancedTab1.scrollHeight + 'px' : ''">
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
             <div>
                 <x:tall-crud-generator::label>Enter Relation Name as defined in Model</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text" wire:model.defer="belongsToManyRelation.name" />

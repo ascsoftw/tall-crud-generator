@@ -1,8 +1,8 @@
 <div>
-    <div x-data="{ selected: null}">
-        <x:tall-crud-generator::accordion-header @click="selected !== 1 ? selected = 1 : selected = null">Customize Text</x:tall-crud-generator::accordion-header>
+    <div x-data="{ selected : @entangle('selected').defer}">
+        <x:tall-crud-generator::accordion-header tab="1">Customize Text</x:tall-crud-generator::accordion-header>
 
-        <x:tall-crud-generator::accordion-wrapper x-ref="advancedTab1" x-bind:style="selected == 1 ? 'max-height: ' + $refs.advancedTab1.scrollHeight + 'px' : ''">
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
             <div>
                 <x:tall-crud-generator::label>Heading of Listing Page</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text" wire:model.defer="advancedSettings.title" />
@@ -44,11 +44,11 @@
             </div>
         </x:tall-crud-generator::accordion-wrapper>
 
-        <x:tall-crud-generator::accordion-header @click="selected !== 2 ? selected = 2 : selected = null">
+        <x:tall-crud-generator::accordion-header tab="2">
             Flash Messages
         </x:tall-crud-generator::accordion-header>
 
-        <x:tall-crud-generator::accordion-wrapper x-ref="advancedTab2" x-bind:style="selected == 2 ? 'max-height: ' + $refs.advancedTab2.scrollHeight + 'px' : ''">
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
             <x:tall-crud-generator::checkbox-wrapper>
                 <x:tall-crud-generator::label>Enable Flash Messages:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="flashMessages.enable" />
@@ -68,10 +68,10 @@
             </div>
         </x:tall-crud-generator::accordion-wrapper>
 
-        <x:tall-crud-generator::accordion-header @click="selected !== 3 ? selected = 3 : selected = null">
+        <x:tall-crud-generator::accordion-header tab="3">
             Table Settings
         </x:tall-crud-generator::accordion-header>
-        <x:tall-crud-generator::accordion-wrapper x-ref="advancedTab3" x-bind:style="selected == 3 ? 'max-height: ' + $refs.advancedTab3.scrollHeight + 'px' : ''">
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
             <x:tall-crud-generator::checkbox-wrapper>
                 <x:tall-crud-generator::label>Show Pagination Dropdown:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="advancedSettings.table_settings.show_pagination_dropdown" />
