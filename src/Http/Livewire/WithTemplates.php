@@ -92,13 +92,13 @@ EOT;
     {
         $this->confirmingItemCreation = true;
         $this->resetErrorBag();
-        $this->reset(['item']);##BTM_INIT##
+        $this->reset(['item']);##BTM_INIT####BELONGS_TO_INIT##
     }
 
     public function createItem() 
     {
         $this->validate();
-        $item = ##MODEL##::create([##CREATE_FIELDS##
+        $item = ##MODEL##::create([##CREATE_FIELDS####BELONGS_TO_SAVE##
         ]);##BTM_ATTACH##
         $this->confirmingItemCreation = false;
         $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
@@ -122,7 +122,7 @@ EOT;
     {
         $this->resetErrorBag();
         $this->item = $##MODEL_VAR##;
-        $this->confirmingItemEdition = true;##BTM_FETCH##
+        $this->confirmingItemEdition = true;##BTM_FETCH####BELONGS_TO_INIT##
     }
 
     public function editItem() 
@@ -341,7 +341,7 @@ EOT;
             Add Record
         </x-slot>
 
-        <x-slot name="content">##FIELDS####BTM_FIELDS##
+        <x-slot name="content">##FIELDS####BELONGS_TO_FIELDS####BTM_FIELDS##
         </x-slot>
 
         <x-slot name="footer">
@@ -362,7 +362,7 @@ EOT;
             Edit Record
         </x-slot>
 
-        <x-slot name="content">##FIELDS####BTM_FIELDS##
+        <x-slot name="content">##FIELDS####BELONGS_TO_FIELDS####BTM_FIELDS##
         </x-slot>
 
         <x-slot name="footer">
@@ -500,6 +500,35 @@ EOT;
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endforeach
             </div>
+EOT;
+    }
+
+    private function _getBelongsToFieldTemplate()
+    {
+
+        return <<<'EOT'
+
+
+            <div class="grid grid-cols-3">
+                <div class="mt-4">
+                    <x:tall-crud-generator::label>##LABEL##</x:tall-crud-generator::label>
+                    <x:tall-crud-generator::select class="block mt-1 w-full" wire:model.defer="item.##COLUMN##">
+                        @foreach($##BELONGS_TO_VAR## as $c)
+                        <option value="{{$c->##OWNER_KEY##}}">{{$c->##DISPLAY_COLUMN##}}</option>
+                        @endforeach
+                    </x:tall-crud-generator::select>
+                    @error('item.##COLUMN##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+                </div>
+            </div>
+EOT;
+    }
+
+
+    private function _getBelongsToInitTemplate()
+    {
+        return <<<'EOT'
+
+        $this->##BELONGS_TO_VAR## = ##MODEL##::all();
 EOT;
     }
 }

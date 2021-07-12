@@ -136,4 +136,31 @@ trait WithFeatures
         return true;
     }
 
+    private function _isBelongsToEnabled()
+    {
+        return count($this->belongsToRelations) > 0 ;
+    }
+
+    private function _isBelongsToAddEnabled()
+    {
+        $collection = collect($this->belongsToRelations);
+        $c = $collection->firstWhere('in_add', true);
+        if(is_null($c)) {
+            return false;
+        }
+        return true;
+    }
+
+    private function _isBelongsToEditEnabled()
+    {
+        $collection = collect($this->belongsToRelations);
+        $c = $collection->firstWhere('in_edit', true);
+        if(is_null($c)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
 }

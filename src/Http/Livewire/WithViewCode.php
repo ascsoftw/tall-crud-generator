@@ -20,7 +20,6 @@ trait WithViewCode
         $return['child']['delete_modal'] = $this->_generateDeleteModal();
         $return['child']['add_modal'] = $this->_generateAddModal();
         $return['child']['edit_modal'] = $this->_generateEditModal();
-        // dd($return['child']['add_modal']);
         return $return;
     }
 
@@ -166,13 +165,15 @@ trait WithViewCode
                 '##CancelBtnText##',
                 '##CreateBtnText##',
                 '##FIELDS##',
-                '##BTM_FIELDS##'
+                '##BTM_FIELDS##',
+                '##BELONGS_TO_FIELDS##',
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
                 $this->advancedSettings['text']['create_button'],
                 $string,
                 $this->_getBtmFields(true),
+                $this->_getBelongsToFields(true),
             ],
             $this->_getAddModalTemplate()
         );
@@ -210,12 +211,14 @@ trait WithViewCode
                 '##EditBtnText##',
                 '##FIELDS##',
                 '##BTM_FIELDS##',
+                '##BELONGS_TO_FIELDS##',
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
                 $this->advancedSettings['text']['edit_button'],
                 $string,
                 $this->_getBtmFields(false),
+                $this->_getBelongsToFields(false),
             ],
             $this->_getEditModalTemplate()
         );
@@ -261,14 +264,13 @@ trait WithViewCode
 
     private function _getBtmFields($isAdd= true)
     {
-        if( $isAdd) {
-            if (!$this->_isBtmAddEnabled()) {
-                return '';
-            }
-        } else {
-            if (!$this->_isBtmEditEnabled()) {
-                return '';
-            }
+
+        if( $isAdd && !$this->_isBtmAddEnabled()) {
+            return '';
+        }
+
+        if( !$isAdd && !$this->_isBtmEditEnabled()) {
+            return '';
         }
 
         $string = '';
@@ -297,6 +299,47 @@ trait WithViewCode
                     $r['relatedKey'],
                 ],
                 $this->_getBtmFieldTemplate()
+            );
+        }
+        return $string;
+    }
+
+    private function _getBelongsToFields($isAdd= true)
+    {
+        if( $isAdd && !$this->_isBelongsToAddEnabled()) {
+            return '';
+        }
+
+        if( !$isAdd && !$this->_isBelongsToEditEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach($this->belongsToRelations as $r) {
+            if( $isAdd && !$r['in_add']) {
+                continue;
+            }
+
+            if( !$isAdd && !$r['in_edit']) {
+                continue;
+            }
+
+            $string .= Str::replace(
+                [
+                    '##LABEL##',
+                    '##COLUMN##',
+                    '##BELONGS_TO_VAR##',
+                    '##OWNER_KEY##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    Str::ucfirst($r['relationName']),
+                    $r['column'],
+                    Str::plural($r['relationName']),
+                    $r['ownerKey'],
+                    $r['displayColumn'],
+                ],
+                $this->_getBelongsToFieldTemplate()
             );
         }
         return $string;

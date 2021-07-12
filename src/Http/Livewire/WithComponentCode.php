@@ -22,7 +22,7 @@ trait WithComponentCode
         $return['child_rules'] = $this->_generateChildRules();
         $return['child_validation_attributes'] = $this->_generateChildValidationAttributes();
         $return['child_other_models'] = $this->_generateOtherModelsCode();
-        $return['child_btm_vars'] = $this->_getBtmVars();
+        $return['child_vars'] = $this->_getVars();
         // dd($return);
         return $return;
     }
@@ -257,6 +257,8 @@ trait WithComponentCode
                 '##FLASH_MESSAGE##',
                 '##BTM_INIT##',
                 '##BTM_ATTACH##',
+                '##BELONGS_TO_INIT##',
+                '##BELONGS_TO_SAVE##',
             ],
             [
                 $this->_getModelName(),
@@ -265,6 +267,8 @@ trait WithComponentCode
                 $this->_getAddFlashCode(),
                 $this->_getBtmInitCode(),
                 $this->_getBtmAttachCode(),
+                $this->_getBelongsToInitCode(),
+                $this->_getBelongsToSaveCode(),
             ],
             $this->_getAddMethodTemplate()
         );
@@ -285,6 +289,7 @@ trait WithComponentCode
                 '##FLASH_MESSAGE##',
                 '##BTM_FETCH##',
                 '##BTM_UPDATE##',
+                '##BELONGS_TO_INIT##',
             ],
             [
                 $this->_getModelName(),
@@ -293,6 +298,7 @@ trait WithComponentCode
                 $this->_getEditFlashCode(),
                 $this->_getBtmFetchCode(),
                 $this->_getBtmUpdateCode(),
+                $this->_getBelongsToInitCode(false),
             ],
             $this->_getEditMethodTemplate()
         );
@@ -322,6 +328,8 @@ trait WithComponentCode
                     $this->_getChildFieldTemplate()
                 );
         }
+
+        $string .= $this->_getRulesForBelongsToFields();
         return Str::replace('##RULES##', $string, $this->_getChildRulesTemplate());
     }
 
@@ -343,21 +351,46 @@ trait WithComponentCode
                     $this->_getChildFieldTemplate()
                 );
         }
+        $string .= $this->_getAttributesForBelongsToFields();
         return Str::replace('##ATTRIBUTES##', $string, $this->_getchildValidationAttributesTemplate());
     }
 
     private function _generateOtherModelsCode()
+    {
+        return $this->_generateBtmModelsCode() . $this->_generateBelongstoModelsCode();
+    }
+
+    private function _generateBtmModelsCode()
     {
         if (!$this->_isBtmEnabled()) {
             return '';
         }
 
         $string = '';
-        foreach($this->belongsToManyRelations as $r) {
+        foreach ($this->belongsToManyRelations as $r) {
             $string .= Str::replace('##MODEL##', $r['modelPath'], $this->_getOtherModelTemplate());
         }
 
         return $string;
+    }
+
+    private function _generateBelongstoModelsCode()
+    {
+        if (!$this->_isBelongsToEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach ($this->belongsToRelations as $r) {
+            $string .= Str::replace('##MODEL##', $r['modelPath'], $this->_getOtherModelTemplate());
+        }
+
+        return $string;
+    }
+
+    private function _getVars()
+    {
+        return $this->_getBtmVars() . $this->_getBelongsToVars();
     }
 
     private function _getBtmVars()
@@ -374,6 +407,17 @@ trait WithComponentCode
         return $this->_newLines() . implode($this->_newLines(), $collect->all());
     }
 
+    private function _getBelongsToVars()
+    {
+        if (!$this->_isBelongsToEnabled()) {
+            return '';
+        }
+        $collect = collect();
+        foreach ($this->belongsToRelations as $r) {
+            $collect->push(Str::replace('##NAME##', Str::plural($r['relationName']), $this->_getArrayTemplate()));
+        }
+        return $this->_newLines() . implode($this->_newLines(), $collect->all());
+    }
 
     private function _getAddFlashCode()
     {
@@ -421,8 +465,8 @@ trait WithComponentCode
         }
 
         $string = '';
-        foreach($this->belongsToManyRelations as $r) {
-            if(!$r['in_add']) {
+        foreach ($this->belongsToManyRelations as $r) {
+            if (!$r['in_add']) {
                 continue;
             }
 
@@ -442,7 +486,6 @@ trait WithComponentCode
         }
 
         return $string;
-
     }
 
     private function _getBtmAttachCode()
@@ -452,8 +495,8 @@ trait WithComponentCode
         }
 
         $string = '';
-        foreach($this->belongsToManyRelations as $r) {
-            if(!$r['in_add']) {
+        foreach ($this->belongsToManyRelations as $r) {
+            if (!$r['in_add']) {
                 continue;
             }
 
@@ -480,8 +523,8 @@ trait WithComponentCode
         }
 
         $string = '';
-        foreach($this->belongsToManyRelations as $r) {
-            if(!$r['in_edit']) {
+        foreach ($this->belongsToManyRelations as $r) {
+            if (!$r['in_edit']) {
                 continue;
             }
 
@@ -514,8 +557,8 @@ trait WithComponentCode
         }
 
         $string = '';
-        foreach($this->belongsToManyRelations as $r) {
-            if(!$r['in_edit']) {
+        foreach ($this->belongsToManyRelations as $r) {
+            if (!$r['in_edit']) {
                 continue;
             }
 
@@ -533,5 +576,108 @@ trait WithComponentCode
         }
 
         return $this->_newLines(1) . $string;
+    }
+
+    private function _getRulesForBelongsToFields()
+    {
+
+        if (!$this->_isBelongsToEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach ($this->belongsToRelations as $r) {
+            $string .= $this->_newLines(1, 2) .
+                Str::replace(
+                    [
+                        '##COLUMN_NAME##',
+                        '##VALUE##',
+                    ],
+                    [
+                        $r['column'],
+                        'required'
+                    ],
+                    $this->_getChildFieldTemplate()
+                );
+        }
+        return $string;
+    }
+
+    private function _getAttributesForBelongsToFields()
+    {
+
+        if (!$this->_isBelongsToEnabled()) {
+            return '';
+        }
+
+        // dd($this->belongsToRelations);
+        $string = '';
+        foreach ($this->belongsToRelations as $r) {
+            $string .= $this->_newLines(1, 2) .
+                Str::replace(
+                    [
+                        '##COLUMN_NAME##',
+                        '##VALUE##',
+                    ],
+                    [
+                        $r['column'],
+                        Str::ucfirst($r['relationName']),
+                    ],
+                    $this->_getChildFieldTemplate()
+                );
+        }
+        return $string;
+    }
+    
+    private function _getBelongsToInitCode($isAdd = true)
+    {
+        if ($isAdd && !$this->_isBelongsToAddEnabled()) {
+            return '';
+        }
+
+        if (!$isAdd && !$this->_isBelongsToEditEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach ($this->belongsToRelations as $r) {
+            $string .= $this->_newLines(1) .
+                Str::replace(
+                    [
+                        '##BELONGS_TO_VAR##',
+                        '##MODEL##',
+                    ],
+                    [
+                        Str::plural($r['relationName']),
+                        $this->_getModelName($r['modelPath']),
+                    ],
+                    $this->_getBelongsToInitTemplate()
+                );
+        }
+        return $string;
+    }
+    
+    private function _getBelongsToSaveCode()
+    {
+        if (!$this->_isBelongsToAddEnabled()) {
+            return '';
+        }
+
+        $string = '';
+        foreach ($this->belongsToRelations as $r) {
+            $string .= $this->_newLines(1, 3) .
+                Str::replace(
+                    [
+                        '##COLUMN##',
+                        '##DEFAULT_VALUE##',
+                    ],
+                    [
+                        $r['column'],
+                        0
+                    ],
+                    $this->_getCreateFieldTemplate()
+                );
+        }
+        return $string;
     }
 }

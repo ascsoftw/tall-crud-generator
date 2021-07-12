@@ -3,6 +3,7 @@
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 use Exception;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Component;
 use Illuminate\Support\Facades\Schema;
@@ -44,6 +45,19 @@ class TallCrudGenerator extends Component
         'in_edit' => true,
     ];
     public $belongsToManyRelations = [];
+
+    public $belongsToRelation = [
+        'name' => '',
+        'is_valid' => false,
+        'ownerKey' => '',
+        'modelPath' => '',
+        'columns' => [],
+        'displayColumn' => '',
+        'column' => '',
+        'in_add' => true,
+        'in_edit' => true,
+    ];
+    public $belongsToRelations = [];
 
     public $attributeKey;
     public $confirmingAttributes = false;
@@ -108,7 +122,6 @@ class TallCrudGenerator extends Component
 
     public function render()
     {
-        $this->selected = null;
         return view('tall-crud-generator::livewire.tall-crud-generator');
     }
 
@@ -161,6 +174,7 @@ class TallCrudGenerator extends Component
         //Increase Step
         $this->step += 1;
         $this->_validateStep();
+        $this->selected = null;
     }
 
     public function moveBack()
@@ -193,6 +207,8 @@ class TallCrudGenerator extends Component
     {
         $this->belongsToManyRelation['name'] = '';
         $this->belongsToManyRelation['is_valid'] = false;
+        $this->belongsToRelation['name'] = '';
+        $this->belongsToRelation['is_valid'] = false;
     }
 
     public function checkModel()
@@ -366,6 +382,64 @@ class TallCrudGenerator extends Component
     {
         unset($this->belongsToManyRelations[$i]);
         $this->belongsToManyRelations = array_values($this->belongsToManyRelations);
+    }
+
+    public function validateBelongsToRelation()
+    {
+        $this->resetValidation('belongsToRelation.name');
+        try {
+            $model = new $this->modelPath();
+            $relationName = $this->belongsToRelation['name'];
+            $relation = $model->{$relationName}();
+            if (!$relation instanceof BelongsTo) {
+                $this->addError('belongsToRelation.name', 'Not a Belongs To Relation.');
+                return false;
+            }
+
+            $isValid = true;
+            foreach ($this->belongsToRelations as $k) {
+                if ($k['relationName'] == $this->belongsToRelation['name']) {
+                    $isValid = false;
+                    $this->addError('belongsToRelation.name', 'Relation Already Defined.');
+                    break;
+                }
+            }
+            if (!$isValid) {
+                return false;
+            }
+
+            $this->belongsToRelation['is_valid'] = true;
+            $this->belongsToRelation['ownerKey'] = $relation->getOwnerKeyName();
+            $this->belongsToRelation['modelPath'] = get_class($relation->getRelated());
+            $this->belongsToRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        } catch (Exception $e) {
+            $this->addError('belongsToRelation.name', 'Not a Valid Relation.');
+            return false;
+        }
+    }
+
+    public function addBelongsToRelation()
+    {
+        //Todo Validate if column is already added.
+        // $this->addError('belongsToRelation.column', $this->belongsToRelation['column'] . ' is already selected in previous tab');
+        // return false;
+
+        $this->belongsToRelations[] = [
+            'relationName' => $this->belongsToRelation['name'],
+            'ownerKey' => $this->belongsToRelation['ownerKey'],
+            'modelPath' => $this->belongsToRelation['modelPath'],
+            'displayColumn' => $this->belongsToRelation['displayColumn'],
+            'column' => $this->belongsToRelation['column'],
+            'in_add' => $this->belongsToRelation['in_add'],
+            'in_edit' => $this->belongsToRelation['in_edit'],
+        ];
+        $this->resetRelationsForm();
+    }
+
+    public function deleteBelongsToRelation($i)
+    {
+        unset($this->belongsToRelations[$i]);
+        $this->belongsToRelations = array_values($this->belongsToRelations);
     }
 
     private function _getSortFields()

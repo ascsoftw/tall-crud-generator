@@ -71,7 +71,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[child_edit_method\]/',
                     '/\[child_validation_attributes\]/',
                     '/\[child_other_models\]/',
-                    '/\[child_btm_vars\]/',
+                    '/\[child_vars\]/',
                 ],
                 [
                     $this->classNamespace(),
@@ -89,7 +89,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['code']['child_edit']['method'],
                     $props['code']['child_validation_attributes'],
                     $props['code']['child_other_models'],
-                    $props['code']['child_btm_vars'],
+                    $props['code']['child_vars'],
                 ],
                 $template
             );
