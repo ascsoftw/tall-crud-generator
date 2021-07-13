@@ -63,6 +63,10 @@ trait WithViewCode
             $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
         }
 
+        foreach ($this->withRelations as $r) {
+            $return[] = $this->_getTableColumnHtml(Str::ucfirst($r['relationName']));
+        }
+
         if ($this->_needsActionColumn()) {
             $return[] = $this->_getTableColumnHtml('Actions');
         }
@@ -88,6 +92,12 @@ trait WithViewCode
             );
         }
 
+        foreach ($this->withRelations as $r) {
+            $return[] = $this->_getTableColumnHtml(
+                Str::replace('##COLUMN_NAME##', $this->_getWithTableSlot($r), $this->_getTableColumnTemplate())
+            );
+        }
+
         if ($this->_needsActionColumn()) {
             $return[] = $this->_getTableColumnHtml($this->_getActionHtml());
         }
@@ -108,7 +118,7 @@ trait WithViewCode
     private function _includeFlashComponent()
     {
         if ($this->_isFlashMessageEnabled()) {
-            return $this->_indent(1) . $this->_getFlashComponentHtml();
+            return $this->_indent(1) . $this->_getFlashComponentTemplate();
         }
 
         return '';
@@ -262,24 +272,24 @@ trait WithViewCode
         return $this->_newLines(1, 6) . collect($return)->implode($this->_newLines(1, 6)) . $this->_newLines(1, 5);
     }
 
-    private function _getBtmFields($isAdd= true)
+    private function _getBtmFields($isAdd = true)
     {
 
-        if( $isAdd && !$this->_isBtmAddEnabled()) {
+        if ($isAdd && !$this->_isBtmAddEnabled()) {
             return '';
         }
 
-        if( !$isAdd && !$this->_isBtmEditEnabled()) {
+        if (!$isAdd && !$this->_isBtmEditEnabled()) {
             return '';
         }
 
         $string = '';
-        foreach($this->belongsToManyRelations as $r) {
-            if( $isAdd && !$r['in_add']) {
+        foreach ($this->belongsToManyRelations as $r) {
+            if ($isAdd && !$r['in_add']) {
                 continue;
             }
 
-            if( !$isAdd && !$r['in_edit']) {
+            if (!$isAdd && !$r['in_edit']) {
                 continue;
             }
 
@@ -304,23 +314,23 @@ trait WithViewCode
         return $string;
     }
 
-    private function _getBelongsToFields($isAdd= true)
+    private function _getBelongsToFields($isAdd = true)
     {
-        if( $isAdd && !$this->_isBelongsToAddEnabled()) {
+        if ($isAdd && !$this->_isBelongsToAddEnabled()) {
             return '';
         }
 
-        if( !$isAdd && !$this->_isBelongsToEditEnabled()) {
+        if (!$isAdd && !$this->_isBelongsToEditEnabled()) {
             return '';
         }
 
         $string = '';
-        foreach($this->belongsToRelations as $r) {
-            if( $isAdd && !$r['in_add']) {
+        foreach ($this->belongsToRelations as $r) {
+            if ($isAdd && !$r['in_add']) {
                 continue;
             }
 
-            if( !$isAdd && !$r['in_edit']) {
+            if (!$isAdd && !$r['in_edit']) {
                 continue;
             }
 
@@ -343,5 +353,34 @@ trait WithViewCode
             );
         }
         return $string;
+    }
+
+    private function _getWithTableSlot($r)
+    {
+        if ($this->_isBelongsToManyRelation($r['relationName'])) {
+            return Str::replace(
+                [
+                    '##RELATION##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    $r['relationName'],
+                    $r['displayColumn'],
+                ],
+                $this->_getBelongsToManyTableSlotTemplate()
+            );
+        }
+
+        return Str::replace(
+            [
+                '##RELATION##',
+                '##DISPLAY_COLUMN##',
+            ],
+            [
+                $r['relationName'],
+                $r['displayColumn'],
+            ],
+            $this->_getBelongsToTableSlotTemplate()
+        );
     }
 }

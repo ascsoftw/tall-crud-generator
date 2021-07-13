@@ -1,6 +1,6 @@
 @props(['active' => false, 'current' => false, 'isLast' => false])
 
-<div class="@if($active) bg-blue-500 text-black @else bg-gray-300 text-white @endif">
+<div class="@if($active) bg-blue-500 text-black @else bg-gray-300 text-white @endif w-32">
 
     <div class="font-extrabold flex justify-center items-center">
         <div class="@if($current) bg-blue-700 text-white @else bg-white text-gray-700 @endif w-20 h-20 rounded-full inline-flex items-center justify-center font-bold mt-4 text-2xl font-extrabold">

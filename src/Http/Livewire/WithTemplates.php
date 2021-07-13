@@ -473,7 +473,6 @@ EOT;
 
         $this->item->##RELATION##()->sync($this->##FIELDNAME##);
         $this->##FIELDNAME## = [];
-
 EOT;
     }
 
@@ -513,6 +512,7 @@ EOT;
                 <div class="mt-4">
                     <x:tall-crud-generator::label>##LABEL##</x:tall-crud-generator::label>
                     <x:tall-crud-generator::select class="block mt-1 w-full" wire:model.defer="item.##COLUMN##">
+                        <option value="">Please Select</option>
                         @foreach($##BELONGS_TO_VAR## as $c)
                         <option value="{{$c->##OWNER_KEY##}}">{{$c->##DISPLAY_COLUMN##}}</option>
                         @endforeach
@@ -529,6 +529,35 @@ EOT;
         return <<<'EOT'
 
         $this->##BELONGS_TO_VAR## = ##MODEL##::all();
+EOT;
+    }
+
+    private function _getWithQueryTemplate()
+    {
+        return <<<'EOT'
+
+            ->with([##RELATIONS##])
+EOT;
+    }
+
+    private function _getBelongsToManyTableSlotTemplate()
+    {
+        return <<<'EOT'
+##RELATION##->implode('##DISPLAY_COLUMN##', ',')
+EOT;
+    }
+
+    private function _getBelongsToTableSlotTemplate()
+    {
+        return <<<'EOT'
+##RELATION##?->##DISPLAY_COLUMN##
+EOT;
+    }
+
+    private function _getFlashComponentTemplate()
+    {
+        return <<<'EOT'
+@livewire('livewire-toast')
 EOT;
     }
 }

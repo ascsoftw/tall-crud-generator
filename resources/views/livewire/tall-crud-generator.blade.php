@@ -7,7 +7,7 @@
     '3' => 'Select Fields',
     '4' => 'Relations',
     '5' => 'Sort Fields',
-    '6' => 'Advanced Section',
+    '6' => 'Advanced',
     '7' => 'Generate Files',
     ];
     @endphp

@@ -9,7 +9,7 @@ trait WithHelpers
 {
     private function _getModelName($name = '')
     {
-        if(empty($name)) {
+        if (empty($name)) {
             $name = $this->modelPath;
         }
         return Arr::last(Str::of($name)->explode('\\')->all());
@@ -43,24 +43,23 @@ trait WithHelpers
 
     private function _getDefaultSortableColumn()
     {
-        if($this->_isPrimaryKeySortable()) {
+        if ($this->_isPrimaryKeySortable()) {
             return $this->modelProps['primary_key'];
         }
 
         $collection = collect($this->_getSortedListingFields());
 
-        $field = $collection->first(function($f) {
+        $field = $collection->first(function ($f) {
             if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
                 return false;
             }
-            if($f['sortable']) {
+            if ($f['sortable']) {
                 return true;
             }
             return false;
         });
 
         return $field['column'];
-
     }
 
     private function _getSearchableColumns()
@@ -183,10 +182,10 @@ trait WithHelpers
         return Str::studly(Str::replace('_', ' ', $column));
     }
 
-    private function _getBtmFieldName( $relation )
+    private function _getBtmFieldName($relation)
     {
         return 'checked' . Str::studly($relation);
-    } 
+    }
 
     private function _getListingFieldsToSort()
     {
@@ -247,5 +246,15 @@ trait WithHelpers
             }
             return $item;
         });
+    }
+
+    private function _isBelongsToManyRelation($relation)
+    {
+        foreach ($this->allRelations['belongsToMany'] as $k) {
+            if ($k['name'] == $relation) {
+                return true;
+            }
+        }
+        return false;
     }
 }

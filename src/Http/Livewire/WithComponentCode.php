@@ -13,6 +13,7 @@ trait WithComponentCode
         $return['search'] = $this->_generateSearchCode();
         $return['pagination_dropdown'] = $this->_generatePaginationDropdownCode();
         $return['pagination'] = $this->_generatePaginationCode();
+        $return['with_query'] = $this->_generateWithQueryCode();
 
         $return['child_delete'] = $this->_generateDeleteCode();
         $return['child_add'] = $this->_generateAddCode();
@@ -80,6 +81,11 @@ trait WithComponentCode
         $return['vars'] = $this->_getPaginationVars();
 
         return $return;
+    }
+
+    private function _generateWithQueryCode()
+    {
+        return Str::replace('##RELATIONS##', "'tags', 'brand', 'categories'", $this->_getWithQueryTemplate());
     }
 
     private function _generateAddCode()
@@ -562,20 +568,21 @@ trait WithComponentCode
                 continue;
             }
 
-            $string .= Str::replace(
-                [
-                    '##RELATION##',
-                    '##FIELDNAME##',
-                ],
-                [
-                    $r['relationName'],
-                    $this->_getBtmFieldName($r['relationName']),
-                ],
-                $this->_getBtmUpdateTemplate()
-            );
+            $string .= $this->_newLines(1) .
+                Str::replace(
+                    [
+                        '##RELATION##',
+                        '##FIELDNAME##',
+                    ],
+                    [
+                        $r['relationName'],
+                        $this->_getBtmFieldName($r['relationName']),
+                    ],
+                    $this->_getBtmUpdateTemplate()
+                );
         }
 
-        return $this->_newLines(1) . $string;
+        return $string;
     }
 
     private function _getRulesForBelongsToFields()
@@ -628,7 +635,7 @@ trait WithComponentCode
         }
         return $string;
     }
-    
+
     private function _getBelongsToInitCode($isAdd = true)
     {
         if ($isAdd && !$this->_isBelongsToAddEnabled()) {
@@ -656,7 +663,7 @@ trait WithComponentCode
         }
         return $string;
     }
-    
+
     private function _getBelongsToSaveCode()
     {
         if (!$this->_isBelongsToAddEnabled()) {
