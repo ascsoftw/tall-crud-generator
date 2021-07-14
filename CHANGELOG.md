@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2021-07-14
+- Fix Eager Load Query Code
+
 ## [1.2.0] - 2021-07-14
 - Display BelongsTo Relation Field in Add/Edit Form
 - Display BelongsToMany Relation Field in Add/Edit Form

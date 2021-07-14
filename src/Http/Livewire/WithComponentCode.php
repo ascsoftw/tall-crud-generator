@@ -66,7 +66,6 @@ trait WithComponentCode
             'method' => ''
         ];
         if ($this->_isPaginationDropdownEnabled()) {
-            // $return['vars'] = $this->_getPaginationVars();
             $return['method'] = $this->_getPaginationDropdownMethod();
         }
         return $return;
@@ -85,7 +84,12 @@ trait WithComponentCode
 
     private function _generateWithQueryCode()
     {
-        return Str::replace('##RELATIONS##', "'tags', 'brand', 'categories'", $this->_getWithQueryTemplate());
+        $collection = collect();
+        foreach($this->withRelations as $r) {
+            $collection->push("'" . $r['relationName'] . "'");
+        }
+
+        return Str::replace('##RELATIONS##', $collection->implode(','), $this->_getWithQueryTemplate());
     }
 
     private function _generateAddCode()

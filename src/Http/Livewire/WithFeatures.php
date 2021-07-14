@@ -160,7 +160,4 @@ trait WithFeatures
         }
         return true;
     }
-
-
-
 }
