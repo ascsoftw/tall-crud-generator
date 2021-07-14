@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2021-07-14
+- Display BelongsTo Relation Field in Add/Edit Form
+- Display BelongsToMany Relation Field in Add/Edit Form
+- Added Eager Loading to Display Result in Listing
+- Minor Bug Fixes
+
 ## [1.1.0] - 2021-07-08
 - Change Layout to Multi Step Wizard
 - Support for Flash Messages
@@ -9,7 +15,6 @@ All notable changes to this project will be documented in this file.
 - Ability to Configure No. of Records Per Page
 - Optionally Display Dropdown to change no. of Records Per Page
 - Minor Bug Fixes
-
 
 ## [1.0.1] - 2021-06-28
 - Prefix Blade Component with tall-crud so as to avoid conflicts

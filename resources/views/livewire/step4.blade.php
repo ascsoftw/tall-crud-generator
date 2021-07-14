@@ -82,7 +82,7 @@
         @endif
 
         <x:tall-crud-generator::accordion-header tab="3">
-            With
+            Eager Loading
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
@@ -230,7 +230,7 @@
 
 <x:tall-crud-generator::dialog-modal wire:model="confirmingWith">
     <x-slot name="title">
-        Add a With Relationship
+        Eager Load a Relationship
     </x-slot>
 
     <x-slot name="content">

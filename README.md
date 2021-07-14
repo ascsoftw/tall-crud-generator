@@ -83,13 +83,19 @@ Following are some of the Features that are supported:
 - Flash Messages
 - Configuring No. of Records Per Page
 - Dropdown to change no. of Records Per Page
+- Relations: BelongsTo & BelongsToMany in Listing & Form
+- Display Related Fields in the Listing using Eager Loading
 
 ## Roadmap
 
 Following Features are in the piepline:
-- Support Model Relations
+- ~~Support Model Relations~~
 - ~~Flash Messages~~
-- Select Dropdown from Related Field
+- Support for withCount
+- Display BelongsToMany Relation as Multi-Select in Form
+- Show / hide columns on Listing
+- Sort Eager Loaded and Relation Fields
+- Use Livewire Sorting for Sort ??
 
 ## Troubleshooting
 Your Output don't get styles while using TailwindCss? Please publish your view. Therefore Laravel Mix compiler will find package related views and will purge CSS accordingly.
