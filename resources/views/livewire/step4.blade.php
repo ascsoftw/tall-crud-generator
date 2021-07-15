@@ -122,9 +122,11 @@
                 <x:tall-crud-generator::label>Select Relationship</x:tall-crud-generator::label>
                 <x:tall-crud-generator::select class="block mt-1 w-1/2" wire:model.lazy="belongsToManyRelation.name">
                     <option value="">-Please Select-</option>
+                    @if (array_key_exists('belongsToMany', $allRelations))
                     @foreach($allRelations['belongsToMany'] as $c)
                     <option value="{{$c['name']}}">{{$c['name']}}</option>
                     @endforeach
+                    @endif
                 </x:tall-crud-generator::select>
                 @error('belongsToManyRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
             </div>
@@ -175,9 +177,11 @@
                 <x:tall-crud-generator::label>Select Relationship</x:tall-crud-generator::label>
                 <x:tall-crud-generator::select class="block mt-1 w-1/2" wire:model.lazy="belongsToRelation.name">
                     <option value="">-Please Select-</option>
+                    @if (array_key_exists('belongsTo', $allRelations))
                     @foreach($allRelations['belongsTo'] as $c)
                     <option value="{{$c['name']}}">{{$c['name']}}</option>
                     @endforeach
+                    @endif
                 </x:tall-crud-generator::select>
                 @error('belongsToRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
             </div>
