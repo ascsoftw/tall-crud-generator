@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2021-07-15
+- Fix getAllRelations by checking parameter count
+
 ## [1.2.1] - 2021-07-14
 - Fix Eager Load Query Code
 

@@ -310,19 +310,28 @@ trait WithRelations
             if ($m->isStatic()) {
                 continue;
             }
-            $methodName = $m->getName();
-            $methodReturn = $model->{$methodName}();
 
-            if (!$methodReturn instanceof Relation) {
-                return;
+            if (count($m->getParameters())) {
+                continue;
             }
 
-            if ($methodReturn instanceof BelongsToMany) {
-                $this->allRelations['belongsToMany'][] = ['name' => $methodName];
-            }
+            try {
+                $methodName = $m->getName();
+                $methodReturn = $model->{$methodName}();
 
-            if ($methodReturn instanceof BelongsTo) {
-                $this->allRelations['belongsTo'][] = ['name' => $methodName];
+                if (!$methodReturn instanceof Relation) {
+                    return;
+                }
+
+                if ($methodReturn instanceof BelongsToMany) {
+                    $this->allRelations['belongsToMany'][] = ['name' => $methodName];
+                }
+
+                if ($methodReturn instanceof BelongsTo) {
+                    $this->allRelations['belongsTo'][] = ['name' => $methodName];
+                }
+            } catch (Exception $ignore) {
+                //some issue running the $methodName
             }
         }
     }
