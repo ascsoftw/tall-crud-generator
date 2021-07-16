@@ -89,6 +89,7 @@
                 <x:tall-crud-generator::tag wire:click="addRule('min:3')">Min</x:tall-crud-generator::tag>
                 <x:tall-crud-generator::tag wire:click="addRule('max:50')">Max</x:tall-crud-generator::tag>
                 <x:tall-crud-generator::tag wire:click="addRule('numeric')">Numeric</x:tall-crud-generator::tag>
+                <x:tall-crud-generator::tag wire:click="addRule('email')">Email</x:tall-crud-generator::tag>
             </div>
 
             <div class="mt-4">
