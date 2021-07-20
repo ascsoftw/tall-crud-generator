@@ -5,6 +5,7 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 
@@ -24,6 +25,10 @@ trait WithRelations
     public $confirmingWith = false;
     public $withRelation = [];
     public $withRelations = [];
+
+    public $confirmingWithCount = false;
+    public $withCountRelation = [];
+    public $withCountRelations = [];
 
     public function createNewBelongsToManyRelation()
     {
@@ -287,11 +292,79 @@ trait WithRelations
         unset($this->withRelations[$i]);
         $this->withRelations = array_values($this->withRelations);
     }
+
+    public function createNewWithCountRelation()
+    {
+        $this->resetWithCountRelation();
+        $this->resetValidation('withCountRelation.*');
+        $this->confirmingWithCount = true;
+    }
+
+    public function resetWithCountRelation()
+    {
+        $this->withCountRelation = [
+            'name' => '',
+            'is_valid' => false,
+            'is_sortable' => false,
+        ];
+    }
+
+    public function updatedWithCountRelationName()
+    {
+        $this->resetValidation('withCountRelation.*');
+        $this->withCountRelation['is_valid'] = false;
+
+        if (!$this->_isValidWithCountName()) {
+            return;
+        }
+
+        $this->withCountRelation['is_valid'] = true;
+    }
+
+    private function _isValidWithCountName()
+    {
+        if (empty($this->withCountRelation['name'])) {
+            $this->addError('withCountRelation.name', 'Please select a Relation');
+            return false;
+        }
+
+        foreach ($this->withCountRelations as $k) {
+            if ($k['relationName'] == $this->withCountRelation['name']) {
+                $this->addError('withCountRelation.name', 'Relation Already Defined.');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function addWithCountRelation()
+    {
+        $this->resetValidation('withCountRelation.*');
+        if (!$this->_isValidWithCountName()) {
+            return;
+        }
+
+        $this->withCountRelations[] = [
+            'relationName' => $this->withCountRelation['name'],
+            'is_sortable' => $this->withCountRelation['is_sortable'],
+        ];
+        $this->confirmingWithCount = false;
+        $this->resetRelationsForm();
+    }
+
+    public function deleteWithCountRelation($i)
+    {
+        unset($this->withCountRelations[$i]);
+        $this->withCountRelations = array_values($this->withCountRelations);
+    }
+
     public function resetRelationsForm()
     {
         $this->resetBelongsToManyRelation();
         $this->resetBelongsToRelation();
         $this->resetWithRelation();
+        $this->resetWithCountRelation();
     }
 
     public function getAllRelations()

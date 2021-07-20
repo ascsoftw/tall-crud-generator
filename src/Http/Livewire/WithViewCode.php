@@ -67,6 +67,11 @@ trait WithViewCode
             $return[] = $this->_getTableColumnHtml(Str::ucfirst($r['relationName']));
         }
 
+        //Todo withCount Relation, make it sortable
+        foreach ($this->withCountRelations as $r) {
+            $return[] = $this->_getTableColumnHtml(Str::ucfirst($r['relationName']));
+        }
+
         if ($this->_needsActionColumn()) {
             $return[] = $this->_getTableColumnHtml('Actions');
         }
@@ -95,6 +100,12 @@ trait WithViewCode
         foreach ($this->withRelations as $r) {
             $return[] = $this->_getTableColumnHtml(
                 Str::replace('##COLUMN_NAME##', $this->_getWithTableSlot($r), $this->_getTableColumnTemplate())
+            );
+        }
+
+        foreach ($this->withCountRelations as $r) {
+            $return[] = $this->_getTableColumnHtml(
+                Str::replace('##COLUMN_NAME##', $r['relationName']. '_count', $this->_getTableColumnTemplate())
             );
         }
 
@@ -357,7 +368,7 @@ trait WithViewCode
 
     private function _getWithTableSlot($r)
     {
-        if ($this->_isBelongsToManyRelation($r['relationName'])) {
+        if ($this->_isBelongsToManyRelation($r['relationName']) || $this->_isHasManyRelation($r['relationName'])) {
             return Str::replace(
                 [
                     '##RELATION##',

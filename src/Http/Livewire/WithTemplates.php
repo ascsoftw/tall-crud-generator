@@ -540,6 +540,14 @@ EOT;
 EOT;
     }
 
+    private function _getWithCountQueryTemplate()
+    {
+        return <<<'EOT'
+
+            ->withCount([##RELATIONS##])
+EOT;
+    }
+
     private function _getBelongsToManyTableSlotTemplate()
     {
         return <<<'EOT'

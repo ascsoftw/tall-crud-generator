@@ -14,6 +14,7 @@ trait WithComponentCode
         $return['pagination_dropdown'] = $this->_generatePaginationDropdownCode();
         $return['pagination'] = $this->_generatePaginationCode();
         $return['with_query'] = $this->_generateWithQueryCode();
+        $return['with_count_query'] = $this->_generateWithCountQueryCode();
 
         $return['child_delete'] = $this->_generateDeleteCode();
         $return['child_add'] = $this->_generateAddCode();
@@ -24,7 +25,6 @@ trait WithComponentCode
         $return['child_validation_attributes'] = $this->_generateChildValidationAttributes();
         $return['child_other_models'] = $this->_generateOtherModelsCode();
         $return['child_vars'] = $this->_getVars();
-        // dd($return);
         return $return;
     }
 
@@ -85,11 +85,29 @@ trait WithComponentCode
     private function _generateWithQueryCode()
     {
         $collection = collect();
-        foreach($this->withRelations as $r) {
+        foreach ($this->withRelations as $r) {
             $collection->push("'" . $r['relationName'] . "'");
         }
 
+        if ($collection->isEmpty()) {
+            return '';
+        }
+
         return Str::replace('##RELATIONS##', $collection->implode(','), $this->_getWithQueryTemplate());
+    }
+
+    private function _generateWithCountQueryCode()
+    {
+        $collection = collect();
+        foreach ($this->withCountRelations as $r) {
+            $collection->push("'" . $r['relationName'] . "'");
+        }
+
+        if ($collection->isEmpty()) {
+            return '';
+        }
+
+        return Str::replace('##RELATIONS##', $collection->implode(','), $this->_getWithCountQueryTemplate());
     }
 
     private function _generateAddCode()

@@ -257,4 +257,14 @@ trait WithHelpers
         }
         return false;
     }
+
+    private function _isHasManyRelation($relation)
+    {
+        foreach ($this->allRelations['hasMany'] as $k) {
+            if ($k['name'] == $relation) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -15,7 +15,7 @@ class [class] extends Component
 
     public function render()
     {
-        $results = $this->query()[with_query][search_query][sort_query]
+        $results = $this->query()[with_query][with_count_query][search_query][sort_query]
             ->paginate($this->per_page);
 
         return view('[view]', [

@@ -82,7 +82,7 @@
         @endif
 
         <x:tall-crud-generator::accordion-header tab="3">
-            Eager Loading
+            Eager Load
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
@@ -105,7 +105,32 @@
                 </tr>
                 @endforeach
             </x:tall-crud-generator::table>
+        </x:tall-crud-generator::accordion-wrapper>
 
+        <x:tall-crud-generator::accordion-header tab="4">
+            Eager Load Count
+        </x:tall-crud-generator::accordion-header>
+
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab4" tab="4">
+            <x:tall-crud-generator::button class="mt-4" wire:click="createNewWithCountRelation">Add</x:tall-crud-generator::button>
+            <x:tall-crud-generator::table class="mt-4">
+                <x-slot name="header">
+                    <x:tall-crud-generator::table-column>Relation</x:tall-crud-generator::table-column>
+                    <x:tall-crud-generator::table-column>Sortable</x:tall-crud-generator::table-column>
+                    <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
+                </x-slot>
+                @foreach( $this->withCountRelations as $i => $v)
+                <tr>
+                    <x:tall-crud-generator::table-column>{{$v['relationName']}}</x:tall-crud-generator::table-column>
+                    <x:tall-crud-generator::table-column>{{$v['is_sortable'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
+                    <x:tall-crud-generator::table-column>
+                        <x:tall-crud-generator::button wire:click.prevent="deleteWitCounthRelation({{$i}})" mode="delete">
+                            Delete
+                        </x:tall-crud-generator::button>
+                    </x:tall-crud-generator::table-column>
+                </tr>
+                @endforeach
+            </x:tall-crud-generator::table>
         </x:tall-crud-generator::accordion-wrapper>
     </div>
 </div>
@@ -231,7 +256,6 @@
     </x-slot>
 </x:tall-crud-generator::dialog-modal>
 
-
 <x:tall-crud-generator::dialog-modal wire:model="confirmingWith">
     <x-slot name="title">
         Eager Load a Relationship
@@ -272,5 +296,40 @@
     <x-slot name="footer">
         <x:tall-crud-generator::button wire:click="$set('confirmingWith', false)">Cancel</x:tall-crud-generator::button>
         <x:tall-crud-generator::button mode="add" wire:click="addWithRelation()">Save</x:tall-crud-generator::button>
+    </x-slot>
+</x:tall-crud-generator::dialog-modal>
+
+<x:tall-crud-generator::dialog-modal wire:model="confirmingWithCount">
+    <x-slot name="title">
+        Eager Load Count
+    </x-slot>
+
+    <x-slot name="content">
+        <div class="mt-4">
+            <div>
+                <x:tall-crud-generator::label>Select Relationship</x:tall-crud-generator::label>
+                <x:tall-crud-generator::select class="block mt-1 w-1/2" wire:model.lazy="withCountRelation.name">
+                    <option value="">-Please Select-</option>
+                    @foreach($allRelations as $allRelation)
+                    @foreach($allRelation as $c)
+                    <option value="{{$c['name']}}">{{$c['name']}}</option>
+                    @endforeach
+                    @endforeach
+                </x:tall-crud-generator::select>
+                @error('withCountRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+            </div>
+
+            @if($withCountRelation['is_valid'])
+            <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                <x:tall-crud-generator::label>Make Heading Sortable</x:tall-crud-generator::label>
+                <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="withCountRelation.is_sortable" />
+            </x:tall-crud-generator::checkbox-wrapper>
+            @endif
+        </div>
+    </x-slot>
+
+    <x-slot name="footer">
+        <x:tall-crud-generator::button wire:click="$set('confirmingWithCount', false)">Cancel</x:tall-crud-generator::button>
+        <x:tall-crud-generator::button mode="add" wire:click="addWithCountRelation()">Save</x:tall-crud-generator::button>
     </x-slot>
 </x:tall-crud-generator::dialog-modal>
