@@ -623,7 +623,7 @@ trait WithComponentCode
                         '##VALUE##',
                     ],
                     [
-                        $r['column'],
+                        $r['foreignKey'],
                         'required'
                     ],
                     $this->_getChildFieldTemplate()
@@ -649,7 +649,7 @@ trait WithComponentCode
                         '##VALUE##',
                     ],
                     [
-                        $r['column'],
+                        $r['foreignKey'],
                         Str::ucfirst($r['relationName']),
                     ],
                     $this->_getChildFieldTemplate()
@@ -701,7 +701,7 @@ trait WithComponentCode
                         '##DEFAULT_VALUE##',
                     ],
                     [
-                        $r['column'],
+                        $r['foreignKey'],
                         0
                     ],
                     $this->_getCreateFieldTemplate()

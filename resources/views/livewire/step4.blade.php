@@ -235,16 +235,6 @@
                     </x:tall-crud-generator::select>
                     @error('belongsToRelation.displayColumn') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
                 </div>
-                <div class="mt-4">
-                    <x:tall-crud-generator::label>Map to Column</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::select class="block mt-1 w-1/4" wire:model.defer="belongsToRelation.column">
-                        <option value="">-Please Select-</option>
-                        @foreach($modelProps['columns'] as $c)
-                        <option value="{{$c}}">{{$c}}</option>
-                        @endforeach
-                    </x:tall-crud-generator::select>
-                    @error('belongsToRelation.column') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
-                </div>
             </div>
             @endif
         </div>

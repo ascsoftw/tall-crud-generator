@@ -134,7 +134,7 @@ trait WithRelations
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
-            'column' => '',
+            'foreignKey' => '',
             'in_add' => true,
             'in_edit' => true,
         ];
@@ -176,6 +176,7 @@ trait WithRelations
         $relation = $model->{$relationName}();
         $this->belongsToRelation['is_valid'] = true;
         $this->belongsToRelation['ownerKey'] = $relation->getOwnerKeyName();
+        $this->belongsToRelation['foreignKey'] = $relation->getForeignKeyName();
         $this->belongsToRelation['modelPath'] = get_class($relation->getRelated());
         $this->belongsToRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
@@ -189,16 +190,13 @@ trait WithRelations
         $this->validateOnly('belongsToRelation.displayColumn', [
             'belongsToRelation.displayColumn' => 'required',
         ]);
-        $this->validateOnly('belongsToRelation.column', [
-            'belongsToRelation.column' => 'required',
-        ]);
 
         $this->belongsToRelations[] = [
             'relationName' => $this->belongsToRelation['name'],
             'ownerKey' => $this->belongsToRelation['ownerKey'],
             'modelPath' => $this->belongsToRelation['modelPath'],
             'displayColumn' => $this->belongsToRelation['displayColumn'],
-            'column' => $this->belongsToRelation['column'],
+            'foreignKey' => $this->belongsToRelation['foreignKey'],
             'in_add' => $this->belongsToRelation['in_add'],
             'in_edit' => $this->belongsToRelation['in_edit'],
         ];

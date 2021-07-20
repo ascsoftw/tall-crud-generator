@@ -355,7 +355,7 @@ trait WithViewCode
                 ],
                 [
                     Str::ucfirst($r['relationName']),
-                    $r['column'],
+                    $r['foreignKey'],
                     Str::plural($r['relationName']),
                     $r['ownerKey'],
                     $r['displayColumn'],

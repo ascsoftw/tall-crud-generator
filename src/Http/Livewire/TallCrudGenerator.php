@@ -94,7 +94,6 @@ class TallCrudGenerator extends Component
         'componentName.min' => 'Must be minimum of 3 characters',
         'belongsToManyRelation.displayColumn.required' => 'Please select a value.',
         'belongsToRelation.displayColumn.required' => 'Please select a value.',
-        'belongsToRelation.column.required' => 'Please select a value.',
         'withRelation.displayColumn.required' => 'Please select a value.',
     ];
 
