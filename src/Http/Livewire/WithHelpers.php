@@ -193,13 +193,21 @@ trait WithHelpers
         $order = 0;
         $collection = collect();
         if ($this->_needsPrimaryKeyInListing()) {
-            $collection->push(['field' => $this->modelProps['primary_key'], 'order' => ++$order]);
+            $collection->push(['field' => $this->modelProps['primary_key'], 'type' => 'primary', 'order' => ++$order]);
         }
 
         foreach ($this->fields as $f) {
             if ($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) {
-                $collection->push(['field' => $f['column'], 'order' => ++$order]);
+                $collection->push(['field' => $f['column'], 'type' => 'normal', 'order' => ++$order]);
             }
+        }
+
+        foreach ($this->withRelations as $r) {
+            $collection->push(['field' => $r['relationName'], 'type' => 'with', 'order' => ++$order]);
+        }
+
+        foreach ($this->withCountRelations as $r) {
+            $collection->push(['field' => $r['relationName'], 'type' => 'withCount', 'order' => ++$order]);
         }
 
         return $collection->all();
@@ -209,8 +217,31 @@ trait WithHelpers
     {
         $collection = collect($this->_getFormFields($addForm, !$addForm));
         $map = $collection->map(function ($item, $key) {
-            return ['field' => $item['column'], 'order' => ++$key];
+            return ['field' => $item['column'], 'type' => 'normal', 'order' => ++$key];
         });
+        //
+        $order = $map->count();
+        foreach ($this->belongsToManyRelations as $r) {
+            if ($addForm && !$r['in_add']) {
+                continue;
+            }
+
+            if (!$addForm && !$r['in_edit']) {
+                continue;
+            }
+            $map->push(['field' => $r['relationName'], 'type' => 'btm', 'order' => ++$order]);
+        }
+
+        foreach ($this->belongsToRelations as $r) {
+            if ($addForm && !$r['in_add']) {
+                continue;
+            }
+
+            if (!$addForm && !$r['in_edit']) {
+                continue;
+            }
+            $map->push(['field' => $r['relationName'], 'type' => 'belongsTo', 'order' => ++$order]);
+        }
         return $map->all();
     }
 
@@ -227,8 +258,39 @@ trait WithHelpers
     {
         $sortFields = collect($this->_sortFieldsByOrder($this->sortFields[$addForm ? 'add' : 'edit']));
         $collection = collect($this->_getFormFields($addForm, !$addForm));
+        $btmCollection = collect();
+        foreach ($this->belongsToManyRelations as $r) {
+            if ($addForm && !$r['in_add']) {
+                continue;
+            }
 
-        return $sortFields->map(function ($i) use ($collection) {
+            if (!$addForm && !$r['in_edit']) {
+                continue;
+            }
+            $btmCollection->push($r);
+        }
+
+        $belongsToCollection = collect();
+        foreach ($this->belongsToRelations as $r) {
+            if ($addForm && !$r['in_add']) {
+                continue;
+            }
+
+            if (!$addForm && !$r['in_edit']) {
+                continue;
+            }
+            $belongsToCollection->push($r);
+        }
+
+        return $sortFields->map(function ($i) use ($collection, $btmCollection, $belongsToCollection) {
+            switch ($i['type']) {
+                case 'normal':
+                    return collect($collection->firstWhere('column', $i['field']))->merge(['type' => 'normal'])->all();
+                case 'btm':
+                    return collect($btmCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'btm'])->all();
+                case 'belongsTo':
+                    return collect($belongsToCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'belongsTo'])->all();
+            }
             return $collection->firstWhere('column', $i['field']);
         });
     }
@@ -238,13 +300,20 @@ trait WithHelpers
 
         $sortFields = collect($this->_sortFieldsByOrder($this->sortFields['listing']));
         $collection = collect($this->fields);
+        $withRelationsCollection = collect($this->withRelations);
+        $withCountRelationsCollection = collect($this->withCountRelations);
 
-        return $sortFields->map(function ($i) use ($collection) {
-            $item = $collection->firstWhere('column', $i['field']);
-            if (is_null($item)) {
-                return ['isPrimaryKey' => true];
+        return $sortFields->map(function ($i) use ($collection, $withRelationsCollection, $withCountRelationsCollection) {
+            switch ($i['type']) {
+                case 'primary':
+                    return ['field' => $i['field'], 'type' => $i['type']];
+                case 'normal':
+                    return collect($collection->firstWhere('column', $i['field']))->merge(['type' => 'normal'])->all();
+                case 'with':
+                    return collect($withRelationsCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'with'])->all();
+                case 'withCount':
+                    return collect($withCountRelationsCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'withCount'])->all();
             }
-            return $item;
         });
     }
 

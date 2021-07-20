@@ -302,19 +302,20 @@ class TallCrudGenerator extends Component
         $this->sortFields['edit'] = $this->_getFormFieldsToSort(false);
     }
 
-    public function moveUp($field, $mode)
+    public function moveUp($field, $type, $mode)
     {
         $collection = collect($this->sortFields[$mode]);
-        $f = $collection->firstWhere('field', $field);
+        $filterType = $collection->where('type', $type);
+        $f = $filterType->firstWhere('field', $field);
         $findOrder = $f['order'] - 1;
 
-        $map = $collection->map(function ($item) use ($findOrder, $field) {
+        $map = $collection->map(function ($item) use ($findOrder, $field, $type) {
             if ($item['order'] == $findOrder) {
                 $item['order']++;
                 return $item;
             }
 
-            if ($item['field'] == $field) {
+            if ($item['field'] == $field && $item['type'] == $type) {
                 $item['order']--;
                 return $item;
             }
@@ -325,19 +326,20 @@ class TallCrudGenerator extends Component
         $this->sortFields[$mode] = $this->_sortFieldsByOrder($map);
     }
 
-    public function moveDown($field, $mode)
+    public function moveDown($field, $type, $mode)
     {
         $collection = collect($this->sortFields[$mode]);
-        $f = $collection->firstWhere('field', $field);
+        $filterType = $collection->where('type', $type);
+        $f = $filterType->firstWhere('field', $field);
         $findOrder = $f['order'] + 1;
 
-        $map = $collection->map(function ($item) use ($findOrder, $field) {
+        $map = $collection->map(function ($item) use ($findOrder, $field, $type) {
             if ($item['order'] == $findOrder) {
                 $item['order']--;
                 return $item;
             }
 
-            if ($item['field'] == $field) {
+            if ($item['field'] == $field && $item['type'] == $type) {
                 $item['order']++;
                 return $item;
             }

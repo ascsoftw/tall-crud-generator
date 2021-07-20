@@ -55,21 +55,21 @@ trait WithViewCode
         $return = [];
 
         foreach ($fields as $f) {
-            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
-                $return[] = $this->_getHeaderHtml($this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']), $this->modelProps['primary_key'], true);
-                continue;
+            switch ($f['type']) {
+                case 'primary':
+                    $return[] = $this->_getHeaderHtml($this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']), $this->modelProps['primary_key'], true);
+                    break;
+                case 'normal':
+                    $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
+                    break;
+                case 'with':
+                    $return[] = $this->_getTableColumnHtml(Str::ucfirst($f['relationName']));
+                    break;
+                case 'withCount':
+                    //Todo make it sortable
+                    $return[] = $this->_getTableColumnHtml(Str::ucfirst($f['relationName']) . ' Count ');
+                    break;
             }
-
-            $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
-        }
-
-        foreach ($this->withRelations as $r) {
-            $return[] = $this->_getTableColumnHtml(Str::ucfirst($r['relationName']));
-        }
-
-        //Todo withCount Relation, make it sortable
-        foreach ($this->withCountRelations as $r) {
-            $return[] = $this->_getTableColumnHtml(Str::ucfirst($r['relationName']));
         }
 
         if ($this->_needsActionColumn()) {
@@ -81,32 +81,32 @@ trait WithViewCode
 
     private function _generateTableSlot()
     {
-        $return = [];
         $fields = $this->_getSortedListingFields();
+        $return = [];
 
         foreach ($fields as $f) {
-            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
-                $return[] = $this->_getTableColumnHtml(
-                    Str::replace('##COLUMN_NAME##', $this->modelProps['primary_key'], $this->_getTableColumnTemplate())
-                );
-                continue;
+            switch ($f['type']) {
+                case 'primary':
+                    $return[] = $this->_getTableColumnHtml(
+                        Str::replace('##COLUMN_NAME##', $this->modelProps['primary_key'], $this->_getTableColumnTemplate())
+                    );
+                    break;
+                case 'normal':
+                    $return[] = $this->_getTableColumnHtml(
+                        Str::replace('##COLUMN_NAME##', $f['column'], $this->_getTableColumnTemplate())
+                    );
+                    break;
+                case 'with':
+                    $return[] = $this->_getTableColumnHtml(
+                        Str::replace('##COLUMN_NAME##', $this->_getWithTableSlot($f), $this->_getTableColumnTemplate())
+                    );
+                    break;
+                case 'withCount':
+                    $return[] = $this->_getTableColumnHtml(
+                        Str::replace('##COLUMN_NAME##', $f['relationName'] . '_count', $this->_getTableColumnTemplate())
+                    );
+                    break;
             }
-
-            $return[] = $this->_getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $f['column'], $this->_getTableColumnTemplate())
-            );
-        }
-
-        foreach ($this->withRelations as $r) {
-            $return[] = $this->_getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $this->_getWithTableSlot($r), $this->_getTableColumnTemplate())
-            );
-        }
-
-        foreach ($this->withCountRelations as $r) {
-            $return[] = $this->_getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $r['relationName']. '_count', $this->_getTableColumnTemplate())
-            );
         }
 
         if ($this->_needsActionColumn()) {
@@ -163,21 +163,16 @@ trait WithViewCode
         $fields = $this->_getSortedFormFields(true);
         $string = '';
         foreach ($fields as $field) {
-            $string .=
-                Str::replace(
-                    [
-                        '##COLUMN##',
-                        '##LABEL##',
-                    ],
-                    [
-                        $field['column'],
-                        $this->_getLabel($field['label'], $field['column'])
-                    ],
-                    $this->_getFieldTemplate($field['attributes']['type'])
-                );
-
-            if ($field['attributes']['type'] == 'select') {
-                $string = Str::replace('##OPTIONS##', $this->_getSelectOptionsHtml($field['attributes']['options']), $string);
+            switch ($field['type']) {
+                case 'normal':
+                    $string .= $this->_getNormalFieldHtml($field);
+                    break;
+                case 'btm':
+                    $string .= $this->_getBtmFieldHtml($field);
+                    break;
+                case 'belongsTo':
+                    $string .= $this->_getBelongsToFieldHtml($field);
+                    break;
             }
         }
 
@@ -186,15 +181,11 @@ trait WithViewCode
                 '##CancelBtnText##',
                 '##CreateBtnText##',
                 '##FIELDS##',
-                '##BTM_FIELDS##',
-                '##BELONGS_TO_FIELDS##',
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
                 $this->advancedSettings['text']['create_button'],
                 $string,
-                $this->_getBtmFields(true),
-                $this->_getBelongsToFields(true),
             ],
             $this->_getAddModalTemplate()
         );
@@ -208,21 +199,16 @@ trait WithViewCode
         $fields = $this->_getSortedFormFields(false);
         $string = '';
         foreach ($fields as $field) {
-            $string .=
-                Str::replace(
-                    [
-                        '##COLUMN##',
-                        '##LABEL##',
-                    ],
-                    [
-                        $field['column'],
-                        $this->_getLabel($field['label'], $field['column'])
-                    ],
-                    $this->_getFieldTemplate($field['attributes']['type'])
-                );
-
-            if ($field['attributes']['type'] == 'select') {
-                $string = Str::replace('##OPTIONS##', $this->_getSelectOptionsHtml($field['attributes']['options']), $string);
+            switch ($field['type']) {
+                case 'normal':
+                    $string .= $this->_getNormalFieldHtml($field);
+                    break;
+                case 'btm':
+                    $string .= $this->_getBtmFieldHtml($field);
+                    break;
+                case 'belongsTo':
+                    $string .= $this->_getBelongsToFieldHtml($field);
+                    break;
             }
         }
 
@@ -231,15 +217,11 @@ trait WithViewCode
                 '##CancelBtnText##',
                 '##EditBtnText##',
                 '##FIELDS##',
-                '##BTM_FIELDS##',
-                '##BELONGS_TO_FIELDS##',
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
                 $this->advancedSettings['text']['edit_button'],
                 $string,
-                $this->_getBtmFields(false),
-                $this->_getBelongsToFields(false),
             ],
             $this->_getEditModalTemplate()
         );
@@ -283,89 +265,6 @@ trait WithViewCode
         return $this->_newLines(1, 6) . collect($return)->implode($this->_newLines(1, 6)) . $this->_newLines(1, 5);
     }
 
-    private function _getBtmFields($isAdd = true)
-    {
-
-        if ($isAdd && !$this->_isBtmAddEnabled()) {
-            return '';
-        }
-
-        if (!$isAdd && !$this->_isBtmEditEnabled()) {
-            return '';
-        }
-
-        $string = '';
-        foreach ($this->belongsToManyRelations as $r) {
-            if ($isAdd && !$r['in_add']) {
-                continue;
-            }
-
-            if (!$isAdd && !$r['in_edit']) {
-                continue;
-            }
-
-            $string .= Str::replace(
-                [
-                    '##HEADING##',
-                    '##RELATION##',
-                    '##FIELDNAME##',
-                    '##DISPLAY_COLUMN##',
-                    '##RELATED_KEY##',
-                ],
-                [
-                    Str::studly($r['relationName']),
-                    $r['relationName'],
-                    $this->_getBtmFieldName($r['relationName']),
-                    $r['displayColumn'],
-                    $r['relatedKey'],
-                ],
-                $this->_getBtmFieldTemplate()
-            );
-        }
-        return $string;
-    }
-
-    private function _getBelongsToFields($isAdd = true)
-    {
-        if ($isAdd && !$this->_isBelongsToAddEnabled()) {
-            return '';
-        }
-
-        if (!$isAdd && !$this->_isBelongsToEditEnabled()) {
-            return '';
-        }
-
-        $string = '';
-        foreach ($this->belongsToRelations as $r) {
-            if ($isAdd && !$r['in_add']) {
-                continue;
-            }
-
-            if (!$isAdd && !$r['in_edit']) {
-                continue;
-            }
-
-            $string .= Str::replace(
-                [
-                    '##LABEL##',
-                    '##COLUMN##',
-                    '##BELONGS_TO_VAR##',
-                    '##OWNER_KEY##',
-                    '##DISPLAY_COLUMN##',
-                ],
-                [
-                    Str::ucfirst($r['relationName']),
-                    $r['foreignKey'],
-                    Str::plural($r['relationName']),
-                    $r['ownerKey'],
-                    $r['displayColumn'],
-                ],
-                $this->_getBelongsToFieldTemplate()
-            );
-        }
-        return $string;
-    }
-
     private function _getWithTableSlot($r)
     {
         if ($this->_isBelongsToManyRelation($r['relationName']) || $this->_isHasManyRelation($r['relationName'])) {
@@ -392,6 +291,69 @@ trait WithViewCode
                 $r['displayColumn'],
             ],
             $this->_getBelongsToTableSlotTemplate()
+        );
+    }
+
+    private function _getNormalFieldHtml($field)
+    {
+        $html =
+            Str::replace(
+                [
+                    '##COLUMN##',
+                    '##LABEL##',
+                ],
+                [
+                    $field['column'],
+                    $this->_getLabel($field['label'], $field['column'])
+                ],
+                $this->_getFieldTemplate($field['attributes']['type'])
+            );
+
+        if ($field['attributes']['type'] == 'select') {
+            $html = Str::replace('##OPTIONS##', $this->_getSelectOptionsHtml($field['attributes']['options']), $html);
+        }
+        return $html;
+    }
+
+    private function _getBtmFieldHtml($r)
+    {
+        return Str::replace(
+            [
+                '##HEADING##',
+                '##RELATION##',
+                '##FIELDNAME##',
+                '##DISPLAY_COLUMN##',
+                '##RELATED_KEY##',
+            ],
+            [
+                Str::studly($r['relationName']),
+                $r['relationName'],
+                $this->_getBtmFieldName($r['relationName']),
+                $r['displayColumn'],
+                $r['relatedKey'],
+            ],
+            $this->_getBtmFieldTemplate()
+        );
+    }
+
+    private function _getBelongsToFieldHtml($r)
+    {
+        return Str::replace(
+            [
+                '##LABEL##',
+                '##COLUMN##',
+                '##BELONGS_TO_VAR##',
+                '##OWNER_KEY##',
+                '##DISPLAY_COLUMN##',
+            ],
+            [
+                Str::ucfirst($r['relationName']),
+                $r['foreignKey'],
+                Str::plural($r['relationName']),
+                $r['ownerKey'],
+                $r['displayColumn'],
+            ],
+            $this->_getBelongsToFieldTemplate()
         );
     }
 }

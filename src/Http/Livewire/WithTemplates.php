@@ -341,7 +341,7 @@ EOT;
             Add Record
         </x-slot>
 
-        <x-slot name="content">##FIELDS####BELONGS_TO_FIELDS####BTM_FIELDS##
+        <x-slot name="content">##FIELDS##
         </x-slot>
 
         <x-slot name="footer">
@@ -362,7 +362,7 @@ EOT;
             Edit Record
         </x-slot>
 
-        <x-slot name="content">##FIELDS####BELONGS_TO_FIELDS####BTM_FIELDS##
+        <x-slot name="content">##FIELDS##
         </x-slot>
 
         <x-slot name="footer">
