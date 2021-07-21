@@ -134,8 +134,8 @@ trait WithViewCode
 
         return Str::replace(
             [
-                '##CancelBtnText##',
-                '##DeleteBtnText##',
+                '##CANCEL_BTN_TEXT##',
+                '##DELETE_BTN_TEXT##',
             ],
             [
                 $this->advancedSettings['text']['cancel_button'],
@@ -159,8 +159,8 @@ trait WithViewCode
 
         return Str::replace(
             [
-                '##CancelBtnText##',
-                '##CreateBtnText##',
+                '##CANCEL_BTN_TEXT##',
+                '##CREATE_BTN_TEXT##',
                 '##FIELDS##',
             ],
             [
@@ -185,8 +185,8 @@ trait WithViewCode
 
         return Str::replace(
             [
-                '##CancelBtnText##',
-                '##EditBtnText##',
+                '##CANCEL_BTN_TEXT##',
+                '##EDIT_BTN_TEXT##',
                 '##FIELDS##',
             ],
             [
@@ -291,7 +291,7 @@ trait WithViewCode
             [
                 '##HEADING##',
                 '##RELATION##',
-                '##FIELDNAME##',
+                '##FIELD_NAME##',
                 '##DISPLAY_COLUMN##',
                 '##RELATED_KEY##',
             ],

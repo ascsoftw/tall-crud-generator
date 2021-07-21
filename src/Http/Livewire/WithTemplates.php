@@ -324,8 +324,8 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemDeletion', false)">##CancelBtnText##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="delete" wire:loading.attr="disabled" wire:click="deleteItem()">##DeleteBtnText##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button wire:click="$set('confirmingItemDeletion', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button mode="delete" wire:loading.attr="disabled" wire:click="deleteItem()">##DELETE_BTN_TEXT##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::confirmation-dialog>
 
@@ -345,8 +345,8 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemCreation', false)">##CancelBtnText##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="createItem()">##CreateBtnText##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button wire:click="$set('confirmingItemCreation', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="createItem()">##CREATE_BTN_TEXT##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::dialog-modal>
 
@@ -366,8 +366,8 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdition', false)">##CancelBtnText##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EditBtnText##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdition', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EDIT_BTN_TEXT##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::dialog-modal>
 EOT;
@@ -443,7 +443,7 @@ EOT;
 
 
         $this->##RELATION## = ##MODEL##::all();
-        $this->##FIELDNAME## = [];
+        $this->##FIELD_NAME## = [];
 EOT;
     }
 
@@ -451,7 +451,7 @@ EOT;
     {
         return <<<'EOT'
 
-        $item->##RELATION##()->attach($this->##FIELDNAME##);
+        $item->##RELATION##()->attach($this->##FIELD_NAME##);
 EOT;
     }
 
@@ -459,7 +459,7 @@ EOT;
     {
         return <<<'EOT'
 
-        $this->##FIELDNAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function ($i) {
+        $this->##FIELD_NAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function ($i) {
             return (string)$i;
         })->toArray();
         $this->##RELATION## = ##MODEL##::all();
@@ -471,8 +471,8 @@ EOT;
     {
         return <<<'EOT'
 
-        $this->item->##RELATION##()->sync($this->##FIELDNAME##);
-        $this->##FIELDNAME## = [];
+        $this->item->##RELATION##()->sync($this->##FIELD_NAME##);
+        $this->##FIELD_NAME## = [];
 EOT;
     }
 
@@ -495,7 +495,7 @@ EOT;
                 @foreach( $##RELATION## as $c)
                 <x:tall-crud-generator::checkbox-wrapper class="mt-4">
                     <x:tall-crud-generator::label>{{$c->##DISPLAY_COLUMN##}}</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::checkbox value="{{ $c->##RELATED_KEY## }}" class="ml-2" wire:model.defer="##FIELDNAME##" />
+                    <x:tall-crud-generator::checkbox value="{{ $c->##RELATED_KEY## }}" class="ml-2" wire:model.defer="##FIELD_NAME##" />
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endforeach
             </div>

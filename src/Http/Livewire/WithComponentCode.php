@@ -502,7 +502,7 @@ trait WithComponentCode
                 [
                     '##RELATION##',
                     '##MODEL##',
-                    '##FIELDNAME##',
+                    '##FIELD_NAME##',
                 ],
                 [
                     $r['relationName'],
@@ -531,7 +531,7 @@ trait WithComponentCode
             $string .= Str::replace(
                 [
                     '##RELATION##',
-                    '##FIELDNAME##',
+                    '##FIELD_NAME##',
                 ],
                 [
                     $r['relationName'],
@@ -559,7 +559,7 @@ trait WithComponentCode
             $string .= Str::replace(
                 [
                     '##RELATION##',
-                    '##FIELDNAME##',
+                    '##FIELD_NAME##',
                     '##KEY##',
                     '##MODEL##',
                     '##MODEL_VAR##',
@@ -594,7 +594,7 @@ trait WithComponentCode
                 Str::replace(
                     [
                         '##RELATION##',
-                        '##FIELDNAME##',
+                        '##FIELD_NAME##',
                     ],
                     [
                         $r['relationName'],
