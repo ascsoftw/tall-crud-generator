@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 trait WithHelpers
 {
-    private function _getModelName($name = '')
+    public function getModelName($name = '')
     {
         if (empty($name)) {
             $name = $this->modelPath;
@@ -15,22 +15,22 @@ trait WithHelpers
         return Arr::last(Str::of($name)->explode('\\')->all());
     }
 
-    private function _newLines($count = 1, $indent = 0)
+    public function newLines($count = 1, $indent = 0)
     {
-        return str_repeat("\n" . $this->_indent($indent), $count);
+        return str_repeat("\n" . $this->indent($indent), $count);
     }
 
-    private function _spaces($count = 1)
+    public function spaces($count = 1)
     {
         return str_repeat(" ", $count);
     }
 
-    private function _indent($step = 1)
+    public function indent($step = 1)
     {
-        return $this->_spaces($step * 4);
+        return $this->spaces($step * 4);
     }
 
-    private function _getColumns($columns, $primaryKey)
+    public function getColumns($columns, $primaryKey)
     {
         $collection = collect($columns);
 
@@ -41,13 +41,13 @@ trait WithHelpers
         return $filtered->all();
     }
 
-    private function _getDefaultSortableColumn()
+    public function getDefaultSortableColumn()
     {
-        if ($this->_isPrimaryKeySortable()) {
+        if ($this->isPrimaryKeySortable()) {
             return $this->modelProps['primary_key'];
         }
 
-        $collection = collect($this->_getSortedListingFields());
+        $collection = collect($this->getSortedListingFields());
 
         $field = $collection->first(function ($f) {
             if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
@@ -62,18 +62,18 @@ trait WithHelpers
         return $field['column'];
     }
 
-    private function _getSearchableColumns()
+    public function getSearchableColumns()
     {
         $columns = [];
         foreach ($this->fields as $f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['searchable']) {
+            if (($this->hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['searchable']) {
                 $columns[] = $f;
             }
         }
         return $columns;
     }
 
-    private function _validateEmptyColumns()
+    public function validateEmptyColumns()
     {
         $collection = collect($this->fields);
 
@@ -84,22 +84,22 @@ trait WithHelpers
         return count($this->fields) == count($filtered->all());
     }
 
-    private function _validateUniqueFields()
+    public function validateUniqueFields()
     {
         $collection = collect($this->fields);
         $filtered = $collection->duplicates('column')->all();
         return 0 == count($filtered);
     }
 
-    private function _validateEachRow()
+    public function validateEachRow()
     {
-        if ($this->_hasAddAndEditFeaturesDisabled()) {
+        if ($this->hasAddAndEditFeaturesDisabled()) {
             return true;
         }
         foreach ($this->fields as $f) {
             if (!($f['inList'] ||
-                ($this->_isAddFeatureEnabled() && $f['inAdd']) ||
-                ($this->_isEditFeatureEnabled()  && $f['inEdit']))) {
+                ($this->isAddFeatureEnabled() && $f['inAdd']) ||
+                ($this->isEditFeatureEnabled()  && $f['inEdit']))) {
                 $this->addError('fields', $f['column'] . ' Column should be selected to display in at least 1 view.');
                 return false;
             }
@@ -107,9 +107,9 @@ trait WithHelpers
         return true;
     }
 
-    private function _validateDisplayColumn()
+    public function validateDisplayColumn()
     {
-        if ($this->_hasAddAndEditFeaturesDisabled()) {
+        if ($this->hasAddAndEditFeaturesDisabled()) {
             return true;
         }
 
@@ -121,9 +121,9 @@ trait WithHelpers
         return 0 != count($filtered->all());
     }
 
-    private function _validateCreateColumn()
+    public function validateCreateColumn()
     {
-        if (!$this->_isAddFeatureEnabled()) {
+        if (!$this->isAddFeatureEnabled()) {
             return true;
         }
 
@@ -135,9 +135,9 @@ trait WithHelpers
         return 0 != count($filtered->all());
     }
 
-    private function _validateEditColumn()
+    public function validateEditColumn()
     {
-        if (!$this->_isEditFeatureEnabled()) {
+        if (!$this->isEditFeatureEnabled()) {
             return true;
         }
 
@@ -149,14 +149,14 @@ trait WithHelpers
         return 0 != count($filtered->all());
     }
 
-    private function _getChildComponentName()
+    public function getChildComponentName()
     {
         return $this->componentName . '-child';
     }
 
-    private function _getFormFields($addForm = true, $editForm = true)
+    public function getFormFields($addForm = true, $editForm = true)
     {
-        if ($this->_hasAddAndEditFeaturesDisabled()) {
+        if ($this->hasAddAndEditFeaturesDisabled()) {
             return [];
         }
 
@@ -173,7 +173,7 @@ trait WithHelpers
         return $columns;
     }
 
-    private function _getLabel($label = '', $column = '')
+    public function getLabel($label = '', $column = '')
     {
         if (!empty($label)) {
             return $label;
@@ -182,37 +182,37 @@ trait WithHelpers
         return Str::studly(Str::replace('_', ' ', $column));
     }
 
-    private function _getLabelForWith($relation = '')
+    public function getLabelForWith($relation = '')
     {
         return Str::ucfirst($relation);
     }
 
-    private function _getLabelForWithCount($relation = '')
+    public function getLabelForWithCount($relation = '')
     {
         return Str::ucfirst($relation) . ' Count';
     }
 
-    private function _getColumnForWithCount($relation = '')
+    public function getColumnForWithCount($relation = '')
     {
         return $relation . '_count';
     }
 
-    private function _getBtmFieldName($relation)
+    public function getBtmFieldName($relation)
     {
         return 'checked' . Str::studly($relation);
     }
 
-    private function _getListingFieldsToSort()
+    public function getListingFieldsToSort()
     {
 
         $order = 0;
         $collection = collect();
-        if ($this->_needsPrimaryKeyInListing()) {
+        if ($this->needsPrimaryKeyInListing()) {
             $collection->push(['field' => $this->modelProps['primary_key'], 'type' => 'primary', 'order' => ++$order]);
         }
 
         foreach ($this->fields as $f) {
-            if ($this->_hasAddAndEditFeaturesDisabled() || $f['inList']) {
+            if ($this->hasAddAndEditFeaturesDisabled() || $f['inList']) {
                 $collection->push(['field' => $f['column'], 'type' => 'normal', 'order' => ++$order]);
             }
         }
@@ -228,9 +228,9 @@ trait WithHelpers
         return $collection->all();
     }
 
-    private function _getFormFieldsToSort($addForm = true)
+    public function getFormFieldsToSort($addForm = true)
     {
-        $collection = collect($this->_getFormFields($addForm, !$addForm));
+        $collection = collect($this->getFormFields($addForm, !$addForm));
         $map = $collection->map(function ($item, $key) {
             return ['field' => $item['column'], 'type' => 'normal', 'order' => ++$key];
         });
@@ -260,7 +260,7 @@ trait WithHelpers
         return $map->all();
     }
 
-    private function _sortFieldsByOrder($fields)
+    public function sortFieldsByOrder($fields)
     {
         if (is_array($fields)) {
             $fields = collect($fields);
@@ -269,10 +269,10 @@ trait WithHelpers
         return $sorted->values()->all();
     }
 
-    private function _getSortedFormFields($addForm = true)
+    public function getSortedFormFields($addForm = true)
     {
-        $sortFields = collect($this->_sortFieldsByOrder($this->sortFields[$addForm ? 'add' : 'edit']));
-        $collection = collect($this->_getFormFields($addForm, !$addForm));
+        $sortFields = collect($this->sortFieldsByOrder($this->sortFields[$addForm ? 'add' : 'edit']));
+        $collection = collect($this->getFormFields($addForm, !$addForm));
         $btmCollection = collect();
         foreach ($this->belongsToManyRelations as $r) {
             if ($addForm && !$r['inAdd']) {
@@ -310,10 +310,10 @@ trait WithHelpers
         });
     }
 
-    private function _getSortedListingFields()
+    public function getSortedListingFields()
     {
 
-        $sortFields = collect($this->_sortFieldsByOrder($this->sortFields['listing']));
+        $sortFields = collect($this->sortFieldsByOrder($this->sortFields['listing']));
         $collection = collect($this->fields);
         $withRelationsCollection = collect($this->withRelations);
         $withCountRelationsCollection = collect($this->withCountRelations);
@@ -332,7 +332,7 @@ trait WithHelpers
         });
     }
 
-    private function _isBelongsToManyRelation($relation)
+    public function isBelongsToManyRelation($relation)
     {
         if( empty( $this->allRelations['belongsToMany'])) {
             return false;
@@ -345,7 +345,7 @@ trait WithHelpers
         return false;
     }
 
-    private function _isHasManyRelation($relation)
+    public function isHasManyRelation($relation)
     {
         if( empty( $this->allRelations['hasMany'])) {
             return false;

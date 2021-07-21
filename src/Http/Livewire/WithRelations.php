@@ -56,14 +56,14 @@ trait WithRelations
         $this->resetValidation('belongsToManyRelation.*');
         $this->belongsToManyRelation['isValid'] = false;
 
-        if (!$this->_isValidBelongsToManyName()) {
+        if (!$this->isValidBelongsToManyName()) {
             return;
         }
 
-        $this->_fillBelongsToManyFields();
+        $this->fillBelongsToManyFields();
     }
 
-    private function _isValidBelongsToManyName()
+    public function isValidBelongsToManyName()
     {
         if (empty($this->belongsToManyRelation['name'])) {
             $this->addError('belongsToManyRelation.name', 'Please select a Relation');
@@ -80,7 +80,7 @@ trait WithRelations
         return true;
     }
 
-    private function _fillBelongsToManyFields()
+    public function fillBelongsToManyFields()
     {
         $model = new $this->modelPath();
         $relationName = $this->belongsToManyRelation['name'];
@@ -88,13 +88,13 @@ trait WithRelations
         $this->belongsToManyRelation['isValid'] = true;
         $this->belongsToManyRelation['relatedKey'] = $relation->getRelatedKeyName();
         $this->belongsToManyRelation['modelPath'] = get_class($relation->getRelated());
-        $this->belongsToManyRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        $this->belongsToManyRelation['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
     public function addBelongsToManyRelation()
     {
         $this->resetValidation('belongsToManyRelation.*');
-        if (!$this->_isValidBelongsToManyName()) {
+        if (!$this->isValidBelongsToManyName()) {
             return;
         }
         $this->validateOnly('belongsToManyRelation.displayColumn', [
@@ -145,14 +145,14 @@ trait WithRelations
         $this->resetValidation('belongsToRelation.*');
         $this->belongsToRelation['isValid'] = false;
 
-        if (!$this->_isValidBelongsToName()) {
+        if (!$this->isValidBelongsToName()) {
             return;
         }
 
-        $this->_fillBelongsToFields();
+        $this->fillBelongsToFields();
     }
 
-    private function _isValidBelongsToName()
+    public function isValidBelongsToName()
     {
         if (empty($this->belongsToRelation['name'])) {
             $this->addError('belongsToRelation.name', 'Please select a Relation');
@@ -169,7 +169,7 @@ trait WithRelations
         return true;
     }
 
-    private function _fillBelongsToFields()
+    public function fillBelongsToFields()
     {
         $model = new $this->modelPath();
         $relationName = $this->belongsToRelation['name'];
@@ -178,13 +178,13 @@ trait WithRelations
         $this->belongsToRelation['ownerKey'] = $relation->getOwnerKeyName();
         $this->belongsToRelation['foreignKey'] = $relation->getForeignKeyName();
         $this->belongsToRelation['modelPath'] = get_class($relation->getRelated());
-        $this->belongsToRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        $this->belongsToRelation['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
     public function addBelongsToRelation()
     {
         $this->resetValidation('belongsToRelation.*');
-        if (!$this->_isValidBelongsToName()) {
+        if (!$this->isValidBelongsToName()) {
             return;
         }
         $this->validateOnly('belongsToRelation.displayColumn', [
@@ -233,14 +233,14 @@ trait WithRelations
         $this->resetValidation('withRelation.*');
         $this->withRelation['isValid'] = false;
 
-        if (!$this->_isValidWithName()) {
+        if (!$this->isValidWithName()) {
             return;
         }
 
-        $this->_fillWithFields();
+        $this->fillWithFields();
     }
 
-    private function _isValidWithName()
+    public function isValidWithName()
     {
         if (empty($this->withRelation['name'])) {
             $this->addError('withRelation.name', 'Please select a Relation');
@@ -257,20 +257,20 @@ trait WithRelations
         return true;
     }
 
-    private function _fillWithFields()
+    public function fillWithFields()
     {
         $model = new $this->modelPath();
         $relationName = $this->withRelation['name'];
         $relation = $model->{$relationName}();
         $this->withRelation['isValid'] = true;
         $this->withRelation['modelPath'] = get_class($relation->getRelated());
-        $this->withRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        $this->withRelation['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
     public function addWithRelation()
     {
         $this->resetValidation('withRelation.*');
-        if (!$this->_isValidWithName()) {
+        if (!$this->isValidWithName()) {
             return;
         }
         $this->validateOnly('withRelation.displayColumn', [
@@ -312,14 +312,14 @@ trait WithRelations
         $this->resetValidation('withCountRelation.*');
         $this->withCountRelation['isValid'] = false;
 
-        if (!$this->_isValidWithCountName()) {
+        if (!$this->isValidWithCountName()) {
             return;
         }
 
         $this->withCountRelation['isValid'] = true;
     }
 
-    private function _isValidWithCountName()
+    public function isValidWithCountName()
     {
         if (empty($this->withCountRelation['name'])) {
             $this->addError('withCountRelation.name', 'Please select a Relation');
@@ -339,7 +339,7 @@ trait WithRelations
     public function addWithCountRelation()
     {
         $this->resetValidation('withCountRelation.*');
-        if (!$this->_isValidWithCountName()) {
+        if (!$this->isValidWithCountName()) {
             return;
         }
 

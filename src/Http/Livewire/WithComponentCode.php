@@ -6,83 +6,83 @@ use Illuminate\Support\Str;
 
 trait WithComponentCode
 {
-    private function _generateComponentCode()
+    public function generateComponentCode()
     {
         $return = [];
-        $return['sort'] = $this->_generateSortCode();
-        $return['search'] = $this->_generateSearchCode();
-        $return['pagination_dropdown'] = $this->_generatePaginationDropdownCode();
-        $return['pagination'] = $this->_generatePaginationCode();
-        $return['with_query'] = $this->_generateWithQueryCode();
-        $return['with_count_query'] = $this->_generateWithCountQueryCode();
+        $return['sort'] = $this->generateSortCode();
+        $return['search'] = $this->generateSearchCode();
+        $return['pagination_dropdown'] = $this->generatePaginationDropdownCode();
+        $return['pagination'] = $this->generatePaginationCode();
+        $return['with_query'] = $this->generateWithQueryCode();
+        $return['with_count_query'] = $this->generateWithCountQueryCode();
 
-        $return['child_delete'] = $this->_generateDeleteCode();
-        $return['child_add'] = $this->_generateAddCode();
-        $return['child_edit'] = $this->_generateEditCode();
-        $return['child_listeners'] = $this->_generateChildListeners();
-        $return['child_item'] = $this->_generateChildItem();
-        $return['child_rules'] = $this->_generateChildRules();
-        $return['child_validation_attributes'] = $this->_generateChildValidationAttributes();
-        $return['child_other_models'] = $this->_generateOtherModelsCode();
-        $return['child_vars'] = $this->_getVars();
+        $return['child_delete'] = $this->generateDeleteCode();
+        $return['child_add'] = $this->generateAddCode();
+        $return['child_edit'] = $this->generateEditCode();
+        $return['child_listeners'] = $this->generateChildListeners();
+        $return['child_item'] = $this->generateChildItem();
+        $return['child_rules'] = $this->generateChildRules();
+        $return['child_validation_attributes'] = $this->generateChildValidationAttributes();
+        $return['child_other_models'] = $this->generateOtherModelsCode();
+        $return['child_vars'] = $this->getVars();
         return $return;
     }
 
-    private function _generateSortCode()
+    public function generateSortCode()
     {
         $return = [
             'vars' => '',
             'query' => '',
             'method' => ''
         ];
-        if ($this->_isSortingEnabled()) {
-            $return['vars'] = $this->_getSortingVars();
-            $return['query'] = $this->_getSortingQuery();
-            $return['method'] = $this->_getSortingMethod();
+        if ($this->isSortingEnabled()) {
+            $return['vars'] = $this->getSortingVars();
+            $return['query'] = $this->getSortingQuery();
+            $return['method'] = $this->getSortingMethod();
         }
 
         return $return;
     }
 
-    private function _generateSearchCode()
+    public function generateSearchCode()
     {
         $return = [
             'vars' => '',
             'query' => '',
             'method' => ''
         ];
-        if ($this->_isSearchingEnabled()) {
-            $return['vars'] = $this->_getSearchingVars();
-            $return['query'] = $this->_getSearchingQuery();
-            $return['method'] = $this->_getSearchingMethod();
+        if ($this->isSearchingEnabled()) {
+            $return['vars'] = $this->getSearchingVars();
+            $return['query'] = $this->getSearchingQuery();
+            $return['method'] = $this->getSearchingMethod();
         }
 
         return $return;
     }
 
-    private function _generatePaginationDropdownCode()
+    public function generatePaginationDropdownCode()
     {
         $return = [
             'method' => ''
         ];
-        if ($this->_isPaginationDropdownEnabled()) {
-            $return['method'] = $this->_getPaginationDropdownMethod();
+        if ($this->isPaginationDropdownEnabled()) {
+            $return['method'] = $this->getPaginationDropdownMethod();
         }
         return $return;
     }
 
-    private function _generatePaginationCode()
+    public function generatePaginationCode()
     {
         $return = [
             'vars' => ''
         ];
 
-        $return['vars'] = $this->_getPaginationVars();
+        $return['vars'] = $this->getPaginationVars();
 
         return $return;
     }
 
-    private function _generateWithQueryCode()
+    public function generateWithQueryCode()
     {
         $collection = collect();
         foreach ($this->withRelations as $r) {
@@ -93,10 +93,10 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace('##RELATIONS##', $collection->implode(','), $this->_getWithQueryTemplate());
+        return Str::replace('##RELATIONS##', $collection->implode(','), $this->getWithQueryTemplate());
     }
 
-    private function _generateWithCountQueryCode()
+    public function generateWithCountQueryCode()
     {
         $collection = collect();
         foreach ($this->withCountRelations as $r) {
@@ -107,52 +107,52 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace('##RELATIONS##', $collection->implode(','), $this->_getWithCountQueryTemplate());
+        return Str::replace('##RELATIONS##', $collection->implode(','), $this->getWithCountQueryTemplate());
     }
 
-    private function _generateAddCode()
+    public function generateAddCode()
     {
         $return = [
             'vars' => '',
             'method' => ''
         ];
-        if ($this->_isAddFeatureEnabled()) {
-            $return['vars'] = $this->_getAddVars();
-            $return['method'] = $this->_getAddMethod();
+        if ($this->isAddFeatureEnabled()) {
+            $return['vars'] = $this->getAddVars();
+            $return['method'] = $this->getAddMethod();
         }
 
         return $return;
     }
 
-    private function _generateEditCode()
+    public function generateEditCode()
     {
         $return = [
             'vars' => '',
             'method' => ''
         ];
-        if ($this->_isEditFeatureEnabled()) {
-            $return['vars'] = $this->_getEditVars();
-            $return['method'] = $this->_getEditMethod();
+        if ($this->isEditFeatureEnabled()) {
+            $return['vars'] = $this->getEditVars();
+            $return['method'] = $this->getEditMethod();
         }
 
         return $return;
     }
 
-    private function _generateDeleteCode()
+    public function generateDeleteCode()
     {
         $return = [
             'vars' => '',
             'method' => ''
         ];
-        if ($this->_isDeleteFeatureEnabled()) {
-            $return['vars'] = $this->_getDeleteVars();
-            $return['method'] = $this->_getDeleteMethod();
+        if ($this->isDeleteFeatureEnabled()) {
+            $return['vars'] = $this->getDeleteVars();
+            $return['method'] = $this->getDeleteMethod();
         }
 
         return $return;
     }
 
-    private function _generateChildListeners()
+    public function generateChildListeners()
     {
         $return = '';
         return Str::replace(
@@ -162,41 +162,41 @@ trait WithComponentCode
                 '##EDIT_LISTENER##',
             ],
             [
-                $this->_isDeleteFeatureEnabled() ? 'showDeleteForm' : '',
-                $this->_isAddFeatureEnabled() ? 'showCreateForm' : '',
-                $this->_isEditFeatureEnabled() ? 'showEditForm' : '',
+                $this->isDeleteFeatureEnabled() ? 'showDeleteForm' : '',
+                $this->isAddFeatureEnabled() ? 'showCreateForm' : '',
+                $this->isEditFeatureEnabled() ? 'showEditForm' : '',
             ],
-            $this->_getChildListenerTemplate(),
+            $this->getChildListenerTemplate(),
         );
 
         return $return;
     }
 
-    private function _getSortingVars()
+    public function getSortingVars()
     {
-        return Str::replace('##SORT_COLUMN##', $this->_getDefaultSortableColumn(), $this->_getSortingVarsTemplate());
+        return Str::replace('##SORT_COLUMN##', $this->getDefaultSortableColumn(), $this->getSortingVarsTemplate());
     }
 
-    private function _getSortingQuery()
+    public function getSortingQuery()
     {
-        return $this->_getSortingQueryTemplate();
+        return $this->getSortingQueryTemplate();
     }
 
-    private function _getSortingMethod()
+    public function getSortingMethod()
     {
-        return $this->_getSortingMethodTemplate();
+        return $this->getSortingMethodTemplate();
     }
 
-    private function _getSearchingVars()
+    public function getSearchingVars()
     {
-        return $this->_getSearchingVarsTemplate();
+        return $this->getSearchingVarsTemplate();
     }
 
-    private function _getSearchingQuery()
+    public function getSearchingQuery()
     {
         $searchQuery = '';
 
-        $searchableColumns = $this->_getSearchableColumns();
+        $searchableColumns = $this->getSearchableColumns();
         $isFirst = true;
         foreach ($searchableColumns as $f) {
             $searchQuery .= Str::replace(
@@ -205,38 +205,38 @@ trait WithComponentCode
                     '##COLUMN##',
                 ],
                 [
-                    $isFirst ? '$query->where' : $this->_newLines(1, 6) . '->orWhere',
+                    $isFirst ? '$query->where' : $this->newLines(1, 6) . '->orWhere',
                     $f['column'],
                 ],
-                $this->_getSearchingQueryWhereTemplate(),
+                $this->getSearchingQueryWhereTemplate(),
             );
             $isFirst = false;
         }
 
-        return Str::replace('##SEARCH_QUERY##', $searchQuery, $this->_getSearchinQueryTemplate());
+        return Str::replace('##SEARCH_QUERY##', $searchQuery, $this->getSearchinQueryTemplate());
     }
 
-    private function _getSearchingMethod()
+    public function getSearchingMethod()
     {
-        return $this->_getSearchingMethodTemplate();
+        return $this->getSearchingMethodTemplate();
     }
 
-    private function _getPaginationVars()
+    public function getPaginationVars()
     {
-        return Str::replace('##PER_PAGE##', $this->advancedSettings['table_settings']['recordsPerPage'], $this->_getPaginationVarsTemplate());
+        return Str::replace('##PER_PAGE##', $this->advancedSettings['table_settings']['recordsPerPage'], $this->getPaginationVarsTemplate());
     }
 
-    private function _getPaginationDropdownMethod()
+    public function getPaginationDropdownMethod()
     {
-        return $this->_getPaginationDropdownMethodTemplate();
+        return $this->getPaginationDropdownMethodTemplate();
     }
 
-    private function _getDeleteVars()
+    public function getDeleteVars()
     {
-        return $this->_getDeleteVarsTemplate();
+        return $this->getDeleteVarsTemplate();
     }
 
-    private function _getDeleteMethod()
+    public function getDeleteMethod()
     {
         return Str::replace(
             [
@@ -245,25 +245,25 @@ trait WithComponentCode
                 '##FLASH_MESSAGE##',
             ],
             [
-                $this->_getModelName(),
+                $this->getModelName(),
                 $this->componentName,
-                $this->_getDeleteFlashCode(),
+                $this->getDeleteFlashCode(),
             ],
-            $this->_getDeleteMethodTemplate()
+            $this->getDeleteMethodTemplate()
         );
     }
 
-    private function _getAddVars()
+    public function getAddVars()
     {
-        return $this->_getAddVarsTemplate();
+        return $this->getAddVarsTemplate();
     }
 
-    private function _getAddMethod()
+    public function getAddMethod()
     {
-        $fields = $this->_getFormFields(true, false);
+        $fields = $this->getFormFields(true, false);
         $string = '';
         foreach ($fields as $field) {
-            $string .= $this->_newLines(1, 3) .
+            $string .= $this->newLines(1, 3) .
                 Str::replace(
                     [
                         '##COLUMN##',
@@ -273,7 +273,7 @@ trait WithComponentCode
                         $field['column'],
                         ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
                     ],
-                    $this->_getCreateFieldTemplate()
+                    $this->getCreateFieldTemplate()
                 );
         }
 
@@ -289,25 +289,25 @@ trait WithComponentCode
                 '##BELONGS_TO_SAVE##',
             ],
             [
-                $this->_getModelName(),
+                $this->getModelName(),
                 $this->componentName,
                 $string,
-                $this->_getAddFlashCode(),
-                $this->_getBtmInitCode(),
-                $this->_getBtmAttachCode(),
-                $this->_getBelongsToInitCode(),
-                $this->_getBelongsToSaveCode(),
+                $this->getAddFlashCode(),
+                $this->getBtmInitCode(),
+                $this->getBtmAttachCode(),
+                $this->getBelongsToInitCode(),
+                $this->getBelongsToSaveCode(),
             ],
-            $this->_getAddMethodTemplate()
+            $this->getAddMethodTemplate()
         );
     }
 
-    private function _getEditVars()
+    public function getEditVars()
     {
-        return $this->_getEditVarsTemplate();
+        return $this->getEditVarsTemplate();
     }
 
-    private function _getEditMethod()
+    public function getEditMethod()
     {
         return Str::replace(
             [
@@ -320,30 +320,30 @@ trait WithComponentCode
                 '##BELONGS_TO_INIT##',
             ],
             [
-                $this->_getModelName(),
-                Str::lower($this->_getModelName()),
+                $this->getModelName(),
+                Str::lower($this->getModelName()),
                 $this->componentName,
-                $this->_getEditFlashCode(),
-                $this->_getBtmFetchCode(),
-                $this->_getBtmUpdateCode(),
-                $this->_getBelongsToInitCode(false),
+                $this->getEditFlashCode(),
+                $this->getBtmFetchCode(),
+                $this->getBtmUpdateCode(),
+                $this->getBelongsToInitCode(false),
             ],
-            $this->_getEditMethodTemplate()
+            $this->getEditMethodTemplate()
         );
     }
 
-    private function _generateChildItem()
+    public function generateChildItem()
     {
-        return $this->_getChildItemTemplate();
+        return $this->getChildItemTemplate();
     }
 
-    private function _generateChildRules()
+    public function generateChildRules()
     {
-        $fields = $this->_getFormFields();
+        $fields = $this->getFormFields();
         $string = '';
 
         foreach ($fields as $field) {
-            $string .= $this->_newLines(1, 2) .
+            $string .= $this->newLines(1, 2) .
                 Str::replace(
                     [
                         '##COLUMN_NAME##',
@@ -353,20 +353,20 @@ trait WithComponentCode
                         $field['column'],
                         Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
                     ],
-                    $this->_getChildFieldTemplate()
+                    $this->getChildFieldTemplate()
                 );
         }
 
-        $string .= $this->_getRulesForBelongsToFields();
-        return Str::replace('##RULES##', $string, $this->_getChildRulesTemplate());
+        $string .= $this->getRulesForBelongsToFields();
+        return Str::replace('##RULES##', $string, $this->getChildRulesTemplate());
     }
 
-    private function _generateChildValidationAttributes()
+    public function generateChildValidationAttributes()
     {
-        $fields = $this->_getFormFields();
+        $fields = $this->getFormFields();
         $string = '';
         foreach ($fields as $field) {
-            $string .= $this->_newLines(1, 2) .
+            $string .= $this->newLines(1, 2) .
                 Str::replace(
                     [
                         '##COLUMN_NAME##',
@@ -374,82 +374,82 @@ trait WithComponentCode
                     ],
                     [
                         $field['column'],
-                        $this->_getLabel($field['label'], $field['column'])
+                        $this->getLabel($field['label'], $field['column'])
                     ],
-                    $this->_getChildFieldTemplate()
+                    $this->getChildFieldTemplate()
                 );
         }
-        $string .= $this->_getAttributesForBelongsToFields();
-        return Str::replace('##ATTRIBUTES##', $string, $this->_getchildValidationAttributesTemplate());
+        $string .= $this->getAttributesForBelongsToFields();
+        return Str::replace('##ATTRIBUTES##', $string, $this->getchildValidationAttributesTemplate());
     }
 
-    private function _generateOtherModelsCode()
+    public function generateOtherModelsCode()
     {
-        return $this->_generateBtmModelsCode() . $this->_generateBelongstoModelsCode();
+        return $this->generateBtmModelsCode() . $this->generateBelongstoModelsCode();
     }
 
-    private function _generateBtmModelsCode()
+    public function generateBtmModelsCode()
     {
-        if (!$this->_isBtmEnabled()) {
+        if (!$this->isBtmEnabled()) {
             return '';
         }
 
         $string = '';
         foreach ($this->belongsToManyRelations as $r) {
-            $string .= Str::replace('##MODEL##', $r['modelPath'], $this->_getOtherModelTemplate());
+            $string .= Str::replace('##MODEL##', $r['modelPath'], $this->getOtherModelTemplate());
         }
 
         return $string;
     }
 
-    private function _generateBelongstoModelsCode()
+    public function generateBelongstoModelsCode()
     {
-        if (!$this->_isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
 
         $string = '';
         foreach ($this->belongsToRelations as $r) {
-            $string .= Str::replace('##MODEL##', $r['modelPath'], $this->_getOtherModelTemplate());
+            $string .= Str::replace('##MODEL##', $r['modelPath'], $this->getOtherModelTemplate());
         }
 
         return $string;
     }
 
-    private function _getVars()
+    public function getVars()
     {
-        return $this->_getBtmVars() . $this->_getBelongsToVars();
+        return $this->getBtmVars() . $this->getBelongsToVars();
     }
 
-    private function _getBtmVars()
+    public function getBtmVars()
     {
-        if (!$this->_isBtmEnabled()) {
+        if (!$this->isBtmEnabled()) {
             return '';
         }
 
         $collect = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            $collect->push(Str::replace('##NAME##', $r['relationName'], $this->_getArrayTemplate()));
-            $collect->push(Str::replace('##NAME##', $this->_getBtmFieldName($r['relationName']), $this->_getArrayTemplate()));
+            $collect->push(Str::replace('##NAME##', $r['relationName'], $this->getArrayTemplate()));
+            $collect->push(Str::replace('##NAME##', $this->getBtmFieldName($r['relationName']), $this->getArrayTemplate()));
         }
-        return $this->_newLines() . implode($this->_newLines(), $collect->all());
+        return $this->newLines() . implode($this->newLines(), $collect->all());
     }
 
-    private function _getBelongsToVars()
+    public function getBelongsToVars()
     {
-        if (!$this->_isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
         $collect = collect();
         foreach ($this->belongsToRelations as $r) {
-            $collect->push(Str::replace('##NAME##', Str::plural($r['relationName']), $this->_getArrayTemplate()));
+            $collect->push(Str::replace('##NAME##', Str::plural($r['relationName']), $this->getArrayTemplate()));
         }
-        return $this->_newLines() . implode($this->_newLines(), $collect->all());
+        return $this->newLines() . implode($this->newLines(), $collect->all());
     }
 
-    private function _getAddFlashCode()
+    public function getAddFlashCode()
     {
-        if (!$this->_isFlashMessageEnabled()) {
+        if (!$this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -457,12 +457,12 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace('##MESSAGE##', $this->flashMessages['text']['add'], $this->_getFlashTriggerTemplate());
+        return Str::replace('##MESSAGE##', $this->flashMessages['text']['add'], $this->getFlashTriggerTemplate());
     }
 
-    private function _getEditFlashCode()
+    public function getEditFlashCode()
     {
-        if (!$this->_isFlashMessageEnabled()) {
+        if (!$this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -470,12 +470,12 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace('##MESSAGE##', $this->flashMessages['text']['edit'], $this->_getFlashTriggerTemplate());
+        return Str::replace('##MESSAGE##', $this->flashMessages['text']['edit'], $this->getFlashTriggerTemplate());
     }
 
-    private function _getDeleteFlashCode()
+    public function getDeleteFlashCode()
     {
-        if (!$this->_isFlashMessageEnabled()) {
+        if (!$this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -483,12 +483,12 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace('##MESSAGE##', $this->flashMessages['text']['delete'], $this->_getFlashTriggerTemplate());
+        return Str::replace('##MESSAGE##', $this->flashMessages['text']['delete'], $this->getFlashTriggerTemplate());
     }
 
-    private function _getBtmInitCode()
+    public function getBtmInitCode()
     {
-        if (!$this->_isBtmAddEnabled()) {
+        if (!$this->isBtmAddEnabled()) {
             return '';
         }
 
@@ -506,19 +506,19 @@ trait WithComponentCode
                 ],
                 [
                     $r['relationName'],
-                    $this->_getModelName($r['modelPath']),
-                    $this->_getBtmFieldName($r['relationName'])
+                    $this->getModelName($r['modelPath']),
+                    $this->getBtmFieldName($r['relationName'])
                 ],
-                $this->_getBtmInitTemplate()
+                $this->getBtmInitTemplate()
             );
         }
 
         return $string;
     }
 
-    private function _getBtmAttachCode()
+    public function getBtmAttachCode()
     {
-        if (!$this->_isBtmAddEnabled()) {
+        if (!$this->isBtmAddEnabled()) {
             return '';
         }
 
@@ -535,18 +535,18 @@ trait WithComponentCode
                 ],
                 [
                     $r['relationName'],
-                    $this->_getBtmFieldName($r['relationName'])
+                    $this->getBtmFieldName($r['relationName'])
                 ],
-                $this->_getBtmAttachTemplate()
+                $this->getBtmAttachTemplate()
             );
         }
 
-        return $string . $this->_newLines(1);
+        return $string . $this->newLines(1);
     }
 
-    private function _getBtmFetchCode()
+    public function getBtmFetchCode()
     {
-        if (!$this->_isBtmEditEnabled()) {
+        if (!$this->isBtmEditEnabled()) {
             return '';
         }
 
@@ -566,21 +566,21 @@ trait WithComponentCode
                 ],
                 [
                     $r['relationName'],
-                    $this->_getBtmFieldName($r['relationName']),
+                    $this->getBtmFieldName($r['relationName']),
                     $r['relatedKey'],
-                    $this->_getModelName($r['modelPath']),
-                    Str::lower($this->_getModelName()),
+                    $this->getModelName($r['modelPath']),
+                    Str::lower($this->getModelName()),
                 ],
-                $this->_getBtmFetchTemplate()
+                $this->getBtmFetchTemplate()
             );
         }
 
-        return $this->_newLines(1) . $string;
+        return $this->newLines(1) . $string;
     }
 
-    private function _getBtmUpdateCode()
+    public function getBtmUpdateCode()
     {
-        if (!$this->_isBtmEditEnabled()) {
+        if (!$this->isBtmEditEnabled()) {
             return '';
         }
 
@@ -590,7 +590,7 @@ trait WithComponentCode
                 continue;
             }
 
-            $string .= $this->_newLines(1) .
+            $string .= $this->newLines(1) .
                 Str::replace(
                     [
                         '##RELATION##',
@@ -598,25 +598,25 @@ trait WithComponentCode
                     ],
                     [
                         $r['relationName'],
-                        $this->_getBtmFieldName($r['relationName']),
+                        $this->getBtmFieldName($r['relationName']),
                     ],
-                    $this->_getBtmUpdateTemplate()
+                    $this->getBtmUpdateTemplate()
                 );
         }
 
         return $string;
     }
 
-    private function _getRulesForBelongsToFields()
+    public function getRulesForBelongsToFields()
     {
 
-        if (!$this->_isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
 
         $string = '';
         foreach ($this->belongsToRelations as $r) {
-            $string .= $this->_newLines(1, 2) .
+            $string .= $this->newLines(1, 2) .
                 Str::replace(
                     [
                         '##COLUMN_NAME##',
@@ -626,22 +626,22 @@ trait WithComponentCode
                         $r['foreignKey'],
                         'required'
                     ],
-                    $this->_getChildFieldTemplate()
+                    $this->getChildFieldTemplate()
                 );
         }
         return $string;
     }
 
-    private function _getAttributesForBelongsToFields()
+    public function getAttributesForBelongsToFields()
     {
 
-        if (!$this->_isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
 
         $string = '';
         foreach ($this->belongsToRelations as $r) {
-            $string .= $this->_newLines(1, 2) .
+            $string .= $this->newLines(1, 2) .
                 Str::replace(
                     [
                         '##COLUMN_NAME##',
@@ -651,25 +651,25 @@ trait WithComponentCode
                         $r['foreignKey'],
                         Str::ucfirst($r['relationName']),
                     ],
-                    $this->_getChildFieldTemplate()
+                    $this->getChildFieldTemplate()
                 );
         }
         return $string;
     }
 
-    private function _getBelongsToInitCode($isAdd = true)
+    public function getBelongsToInitCode($isAdd = true)
     {
-        if ($isAdd && !$this->_isBelongsToAddEnabled()) {
+        if ($isAdd && !$this->isBelongsToAddEnabled()) {
             return '';
         }
 
-        if (!$isAdd && !$this->_isBelongsToEditEnabled()) {
+        if (!$isAdd && !$this->isBelongsToEditEnabled()) {
             return '';
         }
 
         $string = '';
         foreach ($this->belongsToRelations as $r) {
-            $string .= $this->_newLines(1) .
+            $string .= $this->newLines(1) .
                 Str::replace(
                     [
                         '##BELONGS_TO_VAR##',
@@ -677,23 +677,23 @@ trait WithComponentCode
                     ],
                     [
                         Str::plural($r['relationName']),
-                        $this->_getModelName($r['modelPath']),
+                        $this->getModelName($r['modelPath']),
                     ],
-                    $this->_getBelongsToInitTemplate()
+                    $this->getBelongsToInitTemplate()
                 );
         }
         return $string;
     }
 
-    private function _getBelongsToSaveCode()
+    public function getBelongsToSaveCode()
     {
-        if (!$this->_isBelongsToAddEnabled()) {
+        if (!$this->isBelongsToAddEnabled()) {
             return '';
         }
 
         $string = '';
         foreach ($this->belongsToRelations as $r) {
-            $string .= $this->_newLines(1, 3) .
+            $string .= $this->newLines(1, 3) .
                 Str::replace(
                     [
                         '##COLUMN##',
@@ -703,7 +703,7 @@ trait WithComponentCode
                         $r['foreignKey'],
                         0
                     ],
-                    $this->_getCreateFieldTemplate()
+                    $this->getCreateFieldTemplate()
                 );
         }
         return $string;

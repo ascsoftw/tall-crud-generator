@@ -6,22 +6,22 @@ use Illuminate\Support\Str;
 
 trait WithBaseHtml
 {
-    private function _getTableColumnHtml($slot)
+    public function getTableColumnHtml($slot)
     {
         return '<x:tall-crud-generator::table-column>' . $slot . '</x:tall-crud-generator::table-column>';
     }
 
-    private function _getButtonHtml($slot, $mode = '', $params = '')
+    public function getButtonHtml($slot, $mode = '', $params = '')
     {
         return '<x:tall-crud-generator::button mode="' . $mode . '" ' . $params . '>' . $slot . '</x:tall-crud-generator::button>';
     }
 
-    private function _getSortIconHtml($column)
+    public function getSortIconHtml($column)
     {
         return '<x:tall-crud-generator::sort-icon sortField="' . $column . '" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
     }
 
-    private function _getHeaderHtml($label, $column = null, $isSortable = false)
+    public function getHeaderHtml($label, $column = null, $isSortable = false)
     {
         if ($isSortable) {
             $html = Str::replace(
@@ -33,28 +33,28 @@ trait WithBaseHtml
                 [
                     $column,
                     $label,
-                    $this->_getSortIconHtml($column),
+                    $this->getSortIconHtml($column),
                 ],
-                $this->_getSortingHeaderTemplate()
+                $this->getSortingHeaderTemplate()
             );
-            $slot = $this->_newLines() . $html . $this->_newLines(1, 4);
+            $slot = $this->newLines() . $html . $this->newLines(1, 4);
         } else {
             $slot = $label;
         }
-        return $this->_getTableColumnHtml($slot);
+        return $this->getTableColumnHtml($slot);
     }
 
-    private function _getSearchBoxHtml()
+    public function getSearchBoxHtml()
     {
-        return $this->_getSearchBoxTemplate();
+        return $this->getSearchBoxTemplate();
     }
 
-    private function _getPaginationDropdownHtml()
+    public function getPaginationDropdownHtml()
     {
-        return $this->_getPaginationDropdownTemplate();
+        return $this->getPaginationDropdownTemplate();
     }
 
-    private function _getSelectOptionsHtml($options)
+    public function getSelectOptionsHtml($options)
     {
         $options = json_decode($options);
         if (is_null($options)) {

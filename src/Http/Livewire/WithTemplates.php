@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 trait WithTemplates
 {
-    private function _getSortingHeaderTemplate()
+    public function getSortingHeaderTemplate()
     {
         return <<<'EOT'
                     <div class="flex items-center">
@@ -14,7 +14,7 @@ trait WithTemplates
 EOT;
     }
 
-    private function _getSearchBoxTemplate()
+    public function getSearchBoxTemplate()
     {
         return <<<EOT
 
@@ -27,7 +27,7 @@ EOT;
 EOT;
     }
 
-    private function _getPaginationDropdownTemplate()
+    public function getPaginationDropdownTemplate()
     {
         return <<<'EOT'
 
@@ -40,28 +40,28 @@ EOT;
 EOT;
     }
 
-    private function _getDeleteButtonTemplate()
+    public function getDeleteButtonTemplate()
     {
         return <<<'EOT'
 wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm',  {{ $result->##PRIMARY_KEY##}});"
 EOT;
     }
 
-    private function _getAddButtonTemplate()
+    public function getAddButtonTemplate()
     {
         return <<<'EOT'
 wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');"
 EOT;
     }
 
-    private function _getEditButtonTemplate()
+    public function getEditButtonTemplate()
     {
         return <<<'EOT'
 wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm',  {{ $result->##PRIMARY_KEY##}});"
 EOT;
     }
 
-    private function _getDeleteMethodTemplate()
+    public function getDeleteMethodTemplate()
     {
         return <<<'EOT'
 
@@ -84,7 +84,7 @@ EOT;
 EOT;
     }
 
-    private function _getAddMethodTemplate()
+    public function getAddMethodTemplate()
     {
         return <<<'EOT'
  
@@ -107,14 +107,14 @@ EOT;
 EOT;
     }
 
-    private function _getCreateFieldTemplate()
+    public function getCreateFieldTemplate()
     {
         return <<<'EOT'
 '##COLUMN##' => $this->item['##COLUMN##'] ?? ##DEFAULT_VALUE##, 
 EOT;
     }
 
-    private function _getEditMethodTemplate()
+    public function getEditMethodTemplate()
     {
         return <<<'EOT'
  
@@ -137,7 +137,7 @@ EOT;
 EOT;
     }
 
-    private function _getChildListenerTemplate()
+    public function getChildListenerTemplate()
     {
         return <<<'EOT'
     protected $listeners = [
@@ -149,7 +149,7 @@ EOT;
 EOT;
     }
 
-    private function _getSortingMethodTemplate()
+    public function getSortingMethodTemplate()
     {
         return <<<'EOT'
 
@@ -164,7 +164,7 @@ EOT;
 EOT;
     }
 
-    private function _getSearchingMethodTemplate()
+    public function getSearchingMethodTemplate()
     {
         return <<<'EOT'
 
@@ -176,7 +176,7 @@ EOT;
 EOT;
     }
 
-    private function _getPaginationDropdownMethodTemplate()
+    public function getPaginationDropdownMethodTemplate()
     {
         return <<<'EOT'
 
@@ -188,14 +188,14 @@ EOT;
 EOT;
     }
 
-    private function _getTableColumnTemplate()
+    public function getTableColumnTemplate()
     {
         return <<<'EOT'
 {{ $result->##COLUMN_NAME##}}
 EOT;
     }
 
-    private function _getSortingVarsTemplate()
+    public function getSortingVarsTemplate()
     {
         return <<<'EOT'
 
@@ -206,7 +206,7 @@ EOT;
 EOT;
     }
 
-    private function _getSortingQueryTemplate()
+    public function getSortingQueryTemplate()
     {
         return <<<'EOT'
 
@@ -214,7 +214,7 @@ EOT;
 EOT;
     }
 
-    private function _getDeleteVarsTemplate()
+    public function getDeleteVarsTemplate()
     {
         return <<<'EOT'
 
@@ -223,7 +223,7 @@ EOT;
 EOT;
     }
 
-    private function _getAddVarsTemplate()
+    public function getAddVarsTemplate()
     {
         return <<<'EOT'
 
@@ -231,7 +231,7 @@ EOT;
 EOT;
     }
 
-    private function _getEditVarsTemplate()
+    public function getEditVarsTemplate()
     {
         return <<<'EOT'
 
@@ -239,7 +239,7 @@ EOT;
 EOT;
     }
 
-    private function _getSearchingVarsTemplate()
+    public function getSearchingVarsTemplate()
     {
         return <<<'EOT'
 
@@ -247,7 +247,7 @@ EOT;
 EOT;
     }
 
-    private function _getPaginationVarsTemplate()
+    public function getPaginationVarsTemplate()
     {
         return <<<'EOT'
 
@@ -255,7 +255,7 @@ EOT;
 EOT;
     }
 
-    private function _getSearchinQueryTemplate()
+    public function getSearchinQueryTemplate()
     {
         return <<<'EOT'
 
@@ -267,14 +267,14 @@ EOT;
 EOT;
     }
 
-    private function _getSearchingQueryWhereTemplate()
+    public function getSearchingQueryWhereTemplate()
     {
         return <<<'EOT'
 ##FIRST##('##COLUMN##', 'like', '%' . $this->q . '%')
 EOT;
     }
 
-    private function _getChildItemTemplate()
+    public function getChildItemTemplate()
     {
         return <<<'EOT'
 
@@ -282,7 +282,7 @@ EOT;
 EOT;
     }
 
-    private function _getChildRulesTemplate()
+    public function getChildRulesTemplate()
     {
         return <<<'EOT'
 
@@ -292,14 +292,14 @@ EOT;
 EOT;
     }
 
-    private function _getChildFieldTemplate()
+    public function getChildFieldTemplate()
     {
         return <<<'EOT'
 'item.##COLUMN_NAME##' => '##VALUE##',
 EOT;
     }
 
-    private function _getchildValidationAttributesTemplate()
+    public function getchildValidationAttributesTemplate()
     {
         return <<<'EOT'
 
@@ -310,7 +310,7 @@ EOT;
 EOT;
     }
 
-    private function _getDeleteModalTemplate()
+    public function getDeleteModalTemplate()
     {
         return <<<'EOT'
 
@@ -332,7 +332,7 @@ EOT;
 EOT;
     }
 
-    private function _getAddModalTemplate()
+    public function getAddModalTemplate()
     {
         return <<<'EOT'
 
@@ -353,7 +353,7 @@ EOT;
 EOT;
     }
 
-    private function _getEditModalTemplate()
+    public function getEditModalTemplate()
     {
         return <<<'EOT'
 
@@ -373,7 +373,7 @@ EOT;
 EOT;
     }
 
-    private function _getInputFieldTemplate()
+    public function getInputFieldTemplate()
     {
         return <<<'EOT'
 
@@ -385,7 +385,7 @@ EOT;
 EOT;
     }
 
-    private function _getSelectFieldTemplate()
+    public function getSelectFieldTemplate()
     {
         return <<<'EOT'
 
@@ -398,7 +398,7 @@ EOT;
 EOT;
     }
 
-    private function _getCheckboxFieldTemplate()
+    public function getCheckboxFieldTemplate()
     {
         return <<<'EOT'
 
@@ -409,20 +409,20 @@ EOT;
 EOT;
     }
 
-    private function _getFieldTemplate($type = 'input')
+    public function getFieldTemplate($type = 'input')
     {
         switch ($type) {
             case 'checkbox':
-                return $this->_getCheckboxFieldTemplate();
+                return $this->getCheckboxFieldTemplate();
             case 'select':
-                return $this->_getSelectFieldTemplate();
+                return $this->getSelectFieldTemplate();
             case 'input':
             default:
-                return $this->_getInputFieldTemplate();
+                return $this->getInputFieldTemplate();
         }
     }
 
-    private function _getFlashTriggerTemplate()
+    public function getFlashTriggerTemplate()
     {
         return <<<'EOT'
 
@@ -430,14 +430,14 @@ EOT;
 EOT;
     }
 
-    private function _getArrayTemplate()
+    public function getArrayTemplate()
     {
         return <<<'EOT'
     public $##NAME## = [];
 EOT;
     }
 
-    private function _getBtmInitTemplate()
+    public function getBtmInitTemplate()
     {
         return <<<'EOT'
 
@@ -447,7 +447,7 @@ EOT;
 EOT;
     }
 
-    private function _getBtmAttachTemplate()
+    public function getBtmAttachTemplate()
     {
         return <<<'EOT'
 
@@ -455,7 +455,7 @@ EOT;
 EOT;
     }
 
-    private function _getBtmFetchTemplate()
+    public function getBtmFetchTemplate()
     {
         return <<<'EOT'
 
@@ -467,7 +467,7 @@ EOT;
 EOT;
     }
 
-    private function _getBtmUpdateTemplate()
+    public function getBtmUpdateTemplate()
     {
         return <<<'EOT'
 
@@ -476,7 +476,7 @@ EOT;
 EOT;
     }
 
-    private function _getOtherModelTemplate()
+    public function getOtherModelTemplate()
     {
         return <<<'EOT'
 
@@ -484,7 +484,7 @@ use ##MODEL##;
 EOT;
     }
 
-    private function _getBtmFieldTemplate()
+    public function getBtmFieldTemplate()
     {
 
         return <<<'EOT'
@@ -502,7 +502,7 @@ EOT;
 EOT;
     }
 
-    private function _getBelongsToFieldTemplate()
+    public function getBelongsToFieldTemplate()
     {
 
         return <<<'EOT'
@@ -524,7 +524,7 @@ EOT;
     }
 
 
-    private function _getBelongsToInitTemplate()
+    public function getBelongsToInitTemplate()
     {
         return <<<'EOT'
 
@@ -532,7 +532,7 @@ EOT;
 EOT;
     }
 
-    private function _getWithQueryTemplate()
+    public function getWithQueryTemplate()
     {
         return <<<'EOT'
 
@@ -540,7 +540,7 @@ EOT;
 EOT;
     }
 
-    private function _getWithCountQueryTemplate()
+    public function getWithCountQueryTemplate()
     {
         return <<<'EOT'
 
@@ -548,21 +548,21 @@ EOT;
 EOT;
     }
 
-    private function _getBelongsToManyTableSlotTemplate()
+    public function getBelongsToManyTableSlotTemplate()
     {
         return <<<'EOT'
 ##RELATION##->implode('##DISPLAY_COLUMN##', ',')
 EOT;
     }
 
-    private function _getBelongsToTableSlotTemplate()
+    public function getBelongsToTableSlotTemplate()
     {
         return <<<'EOT'
 ##RELATION##?->##DISPLAY_COLUMN##
 EOT;
     }
 
-    private function _getFlashComponentTemplate()
+    public function getFlashComponentTemplate()
     {
         return <<<'EOT'
 @livewire('livewire-toast')
