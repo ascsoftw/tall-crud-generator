@@ -22,7 +22,7 @@ trait WithFeatures
 
     private function _needsPrimaryKeyInListing()
     {
-        if ($this->primaryKeyProps['in_list']) {
+        if ($this->primaryKeyProps['inList']) {
             return true;
         }
         return false;
@@ -30,7 +30,7 @@ trait WithFeatures
 
     private function _isAddFeatureEnabled()
     {
-        if ($this->componentProps['create_add_modal']) {
+        if ($this->componentProps['createAddModal']) {
             return true;
         }
         return false;
@@ -38,7 +38,7 @@ trait WithFeatures
 
     private function _isEditFeatureEnabled()
     {
-        if ($this->componentProps['create_edit_modal']) {
+        if ($this->componentProps['createEditModal']) {
             return true;
         }
         return false;
@@ -46,7 +46,7 @@ trait WithFeatures
 
     private function _isDeleteFeatureEnabled()
     {
-        if ($this->componentProps['create_delete_button']) {
+        if ($this->componentProps['createDeleteButton']) {
             return true;
         }
         return false;
@@ -60,7 +60,7 @@ trait WithFeatures
 
         $collection = collect($this->fields);
         return $collection->contains(function ($f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) && $f['sortable']) {
+            if (($this->_hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['sortable']) {
                 return true;
             }
             return false;
@@ -71,7 +71,7 @@ trait WithFeatures
     {
         $collection = collect($this->fields);
         return $collection->contains(function ($f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) && $f['searchable']) {
+            if (($this->_hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['searchable']) {
                 return true;
             }
             return false;
@@ -108,7 +108,7 @@ trait WithFeatures
 
     private function _isPaginationDropdownEnabled()
     {
-        return $this->advancedSettings['table_settings']['show_pagination_dropdown'];
+        return $this->advancedSettings['table_settings']['showPaginationDropdown'];
     }
 
     private function _isBtmEnabled()
@@ -119,7 +119,7 @@ trait WithFeatures
     private function _isBtmAddEnabled()
     {
         $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('in_add', true);
+        $c = $collection->firstWhere('inAdd', true);
         if(is_null($c)) {
             return false;
         }
@@ -129,7 +129,7 @@ trait WithFeatures
     private function _isBtmEditEnabled()
     {
         $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('in_edit', true);
+        $c = $collection->firstWhere('inEdit', true);
         if(is_null($c)) {
             return false;
         }
@@ -144,7 +144,7 @@ trait WithFeatures
     private function _isBelongsToAddEnabled()
     {
         $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('in_add', true);
+        $c = $collection->firstWhere('inAdd', true);
         if(is_null($c)) {
             return false;
         }
@@ -154,7 +154,7 @@ trait WithFeatures
     private function _isBelongsToEditEnabled()
     {
         $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('in_edit', true);
+        $c = $collection->firstWhere('inEdit', true);
         if(is_null($c)) {
             return false;
         }

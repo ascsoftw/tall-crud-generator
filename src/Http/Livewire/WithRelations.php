@@ -41,20 +41,20 @@ trait WithRelations
     {
         $this->belongsToManyRelation = [
             'name' => '',
-            'is_valid' => false,
+            'isValid' => false,
             'relatedKey' => '',
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
-            'in_add' => true,
-            'in_edit' => true,
+            'inAdd' => true,
+            'inEdit' => true,
         ];
     }
 
     public function updatedBelongsToManyRelationName()
     {
         $this->resetValidation('belongsToManyRelation.*');
-        $this->belongsToManyRelation['is_valid'] = false;
+        $this->belongsToManyRelation['isValid'] = false;
 
         if (!$this->_isValidBelongsToManyName()) {
             return;
@@ -85,7 +85,7 @@ trait WithRelations
         $model = new $this->modelPath();
         $relationName = $this->belongsToManyRelation['name'];
         $relation = $model->{$relationName}();
-        $this->belongsToManyRelation['is_valid'] = true;
+        $this->belongsToManyRelation['isValid'] = true;
         $this->belongsToManyRelation['relatedKey'] = $relation->getRelatedKeyName();
         $this->belongsToManyRelation['modelPath'] = get_class($relation->getRelated());
         $this->belongsToManyRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
@@ -105,8 +105,8 @@ trait WithRelations
             'relatedKey' => $this->belongsToManyRelation['relatedKey'],
             'modelPath' => $this->belongsToManyRelation['modelPath'],
             'displayColumn' => $this->belongsToManyRelation['displayColumn'],
-            'in_add' => $this->belongsToManyRelation['in_add'],
-            'in_edit' => $this->belongsToManyRelation['in_edit'],
+            'inAdd' => $this->belongsToManyRelation['inAdd'],
+            'inEdit' => $this->belongsToManyRelation['inEdit'],
         ];
         $this->confirmingBelongsToMany = false;
         $this->resetRelationsForm();
@@ -129,21 +129,21 @@ trait WithRelations
     {
         $this->belongsToRelation = [
             'name' => '',
-            'is_valid' => false,
+            'isValid' => false,
             'ownerKey' => '',
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
             'foreignKey' => '',
-            'in_add' => true,
-            'in_edit' => true,
+            'inAdd' => true,
+            'inEdit' => true,
         ];
     }
 
     public function updatedBelongsToRelationName()
     {
         $this->resetValidation('belongsToRelation.*');
-        $this->belongsToRelation['is_valid'] = false;
+        $this->belongsToRelation['isValid'] = false;
 
         if (!$this->_isValidBelongsToName()) {
             return;
@@ -174,7 +174,7 @@ trait WithRelations
         $model = new $this->modelPath();
         $relationName = $this->belongsToRelation['name'];
         $relation = $model->{$relationName}();
-        $this->belongsToRelation['is_valid'] = true;
+        $this->belongsToRelation['isValid'] = true;
         $this->belongsToRelation['ownerKey'] = $relation->getOwnerKeyName();
         $this->belongsToRelation['foreignKey'] = $relation->getForeignKeyName();
         $this->belongsToRelation['modelPath'] = get_class($relation->getRelated());
@@ -197,8 +197,8 @@ trait WithRelations
             'modelPath' => $this->belongsToRelation['modelPath'],
             'displayColumn' => $this->belongsToRelation['displayColumn'],
             'foreignKey' => $this->belongsToRelation['foreignKey'],
-            'in_add' => $this->belongsToRelation['in_add'],
-            'in_edit' => $this->belongsToRelation['in_edit'],
+            'inAdd' => $this->belongsToRelation['inAdd'],
+            'inEdit' => $this->belongsToRelation['inEdit'],
         ];
         $this->confirmingBelongsTo = false;
         $this->resetRelationsForm();
@@ -221,7 +221,7 @@ trait WithRelations
     {
         $this->withRelation = [
             'name' => '',
-            'is_valid' => false,
+            'isValid' => false,
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
@@ -231,7 +231,7 @@ trait WithRelations
     public function updatedWithRelationName()
     {
         $this->resetValidation('withRelation.*');
-        $this->withRelation['is_valid'] = false;
+        $this->withRelation['isValid'] = false;
 
         if (!$this->_isValidWithName()) {
             return;
@@ -262,7 +262,7 @@ trait WithRelations
         $model = new $this->modelPath();
         $relationName = $this->withRelation['name'];
         $relation = $model->{$relationName}();
-        $this->withRelation['is_valid'] = true;
+        $this->withRelation['isValid'] = true;
         $this->withRelation['modelPath'] = get_class($relation->getRelated());
         $this->withRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
@@ -302,21 +302,21 @@ trait WithRelations
     {
         $this->withCountRelation = [
             'name' => '',
-            'is_valid' => false,
-            'is_sortable' => false,
+            'isValid' => false,
+            'isSortable' => false,
         ];
     }
 
     public function updatedWithCountRelationName()
     {
         $this->resetValidation('withCountRelation.*');
-        $this->withCountRelation['is_valid'] = false;
+        $this->withCountRelation['isValid'] = false;
 
         if (!$this->_isValidWithCountName()) {
             return;
         }
 
-        $this->withCountRelation['is_valid'] = true;
+        $this->withCountRelation['isValid'] = true;
     }
 
     private function _isValidWithCountName()
@@ -345,7 +345,7 @@ trait WithRelations
 
         $this->withCountRelations[] = [
             'relationName' => $this->withCountRelation['name'],
-            'is_sortable' => $this->withCountRelation['is_sortable'],
+            'isSortable' => $this->withCountRelation['isSortable'],
         ];
         $this->confirmingWithCount = false;
         $this->resetRelationsForm();

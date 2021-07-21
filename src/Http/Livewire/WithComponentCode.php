@@ -223,7 +223,7 @@ trait WithComponentCode
 
     private function _getPaginationVars()
     {
-        return Str::replace('##PER_PAGE##', $this->advancedSettings['table_settings']['records_per_page'], $this->_getPaginationVarsTemplate());
+        return Str::replace('##PER_PAGE##', $this->advancedSettings['table_settings']['recordsPerPage'], $this->_getPaginationVarsTemplate());
     }
 
     private function _getPaginationDropdownMethod()
@@ -494,7 +494,7 @@ trait WithComponentCode
 
         $string = '';
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['in_add']) {
+            if (!$r['inAdd']) {
                 continue;
             }
 
@@ -524,7 +524,7 @@ trait WithComponentCode
 
         $string = '';
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['in_add']) {
+            if (!$r['inAdd']) {
                 continue;
             }
 
@@ -552,7 +552,7 @@ trait WithComponentCode
 
         $string = '';
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['in_edit']) {
+            if (!$r['inEdit']) {
                 continue;
             }
 
@@ -586,7 +586,7 @@ trait WithComponentCode
 
         $string = '';
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['in_edit']) {
+            if (!$r['inEdit']) {
                 continue;
             }
 

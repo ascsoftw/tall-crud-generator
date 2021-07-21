@@ -1,6 +1,6 @@
 <div>
     <div x-data="{ selected : @entangle('selected').defer}">
-        @if($componentProps['create_add_modal'] || $componentProps['create_edit_modal'])
+        @if($componentProps['createAddModal'] || $componentProps['createEditModal'])
         <x:tall-crud-generator::accordion-header tab="1">
             Belongs To Many
         </x:tall-crud-generator::accordion-header>
@@ -12,10 +12,10 @@
                 <x-slot name="header">
                     <x:tall-crud-generator::table-column>Relation</x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>Display Field</x:tall-crud-generator::table-column>
-                    @if($componentProps['create_add_modal'])
+                    @if($componentProps['createAddModal'])
                     <x:tall-crud-generator::table-column>In Add</x:tall-crud-generator::table-column>
                     @endif
-                    @if($componentProps['create_edit_modal'])
+                    @if($componentProps['createEditModal'])
                     <x:tall-crud-generator::table-column>In Edit</x:tall-crud-generator::table-column>
                     @endif
                     <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
@@ -24,11 +24,11 @@
                 <tr>
                     <x:tall-crud-generator::table-column>{{$v['relationName']}}</x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>{{$v['displayColumn']}}</x:tall-crud-generator::table-column>
-                    @if($componentProps['create_add_modal'])
-                    <x:tall-crud-generator::table-column>{{$v['in_add'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
+                    @if($componentProps['createAddModal'])
+                    <x:tall-crud-generator::table-column>{{$v['inAdd'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
                     @endif
-                    @if($componentProps['create_edit_modal'])
-                    <x:tall-crud-generator::table-column>{{$v['in_edit'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
+                    @if($componentProps['createEditModal'])
+                    <x:tall-crud-generator::table-column>{{$v['inEdit'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
                     @endif
                     <x:tall-crud-generator::table-column>
                         <x:tall-crud-generator::button wire:click.prevent="deleteBelongsToManyRelation({{$i}})" mode="delete">
@@ -41,7 +41,7 @@
         </x:tall-crud-generator::accordion-wrapper>
         @endif
 
-        @if($componentProps['create_add_modal'] || $componentProps['create_edit_modal'])
+        @if($componentProps['createAddModal'] || $componentProps['createEditModal'])
         <x:tall-crud-generator::accordion-header tab="2">
             Belongs To
         </x:tall-crud-generator::accordion-header>
@@ -52,10 +52,10 @@
                 <x-slot name="header">
                     <x:tall-crud-generator::table-column>Relation</x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>Display Field</x:tall-crud-generator::table-column>
-                    @if($componentProps['create_add_modal'])
+                    @if($componentProps['createAddModal'])
                     <x:tall-crud-generator::table-column>In Add</x:tall-crud-generator::table-column>
                     @endif
-                    @if($componentProps['create_edit_modal'])
+                    @if($componentProps['createEditModal'])
                     <x:tall-crud-generator::table-column>In Edit</x:tall-crud-generator::table-column>
                     @endif
                     <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
@@ -64,11 +64,11 @@
                 <tr>
                     <x:tall-crud-generator::table-column>{{$v['relationName']}}</x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>{{$v['displayColumn']}}</x:tall-crud-generator::table-column>
-                    @if($componentProps['create_add_modal'])
-                    <x:tall-crud-generator::table-column>{{$v['in_add'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
+                    @if($componentProps['createAddModal'])
+                    <x:tall-crud-generator::table-column>{{$v['inAdd'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
                     @endif
-                    @if($componentProps['create_edit_modal'])
-                    <x:tall-crud-generator::table-column>{{$v['in_edit'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
+                    @if($componentProps['createEditModal'])
+                    <x:tall-crud-generator::table-column>{{$v['inEdit'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
                     @endif
                     <x:tall-crud-generator::table-column>
                         <x:tall-crud-generator::button wire:click.prevent="deleteBelongsToRelation({{$i}})" mode="delete">
@@ -122,7 +122,7 @@
                 @foreach( $this->withCountRelations as $i => $v)
                 <tr>
                     <x:tall-crud-generator::table-column>{{$v['relationName']}}</x:tall-crud-generator::table-column>
-                    <x:tall-crud-generator::table-column>{{$v['is_sortable'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
+                    <x:tall-crud-generator::table-column>{{$v['isSortable'] ? 'Yes' : 'No'}}</x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>
                         <x:tall-crud-generator::button wire:click.prevent="deleteWitCounthRelation({{$i}})" mode="delete">
                             Delete
@@ -156,18 +156,18 @@
                 @error('belongsToManyRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
             </div>
 
-            @if($belongsToManyRelation['is_valid'])
+            @if($belongsToManyRelation['isValid'])
             <div class="mt-4 p-4 rounded border border-gray-300">
-                @if($componentProps['create_add_modal'])
+                @if($componentProps['createAddModal'])
                 <x:tall-crud-generator::checkbox-wrapper>
                     <x:tall-crud-generator::label>Show in Add Form:</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToManyRelation.in_add" />
+                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inAdd" />
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endif
-                @if($componentProps['create_edit_modal'])
+                @if($componentProps['createEditModal'])
                 <x:tall-crud-generator::checkbox-wrapper>
                     <x:tall-crud-generator::label>Show in Edit Form:</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToManyRelation.in_edit" />
+                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inEdit" />
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endif
                 <div class="mt-4">
@@ -211,18 +211,18 @@
                 @error('belongsToRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
             </div>
 
-            @if($belongsToRelation['is_valid'])
+            @if($belongsToRelation['isValid'])
             <div class="mt-4 p-4 rounded border border-gray-300">
-                @if($componentProps['create_add_modal'])
+                @if($componentProps['createAddModal'])
                 <x:tall-crud-generator::checkbox-wrapper>
                     <x:tall-crud-generator::label>Show in Add Form:</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToRelation.in_add" />
+                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToRelation.inAdd" />
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endif
-                @if($componentProps['create_edit_modal'])
+                @if($componentProps['createEditModal'])
                 <x:tall-crud-generator::checkbox-wrapper>
                     <x:tall-crud-generator::label>Show in Edit Form:</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToRelation.in_edit" />
+                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToRelation.inEdit" />
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endif
                 <div class="mt-4">
@@ -266,7 +266,7 @@
                 @error('withRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
             </div>
 
-            @if($withRelation['is_valid'])
+            @if($withRelation['isValid'])
             <div class="mt-4 p-4 rounded border border-gray-300">
                 <div class="mt-4">
                     <x:tall-crud-generator::label>Display Column</x:tall-crud-generator::label>
@@ -309,10 +309,10 @@
                 @error('withCountRelation.name') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
             </div>
 
-            @if($withCountRelation['is_valid'])
+            @if($withCountRelation['isValid'])
             <x:tall-crud-generator::checkbox-wrapper class="mt-4">
                 <x:tall-crud-generator::label>Make Heading Sortable</x:tall-crud-generator::label>
-                <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="withCountRelation.is_sortable" />
+                <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="withCountRelation.isSortable" />
             </x:tall-crud-generator::checkbox-wrapper>
             @endif
         </div>

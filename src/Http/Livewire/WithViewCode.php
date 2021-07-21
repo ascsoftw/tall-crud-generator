@@ -27,7 +27,7 @@ trait WithViewCode
     {
         if ($this->_isAddFeatureEnabled()) {
             $string = Str::replace('##COMPONENT_NAME##', $this->_getChildComponentName(), $this->_getAddButtonTemplate());
-            return $this->_newLines(1, 2) . $this->_getButtonHtml($this->advancedSettings['text']['add_link'], 'add', $string);
+            return $this->_newLines(1, 2) . $this->_getButtonHtml($this->advancedSettings['text']['addLink'], 'add', $string);
         }
         return '';
     }
@@ -76,7 +76,7 @@ trait WithViewCode
                 case 'withCount':
                     $label = $this->_getLabelForWithCount($f['relationName']);
                     $column = $this->_getColumnForWithCount($f['relationName']);
-                    $isSortable = $f['is_sortable'];
+                    $isSortable = $f['isSortable'];
                     break;
             }
             $return[] = $this->_getHeaderHtml($label, $column, $isSortable);
@@ -138,8 +138,8 @@ trait WithViewCode
                 '##DELETE_BTN_TEXT##',
             ],
             [
-                $this->advancedSettings['text']['cancel_button'],
-                $this->advancedSettings['text']['delete_button'],
+                $this->advancedSettings['text']['cancelButton'],
+                $this->advancedSettings['text']['deleteButton'],
             ],
             $this->_getDeleteModalTemplate()
         );
@@ -164,8 +164,8 @@ trait WithViewCode
                 '##FIELDS##',
             ],
             [
-                $this->advancedSettings['text']['cancel_button'],
-                $this->advancedSettings['text']['create_button'],
+                $this->advancedSettings['text']['cancelButton'],
+                $this->advancedSettings['text']['createButton'],
                 $string,
             ],
             $this->_getAddModalTemplate()
@@ -190,8 +190,8 @@ trait WithViewCode
                 '##FIELDS##',
             ],
             [
-                $this->advancedSettings['text']['cancel_button'],
-                $this->advancedSettings['text']['edit_button'],
+                $this->advancedSettings['text']['cancelButton'],
+                $this->advancedSettings['text']['editButton'],
                 $string,
             ],
             $this->_getEditModalTemplate()
@@ -213,7 +213,7 @@ trait WithViewCode
                 ],
                 $this->_getEditButtonTemplate()
             );
-            $return[] = $this->_getButtonHtml($this->advancedSettings['text']['edit_link'], 'edit', $string);
+            $return[] = $this->_getButtonHtml($this->advancedSettings['text']['editLink'], 'edit', $string);
         }
 
         if ($this->_isDeleteFeatureEnabled()) {
@@ -229,7 +229,7 @@ trait WithViewCode
                 $this->_getDeleteButtonTemplate()
             );
 
-            $return[] = $this->_getButtonHtml($this->advancedSettings['text']['delete_link'], 'delete', $string);
+            $return[] = $this->_getButtonHtml($this->advancedSettings['text']['deleteLink'], 'delete', $string);
         }
 
         return $this->_newLines(1, 6) . collect($return)->implode($this->_newLines(1, 6)) . $this->_newLines(1, 5);

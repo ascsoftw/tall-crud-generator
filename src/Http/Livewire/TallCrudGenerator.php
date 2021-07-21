@@ -43,13 +43,13 @@ class TallCrudGenerator extends Component
 
     public $componentName = '';
     public $componentProps = [
-        'create_add_modal' => true,
-        'create_edit_modal' => true,
-        'create_delete_button' => true,
+        'createAddModal' => true,
+        'createEditModal' => true,
+        'createDeleteButton' => true,
     ];
 
     public $primaryKeyProps = [
-        'in_list' => true,
+        'inList' => true,
         'label' => '',
         'sortable' => true,
     ];
@@ -57,17 +57,17 @@ class TallCrudGenerator extends Component
     public $advancedSettings = [
         'title' => '',
         'text' => [
-            'add_link' => 'Create New',
-            'edit_link' => 'Edit',
-            'delete_link' => 'Delete',
-            'create_button' => 'Save',
-            'edit_button' => 'Save',
-            'cancel_button' => 'Cancel',
-            'delete_button' => 'Delete',
+            'addLink' => 'Create New',
+            'editLink' => 'Edit',
+            'deleteLink' => 'Delete',
+            'createButton' => 'Save',
+            'editButton' => 'Save',
+            'cancelButton' => 'Cancel',
+            'deleteButton' => 'Delete',
         ],
         'table_settings' => [
-            'show_pagination_dropdown' => true,
-            'records_per_page' => 15,
+            'showPaginationDropdown' => true,
+            'recordsPerPage' => 15,
         ]
     ];
 
@@ -211,9 +211,9 @@ class TallCrudGenerator extends Component
             'label' => '',
             'sortable' => false,
             'searchable' => false,
-            'in_list' => true,
-            'in_add' => true,
-            'in_edit' => true,
+            'inList' => true,
+            'inAdd' => true,
+            'inEdit' => true,
             'attributes' => [
                 'rules' => '',
                 'type' => 'input',

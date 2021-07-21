@@ -2,13 +2,13 @@
     <x-slot name="header">
         <x:tall-crud-generator::table-column>Column</x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>Label</x:tall-crud-generator::table-column>
-        @if(!( !$componentProps['create_add_modal'] && !$componentProps['create_edit_modal'] ))
+        @if(!( !$componentProps['createAddModal'] && !$componentProps['createEditModal'] ))
         <x:tall-crud-generator::table-column>Display In Listing</x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_add_modal'])
+        @if($componentProps['createAddModal'])
         <x:tall-crud-generator::table-column>Display In Create</x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_edit_modal'])
+        @if($componentProps['createEditModal'])
         <x:tall-crud-generator::table-column>Display In Edit</x:tall-crud-generator::table-column>
         @endif
         <x:tall-crud-generator::table-column>Searchable</x:tall-crud-generator::table-column>
@@ -28,19 +28,19 @@
         <x:tall-crud-generator::table-column>
             <x:tall-crud-generator::input type="text" class="mt-1 block w-full" wire:model.defer="fields.{{$i}}.label" placeholder="Label" />
         </x:tall-crud-generator::table-column>
-        @if(!( !$componentProps['create_add_modal'] && !$componentProps['create_edit_modal'] ))
+        @if(!( !$componentProps['createAddModal'] && !$componentProps['createEditModal'] ))
         <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.in_list" />
+            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.inList" />
         </x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_add_modal'])
+        @if($componentProps['createAddModal'])
         <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.in_add" />
+            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.inAdd" />
         </x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_edit_modal'])
+        @if($componentProps['createEditModal'])
         <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.in_edit" />
+            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.inEdit" />
         </x:tall-crud-generator::table-column>
         @endif
         <x:tall-crud-generator::table-column>
@@ -50,7 +50,7 @@
             <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.sortable" />
         </x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>
-            @if(!( !$componentProps['create_add_modal'] && !$componentProps['create_edit_modal'] ))
+            @if(!( !$componentProps['createAddModal'] && !$componentProps['createEditModal'] ))
             <x:tall-crud-generator::button wire:click.prevent="showAttributes({{$i}})" mode="edit" class="mr-8 mt-4">
                 Attributes
             </x:tall-crud-generator::button>

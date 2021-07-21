@@ -66,7 +66,7 @@ trait WithHelpers
     {
         $columns = [];
         foreach ($this->fields as $f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) && $f['searchable']) {
+            if (($this->_hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['searchable']) {
                 $columns[] = $f;
             }
         }
@@ -97,9 +97,9 @@ trait WithHelpers
             return true;
         }
         foreach ($this->fields as $f) {
-            if (!($f['in_list'] ||
-                ($this->_isAddFeatureEnabled() && $f['in_add']) ||
-                ($this->_isEditFeatureEnabled()  && $f['in_edit']))) {
+            if (!($f['inList'] ||
+                ($this->_isAddFeatureEnabled() && $f['inAdd']) ||
+                ($this->_isEditFeatureEnabled()  && $f['inEdit']))) {
                 $this->addError('fields', $f['column'] . ' Column should be selected to display in at least 1 view.');
                 return false;
             }
@@ -115,7 +115,7 @@ trait WithHelpers
 
         $collection = collect($this->fields);
         $filtered = $collection->reject(function ($field) {
-            return empty($field['in_list']);
+            return empty($field['inList']);
         });
 
         return 0 != count($filtered->all());
@@ -129,7 +129,7 @@ trait WithHelpers
 
         $collection = collect($this->fields);
         $filtered = $collection->reject(function ($field) {
-            return empty($field['in_add']);
+            return empty($field['inAdd']);
         });
 
         return 0 != count($filtered->all());
@@ -143,7 +143,7 @@ trait WithHelpers
 
         $collection = collect($this->fields);
         $filtered = $collection->reject(function ($field) {
-            return empty($field['in_edit']);
+            return empty($field['inEdit']);
         });
 
         return 0 != count($filtered->all());
@@ -163,8 +163,8 @@ trait WithHelpers
         $columns = [];
         foreach ($this->fields as $f) {
             if (
-                ($addForm && $f['in_add']) ||
-                ($editForm && $f['in_edit'])
+                ($addForm && $f['inAdd']) ||
+                ($editForm && $f['inEdit'])
             ) {
                 $columns[] = $f;
             }
@@ -212,7 +212,7 @@ trait WithHelpers
         }
 
         foreach ($this->fields as $f) {
-            if ($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) {
+            if ($this->_hasAddAndEditFeaturesDisabled() || $f['inList']) {
                 $collection->push(['field' => $f['column'], 'type' => 'normal', 'order' => ++$order]);
             }
         }
@@ -237,22 +237,22 @@ trait WithHelpers
         //
         $order = $map->count();
         foreach ($this->belongsToManyRelations as $r) {
-            if ($addForm && !$r['in_add']) {
+            if ($addForm && !$r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['in_edit']) {
+            if (!$addForm && !$r['inEdit']) {
                 continue;
             }
             $map->push(['field' => $r['relationName'], 'type' => 'btm', 'order' => ++$order]);
         }
 
         foreach ($this->belongsToRelations as $r) {
-            if ($addForm && !$r['in_add']) {
+            if ($addForm && !$r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['in_edit']) {
+            if (!$addForm && !$r['inEdit']) {
                 continue;
             }
             $map->push(['field' => $r['relationName'], 'type' => 'belongsTo', 'order' => ++$order]);
@@ -275,11 +275,11 @@ trait WithHelpers
         $collection = collect($this->_getFormFields($addForm, !$addForm));
         $btmCollection = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if ($addForm && !$r['in_add']) {
+            if ($addForm && !$r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['in_edit']) {
+            if (!$addForm && !$r['inEdit']) {
                 continue;
             }
             $btmCollection->push($r);
@@ -287,11 +287,11 @@ trait WithHelpers
 
         $belongsToCollection = collect();
         foreach ($this->belongsToRelations as $r) {
-            if ($addForm && !$r['in_add']) {
+            if ($addForm && !$r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['in_edit']) {
+            if (!$addForm && !$r['inEdit']) {
                 continue;
             }
             $belongsToCollection->push($r);
