@@ -21,10 +21,9 @@ trait WithBaseHtml
         return '<x:tall-crud-generator::sort-icon sortField="' . $column . '" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
     }
 
-    private function _getHeaderHtml($label, $column, $isPrimaryKey = false)
+    private function _getHeaderHtml($label, $column = null, $isSortable = false)
     {
-        if (($isPrimaryKey && $this->_isPrimaryKeySortable()) || $this->_isColumnSortable($column)) {
-            $sortIconHtml = $this->_getSortIconHtml($column);
+        if ($isSortable) {
             $html = Str::replace(
                 [
                     '##COLUMN##',
@@ -34,14 +33,15 @@ trait WithBaseHtml
                 [
                     $column,
                     $label,
-                    $sortIconHtml,
+                    $this->_getSortIconHtml($column),
                 ],
                 $this->_getSortingHeaderTemplate()
             );
             $slot = $this->_newLines() . $html . $this->_newLines(1, 4);
-            return $this->_getTableColumnHtml($slot);
+        } else {
+            $slot = $label;
         }
-        return $this->_getTableColumnHtml($label);
+        return $this->_getTableColumnHtml($slot);
     }
 
     private function _getSearchBoxHtml()

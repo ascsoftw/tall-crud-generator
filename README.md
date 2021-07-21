@@ -79,22 +79,23 @@ Following are some of the Features that are supported:
 - Modal Delete
 - Validations
 - Form Field Type
-- Sorting Fields
+- Display Order for Fields
 - Flash Messages
 - Configuring No. of Records Per Page
 - Dropdown to change no. of Records Per Page
 - Relations: BelongsTo & BelongsToMany in Listing & Form
 - Display Related Fields in the Listing using Eager Loading
+- Display Count in the Listing using Eager Loading Count
 
 ## Roadmap
 
 Following Features are in the piepline:
 - ~~Support Model Relations~~
 - ~~Flash Messages~~
-- Support for withCount
+- ~~Support for withCount~~
 - Display BelongsToMany Relation as Multi-Select in Form
 - Show / hide columns on Listing
-- Sort Eager Loaded and Relation Fields
+- ~~Sort Eager Loaded and Relation Fields~~
 - Use Livewire Sorting for Sort ??
 
 ## Troubleshooting

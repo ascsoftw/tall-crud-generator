@@ -182,6 +182,21 @@ trait WithHelpers
         return Str::studly(Str::replace('_', ' ', $column));
     }
 
+    private function _getLabelForWith($relation = '')
+    {
+        return Str::ucfirst($relation);
+    }
+
+    private function _getLabelForWithCount($relation = '')
+    {
+        return Str::ucfirst($relation) . ' Count';
+    }
+
+    private function _getColumnForWithCount($relation = '')
+    {
+        return $relation . '_count';
+    }
+
     private function _getBtmFieldName($relation)
     {
         return 'checked' . Str::studly($relation);
@@ -319,6 +334,9 @@ trait WithHelpers
 
     private function _isBelongsToManyRelation($relation)
     {
+        if( empty( $this->allRelations['belongsToMany'])) {
+            return false;
+        }
         foreach ($this->allRelations['belongsToMany'] as $k) {
             if ($k['name'] == $relation) {
                 return true;
@@ -329,6 +347,10 @@ trait WithHelpers
 
     private function _isHasManyRelation($relation)
     {
+        if( empty( $this->allRelations['hasMany'])) {
+            return false;
+        }
+
         foreach ($this->allRelations['hasMany'] as $k) {
             if ($k['name'] == $relation) {
                 return true;

@@ -459,7 +459,7 @@ EOT;
     {
         return <<<'EOT'
 
-        $this->##FIELDNAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function( $i) {
+        $this->##FIELDNAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function ($i) {
             return (string)$i;
         })->toArray();
         $this->##RELATION## = ##MODEL##::all();
@@ -511,13 +511,13 @@ EOT;
             <div class="grid grid-cols-3">
                 <div class="mt-4">
                     <x:tall-crud-generator::label>##LABEL##</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::select class="block mt-1 w-full" wire:model.defer="item.##COLUMN##">
+                    <x:tall-crud-generator::select class="block mt-1 w-full" wire:model.defer="item.##FOREIGN_KEY##">
                         <option value="">Please Select</option>
                         @foreach($##BELONGS_TO_VAR## as $c)
                         <option value="{{$c->##OWNER_KEY##}}">{{$c->##DISPLAY_COLUMN##}}</option>
                         @endforeach
                     </x:tall-crud-generator::select>
-                    @error('item.##COLUMN##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+                    @error('item.##FOREIGN_KEY##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
                 </div>
             </div>
 EOT;

@@ -55,21 +55,31 @@ trait WithViewCode
         $return = [];
 
         foreach ($fields as $f) {
+            $label = '';
+            $column = null;
+            $isSortable = false;
+
             switch ($f['type']) {
                 case 'primary':
-                    $return[] = $this->_getHeaderHtml($this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']), $this->modelProps['primary_key'], true);
+                    $label = $this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']);
+                    $column = $this->modelProps['primary_key'];
+                    $isSortable = $this->_isPrimaryKeySortable();
                     break;
                 case 'normal':
-                    $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
+                    $label = $this->_getLabel($f['label'], $f['column']);
+                    $column = $f['column'];
+                    $isSortable = $this->_isColumnSortable($f['column']);
                     break;
                 case 'with':
-                    $return[] = $this->_getTableColumnHtml(Str::ucfirst($f['relationName']));
+                    $label = $this->_getLabelForWith($f['relationName']);
                     break;
                 case 'withCount':
-                    //Todo make it sortable
-                    $return[] = $this->_getTableColumnHtml(Str::ucfirst($f['relationName']) . ' Count ');
+                    $label = $this->_getLabelForWithCount($f['relationName']);
+                    $column = $this->_getColumnForWithCount($f['relationName']);
+                    $isSortable = $f['is_sortable'];
                     break;
             }
+            $return[] = $this->_getHeaderHtml($label, $column, $isSortable);
         }
 
         if ($this->_needsActionColumn()) {
@@ -85,28 +95,9 @@ trait WithViewCode
         $return = [];
 
         foreach ($fields as $f) {
-            switch ($f['type']) {
-                case 'primary':
-                    $return[] = $this->_getTableColumnHtml(
-                        Str::replace('##COLUMN_NAME##', $this->modelProps['primary_key'], $this->_getTableColumnTemplate())
-                    );
-                    break;
-                case 'normal':
-                    $return[] = $this->_getTableColumnHtml(
-                        Str::replace('##COLUMN_NAME##', $f['column'], $this->_getTableColumnTemplate())
-                    );
-                    break;
-                case 'with':
-                    $return[] = $this->_getTableColumnHtml(
-                        Str::replace('##COLUMN_NAME##', $this->_getWithTableSlot($f), $this->_getTableColumnTemplate())
-                    );
-                    break;
-                case 'withCount':
-                    $return[] = $this->_getTableColumnHtml(
-                        Str::replace('##COLUMN_NAME##', $f['relationName'] . '_count', $this->_getTableColumnTemplate())
-                    );
-                    break;
-            }
+            $return[] = $this->_getTableColumnHtml(
+                Str::replace('##COLUMN_NAME##', $this->_getTableSlotColumnValue($f), $this->_getTableColumnTemplate())
+            );
         }
 
         if ($this->_needsActionColumn()) {
@@ -163,17 +154,7 @@ trait WithViewCode
         $fields = $this->_getSortedFormFields(true);
         $string = '';
         foreach ($fields as $field) {
-            switch ($field['type']) {
-                case 'normal':
-                    $string .= $this->_getNormalFieldHtml($field);
-                    break;
-                case 'btm':
-                    $string .= $this->_getBtmFieldHtml($field);
-                    break;
-                case 'belongsTo':
-                    $string .= $this->_getBelongsToFieldHtml($field);
-                    break;
-            }
+            $string .= $this->_getFieldHtml($field);
         }
 
         return Str::replace(
@@ -199,17 +180,7 @@ trait WithViewCode
         $fields = $this->_getSortedFormFields(false);
         $string = '';
         foreach ($fields as $field) {
-            switch ($field['type']) {
-                case 'normal':
-                    $string .= $this->_getNormalFieldHtml($field);
-                    break;
-                case 'btm':
-                    $string .= $this->_getBtmFieldHtml($field);
-                    break;
-                case 'belongsTo':
-                    $string .= $this->_getBelongsToFieldHtml($field);
-                    break;
-            }
+            $string .= $this->_getFieldHtml($field);
         }
 
         return Str::replace(
@@ -226,7 +197,6 @@ trait WithViewCode
             $this->_getEditModalTemplate()
         );
     }
-
 
     private function _getActionHtml()
     {
@@ -341,7 +311,7 @@ trait WithViewCode
         return Str::replace(
             [
                 '##LABEL##',
-                '##COLUMN##',
+                '##FOREIGN_KEY##',
                 '##BELONGS_TO_VAR##',
                 '##OWNER_KEY##',
                 '##DISPLAY_COLUMN##',
@@ -355,5 +325,33 @@ trait WithViewCode
             ],
             $this->_getBelongsToFieldTemplate()
         );
+    }
+
+    private function _getTableSlotColumnValue($f)
+    {
+        switch ($f['type']) {
+            case 'primary':
+                return $this->modelProps['primary_key'];
+            case 'normal':
+                return  $f['column'];
+            case 'with':
+                return $this->_getWithTableSlot($f);
+            case 'withCount':
+                return $this->_getColumnForWithCount($f['relationName']);
+        }
+        return '';
+    }
+
+    private function _getFieldHtml($field)
+    {
+        switch ($field['type']) {
+            case 'normal':
+                return $this->_getNormalFieldHtml($field);
+            case 'btm':
+                return $this->_getBtmFieldHtml($field);
+            case 'belongsTo':
+                return $this->_getBelongsToFieldHtml($field);
+        }
+        return '';
     }
 }
