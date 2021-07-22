@@ -113,14 +113,14 @@ trait WithFeatures
 
     public function isBtmEnabled()
     {
-        return count($this->belongsToManyRelations) > 0 ;
+        return count($this->belongsToManyRelations) > 0;
     }
 
     public function isBtmAddEnabled()
     {
         $collection = collect($this->belongsToManyRelations);
         $c = $collection->firstWhere('inAdd', true);
-        if(is_null($c)) {
+        if (is_null($c)) {
             return false;
         }
         return true;
@@ -130,7 +130,7 @@ trait WithFeatures
     {
         $collection = collect($this->belongsToManyRelations);
         $c = $collection->firstWhere('inEdit', true);
-        if(is_null($c)) {
+        if (is_null($c)) {
             return false;
         }
         return true;
@@ -138,14 +138,14 @@ trait WithFeatures
 
     public function isBelongsToEnabled()
     {
-        return count($this->belongsToRelations) > 0 ;
+        return count($this->belongsToRelations) > 0;
     }
 
     public function isBelongsToAddEnabled()
     {
         $collection = collect($this->belongsToRelations);
         $c = $collection->firstWhere('inAdd', true);
-        if(is_null($c)) {
+        if (is_null($c)) {
             return false;
         }
         return true;
@@ -155,7 +155,7 @@ trait WithFeatures
     {
         $collection = collect($this->belongsToRelations);
         $c = $collection->firstWhere('inEdit', true);
-        if(is_null($c)) {
+        if (is_null($c)) {
             return false;
         }
         return true;

@@ -299,7 +299,7 @@ EOT;
 EOT;
     }
 
-    public function getchildValidationAttributesTemplate()
+    public function getChildValidationAttributesTemplate()
     {
         return <<<'EOT'
 

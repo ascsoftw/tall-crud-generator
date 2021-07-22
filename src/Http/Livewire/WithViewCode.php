@@ -8,26 +8,35 @@ trait WithViewCode
 {
     public function generateViewHtml()
     {
-        $return = [];
-        $return['css_class'] = $this->isSearchingEnabled() ? 'justify-between' : 'justify-end';
-        $return['add_link'] = $this->generateAddLink();
-        $return['search_box'] = $this->generateSearchBox();
-        $return['pagination_dropdown'] = $this->generatePaginationDropdown();
-        $return['table_header'] = $this->generateTableHeader();
-        $return['table_slot'] = $this->generateTableSlot();
-        $return['child_component'] = $this->includeChildComponent();
-        $return['flash_component'] = $this->includeFlashComponent();
-        $return['child']['delete_modal'] = $this->generateDeleteModal();
-        $return['child']['add_modal'] = $this->generateAddModal();
-        $return['child']['edit_modal'] = $this->generateEditModal();
-        return $return;
+        $code = [];
+        $code['css_class'] = $this->isSearchingEnabled() ? 'justify-between' : 'justify-end';
+        $code['add_link'] = $this->generateAddLink();
+        $code['search_box'] = $this->generateSearchBox();
+        $code['pagination_dropdown'] = $this->generatePaginationDropdown();
+        $code['table_header'] = $this->generateTableHeader();
+        $code['table_slot'] = $this->generateTableSlot();
+        $code['child_component'] = $this->includeChildComponent();
+        $code['flash_component'] = $this->includeFlashComponent();
+        $code['child']['delete_modal'] = $this->generateDeleteModal();
+        $code['child']['add_modal'] = $this->generateAddModal();
+        $code['child']['edit_modal'] = $this->generateEditModal();
+        return $code;
     }
 
     public function generateAddLink()
     {
         if ($this->isAddFeatureEnabled()) {
-            $string = Str::replace('##COMPONENT_NAME##', $this->getChildComponentName(), $this->getAddButtonTemplate());
-            return $this->newLines(1, 2) . $this->getButtonHtml($this->advancedSettings['text']['addLink'], 'add', $string);
+            $buttonParams = Str::replace(
+                '##COMPONENT_NAME##',
+                $this->getChildComponentName(),
+                $this->getAddButtonTemplate()
+            );
+            return $this->newLines(1, 2) .
+                $this->getButtonHtml(
+                    $this->advancedSettings['text']['addLink'],
+                    'add',
+                    $buttonParams
+                );
         }
         return '';
     }
@@ -52,59 +61,42 @@ trait WithViewCode
     {
 
         $fields = $this->getSortedListingFields();
-        $return = [];
+        $headers = collect();
 
         foreach ($fields as $f) {
-            $label = '';
-            $column = null;
-            $isSortable = false;
-
-            switch ($f['type']) {
-                case 'primary':
-                    $label = $this->getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']);
-                    $column = $this->modelProps['primary_key'];
-                    $isSortable = $this->isPrimaryKeySortable();
-                    break;
-                case 'normal':
-                    $label = $this->getLabel($f['label'], $f['column']);
-                    $column = $f['column'];
-                    $isSortable = $this->isColumnSortable($f['column']);
-                    break;
-                case 'with':
-                    $label = $this->getLabelForWith($f['relationName']);
-                    break;
-                case 'withCount':
-                    $label = $this->getLabelForWithCount($f['relationName']);
-                    $column = $this->getColumnForWithCount($f['relationName']);
-                    $isSortable = $f['isSortable'];
-                    break;
-            }
-            $return[] = $this->getHeaderHtml($label, $column, $isSortable);
+            [$label, $column, $isSortable] = $this->getTableColumnProps($f);
+            $headers->push($this->getHeaderHtml($label, $column, $isSortable));
         }
 
         if ($this->needsActionColumn()) {
-            $return[] = $this->getTableColumnHtml('Actions');
+            $headers->push($this->getTableColumnHtml('Actions'));
         }
 
-        return collect($return)->implode($this->newLines(1, 4));
+        return $headers->implode($this->newLines(1, 4));
     }
 
     public function generateTableSlot()
     {
         $fields = $this->getSortedListingFields();
-        $return = [];
+        $columns = collect();
 
         foreach ($fields as $f) {
-            $return[] = $this->getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $this->getTableSlotColumnValue($f), $this->getTableColumnTemplate())
-            );
+            $columns->push($this->getTableColumnHtml(
+                Str::replace(
+                    '##COLUMN_NAME##',
+                    $this->getTableSlotColumnValue($f),
+                    $this->getTableColumnTemplate()
+                )
+            ));
         }
 
         if ($this->needsActionColumn()) {
-            $return[] = $this->getTableColumnHtml($this->getActionHtml());
+            $columns->push($this->getTableColumnHtml(
+                $this->getActionHtml()
+            ));
         }
 
-        return collect($return)->implode($this->newLines(1, 5));
+        return $columns->implode($this->newLines(1, 5));
     }
 
     public function includeChildComponent()
@@ -152,9 +144,9 @@ trait WithViewCode
         }
 
         $fields = $this->getSortedFormFields(true);
-        $string = '';
+        $fieldsHtml = collect();
         foreach ($fields as $field) {
-            $string .= $this->getFieldHtml($field);
+            $fieldsHtml->push($this->getFieldHtml($field));
         }
 
         return Str::replace(
@@ -166,7 +158,7 @@ trait WithViewCode
             [
                 $this->advancedSettings['text']['cancelButton'],
                 $this->advancedSettings['text']['createButton'],
-                $string,
+                $fieldsHtml->implode(''),
             ],
             $this->getAddModalTemplate()
         );
@@ -178,9 +170,9 @@ trait WithViewCode
             return '';
         }
         $fields = $this->getSortedFormFields(false);
-        $string = '';
+        $fieldsHtml = collect();
         foreach ($fields as $field) {
-            $string .= $this->getFieldHtml($field);
+            $fieldsHtml->push($this->getFieldHtml($field));
         }
 
         return Str::replace(
@@ -192,7 +184,7 @@ trait WithViewCode
             [
                 $this->advancedSettings['text']['cancelButton'],
                 $this->advancedSettings['text']['editButton'],
-                $string,
+                $fieldsHtml->implode(''),
             ],
             $this->getEditModalTemplate()
         );
@@ -200,39 +192,47 @@ trait WithViewCode
 
     public function getActionHtml()
     {
-        $return = [];
+        $buttons = collect();
         if ($this->isEditFeatureEnabled()) {
-            $string = Str::replace(
+            $buttonParams = Str::replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
                 ],
                 [
                     $this->getChildComponentName(),
-                    $this->modelProps['primary_key']
+                    $this->getPrimaryKey()
                 ],
                 $this->getEditButtonTemplate()
             );
-            $return[] = $this->getButtonHtml($this->advancedSettings['text']['editLink'], 'edit', $string);
+            $buttons->push($this->getButtonHtml(
+                $this->advancedSettings['text']['editLink'],
+                'edit',
+                $buttonParams
+            ));
         }
 
         if ($this->isDeleteFeatureEnabled()) {
-            $string = Str::replace(
+            $buttonParams = Str::replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
                 ],
                 [
                     $this->getChildComponentName(),
-                    $this->modelProps['primary_key']
+                    $this->getPrimaryKey()
                 ],
                 $this->getDeleteButtonTemplate()
             );
 
-            $return[] = $this->getButtonHtml($this->advancedSettings['text']['deleteLink'], 'delete', $string);
+            $buttons->push($this->getButtonHtml(
+                $this->advancedSettings['text']['deleteLink'],
+                'delete',
+                $buttonParams
+            ));
         }
 
-        return $this->newLines(1, 6) . collect($return)->implode($this->newLines(1, 6)) . $this->newLines(1, 5);
+        return $this->newLines(1, 6) . $buttons->implode($this->newLines(1, 6)) . $this->newLines(1, 5);
     }
 
     public function getWithTableSlot($r)
@@ -266,21 +266,24 @@ trait WithViewCode
 
     public function getNormalFieldHtml($field)
     {
-        $html =
-            Str::replace(
-                [
-                    '##COLUMN##',
-                    '##LABEL##',
-                ],
-                [
-                    $field['column'],
-                    $this->getLabel($field['label'], $field['column'])
-                ],
-                $this->getFieldTemplate($field['attributes']['type'])
-            );
+        $html = Str::replace(
+            [
+                '##COLUMN##',
+                '##LABEL##',
+            ],
+            [
+                $field['column'],
+                $this->getLabel($field['label'], $field['column'])
+            ],
+            $this->getFieldTemplate($field['attributes']['type'])
+        );
 
         if ($field['attributes']['type'] == 'select') {
-            $html = Str::replace('##OPTIONS##', $this->getSelectOptionsHtml($field['attributes']['options']), $html);
+            $html = Str::replace(
+                '##OPTIONS##',
+                $this->getSelectOptionsHtml($field['attributes']['options']),
+                $html
+            );
         }
         return $html;
     }
@@ -331,7 +334,7 @@ trait WithViewCode
     {
         switch ($f['type']) {
             case 'primary':
-                return $this->modelProps['primary_key'];
+                return $this->getPrimaryKey();
             case 'normal':
                 return  $f['column'];
             case 'with':
@@ -353,5 +356,33 @@ trait WithViewCode
                 return $this->getBelongsToFieldHtml($field);
         }
         return '';
+    }
+
+    public function getTableColumnProps($field)
+    {
+        switch ($field['type']) {
+            case 'primary':
+                $label = $this->getLabel($this->primaryKeyProps['label'], $this->getPrimaryKey());
+                $column = $this->getPrimaryKey();
+                $isSortable = $this->isPrimaryKeySortable();
+                break;
+            case 'normal':
+                $label = $this->getLabel($field['label'], $field['column']);
+                $column = $field['column'];
+                $isSortable = $this->isColumnSortable($field['column']);
+                break;
+            case 'with':
+                $label = $this->getLabelForWith($field['relationName']);
+                $column = null;
+                $isSortable = false;
+                break;
+            case 'withCount':
+                $label = $this->getLabelForWithCount($field['relationName']);
+                $column = $this->getColumnForWithCount($field['relationName']);
+                $isSortable = $field['isSortable'];
+                break;
+        }
+
+        return [$label, $column, $isSortable];
     }
 }

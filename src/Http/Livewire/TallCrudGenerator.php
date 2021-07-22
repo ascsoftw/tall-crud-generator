@@ -192,16 +192,16 @@ class TallCrudGenerator extends Component
 
         try {
             $model = new $this->modelPath();
-            $this->modelProps['table_name'] = $model->getTable();
-            $this->modelProps['primary_key'] = $model->getKeyName();
-            $this->modelProps['columns'] = $this->getColumns(Schema::getColumnListing($model->getTable()), $this->modelProps['primary_key']);
+            $this->modelProps['tableName'] = $model->getTable();
+            $this->modelProps['primaryKey'] = $model->getKeyName();
+            $this->modelProps['columns'] = $this->getColumns(Schema::getColumnListing($model->getTable()), $this->modelProps['primaryKey']);
         } catch (Exception $e) {
             $this->addError('modelPath', 'Not a Valid Model Class.');
             return;
         }
 
         $this->isValidModel = true;
-        $this->advancedSettings['title'] = Str::title($this->modelProps['table_name']);
+        $this->advancedSettings['title'] = Str::title($this->modelProps['tableName']);
     }
 
     public function addField()

@@ -15,6 +15,11 @@ trait WithHelpers
         return Arr::last(Str::of($name)->explode('\\')->all());
     }
 
+    public function getPrimaryKey()
+    {
+        return $this->modelProps['primaryKey'];
+    }
+
     public function newLines($count = 1, $indent = 0)
     {
         return str_repeat("\n" . $this->indent($indent), $count);
@@ -44,7 +49,7 @@ trait WithHelpers
     public function getDefaultSortableColumn()
     {
         if ($this->isPrimaryKeySortable()) {
-            return $this->modelProps['primary_key'];
+            return $this->getPrimaryKey();
         }
 
         $collection = collect($this->getSortedListingFields());
@@ -154,7 +159,7 @@ trait WithHelpers
         return $this->componentName . '-child';
     }
 
-    public function getFormFields($addForm = true, $editForm = true)
+    public function getNormalFormFields($addForm = true, $editForm = true)
     {
         if ($this->hasAddAndEditFeaturesDisabled()) {
             return [];
@@ -208,7 +213,7 @@ trait WithHelpers
         $order = 0;
         $collection = collect();
         if ($this->needsPrimaryKeyInListing()) {
-            $collection->push(['field' => $this->modelProps['primary_key'], 'type' => 'primary', 'order' => ++$order]);
+            $collection->push(['field' => $this->getPrimaryKey(), 'type' => 'primary', 'order' => ++$order]);
         }
 
         foreach ($this->fields as $f) {
@@ -230,7 +235,7 @@ trait WithHelpers
 
     public function getFormFieldsToSort($addForm = true)
     {
-        $collection = collect($this->getFormFields($addForm, !$addForm));
+        $collection = collect($this->getNormalFormFields($addForm, !$addForm));
         $map = $collection->map(function ($item, $key) {
             return ['field' => $item['column'], 'type' => 'normal', 'order' => ++$key];
         });
@@ -272,39 +277,39 @@ trait WithHelpers
     public function getSortedFormFields($addForm = true)
     {
         $sortFields = collect($this->sortFieldsByOrder($this->sortFields[$addForm ? 'add' : 'edit']));
-        $collection = collect($this->getFormFields($addForm, !$addForm));
-        $btmCollection = collect();
-        foreach ($this->belongsToManyRelations as $r) {
-            if ($addForm && !$r['inAdd']) {
-                continue;
-            }
-
-            if (!$addForm && !$r['inEdit']) {
-                continue;
-            }
-            $btmCollection->push($r);
-        }
-
-        $belongsToCollection = collect();
-        foreach ($this->belongsToRelations as $r) {
-            if ($addForm && !$r['inAdd']) {
-                continue;
-            }
-
-            if (!$addForm && !$r['inEdit']) {
-                continue;
-            }
-            $belongsToCollection->push($r);
-        }
+        $collection = collect($this->getNormalFormFields($addForm, !$addForm));
+        $btmCollection = $this->getBtmCollection($addForm);
+        $belongsToCollection = $this->getBelongsToCollection($addForm);
 
         return $sortFields->map(function ($i) use ($collection, $btmCollection, $belongsToCollection) {
             switch ($i['type']) {
                 case 'normal':
-                    return collect($collection->firstWhere('column', $i['field']))->merge(['type' => 'normal'])->all();
+                    return collect(
+                        $collection->firstWhere(
+                            'column',
+                            $i['field']
+                        )
+                    )
+                        ->merge(['type' => 'normal'])
+                        ->all();
                 case 'btm':
-                    return collect($btmCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'btm'])->all();
+                    return collect(
+                        $btmCollection->firstWhere(
+                            'relationName',
+                            $i['field']
+                        )
+                    )
+                        ->merge(['type' => 'btm'])
+                        ->all();
                 case 'belongsTo':
-                    return collect($belongsToCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'belongsTo'])->all();
+                    return collect(
+                        $belongsToCollection->firstWhere(
+                            'relationName',
+                            $i['field']
+                        )
+                    )
+                        ->merge(['type' => 'belongsTo'])
+                        ->all();
             }
             return $collection->firstWhere('column', $i['field']);
         });
@@ -323,18 +328,39 @@ trait WithHelpers
                 case 'primary':
                     return ['field' => $i['field'], 'type' => $i['type']];
                 case 'normal':
-                    return collect($collection->firstWhere('column', $i['field']))->merge(['type' => 'normal'])->all();
+                    return collect(
+                        $collection->firstWhere(
+                            'column',
+                            $i['field']
+                        )
+                    )
+                        ->merge(['type' => 'normal'])
+                        ->all();
                 case 'with':
-                    return collect($withRelationsCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'with'])->all();
+                    return collect(
+                        $withRelationsCollection->firstWhere(
+                            'relationName',
+                            $i['field']
+                        )
+                    )
+                        ->merge(['type' => 'with'])
+                        ->all();
                 case 'withCount':
-                    return collect($withCountRelationsCollection->firstWhere('relationName', $i['field']))->merge(['type' => 'withCount'])->all();
+                    return collect(
+                        $withCountRelationsCollection->firstWhere(
+                            'relationName',
+                            $i['field']
+                        )
+                    )
+                        ->merge(['type' => 'withCount'])
+                        ->all();
             }
         });
     }
 
     public function isBelongsToManyRelation($relation)
     {
-        if( empty( $this->allRelations['belongsToMany'])) {
+        if (empty($this->allRelations['belongsToMany'])) {
             return false;
         }
         foreach ($this->allRelations['belongsToMany'] as $k) {
@@ -347,7 +373,7 @@ trait WithHelpers
 
     public function isHasManyRelation($relation)
     {
-        if( empty( $this->allRelations['hasMany'])) {
+        if (empty($this->allRelations['hasMany'])) {
             return false;
         }
 
@@ -357,5 +383,37 @@ trait WithHelpers
             }
         }
         return false;
+    }
+
+    public function getBtmCollection($addForm)
+    {
+        $btmCollection = collect();
+        foreach ($this->belongsToManyRelations as $r) {
+            if ($addForm && !$r['inAdd']) {
+                continue;
+            }
+
+            if (!$addForm && !$r['inEdit']) {
+                continue;
+            }
+            $btmCollection->push($r);
+        }
+        return $btmCollection;
+    }
+
+    public function getBelongsToCollection($addForm)
+    {
+        $belongsToCollection = collect();
+        foreach ($this->belongsToRelations as $r) {
+            if ($addForm && !$r['inAdd']) {
+                continue;
+            }
+
+            if (!$addForm && !$r['inEdit']) {
+                continue;
+            }
+            $belongsToCollection->push($r);
+        }
+        return $belongsToCollection;
     }
 }

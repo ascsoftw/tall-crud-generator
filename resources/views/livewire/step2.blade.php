@@ -1,7 +1,7 @@
 <div>
     <div x-data="{showPrimaryKeyInListing : @entangle('primaryKeyProps.inList').defer }">
-        <div class="text-black bg-gray-200 p-4">Table Name is: <span class="font-bold"> {{$modelProps['table_name']}}</span></div>
-        <div class="text-black bg-gray-200 p-4 mt-2">Primary Key is: <span class="font-bold"> {{$modelProps['primary_key']}}</span></div>
+        <div class="text-black bg-gray-200 p-4">Table Name is: <span class="font-bold"> {{$modelProps['tableName']}}</span></div>
+        <div class="text-black bg-gray-200 p-4 mt-2">Primary Key is: <span class="font-bold"> {{$modelProps['primaryKey']}}</span></div>
 
         <x:tall-crud-generator::h2>Primary Key Features</x:tall-crud-generator::h2>
         <x:tall-crud-generator::checkbox-wrapper>
