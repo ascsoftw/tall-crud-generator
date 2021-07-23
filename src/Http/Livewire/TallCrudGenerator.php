@@ -385,4 +385,20 @@ class TallCrudGenerator extends Component
         $this->generatedCode = "@livewire('" . $this->componentName . "')";
         $this->isComplete = true;
     }
+
+    //Define all ComputedProperties.
+    public function getAddFeatureProperty()
+    {
+        return $this->isAddFeatureEnabled();
+    }
+
+    public function getEditFeatureProperty()
+    {
+        return $this->isEditFeatureEnabled();
+    }
+
+    public function getAddAndEditDisabledProperty()
+    {
+        return $this->hasAddAndEditFeaturesDisabled();
+    }
 }

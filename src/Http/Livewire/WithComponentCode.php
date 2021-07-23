@@ -86,7 +86,9 @@ trait WithComponentCode
     {
         $relations = collect();
         foreach ($this->withRelations as $r) {
-            $relations->push("'" . $r['relationName'] . "'");
+            $relations->push(
+                Str::of($r['relationName'])->append("'")->prepend("'")
+            );
         }
 
         if ($relations->isEmpty()) {
