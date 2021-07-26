@@ -20,9 +20,11 @@
         <x:tall-crud-generator::table-column>
             <select wire:model.defer="fields.{{$i}}.column" class="form-select rounded-md shadow-sm">
                 <option value="">-Select Column-</option>
+                @if (Arr::exists($this->modelProps, 'columns'))
                 @foreach ($this->modelProps['columns'] as $column)
                 <option value="{{$column}}">{{$column}}</option>
                 @endforeach
+                @endif
             </select>
         </x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>

@@ -3,53 +3,19 @@
         <x:tall-crud-generator::accordion-header tab="1">Customize Text</x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
-            <div>
-                <x:tall-crud-generator::label>Heading of Listing Page</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.title" />
-            </div>
-
+            @foreach ($advancedSettings['text'] as $key => $text)
             <div class="mt-4">
-                <x:tall-crud-generator::label>Add Link Text</x:tall-crud-generator::label>
+                <x:tall-crud-generator::label>
+                    {{ Str::title(
+                        Str::replace(
+                            '-', ' ', Str::kebab($key)
+                        )) 
+                    }}
+                </x:tall-crud-generator::label>
                 <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.addLink" />
+                    wire:model.defer="advancedSettings.text.{{$key}}" />
             </div>
-
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Edit Link Text</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.editLink" />
-            </div>
-
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Delete Link Text</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.deleteLink" />
-            </div>
-
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Create Submit Buttton Text</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.createButton" />
-            </div>
-
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Edit Submit Buttton Text</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.editButton" />
-            </div>
-
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Delete Submit Buttton Text</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.deleteButton" />
-            </div>
-
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Cancel Buttton Text</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
-                    wire:model.defer="advancedSettings.text.cancelButton" />
-            </div>
+            @endforeach
         </x:tall-crud-generator::accordion-wrapper>
 
         <x:tall-crud-generator::accordion-header tab="2">
@@ -62,21 +28,13 @@
                 <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="flashMessages.enable" />
             </x:tall-crud-generator::checkbox-wrapper>
 
+            @foreach (['add', 'edit', 'delete'] as $key)
             <div class="mt-4">
-                <x:tall-crud-generator::label>Add:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::label>{{ Str::title($key)}}:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/2"
-                    wire:model.defer="flashMessages.text.add" />
+                    wire:model.defer="flashMessages.text.{{$key}}" />
             </div>
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Edit:</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/2"
-                    wire:model.defer="flashMessages.text.edit" />
-            </div>
-            <div class="mt-4">
-                <x:tall-crud-generator::label>Delete:</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/2"
-                    wire:model.defer="flashMessages.text.delete" />
-            </div>
+            @endforeach
         </x:tall-crud-generator::accordion-wrapper>
 
         <x:tall-crud-generator::accordion-header tab="3">

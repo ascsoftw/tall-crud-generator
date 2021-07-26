@@ -6,42 +6,7 @@
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
-
-            <x:tall-crud-generator::button class="mt-4" wire:click="createNewBelongsToManyRelation">Add
-            </x:tall-crud-generator::button>
-            <x:tall-crud-generator::table class="mt-4">
-                <x-slot name="header">
-                    <x:tall-crud-generator::table-column>Relation</x:tall-crud-generator::table-column>
-                    <x:tall-crud-generator::table-column>Display Field</x:tall-crud-generator::table-column>
-                    @if ($this->addFeature)
-                    <x:tall-crud-generator::table-column>In Add</x:tall-crud-generator::table-column>
-                    @endif
-                    @if ($this->editFeature)
-                    <x:tall-crud-generator::table-column>In Edit</x:tall-crud-generator::table-column>
-                    @endif
-                    <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
-                </x-slot>
-                @foreach ($this->belongsToManyRelations as $i => $v)
-                <tr>
-                    <x:tall-crud-generator::table-column>{{$v['relationName']}}</x:tall-crud-generator::table-column>
-                    <x:tall-crud-generator::table-column>{{$v['displayColumn']}}</x:tall-crud-generator::table-column>
-                    @if ($this->addFeature)
-                    <x:tall-crud-generator::table-column>{{$v['inAdd'] ? 'Yes' : 'No'}}
-                    </x:tall-crud-generator::table-column>
-                    @endif
-                    @if ($this->addFeature)
-                    <x:tall-crud-generator::table-column>{{$v['inEdit'] ? 'Yes' : 'No'}}
-                    </x:tall-crud-generator::table-column>
-                    @endif
-                    <x:tall-crud-generator::table-column>
-                        <x:tall-crud-generator::button wire:click.prevent="deleteBelongsToManyRelation({{$i}})"
-                            mode="delete">
-                            Delete
-                        </x:tall-crud-generator::button>
-                    </x:tall-crud-generator::table-column>
-                </tr>
-                @endforeach
-            </x:tall-crud-generator::table>
+            <x:tall-crud-generator::show-relations-table type="belongsToManyRelations"></x:tall-crud-generator::show-relations-table>
         </x:tall-crud-generator::accordion-wrapper>
         @endif
 
@@ -51,41 +16,7 @@
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
-            <x:tall-crud-generator::button class="mt-4" wire:click="createNewBelongsToRelation">Add
-            </x:tall-crud-generator::button>
-            <x:tall-crud-generator::table class="mt-4">
-                <x-slot name="header">
-                    <x:tall-crud-generator::table-column>Relation</x:tall-crud-generator::table-column>
-                    <x:tall-crud-generator::table-column>Display Field</x:tall-crud-generator::table-column>
-                    @if ($this->addFeature)
-                    <x:tall-crud-generator::table-column>In Add</x:tall-crud-generator::table-column>
-                    @endif
-                    @if ($this->editFeature)
-                    <x:tall-crud-generator::table-column>In Edit</x:tall-crud-generator::table-column>
-                    @endif
-                    <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
-                </x-slot>
-                @foreach ($this->belongsToRelations as $i => $v)
-                <tr>
-                    <x:tall-crud-generator::table-column>{{$v['relationName']}}</x:tall-crud-generator::table-column>
-                    <x:tall-crud-generator::table-column>{{$v['displayColumn']}}</x:tall-crud-generator::table-column>
-                    @if ($this->addFeature)
-                    <x:tall-crud-generator::table-column>{{$v['inAdd'] ? 'Yes' : 'No'}}
-                    </x:tall-crud-generator::table-column>
-                    @endif
-                    @if ($this->editFeature)
-                    <x:tall-crud-generator::table-column>{{$v['inEdit'] ? 'Yes' : 'No'}}
-                    </x:tall-crud-generator::table-column>
-                    @endif
-                    <x:tall-crud-generator::table-column>
-                        <x:tall-crud-generator::button wire:click.prevent="deleteBelongsToRelation({{$i}})"
-                            mode="delete">
-                            Delete
-                        </x:tall-crud-generator::button>
-                    </x:tall-crud-generator::table-column>
-                </tr>
-                @endforeach
-            </x:tall-crud-generator::table>
+            <x:tall-crud-generator::show-relations-table type="belongsToRelations"></x:tall-crud-generator::show-relations-table>
         </x:tall-crud-generator::accordion-wrapper>
         @endif
 
@@ -159,7 +90,7 @@
                 <x:tall-crud-generator::label>Select Relationship</x:tall-crud-generator::label>
                 <x:tall-crud-generator::select class="block mt-1 w-1/2" wire:model.lazy="belongsToManyRelation.name">
                     <option value="">-Please Select-</option>
-                    @if (array_key_exists('belongsToMany', $allRelations))
+                    @if (Arr::exists($allRelations, 'belongsToMany'))
                     @foreach ($allRelations['belongsToMany'] as $c)
                     <option value="{{$c['name']}}">{{$c['name']}}</option>
                     @endforeach
@@ -188,9 +119,11 @@
                     <x:tall-crud-generator::select class="block mt-1 w-1/2"
                         wire:model.defer="belongsToManyRelation.displayColumn">
                         <option value="">-Please Select-</option>
+                        @if (Arr::exists($belongsToManyRelation, 'columns'))
                         @foreach ($belongsToManyRelation['columns'] as $c)
                         <option value="{{$c}}">{{$c}}</option>
                         @endforeach
+                        @endif
                     </x:tall-crud-generator::select>
                     @error('belongsToManyRelation.displayColumn') <x:tall-crud-generator::error-message>{{$message}}
                     </x:tall-crud-generator::error-message> @enderror
@@ -219,7 +152,7 @@
                 <x:tall-crud-generator::label>Select Relationship</x:tall-crud-generator::label>
                 <x:tall-crud-generator::select class="block mt-1 w-1/2" wire:model.lazy="belongsToRelation.name">
                     <option value="">-Please Select-</option>
-                    @if (array_key_exists('belongsTo', $allRelations))
+                    @if (Arr::exists($allRelations, 'belongsTo'))
                     @foreach ($allRelations['belongsTo'] as $c)
                     <option value="{{$c['name']}}">{{$c['name']}}</option>
                     @endforeach
@@ -248,9 +181,11 @@
                     <x:tall-crud-generator::select class="block mt-1 w-1/4"
                         wire:model.defer="belongsToRelation.displayColumn">
                         <option value="">-Please Select-</option>
+                        @if (Arr::exists($belongsToRelation, 'columns'))
                         @foreach ($belongsToRelation['columns'] as $c)
                         <option value="{{$c}}">{{$c}}</option>
                         @endforeach
+                        @endif
                     </x:tall-crud-generator::select>
                     @error('belongsToRelation.displayColumn') <x:tall-crud-generator::error-message>{{$message}}
                     </x:tall-crud-generator::error-message> @enderror
@@ -296,9 +231,11 @@
                     <x:tall-crud-generator::select class="block mt-1 w-1/2"
                         wire:model.defer="withRelation.displayColumn">
                         <option value="">-Please Select-</option>
+                        @if (Arr::exists($withRelation, 'columns'))
                         @foreach ($withRelation['columns'] as $c)
                         <option value="{{$c}}">{{$c}}</option>
                         @endforeach
+                        @endif
                     </x:tall-crud-generator::select>
                     @error('withRelation.displayColumn') <x:tall-crud-generator::error-message>{{$message}}
                     </x:tall-crud-generator::error-message> @enderror

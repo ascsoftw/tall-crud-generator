@@ -127,7 +127,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[pagination_dropdown\]/',
                 ],
                 [
-                    $props['advancedSettings']['title'],
+                    $props['advancedSettings']['text']['title'],
                     $props['html']['css_class'],
                     $props['html']['add_link'],
                     $props['html']['search_box'],

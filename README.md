@@ -97,6 +97,7 @@ Following Features are in the piepline:
 - Show / hide columns on Listing
 - ~~Sort Eager Loaded and Relation Fields~~
 - Use Livewire Sorting for Sort ??
+- Test Suite
 
 ## Troubleshooting
 Your Output don't get styles while using TailwindCss? Please publish your view. Therefore Laravel Mix compiler will find package related views and will purge CSS accordingly.

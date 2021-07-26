@@ -55,8 +55,8 @@ class TallCrudGenerator extends Component
     ];
 
     public $advancedSettings = [
-        'title' => '',
         'text' => [
+            'title' => '',
             'addLink' => 'Create New',
             'editLink' => 'Edit',
             'deleteLink' => 'Delete',
@@ -201,7 +201,7 @@ class TallCrudGenerator extends Component
         }
 
         $this->isValidModel = true;
-        $this->advancedSettings['title'] = Str::title($this->modelProps['tableName']);
+        $this->advancedSettings['text']['title'] = Str::title($this->modelProps['tableName']);
     }
 
     public function addField()
