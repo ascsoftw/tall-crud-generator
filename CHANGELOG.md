@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2021-08-10
+- Eager Load with Count
+- Automatically detect foreign key for BelongsTo Relationship
+- Allow Relation Fields to be Sorted
+- Support Sorting for WithCount column
+- Use CONSTANT_CASE for Template Variables
+- Use Camel Case for Stub Variables
+- Change Livewire Properties to be Camel Cased
+- Use Livewire Computed Property for repeating View Conditions
+- Code Cleanup
+- Minor Bug Fixes
+    
 ## [1.2.2] - 2021-07-15
 - Fix getAllRelations by checking parameter count
 
