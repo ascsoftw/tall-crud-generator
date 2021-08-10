@@ -8,7 +8,7 @@
             <x:tall-crud-generator::sort-fields-table mode="listing"></x:tall-crud-generator::sort-fields-table>
         </x:tall-crud-generator::accordion-wrapper>
 
-        @if($componentProps['create_add_modal'])
+        @if($this->addFeature)
         <x:tall-crud-generator::accordion-header tab="2">
             Add Fields
         </x:tall-crud-generator::accordion-header>
@@ -18,7 +18,7 @@
         </x:tall-crud-generator::accordion-wrapper>
         @endif
 
-        @if($componentProps['create_edit_modal'])
+        @if($this->editFeature)
         <x:tall-crud-generator::accordion-header tab="3">
             Edit Fields
         </x:tall-crud-generator::accordion-header>

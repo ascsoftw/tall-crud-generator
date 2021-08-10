@@ -3,7 +3,7 @@
 namespace [namespace];
 
 use Livewire\Component;
-use [modelPath];[child_other_models]
+use [model_path];[child_other_models]
 
 class [class] extends Component
 {

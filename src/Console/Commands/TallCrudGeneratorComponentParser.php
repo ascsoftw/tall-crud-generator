@@ -24,7 +24,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[namespace\]/',
                     '/\[class\]/',
                     '/\[view\]/',
-                    '/\[modelPath\]/',
+                    '/\[model_path\]/',
                     '/\[model\]/',
                     '/\[sort_public_vars\]/',
                     '/\[sort_query\]/',
@@ -35,6 +35,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[pagination_dropdown_method\]/',
                     '/\[pagination_vars\]/',
                     '/\[with_query\]/',
+                    '/\[with_count_query\]/',
                 ],
                 [
                     $this->classNamespace(),
@@ -51,6 +52,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['code']['pagination_dropdown']['method'],
                     $props['code']['pagination']['vars'],
                     $props['code']['with_query'],
+                    $props['code']['with_count_query'],
                 ],
                 $template
             );
@@ -61,7 +63,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[namespace\]/',
                     '/\[class\]/',
                     '/\[view\]/',
-                    '/\[modelPath\]/',
+                    '/\[model_path\]/',
                     '/\[child_delete_vars\]/',
                     '/\[child_delete_method\]/',
                     '/\[child_listeners\]/',
@@ -125,7 +127,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[pagination_dropdown\]/',
                 ],
                 [
-                    $props['advancedSettings']['title'],
+                    $props['advancedSettings']['text']['title'],
                     $props['html']['css_class'],
                     $props['html']['add_link'],
                     $props['html']['search_box'],

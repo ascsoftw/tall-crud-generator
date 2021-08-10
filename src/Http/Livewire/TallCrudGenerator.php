@@ -43,31 +43,31 @@ class TallCrudGenerator extends Component
 
     public $componentName = '';
     public $componentProps = [
-        'create_add_modal' => true,
-        'create_edit_modal' => true,
-        'create_delete_button' => true,
+        'createAddModal' => true,
+        'createEditModal' => true,
+        'createDeleteButton' => true,
     ];
 
     public $primaryKeyProps = [
-        'in_list' => true,
+        'inList' => true,
         'label' => '',
         'sortable' => true,
     ];
 
     public $advancedSettings = [
-        'title' => '',
         'text' => [
-            'add_link' => 'Create New',
-            'edit_link' => 'Edit',
-            'delete_link' => 'Delete',
-            'create_button' => 'Save',
-            'edit_button' => 'Save',
-            'cancel_button' => 'Cancel',
-            'delete_button' => 'Delete',
+            'title' => '',
+            'addLink' => 'Create New',
+            'editLink' => 'Edit',
+            'deleteLink' => 'Delete',
+            'createButton' => 'Save',
+            'editButton' => 'Save',
+            'cancelButton' => 'Cancel',
+            'deleteButton' => 'Delete',
         ],
         'table_settings' => [
-            'show_pagination_dropdown' => true,
-            'records_per_page' => 15,
+            'showPaginationDropdown' => true,
+            'recordsPerPage' => 15,
         ]
     ];
 
@@ -94,7 +94,6 @@ class TallCrudGenerator extends Component
         'componentName.min' => 'Must be minimum of 3 characters',
         'belongsToManyRelation.displayColumn.required' => 'Please select a value.',
         'belongsToRelation.displayColumn.required' => 'Please select a value.',
-        'belongsToRelation.column.required' => 'Please select a value.',
         'withRelation.displayColumn.required' => 'Please select a value.',
     ];
 
@@ -129,7 +128,7 @@ class TallCrudGenerator extends Component
                 //Relation Fields
 
                 //Prepare for Next Step.
-                $this->_getSortFields();
+                $this->getSortFields();
                 break;
             case 5:
                 //Validate Sort Fields
@@ -142,7 +141,7 @@ class TallCrudGenerator extends Component
             case 7:
                 //Validate Generate Files
                 $this->validateOnly('componentName');
-                $this->_generateFiles();
+                $this->generateFiles();
                 return;
                 break;
         }
@@ -151,17 +150,17 @@ class TallCrudGenerator extends Component
 
         //Increase Step
         $this->step += 1;
-        $this->_validateStep();
+        $this->validateStep();
         $this->selected = null;
     }
 
     public function moveBack()
     {
         $this->step -= 1;
-        $this->_validateStep();
+        $this->validateStep();
     }
 
-    private function _validateStep()
+    public function validateStep()
     {
         if ($this->step < 1) {
             $this->step = 1;
@@ -193,16 +192,16 @@ class TallCrudGenerator extends Component
 
         try {
             $model = new $this->modelPath();
-            $this->modelProps['table_name'] = $model->getTable();
-            $this->modelProps['primary_key'] = $model->getKeyName();
-            $this->modelProps['columns'] = $this->_getColumns(Schema::getColumnListing($model->getTable()), $this->modelProps['primary_key']);
+            $this->modelProps['tableName'] = $model->getTable();
+            $this->modelProps['primaryKey'] = $model->getKeyName();
+            $this->modelProps['columns'] = $this->getColumns(Schema::getColumnListing($model->getTable()), $this->modelProps['primaryKey']);
         } catch (Exception $e) {
             $this->addError('modelPath', 'Not a Valid Model Class.');
             return;
         }
 
         $this->isValidModel = true;
-        $this->advancedSettings['title'] = Str::title($this->modelProps['table_name']);
+        $this->advancedSettings['text']['title'] = Str::title($this->modelProps['tableName']);
     }
 
     public function addField()
@@ -212,9 +211,9 @@ class TallCrudGenerator extends Component
             'label' => '',
             'sortable' => false,
             'searchable' => false,
-            'in_list' => true,
-            'in_add' => true,
-            'in_edit' => true,
+            'inList' => true,
+            'inAdd' => true,
+            'inEdit' => true,
             'attributes' => [
                 'rules' => '',
                 'type' => 'input',
@@ -264,31 +263,31 @@ class TallCrudGenerator extends Component
             return;
         }
 
-        if (!$this->_validateEmptyColumns()) {
+        if (!$this->validateEmptyColumns()) {
             $this->addError('fields', 'Please select column for all fields.');
             return;
         }
 
-        if (!$this->_validateUniqueFields()) {
+        if (!$this->validateUniqueFields()) {
             $this->addError('fields', 'Please do not select a column more than once.');
             return false;
         }
 
-        if (!$this->_validateEachRow()) {
+        if (!$this->validateEachRow()) {
             return false;
         }
 
-        if (!$this->_validateDisplayColumn()) {
+        if (!$this->validateDisplayColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Listing Column.');
             return false;
         }
 
-        if (!$this->_validateCreateColumn()) {
+        if (!$this->validateCreateColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Create Column.');
             return false;
         }
 
-        if (!$this->_validateEditColumn()) {
+        if (!$this->validateEditColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Edit Column.');
             return false;
         }
@@ -296,26 +295,27 @@ class TallCrudGenerator extends Component
         return true;
     }
 
-    private function _getSortFields()
+    public function getSortFields()
     {
-        $this->sortFields['listing'] = $this->_getListingFieldsToSort();
-        $this->sortFields['add'] = $this->_getFormFieldsToSort(true);
-        $this->sortFields['edit'] = $this->_getFormFieldsToSort(false);
+        $this->sortFields['listing'] = $this->getListingFieldsToSort();
+        $this->sortFields['add'] = $this->getFormFieldsToSort(true);
+        $this->sortFields['edit'] = $this->getFormFieldsToSort(false);
     }
 
-    public function moveUp($field, $mode)
+    public function moveUp($field, $type, $mode)
     {
         $collection = collect($this->sortFields[$mode]);
-        $f = $collection->firstWhere('field', $field);
+        $filterType = $collection->where('type', $type);
+        $f = $filterType->firstWhere('field', $field);
         $findOrder = $f['order'] - 1;
 
-        $map = $collection->map(function ($item) use ($findOrder, $field) {
+        $map = $collection->map(function ($item) use ($findOrder, $field, $type) {
             if ($item['order'] == $findOrder) {
                 $item['order']++;
                 return $item;
             }
 
-            if ($item['field'] == $field) {
+            if ($item['field'] == $field && $item['type'] == $type) {
                 $item['order']--;
                 return $item;
             }
@@ -323,22 +323,23 @@ class TallCrudGenerator extends Component
             return $item;
         });
 
-        $this->sortFields[$mode] = $this->_sortFieldsByOrder($map);
+        $this->sortFields[$mode] = $this->sortFieldsByOrder($map);
     }
 
-    public function moveDown($field, $mode)
+    public function moveDown($field, $type, $mode)
     {
         $collection = collect($this->sortFields[$mode]);
-        $f = $collection->firstWhere('field', $field);
+        $filterType = $collection->where('type', $type);
+        $f = $filterType->firstWhere('field', $field);
         $findOrder = $f['order'] + 1;
 
-        $map = $collection->map(function ($item) use ($findOrder, $field) {
+        $map = $collection->map(function ($item) use ($findOrder, $field, $type) {
             if ($item['order'] == $findOrder) {
                 $item['order']--;
                 return $item;
             }
 
-            if ($item['field'] == $field) {
+            if ($item['field'] == $field && $item['type'] == $type) {
                 $item['order']++;
                 return $item;
             }
@@ -346,16 +347,16 @@ class TallCrudGenerator extends Component
             return $item;
         });
 
-        $this->sortFields[$mode] = $this->_sortFieldsByOrder($map);
+        $this->sortFields[$mode] = $this->sortFieldsByOrder($map);
     }
 
-    private function _generateFiles()
+    public function generateFiles()
     {
-        $code = $this->_generateComponentCode();
-        $html = $this->_generateViewHtml();
+        $code = $this->generateComponentCode();
+        $html = $this->generateViewHtml();
         $props = [
             'modelPath' => $this->modelPath,
-            'model' => $this->_getModelName(),
+            'model' => $this->getModelName(),
             'modelProps' => $this->modelProps,
             'fields' => $this->fields,
             'componentProps' => $this->componentProps,
@@ -372,7 +373,7 @@ class TallCrudGenerator extends Component
         ]);
 
         if ($this->exitCode == 0) {
-            if ($this->_isAddFeatureEnabled() || $this->_isEditFeatureEnabled() || $this->_isDeleteFeatureEnabled()) {
+            if ($this->isAddFeatureEnabled() || $this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
                 $this->exitCode = Artisan::call('livewire:tall-crud-generator', [
                     'name' => $this->componentName . 'Child',
                     'props' => $props,
@@ -383,5 +384,21 @@ class TallCrudGenerator extends Component
 
         $this->generatedCode = "@livewire('" . $this->componentName . "')";
         $this->isComplete = true;
+    }
+
+    //Define all ComputedProperties.
+    public function getAddFeatureProperty()
+    {
+        return $this->isAddFeatureEnabled();
+    }
+
+    public function getEditFeatureProperty()
+    {
+        return $this->isEditFeatureEnabled();
+    }
+
+    public function getAddAndEditDisabledProperty()
+    {
+        return $this->hasAddAndEditFeaturesDisabled();
     }
 }

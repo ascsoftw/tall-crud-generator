@@ -5,6 +5,7 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 
@@ -25,6 +26,10 @@ trait WithRelations
     public $withRelation = [];
     public $withRelations = [];
 
+    public $confirmingWithCount = false;
+    public $withCountRelation = [];
+    public $withCountRelations = [];
+
     public function createNewBelongsToManyRelation()
     {
         $this->resetBelongsToManyRelation();
@@ -36,29 +41,29 @@ trait WithRelations
     {
         $this->belongsToManyRelation = [
             'name' => '',
-            'is_valid' => false,
+            'isValid' => false,
             'relatedKey' => '',
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
-            'in_add' => true,
-            'in_edit' => true,
+            'inAdd' => true,
+            'inEdit' => true,
         ];
     }
 
     public function updatedBelongsToManyRelationName()
     {
         $this->resetValidation('belongsToManyRelation.*');
-        $this->belongsToManyRelation['is_valid'] = false;
+        $this->belongsToManyRelation['isValid'] = false;
 
-        if (!$this->_isValidBelongsToManyName()) {
+        if (!$this->isValidBelongsToManyName()) {
             return;
         }
 
-        $this->_fillBelongsToManyFields();
+        $this->fillBelongsToManyFields();
     }
 
-    private function _isValidBelongsToManyName()
+    public function isValidBelongsToManyName()
     {
         if (empty($this->belongsToManyRelation['name'])) {
             $this->addError('belongsToManyRelation.name', 'Please select a Relation');
@@ -75,21 +80,21 @@ trait WithRelations
         return true;
     }
 
-    private function _fillBelongsToManyFields()
+    public function fillBelongsToManyFields()
     {
         $model = new $this->modelPath();
         $relationName = $this->belongsToManyRelation['name'];
         $relation = $model->{$relationName}();
-        $this->belongsToManyRelation['is_valid'] = true;
+        $this->belongsToManyRelation['isValid'] = true;
         $this->belongsToManyRelation['relatedKey'] = $relation->getRelatedKeyName();
         $this->belongsToManyRelation['modelPath'] = get_class($relation->getRelated());
-        $this->belongsToManyRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        $this->belongsToManyRelation['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
     public function addBelongsToManyRelation()
     {
         $this->resetValidation('belongsToManyRelation.*');
-        if (!$this->_isValidBelongsToManyName()) {
+        if (!$this->isValidBelongsToManyName()) {
             return;
         }
         $this->validateOnly('belongsToManyRelation.displayColumn', [
@@ -100,8 +105,8 @@ trait WithRelations
             'relatedKey' => $this->belongsToManyRelation['relatedKey'],
             'modelPath' => $this->belongsToManyRelation['modelPath'],
             'displayColumn' => $this->belongsToManyRelation['displayColumn'],
-            'in_add' => $this->belongsToManyRelation['in_add'],
-            'in_edit' => $this->belongsToManyRelation['in_edit'],
+            'inAdd' => $this->belongsToManyRelation['inAdd'],
+            'inEdit' => $this->belongsToManyRelation['inEdit'],
         ];
         $this->confirmingBelongsToMany = false;
         $this->resetRelationsForm();
@@ -124,30 +129,30 @@ trait WithRelations
     {
         $this->belongsToRelation = [
             'name' => '',
-            'is_valid' => false,
+            'isValid' => false,
             'ownerKey' => '',
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
-            'column' => '',
-            'in_add' => true,
-            'in_edit' => true,
+            'foreignKey' => '',
+            'inAdd' => true,
+            'inEdit' => true,
         ];
     }
 
     public function updatedBelongsToRelationName()
     {
         $this->resetValidation('belongsToRelation.*');
-        $this->belongsToRelation['is_valid'] = false;
+        $this->belongsToRelation['isValid'] = false;
 
-        if (!$this->_isValidBelongsToName()) {
+        if (!$this->isValidBelongsToName()) {
             return;
         }
 
-        $this->_fillBelongsToFields();
+        $this->fillBelongsToFields();
     }
 
-    private function _isValidBelongsToName()
+    public function isValidBelongsToName()
     {
         if (empty($this->belongsToRelation['name'])) {
             $this->addError('belongsToRelation.name', 'Please select a Relation');
@@ -164,28 +169,26 @@ trait WithRelations
         return true;
     }
 
-    private function _fillBelongsToFields()
+    public function fillBelongsToFields()
     {
         $model = new $this->modelPath();
         $relationName = $this->belongsToRelation['name'];
         $relation = $model->{$relationName}();
-        $this->belongsToRelation['is_valid'] = true;
+        $this->belongsToRelation['isValid'] = true;
         $this->belongsToRelation['ownerKey'] = $relation->getOwnerKeyName();
+        $this->belongsToRelation['foreignKey'] = $relation->getForeignKeyName();
         $this->belongsToRelation['modelPath'] = get_class($relation->getRelated());
-        $this->belongsToRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        $this->belongsToRelation['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
     public function addBelongsToRelation()
     {
         $this->resetValidation('belongsToRelation.*');
-        if (!$this->_isValidBelongsToName()) {
+        if (!$this->isValidBelongsToName()) {
             return;
         }
         $this->validateOnly('belongsToRelation.displayColumn', [
             'belongsToRelation.displayColumn' => 'required',
-        ]);
-        $this->validateOnly('belongsToRelation.column', [
-            'belongsToRelation.column' => 'required',
         ]);
 
         $this->belongsToRelations[] = [
@@ -193,9 +196,9 @@ trait WithRelations
             'ownerKey' => $this->belongsToRelation['ownerKey'],
             'modelPath' => $this->belongsToRelation['modelPath'],
             'displayColumn' => $this->belongsToRelation['displayColumn'],
-            'column' => $this->belongsToRelation['column'],
-            'in_add' => $this->belongsToRelation['in_add'],
-            'in_edit' => $this->belongsToRelation['in_edit'],
+            'foreignKey' => $this->belongsToRelation['foreignKey'],
+            'inAdd' => $this->belongsToRelation['inAdd'],
+            'inEdit' => $this->belongsToRelation['inEdit'],
         ];
         $this->confirmingBelongsTo = false;
         $this->resetRelationsForm();
@@ -218,7 +221,7 @@ trait WithRelations
     {
         $this->withRelation = [
             'name' => '',
-            'is_valid' => false,
+            'isValid' => false,
             'modelPath' => '',
             'columns' => [],
             'displayColumn' => '',
@@ -228,16 +231,16 @@ trait WithRelations
     public function updatedWithRelationName()
     {
         $this->resetValidation('withRelation.*');
-        $this->withRelation['is_valid'] = false;
+        $this->withRelation['isValid'] = false;
 
-        if (!$this->_isValidWithName()) {
+        if (!$this->isValidWithName()) {
             return;
         }
 
-        $this->_fillWithFields();
+        $this->fillWithFields();
     }
 
-    private function _isValidWithName()
+    public function isValidWithName()
     {
         if (empty($this->withRelation['name'])) {
             $this->addError('withRelation.name', 'Please select a Relation');
@@ -254,20 +257,20 @@ trait WithRelations
         return true;
     }
 
-    private function _fillWithFields()
+    public function fillWithFields()
     {
         $model = new $this->modelPath();
         $relationName = $this->withRelation['name'];
         $relation = $model->{$relationName}();
-        $this->withRelation['is_valid'] = true;
+        $this->withRelation['isValid'] = true;
         $this->withRelation['modelPath'] = get_class($relation->getRelated());
-        $this->withRelation['columns'] = $this->_getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+        $this->withRelation['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
     public function addWithRelation()
     {
         $this->resetValidation('withRelation.*');
-        if (!$this->_isValidWithName()) {
+        if (!$this->isValidWithName()) {
             return;
         }
         $this->validateOnly('withRelation.displayColumn', [
@@ -287,11 +290,79 @@ trait WithRelations
         unset($this->withRelations[$i]);
         $this->withRelations = array_values($this->withRelations);
     }
+
+    public function createNewWithCountRelation()
+    {
+        $this->resetWithCountRelation();
+        $this->resetValidation('withCountRelation.*');
+        $this->confirmingWithCount = true;
+    }
+
+    public function resetWithCountRelation()
+    {
+        $this->withCountRelation = [
+            'name' => '',
+            'isValid' => false,
+            'isSortable' => false,
+        ];
+    }
+
+    public function updatedWithCountRelationName()
+    {
+        $this->resetValidation('withCountRelation.*');
+        $this->withCountRelation['isValid'] = false;
+
+        if (!$this->isValidWithCountName()) {
+            return;
+        }
+
+        $this->withCountRelation['isValid'] = true;
+    }
+
+    public function isValidWithCountName()
+    {
+        if (empty($this->withCountRelation['name'])) {
+            $this->addError('withCountRelation.name', 'Please select a Relation');
+            return false;
+        }
+
+        foreach ($this->withCountRelations as $k) {
+            if ($k['relationName'] == $this->withCountRelation['name']) {
+                $this->addError('withCountRelation.name', 'Relation Already Defined.');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function addWithCountRelation()
+    {
+        $this->resetValidation('withCountRelation.*');
+        if (!$this->isValidWithCountName()) {
+            return;
+        }
+
+        $this->withCountRelations[] = [
+            'relationName' => $this->withCountRelation['name'],
+            'isSortable' => $this->withCountRelation['isSortable'],
+        ];
+        $this->confirmingWithCount = false;
+        $this->resetRelationsForm();
+    }
+
+    public function deleteWithCountRelation($i)
+    {
+        unset($this->withCountRelations[$i]);
+        $this->withCountRelations = array_values($this->withCountRelations);
+    }
+
     public function resetRelationsForm()
     {
         $this->resetBelongsToManyRelation();
         $this->resetBelongsToRelation();
         $this->resetWithRelation();
+        $this->resetWithCountRelation();
     }
 
     public function getAllRelations()

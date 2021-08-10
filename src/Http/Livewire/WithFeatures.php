@@ -4,89 +4,89 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 trait WithFeatures
 {
-    private function _hasAddAndEditFeaturesDisabled()
+    public function hasAddAndEditFeaturesDisabled()
     {
-        if (!$this->_isAddFeatureEnabled() && !$this->_isEditFeatureEnabled()) {
+        if (!$this->isAddFeatureEnabled() && !$this->isEditFeatureEnabled()) {
             return true;
         }
         return false;
     }
 
-    private function _needsActionColumn()
+    public function needsActionColumn()
     {
-        if ($this->_isEditFeatureEnabled() || $this->_isDeleteFeatureEnabled()) {
+        if ($this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
             return true;
         }
         return false;
     }
 
-    private function _needsPrimaryKeyInListing()
+    public function needsPrimaryKeyInListing()
     {
-        if ($this->primaryKeyProps['in_list']) {
+        if ($this->primaryKeyProps['inList']) {
             return true;
         }
         return false;
     }
 
-    private function _isAddFeatureEnabled()
+    public function isAddFeatureEnabled()
     {
-        if ($this->componentProps['create_add_modal']) {
+        if ($this->componentProps['createAddModal']) {
             return true;
         }
         return false;
     }
 
-    private function _isEditFeatureEnabled()
+    public function isEditFeatureEnabled()
     {
-        if ($this->componentProps['create_edit_modal']) {
+        if ($this->componentProps['createEditModal']) {
             return true;
         }
         return false;
     }
 
-    private function _isDeleteFeatureEnabled()
+    public function isDeleteFeatureEnabled()
     {
-        if ($this->componentProps['create_delete_button']) {
+        if ($this->componentProps['createDeleteButton']) {
             return true;
         }
         return false;
     }
 
-    private function _isSortingEnabled()
+    public function isSortingEnabled()
     {
-        if ($this->_isPrimaryKeySortable()) {
+        if ($this->isPrimaryKeySortable()) {
             return true;
         }
 
         $collection = collect($this->fields);
         return $collection->contains(function ($f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) && $f['sortable']) {
+            if (($this->hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['sortable']) {
                 return true;
             }
             return false;
         });
     }
 
-    private function _isSearchingEnabled()
+    public function isSearchingEnabled()
     {
         $collection = collect($this->fields);
         return $collection->contains(function ($f) {
-            if (($this->_hasAddAndEditFeaturesDisabled() || $f['in_list']) && $f['searchable']) {
+            if (($this->hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['searchable']) {
                 return true;
             }
             return false;
         });
     }
 
-    private function _isPrimaryKeySortable()
+    public function isPrimaryKeySortable()
     {
-        if ($this->_needsPrimaryKeyInListing() && $this->primaryKeyProps['sortable']) {
+        if ($this->needsPrimaryKeyInListing() && $this->primaryKeyProps['sortable']) {
             return true;
         }
         return false;
     }
 
-    private function _isColumnSortable($column)
+    public function isColumnSortable($column)
     {
         $collection = collect($this->fields);
         $field = $collection->firstWhere('column', $column);
@@ -101,61 +101,61 @@ trait WithFeatures
         return false;
     }
 
-    private function _isFlashMessageEnabled()
+    public function isFlashMessageEnabled()
     {
         return $this->flashMessages['enable'];
     }
 
-    private function _isPaginationDropdownEnabled()
+    public function isPaginationDropdownEnabled()
     {
-        return $this->advancedSettings['table_settings']['show_pagination_dropdown'];
+        return $this->advancedSettings['table_settings']['showPaginationDropdown'];
     }
 
-    private function _isBtmEnabled()
+    public function isBtmEnabled()
     {
-        return count($this->belongsToManyRelations) > 0 ;
+        return count($this->belongsToManyRelations) > 0;
     }
 
-    private function _isBtmAddEnabled()
+    public function isBtmAddEnabled()
     {
         $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('in_add', true);
-        if(is_null($c)) {
+        $c = $collection->firstWhere('inAdd', true);
+        if (is_null($c)) {
             return false;
         }
         return true;
     }
 
-    private function _isBtmEditEnabled()
+    public function isBtmEditEnabled()
     {
         $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('in_edit', true);
-        if(is_null($c)) {
+        $c = $collection->firstWhere('inEdit', true);
+        if (is_null($c)) {
             return false;
         }
         return true;
     }
 
-    private function _isBelongsToEnabled()
+    public function isBelongsToEnabled()
     {
-        return count($this->belongsToRelations) > 0 ;
+        return count($this->belongsToRelations) > 0;
     }
 
-    private function _isBelongsToAddEnabled()
+    public function isBelongsToAddEnabled()
     {
         $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('in_add', true);
-        if(is_null($c)) {
+        $c = $collection->firstWhere('inAdd', true);
+        if (is_null($c)) {
             return false;
         }
         return true;
     }
 
-    private function _isBelongsToEditEnabled()
+    public function isBelongsToEditEnabled()
     {
         $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('in_edit', true);
-        if(is_null($c)) {
+        $c = $collection->firstWhere('inEdit', true);
+        if (is_null($c)) {
             return false;
         }
         return true;

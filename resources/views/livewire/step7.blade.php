@@ -2,12 +2,13 @@
     <div>
         <x:tall-crud-generator::label>Name of your Livewire Component</x:tall-crud-generator::label>
         <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text" wire:model.defer="componentName" required />
-        @error('componentName') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message>@enderror
+        @error('componentName') <x:tall-crud-generator::error-message>{{$message}}
+        </x:tall-crud-generator::error-message>@enderror
     </div>
 
     @if($isComplete)
     <div class="flex items-center justify-end">
-        @if($exitCode == 0)
+        @if ($exitCode == 0)
         <div>
             <div class="text-green-500 font-bold italic">
                 Files Generated Successfully! <br />

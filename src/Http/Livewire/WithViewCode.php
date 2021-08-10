@@ -6,358 +6,238 @@ use Illuminate\Support\Str;
 
 trait WithViewCode
 {
-    private function _generateViewHtml()
+    public function generateViewHtml()
     {
-        $return = [];
-        $return['css_class'] = $this->_isSearchingEnabled() ? 'justify-between' : 'justify-end';
-        $return['add_link'] = $this->_generateAddLink();
-        $return['search_box'] = $this->_generateSearchBox();
-        $return['pagination_dropdown'] = $this->_generatePaginationDropdown();
-        $return['table_header'] = $this->_generateTableHeader();
-        $return['table_slot'] = $this->_generateTableSlot();
-        $return['child_component'] = $this->_includeChildComponent();
-        $return['flash_component'] = $this->_includeFlashComponent();
-        $return['child']['delete_modal'] = $this->_generateDeleteModal();
-        $return['child']['add_modal'] = $this->_generateAddModal();
-        $return['child']['edit_modal'] = $this->_generateEditModal();
-        return $return;
+        $code = [];
+        $code['css_class'] = $this->isSearchingEnabled() ? 'justify-between' : 'justify-end';
+        $code['add_link'] = $this->generateAddLink();
+        $code['search_box'] = $this->generateSearchBox();
+        $code['pagination_dropdown'] = $this->generatePaginationDropdown();
+        $code['table_header'] = $this->generateTableHeader();
+        $code['table_slot'] = $this->generateTableSlot();
+        $code['child_component'] = $this->includeChildComponent();
+        $code['flash_component'] = $this->includeFlashComponent();
+        $code['child']['delete_modal'] = $this->generateDeleteModal();
+        $code['child']['add_modal'] = $this->generateAddModal();
+        $code['child']['edit_modal'] = $this->generateEditModal();
+        return $code;
     }
 
-    private function _generateAddLink()
+    public function generateAddLink()
     {
-        if ($this->_isAddFeatureEnabled()) {
-            $string = Str::replace('##COMPONENT_NAME##', $this->_getChildComponentName(), $this->_getAddButtonTemplate());
-            return $this->_newLines(1, 2) . $this->_getButtonHtml($this->advancedSettings['text']['add_link'], 'add', $string);
+        if ($this->isAddFeatureEnabled()) {
+            $buttonParams = Str::replace(
+                '##COMPONENT_NAME##',
+                $this->getChildComponentName(),
+                $this->getAddButtonTemplate()
+            );
+            return $this->newLines(1, 2) .
+                $this->getButtonHtml(
+                    $this->advancedSettings['text']['addLink'],
+                    'add',
+                    $buttonParams
+                );
         }
         return '';
     }
 
-    private function _generateSearchBox()
+    public function generateSearchBox()
     {
-        if ($this->_isSearchingEnabled()) {
-            return $this->_getSearchBoxHtml();
+        if ($this->isSearchingEnabled()) {
+            return $this->getSearchBoxHtml();
         }
         return '';
     }
 
-    private function _generatePaginationDropdown()
+    public function generatePaginationDropdown()
     {
-        if ($this->_isPaginationDropdownEnabled()) {
-            return $this->_getPaginationDropdownHtml();
+        if ($this->isPaginationDropdownEnabled()) {
+            return $this->getPaginationDropdownHtml();
         }
         return '';
     }
 
-    private function _generateTableHeader()
+    public function generateTableHeader()
     {
 
-        $fields = $this->_getSortedListingFields();
-        $return = [];
+        $fields = $this->getSortedListingFields();
+        $headers = collect();
 
         foreach ($fields as $f) {
-            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
-                $return[] = $this->_getHeaderHtml($this->_getLabel($this->primaryKeyProps['label'], $this->modelProps['primary_key']), $this->modelProps['primary_key'], true);
-                continue;
-            }
-
-            $return[] = $this->_getHeaderHtml($this->_getLabel($f['label'], $f['column']), $f['column']);
+            [$label, $column, $isSortable] = $this->getTableColumnProps($f);
+            $headers->push($this->getHeaderHtml($label, $column, $isSortable));
         }
 
-        foreach ($this->withRelations as $r) {
-            $return[] = $this->_getTableColumnHtml(Str::ucfirst($r['relationName']));
+        if ($this->needsActionColumn()) {
+            $headers->push($this->getTableColumnHtml('Actions'));
         }
 
-        if ($this->_needsActionColumn()) {
-            $return[] = $this->_getTableColumnHtml('Actions');
-        }
-
-        return collect($return)->implode($this->_newLines(1, 4));
+        return $headers->implode($this->newLines(1, 4));
     }
 
-    private function _generateTableSlot()
+    public function generateTableSlot()
     {
-        $return = [];
-        $fields = $this->_getSortedListingFields();
+        $fields = $this->getSortedListingFields();
+        $columns = collect();
 
         foreach ($fields as $f) {
-            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
-                $return[] = $this->_getTableColumnHtml(
-                    Str::replace('##COLUMN_NAME##', $this->modelProps['primary_key'], $this->_getTableColumnTemplate())
-                );
-                continue;
-            }
-
-            $return[] = $this->_getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $f['column'], $this->_getTableColumnTemplate())
-            );
+            $columns->push($this->getTableColumnHtml(
+                Str::replace(
+                    '##COLUMN_NAME##',
+                    $this->getTableSlotColumnValue($f),
+                    $this->getTableColumnTemplate()
+                )
+            ));
         }
 
-        foreach ($this->withRelations as $r) {
-            $return[] = $this->_getTableColumnHtml(
-                Str::replace('##COLUMN_NAME##', $this->_getWithTableSlot($r), $this->_getTableColumnTemplate())
-            );
+        if ($this->needsActionColumn()) {
+            $columns->push($this->getTableColumnHtml(
+                $this->getActionHtml()
+            ));
         }
 
-        if ($this->_needsActionColumn()) {
-            $return[] = $this->_getTableColumnHtml($this->_getActionHtml());
-        }
-
-        return collect($return)->implode($this->_newLines(1, 5));
+        return $columns->implode($this->newLines(1, 5));
     }
 
-    private function _includeChildComponent()
+    public function includeChildComponent()
     {
-        if ($this->_isAddFeatureEnabled() || $this->_isEditFeatureEnabled() || $this->_isDeleteFeatureEnabled()) {
-            $componentName = $this->_getChildComponentName();
-            return $this->_indent(1) . "@livewire('$componentName')";
+        if ($this->isAddFeatureEnabled() || $this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
+            $componentName = $this->getChildComponentName();
+            return $this->indent(1) . "@livewire('$componentName')";
         }
 
         return '';
     }
 
-    private function _includeFlashComponent()
+    public function includeFlashComponent()
     {
-        if ($this->_isFlashMessageEnabled()) {
-            return $this->_indent(1) . $this->_getFlashComponentTemplate();
+        if ($this->isFlashMessageEnabled()) {
+            return $this->indent(1) . $this->getFlashComponentTemplate();
         }
 
         return '';
     }
 
-    private function _generateDeleteModal()
+    public function generateDeleteModal()
     {
-        if (!$this->_isDeleteFeatureEnabled()) {
+        if (!$this->isDeleteFeatureEnabled()) {
             return '';
         }
 
         return Str::replace(
             [
-                '##CancelBtnText##',
-                '##DeleteBtnText##',
+                '##CANCEL_BTN_TEXT##',
+                '##DELETE_BTN_TEXT##',
             ],
             [
-                $this->advancedSettings['text']['cancel_button'],
-                $this->advancedSettings['text']['delete_button'],
+                $this->advancedSettings['text']['cancelButton'],
+                $this->advancedSettings['text']['deleteButton'],
             ],
-            $this->_getDeleteModalTemplate()
+            $this->getDeleteModalTemplate()
         );
     }
 
-    private function _generateAddModal()
+    public function generateAddModal()
     {
-        if (!$this->_isAddFeatureEnabled()) {
+        if (!$this->isAddFeatureEnabled()) {
             return '';
         }
 
-        $fields = $this->_getSortedFormFields(true);
-        $string = '';
+        $fields = $this->getSortedFormFields(true);
+        $fieldsHtml = collect();
         foreach ($fields as $field) {
-            $string .=
-                Str::replace(
-                    [
-                        '##COLUMN##',
-                        '##LABEL##',
-                    ],
-                    [
-                        $field['column'],
-                        $this->_getLabel($field['label'], $field['column'])
-                    ],
-                    $this->_getFieldTemplate($field['attributes']['type'])
-                );
-
-            if ($field['attributes']['type'] == 'select') {
-                $string = Str::replace('##OPTIONS##', $this->_getSelectOptionsHtml($field['attributes']['options']), $string);
-            }
+            $fieldsHtml->push($this->getFieldHtml($field));
         }
 
         return Str::replace(
             [
-                '##CancelBtnText##',
-                '##CreateBtnText##',
+                '##CANCEL_BTN_TEXT##',
+                '##CREATE_BTN_TEXT##',
                 '##FIELDS##',
-                '##BTM_FIELDS##',
-                '##BELONGS_TO_FIELDS##',
             ],
             [
-                $this->advancedSettings['text']['cancel_button'],
-                $this->advancedSettings['text']['create_button'],
-                $string,
-                $this->_getBtmFields(true),
-                $this->_getBelongsToFields(true),
+                $this->advancedSettings['text']['cancelButton'],
+                $this->advancedSettings['text']['createButton'],
+                $fieldsHtml->implode(''),
             ],
-            $this->_getAddModalTemplate()
+            $this->getAddModalTemplate()
         );
     }
 
-    private function _generateEditModal()
+    public function generateEditModal()
     {
-        if (!$this->_isEditFeatureEnabled()) {
+        if (!$this->isEditFeatureEnabled()) {
             return '';
         }
-        $fields = $this->_getSortedFormFields(false);
-        $string = '';
+        $fields = $this->getSortedFormFields(false);
+        $fieldsHtml = collect();
         foreach ($fields as $field) {
-            $string .=
-                Str::replace(
-                    [
-                        '##COLUMN##',
-                        '##LABEL##',
-                    ],
-                    [
-                        $field['column'],
-                        $this->_getLabel($field['label'], $field['column'])
-                    ],
-                    $this->_getFieldTemplate($field['attributes']['type'])
-                );
-
-            if ($field['attributes']['type'] == 'select') {
-                $string = Str::replace('##OPTIONS##', $this->_getSelectOptionsHtml($field['attributes']['options']), $string);
-            }
+            $fieldsHtml->push($this->getFieldHtml($field));
         }
 
         return Str::replace(
             [
-                '##CancelBtnText##',
-                '##EditBtnText##',
+                '##CANCEL_BTN_TEXT##',
+                '##EDIT_BTN_TEXT##',
                 '##FIELDS##',
-                '##BTM_FIELDS##',
-                '##BELONGS_TO_FIELDS##',
             ],
             [
-                $this->advancedSettings['text']['cancel_button'],
-                $this->advancedSettings['text']['edit_button'],
-                $string,
-                $this->_getBtmFields(false),
-                $this->_getBelongsToFields(false),
+                $this->advancedSettings['text']['cancelButton'],
+                $this->advancedSettings['text']['editButton'],
+                $fieldsHtml->implode(''),
             ],
-            $this->_getEditModalTemplate()
+            $this->getEditModalTemplate()
         );
     }
 
-
-    private function _getActionHtml()
+    public function getActionHtml()
     {
-        $return = [];
-        if ($this->_isEditFeatureEnabled()) {
-            $string = Str::replace(
+        $buttons = collect();
+        if ($this->isEditFeatureEnabled()) {
+            $buttonParams = Str::replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
                 ],
                 [
-                    $this->_getChildComponentName(),
-                    $this->modelProps['primary_key']
+                    $this->getChildComponentName(),
+                    $this->getPrimaryKey()
                 ],
-                $this->_getEditButtonTemplate()
+                $this->getEditButtonTemplate()
             );
-            $return[] = $this->_getButtonHtml($this->advancedSettings['text']['edit_link'], 'edit', $string);
+            $buttons->push($this->getButtonHtml(
+                $this->advancedSettings['text']['editLink'],
+                'edit',
+                $buttonParams
+            ));
         }
 
-        if ($this->_isDeleteFeatureEnabled()) {
-            $string = Str::replace(
+        if ($this->isDeleteFeatureEnabled()) {
+            $buttonParams = Str::replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
                 ],
                 [
-                    $this->_getChildComponentName(),
-                    $this->modelProps['primary_key']
+                    $this->getChildComponentName(),
+                    $this->getPrimaryKey()
                 ],
-                $this->_getDeleteButtonTemplate()
+                $this->getDeleteButtonTemplate()
             );
 
-            $return[] = $this->_getButtonHtml($this->advancedSettings['text']['delete_link'], 'delete', $string);
+            $buttons->push($this->getButtonHtml(
+                $this->advancedSettings['text']['deleteLink'],
+                'delete',
+                $buttonParams
+            ));
         }
 
-        return $this->_newLines(1, 6) . collect($return)->implode($this->_newLines(1, 6)) . $this->_newLines(1, 5);
+        return $this->newLines(1, 6) . $buttons->implode($this->newLines(1, 6)) . $this->newLines(1, 5);
     }
 
-    private function _getBtmFields($isAdd = true)
+    public function getWithTableSlot($r)
     {
-
-        if ($isAdd && !$this->_isBtmAddEnabled()) {
-            return '';
-        }
-
-        if (!$isAdd && !$this->_isBtmEditEnabled()) {
-            return '';
-        }
-
-        $string = '';
-        foreach ($this->belongsToManyRelations as $r) {
-            if ($isAdd && !$r['in_add']) {
-                continue;
-            }
-
-            if (!$isAdd && !$r['in_edit']) {
-                continue;
-            }
-
-            $string .= Str::replace(
-                [
-                    '##HEADING##',
-                    '##RELATION##',
-                    '##FIELDNAME##',
-                    '##DISPLAY_COLUMN##',
-                    '##RELATED_KEY##',
-                ],
-                [
-                    Str::studly($r['relationName']),
-                    $r['relationName'],
-                    $this->_getBtmFieldName($r['relationName']),
-                    $r['displayColumn'],
-                    $r['relatedKey'],
-                ],
-                $this->_getBtmFieldTemplate()
-            );
-        }
-        return $string;
-    }
-
-    private function _getBelongsToFields($isAdd = true)
-    {
-        if ($isAdd && !$this->_isBelongsToAddEnabled()) {
-            return '';
-        }
-
-        if (!$isAdd && !$this->_isBelongsToEditEnabled()) {
-            return '';
-        }
-
-        $string = '';
-        foreach ($this->belongsToRelations as $r) {
-            if ($isAdd && !$r['in_add']) {
-                continue;
-            }
-
-            if (!$isAdd && !$r['in_edit']) {
-                continue;
-            }
-
-            $string .= Str::replace(
-                [
-                    '##LABEL##',
-                    '##COLUMN##',
-                    '##BELONGS_TO_VAR##',
-                    '##OWNER_KEY##',
-                    '##DISPLAY_COLUMN##',
-                ],
-                [
-                    Str::ucfirst($r['relationName']),
-                    $r['column'],
-                    Str::plural($r['relationName']),
-                    $r['ownerKey'],
-                    $r['displayColumn'],
-                ],
-                $this->_getBelongsToFieldTemplate()
-            );
-        }
-        return $string;
-    }
-
-    private function _getWithTableSlot($r)
-    {
-        if ($this->_isBelongsToManyRelation($r['relationName'])) {
+        if ($this->isBelongsToManyRelation($r['relationName']) || $this->isHasManyRelation($r['relationName'])) {
             return Str::replace(
                 [
                     '##RELATION##',
@@ -367,7 +247,7 @@ trait WithViewCode
                     $r['relationName'],
                     $r['displayColumn'],
                 ],
-                $this->_getBelongsToManyTableSlotTemplate()
+                $this->getBelongsToManyTableSlotTemplate()
             );
         }
 
@@ -380,7 +260,129 @@ trait WithViewCode
                 $r['relationName'],
                 $r['displayColumn'],
             ],
-            $this->_getBelongsToTableSlotTemplate()
+            $this->getBelongsToTableSlotTemplate()
         );
+    }
+
+    public function getNormalFieldHtml($field)
+    {
+        $html = Str::replace(
+            [
+                '##COLUMN##',
+                '##LABEL##',
+            ],
+            [
+                $field['column'],
+                $this->getLabel($field['label'], $field['column'])
+            ],
+            $this->getFieldTemplate($field['attributes']['type'])
+        );
+
+        if ($field['attributes']['type'] == 'select') {
+            $html = Str::replace(
+                '##OPTIONS##',
+                $this->getSelectOptionsHtml($field['attributes']['options']),
+                $html
+            );
+        }
+        return $html;
+    }
+
+    public function getBtmFieldHtml($r)
+    {
+        return Str::replace(
+            [
+                '##HEADING##',
+                '##RELATION##',
+                '##FIELD_NAME##',
+                '##DISPLAY_COLUMN##',
+                '##RELATED_KEY##',
+            ],
+            [
+                Str::studly($r['relationName']),
+                $r['relationName'],
+                $this->getBtmFieldName($r['relationName']),
+                $r['displayColumn'],
+                $r['relatedKey'],
+            ],
+            $this->getBtmFieldTemplate()
+        );
+    }
+
+    public function getBelongsToFieldHtml($r)
+    {
+        return Str::replace(
+            [
+                '##LABEL##',
+                '##FOREIGN_KEY##',
+                '##BELONGS_TO_VAR##',
+                '##OWNER_KEY##',
+                '##DISPLAY_COLUMN##',
+            ],
+            [
+                Str::ucfirst($r['relationName']),
+                $r['foreignKey'],
+                Str::plural($r['relationName']),
+                $r['ownerKey'],
+                $r['displayColumn'],
+            ],
+            $this->getBelongsToFieldTemplate()
+        );
+    }
+
+    public function getTableSlotColumnValue($f)
+    {
+        switch ($f['type']) {
+            case 'primary':
+                return $this->getPrimaryKey();
+            case 'normal':
+                return  $f['column'];
+            case 'with':
+                return $this->getWithTableSlot($f);
+            case 'withCount':
+                return $this->getColumnForWithCount($f['relationName']);
+        }
+        return '';
+    }
+
+    public function getFieldHtml($field)
+    {
+        switch ($field['type']) {
+            case 'normal':
+                return $this->getNormalFieldHtml($field);
+            case 'btm':
+                return $this->getBtmFieldHtml($field);
+            case 'belongsTo':
+                return $this->getBelongsToFieldHtml($field);
+        }
+        return '';
+    }
+
+    public function getTableColumnProps($field)
+    {
+        switch ($field['type']) {
+            case 'primary':
+                $label = $this->getLabel($this->primaryKeyProps['label'], $this->getPrimaryKey());
+                $column = $this->getPrimaryKey();
+                $isSortable = $this->isPrimaryKeySortable();
+                break;
+            case 'normal':
+                $label = $this->getLabel($field['label'], $field['column']);
+                $column = $field['column'];
+                $isSortable = $this->isColumnSortable($field['column']);
+                break;
+            case 'with':
+                $label = $this->getLabelForWith($field['relationName']);
+                $column = null;
+                $isSortable = false;
+                break;
+            case 'withCount':
+                $label = $this->getLabelForWithCount($field['relationName']);
+                $column = $this->getColumnForWithCount($field['relationName']);
+                $isSortable = $field['isSortable'];
+                break;
+        }
+
+        return [$label, $column, $isSortable];
     }
 }

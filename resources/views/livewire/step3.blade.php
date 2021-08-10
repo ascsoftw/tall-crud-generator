@@ -2,45 +2,48 @@
     <x-slot name="header">
         <x:tall-crud-generator::table-column>Column</x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>Label</x:tall-crud-generator::table-column>
-        @if(!( !$componentProps['create_add_modal'] && !$componentProps['create_edit_modal'] ))
+        @if (!$this->addAndEditDisabled)
         <x:tall-crud-generator::table-column>Display In Listing</x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_add_modal'])
+        @if ($this->addFeature)
         <x:tall-crud-generator::table-column>Display In Create</x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_edit_modal'])
+        @if ($this->editFeature)
         <x:tall-crud-generator::table-column>Display In Edit</x:tall-crud-generator::table-column>
         @endif
         <x:tall-crud-generator::table-column>Searchable</x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>Sortable</x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
     </x-slot>
-    @foreach( $this->fields as $i => $field)
+    @foreach ($this->fields as $i => $field)
     <tr>
         <x:tall-crud-generator::table-column>
             <select wire:model.defer="fields.{{$i}}.column" class="form-select rounded-md shadow-sm">
                 <option value="">-Select Column-</option>
-                @foreach($this->modelProps['columns'] as $column)
+                @if (Arr::exists($this->modelProps, 'columns'))
+                @foreach ($this->modelProps['columns'] as $column)
                 <option value="{{$column}}">{{$column}}</option>
                 @endforeach
+                @endif
             </select>
         </x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::input type="text" class="mt-1 block w-full" wire:model.defer="fields.{{$i}}.label" placeholder="Label" />
+            <x:tall-crud-generator::input type="text" class="mt-1 block w-full" wire:model.defer="fields.{{$i}}.label"
+                placeholder="Label" />
         </x:tall-crud-generator::table-column>
-        @if(!( !$componentProps['create_add_modal'] && !$componentProps['create_edit_modal'] ))
+        @if (!$this->addAndEditDisabled)
         <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.in_list" />
-        </x:tall-crud-generator::table-column>
-        @endif
-        @if($componentProps['create_add_modal'])
-        <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.in_add" />
+            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.inList" />
         </x:tall-crud-generator::table-column>
         @endif
-        @if($componentProps['create_edit_modal'])
+        @if ($this->addFeature)
         <x:tall-crud-generator::table-column>
-            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.in_edit" />
+            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.inAdd" />
+        </x:tall-crud-generator::table-column>
+        @endif
+        @if ($this->editFeature)
+        <x:tall-crud-generator::table-column>
+            <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.inEdit" />
         </x:tall-crud-generator::table-column>
         @endif
         <x:tall-crud-generator::table-column>
@@ -50,7 +53,7 @@
             <x:tall-crud-generator::checkbox wire:model.defer="fields.{{$i}}.sortable" />
         </x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>
-            @if(!( !$componentProps['create_add_modal'] && !$componentProps['create_edit_modal'] ))
+            @if (!$this->addAndEditDisabled)
             <x:tall-crud-generator::button wire:click.prevent="showAttributes({{$i}})" mode="edit" class="mr-8 mt-4">
                 Attributes
             </x:tall-crud-generator::button>
@@ -62,7 +65,6 @@
     </tr>
     @endforeach
 </x:tall-crud-generator::table>
-
 
 <div class="mt-4">
     <x:tall-crud-generator::button mode="add" wire:click.prevent="addField">
@@ -82,7 +84,8 @@
                 <x:tall-crud-generator::label>Enter Validations (Comma separated)
                     <x:tall-crud-generator::tag wire:click="clearRules()">Clear Options</x:tall-crud-generator::tag>
                 </x:tall-crud-generator::label>
-                <x:tall-crud-generator::input wire:model.defer="attributes.rules" class="block mt-1 w-full" type="text" />
+                <x:tall-crud-generator::input wire:model.defer="attributes.rules" class="block mt-1 w-full"
+                    type="text" />
 
                 Popular Validations:
                 <x:tall-crud-generator::tag wire:click="addRule('required')">Required</x:tall-crud-generator::tag>
@@ -100,7 +103,7 @@
                 </x:tall-crud-generator::select>
             </div>
 
-            @if($attributes['type'] == 'select')
+            @if ($attributes['type'] == 'select')
             <x:tall-crud-generator::label>Select Options (add as JSON)</x:tall-crud-generator::label>
             <x:tall-crud-generator::input class="block mt-1 w-full" type="text" wire:model.defer="attributes.options" />
             @endif
@@ -108,7 +111,8 @@
     </x-slot>
 
     <x-slot name="footer">
-        <x:tall-crud-generator::button wire:click="$set('confirmingAttributes', false)">Cancel</x:tall-crud-generator::button>
+        <x:tall-crud-generator::button wire:click="$set('confirmingAttributes', false)">Cancel
+        </x:tall-crud-generator::button>
         <x:tall-crud-generator::button mode="add" wire:click="setAttributes()">Save</x:tall-crud-generator::button>
     </x-slot>
 </x:tall-crud-generator::dialog-modal>

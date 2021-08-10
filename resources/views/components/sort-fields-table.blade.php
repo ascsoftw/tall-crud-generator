@@ -12,10 +12,13 @@ $count = count($this->sortFields[$mode])
     </x-slot>
     @foreach( $this->sortFields[$mode] as $sortField)
     <tr>
-        <x:tall-crud-generator::table-column>{{ $sortField['field'] }}</x:tall-crud-generator::table-column>
+        <x:tall-crud-generator::table-column>
+            {{ $sortField['field'] }}
+            {{ (isset($sortField['type']) && $sortField['type'] == 'withCount') ? '(Count)' : ''}}
+        </x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>
             @if($sortField['order'] != 1)
-            <a href="#" wire:click.prevent="moveUp('{{ $sortField['field'] }}', '{{$mode}}')">
+            <a href="#" wire:click.prevent="moveUp('{{ $sortField['field'] }}', '{{ $sortField['type'] }}', '{{$mode}}')">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                 </svg>
@@ -24,7 +27,7 @@ $count = count($this->sortFields[$mode])
         </x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>
             @if($sortField['order'] != $count)
-            <a href="#" wire:click.prevent="moveDown('{{ $sortField['field'] }}', '{{$mode}}')">
+            <a href="#" wire:click.prevent="moveDown('{{ $sortField['field'] }}', '{{ $sortField['type'] }}', '{{$mode}}')">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
