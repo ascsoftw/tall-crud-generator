@@ -58,6 +58,10 @@ php artisan vendor:publish --provider="Ascsoftw\TallCrudGenerator\TallCrudGenera
 
 This will publish the Views in `resources/views/vendor/tall-crud-generator` directory which you can then customize. Most of the Components being used are taken from Breeze and Jetstream Packages and so should be familiar.
 
+## Wiki
+
+Please check [Wiki](https://github.com/ascsoftw/tall-crud-generator/wiki) for more Details and Video Tutorials.
+
 ## FAQ
 **Question:** There are many CRUD Packages available. Why use this Package?
 
