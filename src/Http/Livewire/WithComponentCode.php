@@ -519,7 +519,7 @@ trait WithComponentCode
             );
         }
 
-        return $$initCode->implode('');
+        return $initCode->implode('');
     }
 
     public function getBtmAttachCode()
