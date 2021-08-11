@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2021-08-11
+- Fix Typo in Code
+
 ## [1.3.0] - 2021-08-10
 - Eager Load with Count
 - Automatically detect foreign key for BelongsTo Relationship
