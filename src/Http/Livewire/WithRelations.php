@@ -401,6 +401,10 @@ trait WithRelations
                 if ($methodReturn instanceof BelongsTo) {
                     $this->allRelations['belongsTo'][] = ['name' => $methodName];
                 }
+
+                if ($methodReturn instanceof HasMany) {
+                    $this->allRelations['hasMany'][] = ['name' => $methodName];
+                }
             } catch (Exception $ignore) {
                 //some issue running the $methodName
             }
