@@ -1,6 +1,11 @@
 <div>
     <div x-data="{ selected : @entangle('selected').defer}">
-        <x:tall-crud-generator::accordion-header tab="1">Customize Text</x:tall-crud-generator::accordion-header>
+        <x:tall-crud-generator::accordion-header tab="1">
+            Customize Text
+            <x-slot name="help">
+                Customize the Text of Buttons, Links and Headings.
+            </x-slot>
+        </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
             @foreach ($advancedSettings['text'] as $key => $text)
@@ -20,6 +25,9 @@
 
         <x:tall-crud-generator::accordion-header tab="2">
             Flash Messages
+            <x-slot name="help">
+                Enable / Disable Flash Messages & Customize their Text.
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
@@ -39,6 +47,9 @@
 
         <x:tall-crud-generator::accordion-header tab="3">
             Table Settings
+            <x-slot name="help">
+                Customize the Properties of Table displaying the Listing
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
             <x:tall-crud-generator::checkbox-wrapper>

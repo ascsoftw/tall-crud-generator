@@ -3,6 +3,9 @@
         @if ($this->addFeature || $this->editFeature)
         <x:tall-crud-generator::accordion-header tab="1">
             Belongs To Many
+            <x-slot name="help">
+                Display BelongsToMany Relation Field in Add and Edit Form
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
@@ -13,6 +16,9 @@
         @if ($this->addFeature || $this->editFeature)
         <x:tall-crud-generator::accordion-header tab="2">
             Belongs To
+            <x-slot name="help">
+                Display BelongsTo Relation Field in Add and Edit Form
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
@@ -22,6 +28,9 @@
 
         <x:tall-crud-generator::accordion-header tab="3">
             Eager Load
+            <x-slot name="help">
+                Eager Load a Related Model to display in Listing
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
@@ -49,6 +58,9 @@
 
         <x:tall-crud-generator::accordion-header tab="4">
             Eager Load Count
+            <x-slot name="help">
+                Eager Load Count of a Related Model to display in Listing
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab4" tab="4">
