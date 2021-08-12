@@ -207,28 +207,30 @@ trait WithComponentCode
 
     public function getSearchingQuery()
     {
-        $searchQuery = '';
+        $searchQuery = collect();
 
         $searchableColumns = $this->getSearchableColumns();
         $isFirst = true;
         foreach ($searchableColumns as $f) {
-            $searchQuery .= Str::replace(
-                [
-                    '##FIRST##',
-                    '##COLUMN##',
-                ],
-                [
-                    $isFirst ? '$query->where' : $this->newLines(1, 6) . '->orWhere',
-                    $f['column'],
-                ],
-                $this->getSearchingQueryWhereTemplate(),
+            $searchQuery->push(
+                Str::replace(
+                    [
+                        '##FIRST##',
+                        '##COLUMN##',
+                    ],
+                    [
+                        $isFirst ? '$query->where' : $this->newLines(1, 6) . '->orWhere',
+                        $f['column'],
+                    ],
+                    $this->getSearchingQueryWhereTemplate(),
+                )
             );
             $isFirst = false;
         }
 
         return Str::replace(
             '##SEARCH_QUERY##',
-            $searchQuery,
+            $searchQuery->implode(''),
             $this->getSearchinQueryTemplate()
         );
     }
@@ -282,20 +284,22 @@ trait WithComponentCode
     public function getAddMethod()
     {
         $fields = $this->getNormalFormFields(true, false);
-        $createFieldHtml = '';
+        $createFieldHtml = collect();
         foreach ($fields as $field) {
-            $createFieldHtml .= $this->newLines(1, 3) .
-                Str::replace(
-                    [
-                        '##COLUMN##',
-                        '##DEFAULT_VALUE##',
-                    ],
-                    [
-                        $field['column'],
-                        ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
-                    ],
-                    $this->getCreateFieldTemplate()
-                );
+            $createFieldHtml->push(
+                $this->newLines(1, 3) .
+                    Str::replace(
+                        [
+                            '##COLUMN##',
+                            '##DEFAULT_VALUE##',
+                        ],
+                        [
+                            $field['column'],
+                            ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
+                        ],
+                        $this->getCreateFieldTemplate()
+                    )
+            );
         }
 
         return Str::replace(
@@ -312,7 +316,7 @@ trait WithComponentCode
             [
                 $this->getModelName(),
                 $this->componentName,
-                $createFieldHtml,
+                $createFieldHtml->implode(''),
                 $this->getAddFlashCode(),
                 $this->getBtmInitCode(),
                 $this->getBtmAttachCode(),
@@ -361,36 +365,40 @@ trait WithComponentCode
     public function generateChildRules()
     {
         $fields = $this->getNormalFormFields();
-        $rules = '';
+        $rules = collect();
 
         foreach ($fields as $field) {
-            $rules .= $this->newLines(1, 2) .
-                $this->getChildFieldCode(
-                    $field['column'],
-                    Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
-                );
+            $rules->push(
+                $this->newLines(1, 2) .
+                    $this->getChildFieldCode(
+                        $field['column'],
+                        Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
+                    )
+            );
         }
 
-        $rules .= $this->getRulesForBelongsToFields();
-        return Str::replace('##RULES##', $rules, $this->getChildRulesTemplate());
+        $rules->push($this->getRulesForBelongsToFields());
+        return Str::replace('##RULES##', $rules->implode(''), $this->getChildRulesTemplate());
     }
 
     public function generateChildValidationAttributes()
     {
         $fields = $this->getNormalFormFields();
-        $attributes = '';
+        $attributes = collect();
         foreach ($fields as $field) {
-            $attributes .= $this->newLines(1, 2) .
-                $this->getChildFieldCode(
-                    $field['column'],
-                    $this->getLabel($field['label'], $field['column'])
-                );
+            $attributes->push(
+                $this->newLines(1, 2) .
+                    $this->getChildFieldCode(
+                        $field['column'],
+                        $this->getLabel($field['label'], $field['column'])
+                    )
+            );
         }
 
-        $attributes .= $this->getAttributesForBelongsToFields();
+        $attributes->push($this->getAttributesForBelongsToFields());
         return Str::replace(
             '##ATTRIBUTES##',
-            $attributes,
+            $attributes->implode(''),
             $this->getChildValidationAttributesTemplate()
         );
     }
