@@ -442,7 +442,7 @@ EOT;
         return <<<'EOT'
 
 
-        $this->##RELATION## = ##MODEL##::all();
+        $this->##RELATION## = ##MODEL##::orderBy('##DISPLAY_COLUMN##')->get();
         $this->##FIELD_NAME## = [];
 EOT;
     }
@@ -462,7 +462,7 @@ EOT;
         $this->##FIELD_NAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function ($i) {
             return (string)$i;
         })->toArray();
-        $this->##RELATION## = ##MODEL##::all();
+        $this->##RELATION## = ##MODEL##::orderBy('##DISPLAY_COLUMN##')->get();
 
 EOT;
     }
@@ -528,7 +528,7 @@ EOT;
     {
         return <<<'EOT'
 
-        $this->##BELONGS_TO_VAR## = ##MODEL##::all();
+        $this->##BELONGS_TO_VAR## = ##MODEL##::orderBy('##DISPLAY_COLUMN##')->get();
 EOT;
     }
 

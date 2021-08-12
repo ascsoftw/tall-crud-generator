@@ -508,11 +508,13 @@ trait WithComponentCode
                         '##RELATION##',
                         '##MODEL##',
                         '##FIELD_NAME##',
+                        '##DISPLAY_COLUMN##',
                     ],
                     [
                         $r['relationName'],
                         $this->getModelName($r['modelPath']),
-                        $this->getBtmFieldName($r['relationName'])
+                        $this->getBtmFieldName($r['relationName']),
+                        $r['displayColumn'],
                     ],
                     $this->getBtmInitTemplate()
                 )
@@ -572,6 +574,7 @@ trait WithComponentCode
                         '##KEY##',
                         '##MODEL##',
                         '##MODEL_VAR##',
+                        '##DISPLAY_COLUMN##',
                     ],
                     [
                         $r['relationName'],
@@ -579,6 +582,7 @@ trait WithComponentCode
                         $r['relatedKey'],
                         $this->getModelName($r['modelPath']),
                         Str::lower($this->getModelName()),
+                        $r['displayColumn'],
                     ],
                     $this->getBtmFetchTemplate()
                 )
@@ -674,10 +678,12 @@ trait WithComponentCode
                         [
                             '##BELONGS_TO_VAR##',
                             '##MODEL##',
+                            '##DISPLAY_COLUMN##',
                         ],
                         [
                             Str::plural($r['relationName']),
                             $this->getModelName($r['modelPath']),
+                            $r['displayColumn'],
                         ],
                         $this->getBelongsToInitTemplate()
                     )
