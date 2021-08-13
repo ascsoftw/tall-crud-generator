@@ -1,30 +1,10 @@
 <div>
     <div x-data="{ selected : @entangle('selected').defer}">
-        @if ($this->addFeature || $this->editFeature)
         <x:tall-crud-generator::accordion-header tab="1">
-            Belongs To Many
-        </x:tall-crud-generator::accordion-header>
-
-        <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
-            <x:tall-crud-generator::show-relations-table type="belongsToManyRelations"></x:tall-crud-generator::show-relations-table>
-        </x:tall-crud-generator::accordion-wrapper>
-        @endif
-
-        @if ($this->addFeature || $this->editFeature)
-        <x:tall-crud-generator::accordion-header tab="2">
-            Belongs To
-        </x:tall-crud-generator::accordion-header>
-
-        <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
-            <x:tall-crud-generator::show-relations-table type="belongsToRelations"></x:tall-crud-generator::show-relations-table>
-        </x:tall-crud-generator::accordion-wrapper>
-        @endif
-
-        <x:tall-crud-generator::accordion-header tab="3">
             Eager Load
         </x:tall-crud-generator::accordion-header>
 
-        <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
             <x:tall-crud-generator::button class="mt-4" wire:click="createNewWithRelation">Add
             </x:tall-crud-generator::button>
             <x:tall-crud-generator::table class="mt-4">
@@ -47,11 +27,11 @@
             </x:tall-crud-generator::table>
         </x:tall-crud-generator::accordion-wrapper>
 
-        <x:tall-crud-generator::accordion-header tab="4">
+        <x:tall-crud-generator::accordion-header tab="2">
             Eager Load Count
         </x:tall-crud-generator::accordion-header>
 
-        <x:tall-crud-generator::accordion-wrapper ref="advancedTab4" tab="4">
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
             <x:tall-crud-generator::button class="mt-4" wire:click="createNewWithCountRelation">Add
             </x:tall-crud-generator::button>
             <x:tall-crud-generator::table class="mt-4">
@@ -75,6 +55,26 @@
                 @endforeach
             </x:tall-crud-generator::table>
         </x:tall-crud-generator::accordion-wrapper>
+
+        @if ($this->addFeature || $this->editFeature)
+        <x:tall-crud-generator::accordion-header tab="3">
+            Belongs To Many
+        </x:tall-crud-generator::accordion-header>
+
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
+            <x:tall-crud-generator::show-relations-table type="belongsToManyRelations"></x:tall-crud-generator::show-relations-table>
+        </x:tall-crud-generator::accordion-wrapper>
+        @endif
+
+        @if ($this->addFeature || $this->editFeature)
+        <x:tall-crud-generator::accordion-header tab="4">
+            Belongs To
+        </x:tall-crud-generator::accordion-header>
+
+        <x:tall-crud-generator::accordion-wrapper ref="advancedTab4" tab="4">
+            <x:tall-crud-generator::show-relations-table type="belongsToRelations"></x:tall-crud-generator::show-relations-table>
+        </x:tall-crud-generator::accordion-wrapper>
+        @endif
     </div>
 </div>
 
