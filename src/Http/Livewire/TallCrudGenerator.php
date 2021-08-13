@@ -68,6 +68,7 @@ class TallCrudGenerator extends Component
         'table_settings' => [
             'showPaginationDropdown' => true,
             'recordsPerPage' => 15,
+            'showHideColumns' => false,
         ]
     ];
 
@@ -157,6 +158,7 @@ class TallCrudGenerator extends Component
     public function moveBack()
     {
         $this->step -= 1;
+        $this->selected = null;
         $this->validateStep();
     }
 

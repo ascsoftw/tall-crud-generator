@@ -41,7 +41,18 @@ trait WithBaseHtml
         } else {
             $slot = $label;
         }
-        return $this->getTableColumnHtml($slot);
+
+        $preTag = $postTag = '';
+        if($this->isHideColumnsEnabled()) {
+            $preTag = $this->newLines() .
+                Str::replace(
+                    '##LABEL##',
+                    $label,
+                    $this->getHideColumnIfTemplate()
+                );
+            $postTag = $this->newLines(1, 4) . '@endif;';
+        }
+        return $preTag . $this->getTableColumnHtml($slot) . $postTag;
     }
 
     public function getSearchBoxHtml()
@@ -52,6 +63,11 @@ trait WithBaseHtml
     public function getPaginationDropdownHtml()
     {
         return $this->getPaginationDropdownTemplate();
+    }
+
+    public function getHideColumnDropdownHtml()
+    {
+        return $this->getHideColumnDropdownTemplate();
     }
 
     public function getSelectOptionsHtml($options)

@@ -27,6 +27,26 @@ EOT;
 EOT;
     }
 
+    public function getHideColumnDropdownTemplate()
+    {
+        return <<<'EOT'
+
+        <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
+            <x-slot name="trigger">
+                Columns
+            </x-slot>
+
+            <x-slot name="content">
+                @foreach($columns as $c)
+                <x:tall-crud-generator::checkbox-wrapper class="mt-2">
+                    <x:tall-crud-generator::checkbox wire:model="selectedColumns" value="{{ $c }}" /><x:tall-crud-generator::label class="ml-2">{{$c}}</x:tall-crud-generator::label>
+                </x:tall-crud-generator::checkbox-wrapper>
+                @endforeach
+            </x-slot>
+        </x-dropdown>
+EOT;
+    }
+
     public function getPaginationDropdownTemplate()
     {
         return <<<'EOT'
@@ -566,6 +586,36 @@ EOT;
     {
         return <<<'EOT'
 @livewire('livewire-toast')
+EOT;
+    }
+
+    public function getHideColumnVarsTemplate()
+    {
+        return <<<'EOT'
+    public $columns = [
+##COLUMNS##
+    ];
+EOT;
+    }
+
+    public function getArrayValueTemplate()
+    {
+        return <<<'EOT'
+        '##VALUE##', 
+EOT;
+    }
+
+    public function getHideColumnInitCodeTemplate()
+    {
+        return <<<'EOT'
+$this->selectedColumns = $this->columns;
+EOT;
+    }
+
+    public function getHideColumnIfTemplate()
+    {
+        return <<<'EOT'
+@if(in_array('##LABEL##', $this->selectedColumns))
 EOT;
     }
 }

@@ -15,6 +15,7 @@ trait WithComponentCode
         $code['pagination'] = $this->generatePaginationCode();
         $code['with_query'] = $this->generateWithQueryCode();
         $code['with_count_query'] = $this->generateWithCountQueryCode();
+        $code['hide_columns'] = $this->generateHideColumnsCode();
 
         $code['child_delete'] = $this->generateDeleteCode();
         $code['child_add'] = $this->generateAddCode();
@@ -120,6 +121,20 @@ trait WithComponentCode
             $relations->implode(','),
             $this->getWithCountQueryTemplate()
         );
+    }
+
+    public function generateHideColumnsCode()
+    {
+        $code = [
+            'vars' => '',
+            'init' => '',
+        ];
+        if ($this->isHideColumnsEnabled()) {
+            $code['vars'] = $this->getHideColumnVars();
+            $code['init'] = $this->getHideColumnInitCode();
+        }
+
+        return $code;
     }
 
     public function generateAddCode()
@@ -770,5 +785,48 @@ trait WithComponentCode
             ],
             $this->getChildFieldTemplate()
         );
+    }
+
+    public function getHideColumnVars()
+    {
+        return Str::replace(
+            '##COLUMNS##',
+            $this->getAllListingColumns(),
+            $this->getHideColumnVarsTemplate()
+        ) . 
+        $this->newLines() .
+        Str::replace(
+            '##NAME##',
+            'selectedColumns',
+            $this->getArrayTemplate()
+        );
+    }
+
+    public function getHideColumnInitCode()
+    {
+        return $this->getHideColumnInitCodeTemplate();
+    }
+
+    public function getAllListingColumns()
+    {
+        $fields = $this->getSortedListingFields();
+        $labels = collect();
+        foreach ($fields as $f) {
+            [$label, $column, $isSortable] = $this->getTableColumnProps($f);
+            $labels->push($label);
+        }
+
+        $columns = collect();
+        $labels->each(function ($label)  use($columns) {
+            $columns->push(
+                Str::replace(
+                    '##VALUE##',
+                    $label,
+                    $this->getArrayValueTemplate()
+                )
+            );
+        });
+
+        return $columns->implode("\n");
     }
 }

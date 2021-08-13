@@ -160,4 +160,9 @@ trait WithFeatures
         }
         return true;
     }
+
+    public function isHideColumnsEnabled()
+    {
+        return $this->advancedSettings['table_settings']['showHideColumns'];
+    }
 }

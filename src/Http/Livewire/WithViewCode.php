@@ -13,6 +13,7 @@ trait WithViewCode
         $code['add_link'] = $this->generateAddLink();
         $code['search_box'] = $this->generateSearchBox();
         $code['pagination_dropdown'] = $this->generatePaginationDropdown();
+        $code['hide_columns'] = $this->generateHideColumnsDropdown();
         $code['table_header'] = $this->generateTableHeader();
         $code['table_slot'] = $this->generateTableSlot();
         $code['child_component'] = $this->includeChildComponent();
@@ -53,6 +54,14 @@ trait WithViewCode
     {
         if ($this->isPaginationDropdownEnabled()) {
             return $this->getPaginationDropdownHtml();
+        }
+        return '';
+    }
+
+    public function generateHideColumnsDropdown()
+    {
+        if ($this->isHideColumnsEnabled()) {
+            return $this->getHideColumnDropdownHtml();
         }
         return '';
     }

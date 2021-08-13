@@ -41,6 +41,7 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         Blade::component('tall-crud-generator::sort-fields-table', 'tall-crud-sort-fields-table');
         Blade::component('tall-crud-generator::loading-indicator', 'tall-crud-loading-indicator');
         Blade::component('tall-crud-generator::show-relations-table', 'tall-crud-show-relations-table');
+        Blade::component('tall-crud-generator::dropdown', 'tall-crud-dropdown');
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/tall-crud-generator')

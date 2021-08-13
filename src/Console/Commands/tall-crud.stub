@@ -11,7 +11,12 @@ class [class] extends Component
 {
     use WithPagination;
 
-    protected $listeners = ['refresh' => '$refresh'];[sort_public_vars][search_vars][pagination_vars]
+    protected $listeners = ['refresh' => '$refresh'];[sort_public_vars][search_vars][pagination_vars][hide_columns_vars]
+
+    public function mount()
+    {
+        [hide_columns_init]
+    }
 
     public function render()
     {
