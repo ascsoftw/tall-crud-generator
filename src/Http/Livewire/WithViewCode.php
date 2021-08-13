@@ -90,13 +90,23 @@ trait WithViewCode
         $columns = collect();
 
         foreach ($fields as $f) {
-            $columns->push($this->getTableColumnHtml(
+            $preTag = $postTag = '';
+            if ($this->isHideColumnsEnabled()) {
+                [$label, $column, $isSortable] = $this->getTableColumnProps($f);
+                $preTag = Str::replace(
+                    '##LABEL##',
+                    $label,
+                    $this->getHideColumnIfTemplate()
+                ) . $this->newLines(1, 5);
+                $postTag = $this->newLines(1, 5) . '@endif';
+            }
+            $columns->push($preTag . $this->getTableColumnHtml(
                 Str::replace(
                     '##COLUMN_NAME##',
                     $this->getTableSlotColumnValue($f),
                     $this->getTableColumnTemplate()
                 )
-            ));
+            ) . $postTag);
         }
 
         if ($this->needsActionColumn()) {

@@ -44,13 +44,12 @@ trait WithBaseHtml
 
         $preTag = $postTag = '';
         if($this->isHideColumnsEnabled()) {
-            $preTag = $this->newLines() .
-                Str::replace(
+            $preTag = Str::replace(
                     '##LABEL##',
                     $label,
                     $this->getHideColumnIfTemplate()
-                );
-            $postTag = $this->newLines(1, 4) . '@endif;';
+                ) . $this->newLines(1, 4);
+            $postTag = $this->newLines(1, 4) . '@endif';
         }
         return $preTag . $this->getTableColumnHtml($slot) . $postTag;
     }
