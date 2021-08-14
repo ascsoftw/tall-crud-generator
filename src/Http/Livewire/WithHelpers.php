@@ -207,6 +207,11 @@ trait WithHelpers
         return 'checked' . Str::studly($relation);
     }
 
+    public function getBelongsToVarName($relation)
+    {
+        return Str::plural($relation);
+    }
+
     public function getListingFieldsToSort()
     {
 

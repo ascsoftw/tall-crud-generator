@@ -189,7 +189,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingQ() 
+    public function updatingQ()
     {
         $this->resetPage();
     }
@@ -201,7 +201,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingPerPage() 
+    public function updatingPerPage()
     {
         $this->resetPage();
     }
@@ -290,7 +290,7 @@ EOT;
     public function getSearchingQueryWhereTemplate()
     {
         return <<<'EOT'
-##FIRST##('##COLUMN##', 'like', '%' . $this->q . '%')
+##QUERY##('##COLUMN##', 'like', '%' . $this->q . '%')
 EOT;
     }
 
@@ -601,7 +601,7 @@ EOT;
     public function getArrayValueTemplate()
     {
         return <<<'EOT'
-        '##VALUE##', 
+'##VALUE##', 
 EOT;
     }
 

@@ -45,7 +45,7 @@ trait WithViewCode
     public function generateSearchBox()
     {
         if ($this->isSearchingEnabled()) {
-            return $this->getSearchBoxHtml();
+            return $this->getSearchBoxTemplate();
         }
         return '';
     }
@@ -53,7 +53,7 @@ trait WithViewCode
     public function generatePaginationDropdown()
     {
         if ($this->isPaginationDropdownEnabled()) {
-            return $this->getPaginationDropdownHtml();
+            return $this->getPaginationDropdownTemplate();
         }
         return '';
     }
@@ -61,7 +61,7 @@ trait WithViewCode
     public function generateHideColumnsDropdown()
     {
         if ($this->isHideColumnsEnabled()) {
-            return $this->getHideColumnDropdownHtml();
+            return $this->getHideColumnDropdownTemplate();
         }
         return '';
     }
@@ -90,17 +90,7 @@ trait WithViewCode
         $columns = collect();
 
         foreach ($fields as $f) {
-            $preTag = $postTag = '';
-            if ($this->isHideColumnsEnabled()) {
-                $props = $this->getTableColumnProps($f);
-                $preTag = Str::replace(
-                    '##LABEL##',
-                    $props[0],
-                    $this->getHideColumnIfTemplate()
-                ) . $this->newLines(1, 5);
-                $postTag = $this->newLines(1, 5) . '@endif';
-            }
-            $columns->push($this->getTableSlotHtml($f, $preTag, $postTag));
+            $columns->push($this->getTableSlotHtml($f));
         }
 
         if ($this->needsActionColumn()) {

@@ -11,8 +11,19 @@ trait WithBaseHtml
         return '<x:tall-crud-generator::table-column>' . $slot . '</x:tall-crud-generator::table-column>';
     }
 
-    public function getTableSlotHtml($f, $preTag = '', $postTag = '')
+    public function getTableSlotHtml($f)
     {
+        $preTag = $postTag = '';
+        if ($this->isHideColumnsEnabled()) {
+            $props = $this->getTableColumnProps($f);
+            $preTag = Str::replace(
+                '##LABEL##',
+                $props[0],
+                $this->getHideColumnIfTemplate()
+            ) . $this->newLines(1, 5);
+            $postTag = $this->newLines(1, 5) . '@endif';
+        }
+
         return $preTag .
             $this->getTableColumnHtml(
                 Str::replace(
@@ -65,21 +76,6 @@ trait WithBaseHtml
             $postTag = $this->newLines(1, 4) . '@endif';
         }
         return $preTag . $this->getTableColumnHtml($slot) . $postTag;
-    }
-
-    public function getSearchBoxHtml()
-    {
-        return $this->getSearchBoxTemplate();
-    }
-
-    public function getPaginationDropdownHtml()
-    {
-        return $this->getPaginationDropdownTemplate();
-    }
-
-    public function getHideColumnDropdownHtml()
-    {
-        return $this->getHideColumnDropdownTemplate();
     }
 
     public function getSelectOptionsHtml($options)

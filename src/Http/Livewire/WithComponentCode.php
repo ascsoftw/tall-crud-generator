@@ -25,7 +25,7 @@ trait WithComponentCode
         $code['child_rules'] = $this->generateChildRules();
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
         $code['child_other_models'] = $this->generateOtherModelsCode();
-        $code['child_vars'] = $this->getVars();
+        $code['child_vars'] = $this->getRelationVars();
         return $code;
     }
 
@@ -230,7 +230,7 @@ trait WithComponentCode
             $searchQuery->push(
                 Str::replace(
                     [
-                        '##FIRST##',
+                        '##QUERY##',
                         '##COLUMN##',
                     ],
                     [
@@ -242,7 +242,6 @@ trait WithComponentCode
             );
             $isFirst = false;
         }
-
         return Str::replace(
             '##SEARCH_QUERY##',
             $searchQuery->implode(''),
@@ -450,7 +449,7 @@ trait WithComponentCode
         return $modelsCode->implode('');
     }
 
-    public function getVars()
+    public function getRelationVars()
     {
         return $this->getBtmVars() . $this->getBelongsToVars();
     }
@@ -480,7 +479,7 @@ trait WithComponentCode
         $vars = collect();
         foreach ($this->belongsToRelations as $r) {
             $vars->push($this->getArrayCode(
-                Str::plural($r['relationName'])
+                $this->getBelongsToVarName($r['relationName'])
             ));
         }
         return $this->newLines() . implode($this->newLines(), $vars->all());
@@ -704,7 +703,7 @@ trait WithComponentCode
                             '##DISPLAY_COLUMN##',
                         ],
                         [
-                            Str::plural($r['relationName']),
+                            $this->getBelongsToVarName($r['relationName']),
                             $this->getModelName($r['modelPath']),
                             $r['displayColumn'],
                         ],
@@ -793,9 +792,9 @@ trait WithComponentCode
             '##COLUMNS##',
             $this->getAllListingColumns(),
             $this->getHideColumnVarsTemplate()
-        ) . 
-        $this->newLines() .
-        $this->getArrayCode('selectedColumns');
+        ) .
+            $this->newLines() .
+            $this->getArrayCode('selectedColumns');
     }
 
     public function getHideColumnInitCode()
@@ -813,7 +812,7 @@ trait WithComponentCode
         }
 
         $columns = collect();
-        $labels->each(function ($label) use($columns) {
+        $labels->each(function ($label) use ($columns) {
             $columns->push(
                 Str::replace(
                     '##VALUE##',
@@ -823,6 +822,6 @@ trait WithComponentCode
             );
         });
 
-        return $columns->implode("\n");
+        return $columns->implode($this->newLines(1, 2));
     }
 }

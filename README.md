@@ -98,7 +98,7 @@ Following Features are in the piepline:
 - ~~Flash Messages~~
 - ~~Support for withCount~~
 - Display BelongsToMany Relation as Multi-Select in Form
-- Show / hide columns on Listing
+- ~~Show / hide columns on Listing~~
 - ~~Sort Eager Loaded and Relation Fields~~
 - Use Livewire Sorting for Sort ??
 - Test Suite
