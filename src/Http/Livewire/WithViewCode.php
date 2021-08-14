@@ -92,21 +92,15 @@ trait WithViewCode
         foreach ($fields as $f) {
             $preTag = $postTag = '';
             if ($this->isHideColumnsEnabled()) {
-                [$label, $column, $isSortable] = $this->getTableColumnProps($f);
+                $props = $this->getTableColumnProps($f);
                 $preTag = Str::replace(
                     '##LABEL##',
-                    $label,
+                    $props[0],
                     $this->getHideColumnIfTemplate()
                 ) . $this->newLines(1, 5);
                 $postTag = $this->newLines(1, 5) . '@endif';
             }
-            $columns->push($preTag . $this->getTableColumnHtml(
-                Str::replace(
-                    '##COLUMN_NAME##',
-                    $this->getTableSlotColumnValue($f),
-                    $this->getTableColumnTemplate()
-                )
-            ) . $postTag);
+            $columns->push($this->getTableSlotHtml($f, $preTag, $postTag));
         }
 
         if ($this->needsActionColumn()) {

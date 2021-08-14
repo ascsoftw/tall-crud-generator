@@ -31,19 +31,19 @@ EOT;
     {
         return <<<'EOT'
 
-        <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
-            <x-slot name="trigger">
-                Columns
-            </x-slot>
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
+                    <x-slot name="trigger">
+                        Columns
+                    </x-slot>
 
-            <x-slot name="content">
-                @foreach($columns as $c)
-                <x:tall-crud-generator::checkbox-wrapper class="mt-2">
-                    <x:tall-crud-generator::checkbox wire:model="selectedColumns" value="{{ $c }}" /><x:tall-crud-generator::label class="ml-2">{{$c}}</x:tall-crud-generator::label>
-                </x:tall-crud-generator::checkbox-wrapper>
-                @endforeach
-            </x-slot>
-        </x-dropdown>
+                    <x-slot name="content">
+                        @foreach($columns as $c)
+                        <x:tall-crud-generator::checkbox-wrapper class="mt-2">
+                            <x:tall-crud-generator::checkbox wire:model="selectedColumns" value="{{ $c }}" /><x:tall-crud-generator::label class="ml-2">{{$c}}</x:tall-crud-generator::label>
+                        </x:tall-crud-generator::checkbox-wrapper>
+                        @endforeach
+                    </x-slot>
+                </x-dropdown>
 EOT;
     }
 
@@ -51,12 +51,12 @@ EOT;
     {
         return <<<'EOT'
 
-            <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-            </x:tall-crud-generator::select>
+                <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </x:tall-crud-generator::select>
 EOT;
     }
 

@@ -795,11 +795,7 @@ trait WithComponentCode
             $this->getHideColumnVarsTemplate()
         ) . 
         $this->newLines() .
-        Str::replace(
-            '##NAME##',
-            'selectedColumns',
-            $this->getArrayTemplate()
-        );
+        $this->getArrayCode('selectedColumns');
     }
 
     public function getHideColumnInitCode()
@@ -812,12 +808,12 @@ trait WithComponentCode
         $fields = $this->getSortedListingFields();
         $labels = collect();
         foreach ($fields as $f) {
-            [$label, $column, $isSortable] = $this->getTableColumnProps($f);
-            $labels->push($label);
+            $props = $this->getTableColumnProps($f);
+            $labels->push($props[0]);
         }
 
         $columns = collect();
-        $labels->each(function ($label)  use($columns) {
+        $labels->each(function ($label) use($columns) {
             $columns->push(
                 Str::replace(
                     '##VALUE##',

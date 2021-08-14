@@ -11,6 +11,19 @@ trait WithBaseHtml
         return '<x:tall-crud-generator::table-column>' . $slot . '</x:tall-crud-generator::table-column>';
     }
 
+    public function getTableSlotHtml($f, $preTag = '', $postTag = '')
+    {
+        return $preTag .
+            $this->getTableColumnHtml(
+                Str::replace(
+                    '##COLUMN_NAME##',
+                    $this->getTableSlotColumnValue($f),
+                    $this->getTableColumnTemplate()
+                )
+            ) .
+            $postTag;
+    }
+
     public function getButtonHtml($slot, $mode = '', $params = '')
     {
         return '<x:tall-crud-generator::button mode="' . $mode . '" ' . $params . '>' . $slot . '</x:tall-crud-generator::button>';
@@ -43,12 +56,12 @@ trait WithBaseHtml
         }
 
         $preTag = $postTag = '';
-        if($this->isHideColumnsEnabled()) {
+        if ($this->isHideColumnsEnabled()) {
             $preTag = Str::replace(
-                    '##LABEL##',
-                    $label,
-                    $this->getHideColumnIfTemplate()
-                ) . $this->newLines(1, 4);
+                '##LABEL##',
+                $label,
+                $this->getHideColumnIfTemplate()
+            ) . $this->newLines(1, 4);
             $postTag = $this->newLines(1, 4) . '@endif';
         }
         return $preTag . $this->getTableColumnHtml($slot) . $postTag;
@@ -82,5 +95,4 @@ trait WithBaseHtml
         }
         return $html;
     }
-
 }

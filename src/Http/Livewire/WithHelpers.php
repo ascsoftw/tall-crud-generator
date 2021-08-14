@@ -317,7 +317,6 @@ trait WithHelpers
 
     public function getSortedListingFields()
     {
-
         $sortFields = collect($this->sortFieldsByOrder($this->sortFields['listing']));
         $collection = collect($this->fields);
         $withRelationsCollection = collect($this->withRelations);
