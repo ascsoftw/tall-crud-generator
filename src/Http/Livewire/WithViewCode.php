@@ -235,7 +235,7 @@ trait WithViewCode
             ));
         }
 
-        return $this->newLines(1, 6) . $buttons->implode($this->newLines(1, 6)) . $this->newLines(1, 5);
+        return $buttons->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
     }
 
     public function getWithTableSlot($r)

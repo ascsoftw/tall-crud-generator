@@ -281,7 +281,7 @@ EOT;
 
             ->when($this->q, function ($query) {
                 return $query->where(function ($query) {
-                    ##SEARCH_QUERY##;
+##SEARCH_QUERY##;
                 });
             })
 EOT;
@@ -592,6 +592,7 @@ EOT;
     public function getHideColumnVarsTemplate()
     {
         return <<<'EOT'
+
     public $columns = [
 ##COLUMNS##
     ];

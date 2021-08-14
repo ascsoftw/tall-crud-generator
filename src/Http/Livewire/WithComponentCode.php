@@ -234,7 +234,7 @@ trait WithComponentCode
                         '##COLUMN##',
                     ],
                     [
-                        $isFirst ? '$query->where' : $this->newLines(1, 6) . '->orWhere',
+                        $isFirst ? '$query->where' : '->orWhere',
                         $f['column'],
                     ],
                     $this->getSearchingQueryWhereTemplate(),
@@ -244,7 +244,7 @@ trait WithComponentCode
         }
         return Str::replace(
             '##SEARCH_QUERY##',
-            $searchQuery->implode(''),
+            $searchQuery->prependAndJoin($this->newLines(1, 6), $this->indent(5)),
             $this->getSearchinQueryTemplate()
         );
     }
@@ -301,18 +301,17 @@ trait WithComponentCode
         $createFieldHtml = collect();
         foreach ($fields as $field) {
             $createFieldHtml->push(
-                $this->newLines(1, 3) .
-                    Str::replace(
-                        [
-                            '##COLUMN##',
-                            '##DEFAULT_VALUE##',
-                        ],
-                        [
-                            $field['column'],
-                            ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
-                        ],
-                        $this->getCreateFieldTemplate()
-                    )
+                Str::replace(
+                    [
+                        '##COLUMN##',
+                        '##DEFAULT_VALUE##',
+                    ],
+                    [
+                        $field['column'],
+                        ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
+                    ],
+                    $this->getCreateFieldTemplate()
+                )
             );
         }
 
@@ -330,7 +329,7 @@ trait WithComponentCode
             [
                 $this->getModelName(),
                 $this->componentName,
-                $createFieldHtml->implode(''),
+                $createFieldHtml->prependAndJoin($this->newLines(1, 3)),
                 $this->getAddFlashCode(),
                 $this->getBtmInitCode(),
                 $this->getBtmAttachCode(),
@@ -383,16 +382,18 @@ trait WithComponentCode
 
         foreach ($fields as $field) {
             $rules->push(
-                $this->newLines(1, 2) .
-                    $this->getChildFieldCode(
-                        $field['column'],
-                        Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
-                    )
+                $this->getChildFieldCode(
+                    $field['column'],
+                    Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
+                )
             );
         }
 
-        $rules->push($this->getRulesForBelongsToFields());
-        return Str::replace('##RULES##', $rules->implode(''), $this->getChildRulesTemplate());
+        if ($this->isBelongsToEnabled()) {
+            $rules->push($this->getRulesForBelongsToFields());
+        }
+
+        return Str::replace('##RULES##', $rules->prependAndJoin($this->newLines(1, 2)), $this->getChildRulesTemplate());
     }
 
     public function generateChildValidationAttributes()
@@ -401,18 +402,20 @@ trait WithComponentCode
         $attributes = collect();
         foreach ($fields as $field) {
             $attributes->push(
-                $this->newLines(1, 2) .
-                    $this->getChildFieldCode(
-                        $field['column'],
-                        $this->getLabel($field['label'], $field['column'])
-                    )
+                $this->getChildFieldCode(
+                    $field['column'],
+                    $this->getLabel($field['label'], $field['column'])
+                )
             );
         }
 
-        $attributes->push($this->getAttributesForBelongsToFields());
+        if ($this->isBelongsToEnabled()) {
+            $attributes->push($this->getAttributesForBelongsToFields());
+        }
+
         return Str::replace(
             '##ATTRIBUTES##',
-            $attributes->implode(''),
+            $attributes->prependAndJoin($this->newLines(1, 2)),
             $this->getChildValidationAttributesTemplate()
         );
     }
@@ -467,7 +470,8 @@ trait WithComponentCode
                 $this->getBtmFieldName($r['relationName'])
             ));
         }
-        return $this->newLines() . implode($this->newLines(), $vars->all());
+
+        return $vars->prependAndJoin($this->newLines());
     }
 
     public function getBelongsToVars()
@@ -482,7 +486,8 @@ trait WithComponentCode
                 $this->getBelongsToVarName($r['relationName'])
             ));
         }
-        return $this->newLines() . implode($this->newLines(), $vars->all());
+
+        return $vars->prependAndJoin($this->newLines());
     }
 
     public function getAddFlashCode()
@@ -573,7 +578,7 @@ trait WithComponentCode
             );
         }
 
-        return $attachCode->implode('') . $this->newLines(1);
+        return $attachCode->implode('') . $this->newLines();
     }
 
     public function getBtmFetchCode()
@@ -611,7 +616,7 @@ trait WithComponentCode
             );
         }
 
-        return $this->newLines(1) . $btmFetchCode->implode('');
+        return $btmFetchCode->prependAndJoin('', $this->newLines());
     }
 
     public function getBtmUpdateCode()
@@ -627,39 +632,33 @@ trait WithComponentCode
             }
 
             $btmUpdateCode->push(
-                $this->newLines(1) .
-                    Str::replace(
-                        [
-                            '##RELATION##',
-                            '##FIELD_NAME##',
-                        ],
-                        [
-                            $r['relationName'],
-                            $this->getBtmFieldName($r['relationName']),
-                        ],
-                        $this->getBtmUpdateTemplate()
-                    )
+                Str::replace(
+                    [
+                        '##RELATION##',
+                        '##FIELD_NAME##',
+                    ],
+                    [
+                        $r['relationName'],
+                        $this->getBtmFieldName($r['relationName']),
+                    ],
+                    $this->getBtmUpdateTemplate()
+                )
             );
         }
 
-        return $btmUpdateCode->implode('');
+        return $btmUpdateCode->prependAndJoin($this->newLines());
     }
 
     public function getRulesForBelongsToFields()
     {
 
-        if (!$this->isBelongsToEnabled()) {
-            return '';
-        }
-
         $rules = collect();
         foreach ($this->belongsToRelations as $r) {
             $rules->push(
-                $this->newLines(1, 2) .
-                    $this->getChildFieldCode($r['foreignKey'], 'required')
+                $this->getChildFieldCode($r['foreignKey'], 'required')
             );
         }
-        return $rules->implode('');
+        return $rules->join($this->newLines(1, 2));
     }
 
     public function getAttributesForBelongsToFields()
@@ -672,14 +671,13 @@ trait WithComponentCode
         $attributes = collect();
         foreach ($this->belongsToRelations as $r) {
             $attributes->push(
-                $this->newLines(1, 2) .
-                    $this->getChildFieldCode(
-                        $r['foreignKey'],
-                        Str::ucfirst($r['relationName'])
-                    )
+                $this->getChildFieldCode(
+                    $r['foreignKey'],
+                    Str::ucfirst($r['relationName'])
+                )
             );
         }
-        return $attributes->implode('');
+        return $attributes->join($this->newLines(1, 2));
     }
 
     public function getBelongsToInitCode($isAdd = true)
@@ -695,23 +693,22 @@ trait WithComponentCode
         $initCode = collect();
         foreach ($this->belongsToRelations as $r) {
             $initCode->push(
-                $this->newLines(1) .
-                    Str::replace(
-                        [
-                            '##BELONGS_TO_VAR##',
-                            '##MODEL##',
-                            '##DISPLAY_COLUMN##',
-                        ],
-                        [
-                            $this->getBelongsToVarName($r['relationName']),
-                            $this->getModelName($r['modelPath']),
-                            $r['displayColumn'],
-                        ],
-                        $this->getBelongsToInitTemplate()
-                    )
+                Str::replace(
+                    [
+                        '##BELONGS_TO_VAR##',
+                        '##MODEL##',
+                        '##DISPLAY_COLUMN##',
+                    ],
+                    [
+                        $this->getBelongsToVarName($r['relationName']),
+                        $this->getModelName($r['modelPath']),
+                        $r['displayColumn'],
+                    ],
+                    $this->getBelongsToInitTemplate()
+                )
             );
         }
-        return $initCode->implode('');
+        return $initCode->prependAndJoin($this->newLines());
     }
 
     public function getBelongsToSaveCode()
@@ -723,21 +720,20 @@ trait WithComponentCode
         $saveCode = collect();
         foreach ($this->belongsToRelations as $r) {
             $saveCode->push(
-                $this->newLines(1, 3) .
-                    Str::replace(
-                        [
-                            '##COLUMN##',
-                            '##DEFAULT_VALUE##',
-                        ],
-                        [
-                            $r['foreignKey'],
-                            0
-                        ],
-                        $this->getCreateFieldTemplate()
-                    )
+                Str::replace(
+                    [
+                        '##COLUMN##',
+                        '##DEFAULT_VALUE##',
+                    ],
+                    [
+                        $r['foreignKey'],
+                        0
+                    ],
+                    $this->getCreateFieldTemplate()
+                )
             );
         }
-        return $saveCode->implode('');
+        return $saveCode->prependAndJoin($this->newLines(1, 3));
     }
 
     public function getOtherModelCode($modelPath)
@@ -822,6 +818,6 @@ trait WithComponentCode
             );
         });
 
-        return $columns->implode($this->newLines(1, 2));
+        return $columns->prependAndJoin($this->newLines(1, 2), $this->indent(2));
     }
 }
