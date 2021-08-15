@@ -16,6 +16,7 @@ trait WithComponentCode
         $code['with_query'] = $this->generateWithQueryCode();
         $code['with_count_query'] = $this->generateWithCountQueryCode();
         $code['hide_columns'] = $this->generateHideColumnsCode();
+        $code['bulk_actions'] = $this->generateBulkActionsCode();
 
         $code['child_delete'] = $this->generateDeleteCode();
         $code['child_add'] = $this->generateAddCode();
@@ -132,6 +133,20 @@ trait WithComponentCode
         if ($this->isHideColumnsEnabled()) {
             $code['vars'] = $this->getHideColumnVars();
             $code['init'] = $this->getHideColumnInitCode();
+        }
+
+        return $code;
+    }
+
+    public function generateBulkActionsCode()
+    {
+        $code = [
+            'vars' => '',
+            'method' => '',
+        ];
+        if ($this->isBulkActionsEnabled()) {
+            $code['vars'] = $this->getBulkActionsVars();
+            $code['method'] = $this->getBulkActionMethod();
         }
 
         return $code;
@@ -823,5 +838,27 @@ trait WithComponentCode
         });
 
         return $columns->prependAndJoin($this->newLines(1, 2), $this->indent(2));
+    }
+
+    public function getBulkActionsVars()
+    {
+        return $this->newLines() . $this->getArrayCode('selectedItems');
+    }
+
+    public function getBulkActionMethod()
+    {
+        return Str::replace(
+            [
+                '##MODEL##',
+                '##PRIMARY_KEY##',
+                '##COLUMN##',
+            ],
+            [
+                $this->getModelName(),
+                $this->getPrimaryKey(),
+                $this->advancedSettings['table_settings']['bulkActionColumn'],
+            ],
+            $this->getBulkActionMethodTemplate()
+        );
     }
 }

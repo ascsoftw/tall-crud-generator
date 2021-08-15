@@ -634,4 +634,45 @@ EOT;
 @if(in_array('##LABEL##', $this->selectedColumns))
 EOT;
     }
+
+    public function getBulkActionMethodTemplate()
+    {
+        return <<<'EOT'
+
+
+    public function changeStatus($status)
+    {
+        if (!empty($this->selectedItems)) {
+            ##MODEL##::whereIn('##PRIMARY_KEY##', $this->selectedItems)->update(['##COLUMN##' => $status]);
+            $this->selectedItems = [];
+            $this->emitTo('livewire-toast', 'show', 'Records Updated Successfully.');
+        } else {
+            $this->emitTo('livewire-toast', 'showWarning', 'Please select some Records.');
+        }
+    }
+EOT;
+    }
+
+    public function getBulkActionTemplate()
+    {
+        return <<<'EOT'
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
+                    <x-slot name="trigger">
+                        Bulk Actions
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <button wire:click="changeStatus(1)">Activate</button>
+                        <button wire:click="changeStatus(0)">Deactivate</button>
+                    </x-slot>
+                </x-dropdown>
+EOT;
+    }
+
+    public function getBulkCheckboxTemplate()
+    {
+        return <<<'EOT'
+<x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+EOT;
+    }
 }

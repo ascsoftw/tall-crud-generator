@@ -65,6 +65,9 @@
         @if ($this->addFeature || $this->editFeature)
         <x:tall-crud-generator::accordion-header tab="3">
             Belongs To Many
+            <x-slot name="help">
+                Display BelongsToMany Relation Field in Add and Edit Form
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
@@ -75,6 +78,9 @@
         @if ($this->addFeature || $this->editFeature)
         <x:tall-crud-generator::accordion-header tab="4">
             Belongs To
+            <x-slot name="help">
+                Display BelongsTo Relation Field in Add and Edit Form
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab4" tab="4">

@@ -58,8 +58,8 @@
                     wire:model.defer="advancedSettings.table_settings.showPaginationDropdown" />
             </x:tall-crud-generator::checkbox-wrapper>
             <x:tall-crud-generator::checkbox-wrapper class="mt-4">
-                <x:tall-crud-generator::label>Records Per Page</x:tall-crud-generator::label>
-                <x:tall-crud-generator::select class="block mt-1 w-1/6"
+                <x:tall-crud-generator::label>Records Per Page: </x:tall-crud-generator::label>
+                <x:tall-crud-generator::select class="block mt-1 w-1/6 ml-2"
                     wire:model="advancedSettings.table_settings.recordsPerPage">
                     @foreach ([10, 15, 20, 50] as $p)
                     <option value="{{$p}}">{{$p}}</option>
@@ -71,6 +71,25 @@
                 <x:tall-crud-generator::checkbox class="ml-2"
                     wire:model.defer="advancedSettings.table_settings.showHideColumns" />
             </x:tall-crud-generator::checkbox-wrapper>
+            <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                <x:tall-crud-generator::label>Enable Bulk Actions:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::checkbox class="ml-2"
+                    wire:model="advancedSettings.table_settings.bulkActions" />
+            </x:tall-crud-generator::checkbox-wrapper>
+            @if($this->advancedSettings['table_settings']['bulkActions'])
+            <x:tall-crud-generator::checkbox-wrapper>
+                <x:tall-crud-generator::label>Column to Change on Bulk Action: </x:tall-crud-generator::label>
+                <x:tall-crud-generator::select class="block mt-1 w-1/6 ml-2"
+                    wire:model="advancedSettings.table_settings.bulkActionColumn">
+                    <option value="">-Select Column-</option>
+                    @if (Arr::exists($this->modelProps, 'columns'))
+                    @foreach ($this->modelProps['columns'] as $column)
+                    <option value="{{$column}}">{{$column}}</option>
+                    @endforeach
+                    @endif
+                </x:tall-crud-generator::select>
+            </x:tall-crud-generator::checkbox-wrapper>
+            @endif
         </x:tall-crud-generator::accordion-wrapper>
     </div>
 </div>

@@ -69,6 +69,8 @@ class TallCrudGenerator extends Component
             'showPaginationDropdown' => true,
             'recordsPerPage' => 15,
             'showHideColumns' => false,
+            'bulkActions' => false,
+            'bulkActionColumn' => '',
         ]
     ];
 

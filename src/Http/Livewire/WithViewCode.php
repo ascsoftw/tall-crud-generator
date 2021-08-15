@@ -14,6 +14,7 @@ trait WithViewCode
         $code['search_box'] = $this->generateSearchBox();
         $code['pagination_dropdown'] = $this->generatePaginationDropdown();
         $code['hide_columns'] = $this->generateHideColumnsDropdown();
+        $code['bulk_action'] = $this->generateBulkAction();
         $code['table_header'] = $this->generateTableHeader();
         $code['table_slot'] = $this->generateTableSlot();
         $code['child_component'] = $this->includeChildComponent();
@@ -66,11 +67,23 @@ trait WithViewCode
         return '';
     }
 
+    public function generateBulkAction()
+    {
+        if ($this->isBulkActionsEnabled()) {
+            return $this->getBulkActionTemplate();
+        }
+        return '';
+    }
+
     public function generateTableHeader()
     {
 
         $fields = $this->getSortedListingFields();
         $headers = collect();
+
+        if ($this->isBulkActionsEnabled()) {
+            $headers->push($this->getTableColumnHtml('', 'width="10"'));
+        }
 
         foreach ($fields as $f) {
             [$label, $column, $isSortable] = $this->getTableColumnProps($f);
@@ -88,6 +101,14 @@ trait WithViewCode
     {
         $fields = $this->getSortedListingFields();
         $columns = collect();
+
+        if ($this->isBulkActionsEnabled()) {
+            $columns->push(
+                $this->getTableColumnHtml(
+                    $this->getBulkColumnCheckbox()
+                )
+            );
+        }
 
         foreach ($fields as $f) {
             $columns->push($this->getTableSlotHtml($f));
@@ -242,6 +263,19 @@ trait WithViewCode
         }
 
         return $buttons->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
+    }
+
+    public function getBulkColumnCheckbox()
+    {
+        $html = collect();
+        $html->push(
+            Str::replace(
+                '##PRIMARY_KEY##',
+                $this->getPrimaryKey(),
+                $this->getBulkCheckboxTemplate()
+            )
+        );
+        return $html->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
     }
 
     public function getWithTableSlot($r)

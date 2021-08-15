@@ -6,9 +6,9 @@ use Illuminate\Support\Str;
 
 trait WithBaseHtml
 {
-    public function getTableColumnHtml($slot)
+    public function getTableColumnHtml($slot, $params = '')
     {
-        return '<x:tall-crud-generator::table-column>' . $slot . '</x:tall-crud-generator::table-column>';
+        return '<x:tall-crud-generator::table-column ' . $params .  '>' . $slot . '</x:tall-crud-generator::table-column>';
     }
 
     public function getTableSlotHtml($f)
