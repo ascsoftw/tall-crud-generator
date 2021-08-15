@@ -94,9 +94,11 @@ trait WithViewCode
         }
 
         if ($this->needsActionColumn()) {
-            $columns->push($this->getTableColumnHtml(
-                $this->getActionHtml()
-            ));
+            $columns->push(
+                $this->getTableColumnHtml(
+                    $this->getActionHtml()
+                )
+            );
         }
 
         return $columns->implode($this->newLines(1, 5));
@@ -208,11 +210,13 @@ trait WithViewCode
                 ],
                 $this->getEditButtonTemplate()
             );
-            $buttons->push($this->getButtonHtml(
-                $this->advancedSettings['text']['editLink'],
-                'edit',
-                $buttonParams
-            ));
+            $buttons->push(
+                $this->getButtonHtml(
+                    $this->advancedSettings['text']['editLink'],
+                    'edit',
+                    $buttonParams
+                )
+            );
         }
 
         if ($this->isDeleteFeatureEnabled()) {
@@ -228,11 +232,13 @@ trait WithViewCode
                 $this->getDeleteButtonTemplate()
             );
 
-            $buttons->push($this->getButtonHtml(
-                $this->advancedSettings['text']['deleteLink'],
-                'delete',
-                $buttonParams
-            ));
+            $buttons->push(
+                $this->getButtonHtml(
+                    $this->advancedSettings['text']['deleteLink'],
+                    'delete',
+                    $buttonParams
+                )
+            );
         }
 
         return $buttons->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);

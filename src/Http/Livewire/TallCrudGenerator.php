@@ -206,10 +206,10 @@ class TallCrudGenerator extends Component
         $this->advancedSettings['text']['title'] = Str::title($this->modelProps['tableName']);
     }
 
-    public function addField()
+    public function addField( $column = '')
     {
         $this->fields[] = [
-            'column' => '',
+            'column' => $column,
             'label' => '',
             'sortable' => false,
             'searchable' => false,
@@ -230,6 +230,13 @@ class TallCrudGenerator extends Component
         unset($this->fields[$i]);
         $this->fields = array_values($this->fields);
         $this->resetValidation('fields');
+    }
+
+    public function addAllFields()
+    {
+        foreach($this->modelProps['columns'] as $column) {
+            $this->addField($column);
+        }
     }
 
     public function showAttributes($i)

@@ -1,3 +1,9 @@
+@if(count($this->fields) == 0)
+<x:tall-crud-generator::button wire:click.prevent="addAllFields">
+    Add All Fields
+</x:tall-crud-generator::button>
+@endif
+
 <x:tall-crud-generator::table class="mt-4">
     <x-slot name="header">
         <x:tall-crud-generator::table-column>Column</x:tall-crud-generator::table-column>
@@ -68,7 +74,7 @@
 
 <div class="mt-4">
     <x:tall-crud-generator::button mode="add" wire:click.prevent="addField">
-        Add New Fields
+        Add New Field
     </x:tall-crud-generator::button>
     @error('fields') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
 </div>

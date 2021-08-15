@@ -466,9 +466,11 @@ trait WithComponentCode
         $vars = collect();
         foreach ($this->belongsToManyRelations as $r) {
             $vars->push($this->getArrayCode($r['relationName']));
-            $vars->push($this->getArrayCode(
-                $this->getBtmFieldName($r['relationName'])
-            ));
+            $vars->push(
+                $this->getArrayCode(
+                    $this->getBtmFieldName($r['relationName'])
+                )
+            );
         }
 
         return $vars->prependAndJoin($this->newLines());
@@ -482,9 +484,11 @@ trait WithComponentCode
 
         $vars = collect();
         foreach ($this->belongsToRelations as $r) {
-            $vars->push($this->getArrayCode(
-                $this->getBelongsToVarName($r['relationName'])
-            ));
+            $vars->push(
+                $this->getArrayCode(
+                    $this->getBelongsToVarName($r['relationName'])
+                )
+            );
         }
 
         return $vars->prependAndJoin($this->newLines());
