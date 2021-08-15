@@ -314,7 +314,7 @@ trait WithViewCode
                 $r['displayColumn'],
                 $r['relatedKey'],
             ],
-            $this->getBtmFieldTemplate()
+            $r['isMultiSelect'] ? $this->getBtmFieldMultiSelectTemplate() : $this->getBtmFieldTemplate()
         );
     }
 

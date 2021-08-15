@@ -120,6 +120,10 @@
                     <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inEdit" />
                 </x:tall-crud-generator::checkbox-wrapper>
                 @endif
+                <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                    <x:tall-crud-generator::label>Display as Multi-Select (Default is Checkboxes):</x:tall-crud-generator::label>
+                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="belongsToManyRelation.isMultiSelect" />
+                </x:tall-crud-generator::checkbox-wrapper>
                 <div class="mt-4">
                     <x:tall-crud-generator::label>Display Column</x:tall-crud-generator::label>
                     <x:tall-crud-generator::select class="block mt-1 w-1/2"

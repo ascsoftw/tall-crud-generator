@@ -522,6 +522,21 @@ EOT;
 EOT;
     }
 
+    public function getBtmFieldMultiSelectTemplate()
+    {
+
+        return <<<'EOT'
+
+
+            <h2 class="mt-4">##HEADING##</h2>
+            <x:tall-crud-generator::select multiple="multiple" wire:model.defer="##FIELD_NAME##">
+            @foreach( $##RELATION## as $c)
+                <option value="{{ $c->##RELATED_KEY## }}">{{$c->##DISPLAY_COLUMN##}}</option>
+            @endforeach
+            </x:tall-crud-generator::select>
+EOT;
+    }
+
     public function getBelongsToFieldTemplate()
     {
 
