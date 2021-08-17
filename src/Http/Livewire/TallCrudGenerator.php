@@ -100,6 +100,9 @@ class TallCrudGenerator extends Component
         'withRelation.displayColumn.required' => 'Please select a value.',
     ];
 
+    public $confirmingSorting = false;
+    public $sortingMode = '';
+
     public function render()
     {
         return view('tall-crud-generator::livewire.tall-crud-generator');
@@ -132,6 +135,7 @@ class TallCrudGenerator extends Component
 
                 //Prepare for Next Step.
                 $this->getSortFields();
+                $this->confirmingSorting = false;
                 break;
             case 5:
                 //Validate Sort Fields
@@ -313,51 +317,29 @@ class TallCrudGenerator extends Component
         $this->sortFields['edit'] = $this->getFormFieldsToSort(false);
     }
 
-    public function moveUp($field, $type, $mode)
+    public function showSortDialog($mode)
     {
-        $collection = collect($this->sortFields[$mode]);
-        $filterType = $collection->where('type', $type);
-        $f = $filterType->firstWhere('field', $field);
-        $findOrder = $f['order'] - 1;
-
-        $map = $collection->map(function ($item) use ($findOrder, $field, $type) {
-            if ($item['order'] == $findOrder) {
-                $item['order']++;
-                return $item;
-            }
-
-            if ($item['field'] == $field && $item['type'] == $type) {
-                $item['order']--;
-                return $item;
-            }
-
-            return $item;
-        });
-
-        $this->sortFields[$mode] = $this->sortFieldsByOrder($map);
+        $this->confirmingSorting = true;
+        $this->sortingMode = $mode;
+        $this->dispatchBrowserEvent('init-sort-events');
     }
 
-    public function moveDown($field, $type, $mode)
+    public function hideSortDialog()
     {
+        $this->confirmingSorting = false;
+        $this->sortingMode = '';
+    }
+
+    public function reorder($order)
+    {
+        $mode = $this->sortingMode;
         $collection = collect($this->sortFields[$mode]);
-        $filterType = $collection->where('type', $type);
-        $f = $filterType->firstWhere('field', $field);
-        $findOrder = $f['order'] + 1;
-
-        $map = $collection->map(function ($item) use ($findOrder, $field, $type) {
-            if ($item['order'] == $findOrder) {
-                $item['order']--;
-                return $item;
-            }
-
-            if ($item['field'] == $field && $item['type'] == $type) {
-                $item['order']++;
-                return $item;
-            }
-
+        $orderCollection = collect($order);
+        $map = $collection->map(function ($item) use ($orderCollection) {
+            $searchTerm = $item['type'] == 'withCount' ? $item['field'] . ' (Count)' : $item['field'];
+            $item['order'] = $orderCollection->search($searchTerm) + 1;
             return $item;
         });
-
         $this->sortFields[$mode] = $this->sortFieldsByOrder($map);
     }
 

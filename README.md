@@ -103,8 +103,8 @@ Following Features are in the piepline:
 - ~~Show / hide columns on Listing~~
 - ~~Sort Eager Loaded and Relation Fields~~
 - Use Livewire Sorting for Sort ??
-- Bulk Actions
-- Filter
+- ~~Bulk Action~~
+- Add Filters
 - Test Suite
 
 ## Troubleshooting
