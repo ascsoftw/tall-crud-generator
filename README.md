@@ -102,7 +102,7 @@ Following Features are in the piepline:
 - ~~Display BelongsToMany Relation as Multi-Select in Form~~
 - ~~Show / hide columns on Listing~~
 - ~~Sort Eager Loaded and Relation Fields~~
-- Use Livewire Sorting for Sort ??
+- ~~Use Livewire Sorting for Sort ??~~
 - ~~Bulk Action~~
 - Add Filters
 - Test Suite

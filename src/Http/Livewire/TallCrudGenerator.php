@@ -343,6 +343,15 @@ class TallCrudGenerator extends Component
         $this->sortFields[$mode] = $this->sortFieldsByOrder($map);
     }
 
+    public function showHideAccordion($selected)
+    {
+        if($this->selected == $selected) {
+            $this->selected = null;
+        } else {
+            $this->selected = $selected;
+        }
+    }
+
     public function generateFiles()
     {
         $code = $this->generateComponentCode();

@@ -1,7 +1,7 @@
 @props(['tab' => 1])
 
 <div class="mt-2 flex flex-start">
-    <span {{$attributes->merge(['class' => 'cursor-pointer text-blue-500 font-medium']) }} @click="selected !== {{$tab}} ? selected = {{$tab}} : selected = null">{{$slot}}</span>
+    <span {{$attributes->merge(['class' => 'cursor-pointer text-blue-500 font-medium']) }} wire:click="showHideAccordion({{$tab}})">{{$slot}}</span>
     @if(isset($help))
         <span x-data="{ tooltip: false }" x-on:mouseover="tooltip = true" x-on:mouseleave="tooltip = false" class="ml-2 h-5 w-5 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
