@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2021-08-10
+- Eager Load HasMany Relation
+- Add Tooltip Support to Accordion Header
+- Order BelongsTo and BelongsToMany Field using Display Column in Add and Edit Form
+- Implemented Ability for User to Show/Hide Columns in Listing
+- Select All Fields Functionality on Step 3
+- Allow User to Display BelongsToMany Relation as Multi-Select
+- Bulk Actions Functionality
+- Implemented Soring using Drag & Drop
+- Use Livewire for Tab Management
+- Minor bug Fixes
+
 ## [1.3.2] - 2021-08-13
 - ReOrder Tab to fix Circular error
 
