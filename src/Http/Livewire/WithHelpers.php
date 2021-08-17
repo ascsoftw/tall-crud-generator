@@ -207,6 +207,11 @@ trait WithHelpers
         return 'checked' . Str::studly($relation);
     }
 
+    public function getBelongsToVarName($relation)
+    {
+        return Str::plural($relation);
+    }
+
     public function getListingFieldsToSort()
     {
 
@@ -317,7 +322,6 @@ trait WithHelpers
 
     public function getSortedListingFields()
     {
-
         $sortFields = collect($this->sortFieldsByOrder($this->sortFields['listing']));
         $collection = collect($this->fields);
         $withRelationsCollection = collect($this->withRelations);

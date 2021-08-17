@@ -27,16 +27,36 @@ EOT;
 EOT;
     }
 
+    public function getHideColumnDropdownTemplate()
+    {
+        return <<<'EOT'
+
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
+                    <x-slot name="trigger">
+                        Columns
+                    </x-slot>
+
+                    <x-slot name="content">
+                        @foreach($columns as $c)
+                        <x:tall-crud-generator::checkbox-wrapper class="mt-2">
+                            <x:tall-crud-generator::checkbox wire:model="selectedColumns" value="{{ $c }}" /><x:tall-crud-generator::label class="ml-2">{{$c}}</x:tall-crud-generator::label>
+                        </x:tall-crud-generator::checkbox-wrapper>
+                        @endforeach
+                    </x-slot>
+                </x-dropdown>
+EOT;
+    }
+
     public function getPaginationDropdownTemplate()
     {
         return <<<'EOT'
 
-            <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-            </x:tall-crud-generator::select>
+                <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </x:tall-crud-generator::select>
 EOT;
     }
 
@@ -169,7 +189,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingQ() 
+    public function updatingQ()
     {
         $this->resetPage();
     }
@@ -181,7 +201,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingPerPage() 
+    public function updatingPerPage()
     {
         $this->resetPage();
     }
@@ -261,7 +281,7 @@ EOT;
 
             ->when($this->q, function ($query) {
                 return $query->where(function ($query) {
-                    ##SEARCH_QUERY##;
+##SEARCH_QUERY##;
                 });
             })
 EOT;
@@ -270,7 +290,7 @@ EOT;
     public function getSearchingQueryWhereTemplate()
     {
         return <<<'EOT'
-##FIRST##('##COLUMN##', 'like', '%' . $this->q . '%')
+##QUERY##('##COLUMN##', 'like', '%' . $this->q . '%')
 EOT;
     }
 
@@ -442,7 +462,7 @@ EOT;
         return <<<'EOT'
 
 
-        $this->##RELATION## = ##MODEL##::all();
+        $this->##RELATION## = ##MODEL##::orderBy('##DISPLAY_COLUMN##')->get();
         $this->##FIELD_NAME## = [];
 EOT;
     }
@@ -462,7 +482,7 @@ EOT;
         $this->##FIELD_NAME## = $##MODEL_VAR##->##RELATION##->pluck("##KEY##")->map(function ($i) {
             return (string)$i;
         })->toArray();
-        $this->##RELATION## = ##MODEL##::all();
+        $this->##RELATION## = ##MODEL##::orderBy('##DISPLAY_COLUMN##')->get();
 
 EOT;
     }
@@ -502,6 +522,21 @@ EOT;
 EOT;
     }
 
+    public function getBtmFieldMultiSelectTemplate()
+    {
+
+        return <<<'EOT'
+
+
+            <h2 class="mt-4">##HEADING##</h2>
+            <x:tall-crud-generator::select multiple="multiple" wire:model.defer="##FIELD_NAME##">
+            @foreach( $##RELATION## as $c)
+                <option value="{{ $c->##RELATED_KEY## }}">{{$c->##DISPLAY_COLUMN##}}</option>
+            @endforeach
+            </x:tall-crud-generator::select>
+EOT;
+    }
+
     public function getBelongsToFieldTemplate()
     {
 
@@ -528,7 +563,7 @@ EOT;
     {
         return <<<'EOT'
 
-        $this->##BELONGS_TO_VAR## = ##MODEL##::all();
+        $this->##BELONGS_TO_VAR## = ##MODEL##::orderBy('##DISPLAY_COLUMN##')->get();
 EOT;
     }
 
@@ -566,6 +601,78 @@ EOT;
     {
         return <<<'EOT'
 @livewire('livewire-toast')
+EOT;
+    }
+
+    public function getHideColumnVarsTemplate()
+    {
+        return <<<'EOT'
+
+    public $columns = [
+##COLUMNS##
+    ];
+EOT;
+    }
+
+    public function getArrayValueTemplate()
+    {
+        return <<<'EOT'
+'##VALUE##', 
+EOT;
+    }
+
+    public function getHideColumnInitCodeTemplate()
+    {
+        return <<<'EOT'
+$this->selectedColumns = $this->columns;
+EOT;
+    }
+
+    public function getHideColumnIfTemplate()
+    {
+        return <<<'EOT'
+@if(in_array('##LABEL##', $this->selectedColumns))
+EOT;
+    }
+
+    public function getBulkActionMethodTemplate()
+    {
+        return <<<'EOT'
+
+
+    public function changeStatus($status)
+    {
+        if (!empty($this->selectedItems)) {
+            ##MODEL##::whereIn('##PRIMARY_KEY##', $this->selectedItems)->update(['##COLUMN##' => $status]);
+            $this->selectedItems = [];
+            $this->emitTo('livewire-toast', 'show', 'Records Updated Successfully.');
+        } else {
+            $this->emitTo('livewire-toast', 'showWarning', 'Please select some Records.');
+        }
+    }
+EOT;
+    }
+
+    public function getBulkActionTemplate()
+    {
+        return <<<'EOT'
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
+                    <x-slot name="trigger">
+                        Bulk Actions
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <button wire:click="changeStatus(1)">Activate</button>
+                        <button wire:click="changeStatus(0)">Deactivate</button>
+                    </x-slot>
+                </x-dropdown>
+EOT;
+    }
+
+    public function getBulkCheckboxTemplate()
+    {
+        return <<<'EOT'
+<x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
 EOT;
     }
 }

@@ -1,5 +1,10 @@
 @props(['tab' => 1])
 
-<div class="mt-2">
-    <span {{$attributes->merge(['class' => 'cursor-pointer text-blue-500 font-medium']) }} @click="selected !== {{$tab}} ? selected = {{$tab}} : selected = null">{{$slot}}</span>
+<div class="mt-2 flex flex-start">
+    <span {{$attributes->merge(['class' => 'cursor-pointer text-blue-500 font-medium']) }} wire:click="showHideAccordion({{$tab}})">{{$slot}}</span>
+    @if(isset($help))
+    <x:tall-crud-generator::tooltip>
+        {{$help}}
+    </x:tall-crud-generator::tooltip>
+    @endif
 </div>

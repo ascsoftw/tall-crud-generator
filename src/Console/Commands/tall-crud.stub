@@ -11,7 +11,12 @@ class [class] extends Component
 {
     use WithPagination;
 
-    protected $listeners = ['refresh' => '$refresh'];[sort_public_vars][search_vars][pagination_vars]
+    protected $listeners = ['refresh' => '$refresh'];[sort_public_vars][search_vars][pagination_vars][hide_columns_vars][bulk_vars]
+
+    public function mount()
+    {
+        [hide_columns_init]
+    }
 
     public function render()
     {
@@ -21,7 +26,7 @@ class [class] extends Component
         return view('[view]', [
             'results' => $results
         ]);
-    }[sort_method][search_method][pagination_dropdown_method]
+    }[sort_method][search_method][pagination_dropdown_method][bulk_method]
 
     public function query()
     {

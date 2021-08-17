@@ -1,6 +1,11 @@
 <div>
     <div x-data="{ selected : @entangle('selected').defer}">
-        <x:tall-crud-generator::accordion-header tab="1">Customize Text</x:tall-crud-generator::accordion-header>
+        <x:tall-crud-generator::accordion-header tab="1">
+            Customize Text
+            <x-slot name="help">
+                Customize the Text of Buttons, Links and Headings.
+            </x-slot>
+        </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab1" tab="1">
             @foreach ($advancedSettings['text'] as $key => $text)
@@ -20,6 +25,9 @@
 
         <x:tall-crud-generator::accordion-header tab="2">
             Flash Messages
+            <x-slot name="help">
+                Enable / Disable Flash Messages & Customize their Text.
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
 
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab2" tab="2">
@@ -39,6 +47,9 @@
 
         <x:tall-crud-generator::accordion-header tab="3">
             Table Settings
+            <x-slot name="help">
+                Customize the Properties of Table displaying the Listing
+            </x-slot>
         </x:tall-crud-generator::accordion-header>
         <x:tall-crud-generator::accordion-wrapper ref="advancedTab3" tab="3">
             <x:tall-crud-generator::checkbox-wrapper>
@@ -47,14 +58,38 @@
                     wire:model.defer="advancedSettings.table_settings.showPaginationDropdown" />
             </x:tall-crud-generator::checkbox-wrapper>
             <x:tall-crud-generator::checkbox-wrapper class="mt-4">
-                <x:tall-crud-generator::label>Records Per Page</x:tall-crud-generator::label>
-                <x:tall-crud-generator::select class="block mt-1 w-1/6"
+                <x:tall-crud-generator::label>Records Per Page: </x:tall-crud-generator::label>
+                <x:tall-crud-generator::select class="block mt-1 w-1/6 ml-2"
                     wire:model="advancedSettings.table_settings.recordsPerPage">
                     @foreach ([10, 15, 20, 50] as $p)
                     <option value="{{$p}}">{{$p}}</option>
                     @endforeach
                 </x:tall-crud-generator::select>
             </x:tall-crud-generator::checkbox-wrapper>
+            <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                <x:tall-crud-generator::label>Allow User to Hide Column in Listing:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::checkbox class="ml-2"
+                    wire:model.defer="advancedSettings.table_settings.showHideColumns" />
+            </x:tall-crud-generator::checkbox-wrapper>
+            <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                <x:tall-crud-generator::label>Enable Bulk Actions:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::checkbox class="ml-2"
+                    wire:model="advancedSettings.table_settings.bulkActions" />
+            </x:tall-crud-generator::checkbox-wrapper>
+            @if($this->advancedSettings['table_settings']['bulkActions'])
+            <x:tall-crud-generator::checkbox-wrapper>
+                <x:tall-crud-generator::label>Column to Change on Bulk Action: </x:tall-crud-generator::label>
+                <x:tall-crud-generator::select class="block mt-1 w-1/6 ml-2"
+                    wire:model="advancedSettings.table_settings.bulkActionColumn">
+                    <option value="">-Select Column-</option>
+                    @if (Arr::exists($this->modelProps, 'columns'))
+                    @foreach ($this->modelProps['columns'] as $column)
+                    <option value="{{$column}}">{{$column}}</option>
+                    @endforeach
+                    @endif
+                </x:tall-crud-generator::select>
+            </x:tall-crud-generator::checkbox-wrapper>
+            @endif
         </x:tall-crud-generator::accordion-wrapper>
     </div>
 </div>

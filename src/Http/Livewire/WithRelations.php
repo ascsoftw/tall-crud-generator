@@ -48,6 +48,7 @@ trait WithRelations
             'displayColumn' => '',
             'inAdd' => true,
             'inEdit' => true,
+            'isMultiSelect' => false,
         ];
     }
 
@@ -107,6 +108,7 @@ trait WithRelations
             'displayColumn' => $this->belongsToManyRelation['displayColumn'],
             'inAdd' => $this->belongsToManyRelation['inAdd'],
             'inEdit' => $this->belongsToManyRelation['inEdit'],
+            'isMultiSelect' => $this->belongsToManyRelation['isMultiSelect'],
         ];
         $this->confirmingBelongsToMany = false;
         $this->resetRelationsForm();
@@ -400,6 +402,10 @@ trait WithRelations
 
                 if ($methodReturn instanceof BelongsTo) {
                     $this->allRelations['belongsTo'][] = ['name' => $methodName];
+                }
+
+                if ($methodReturn instanceof HasMany) {
+                    $this->allRelations['hasMany'][] = ['name' => $methodName];
                 }
             } catch (Exception $ignore) {
                 //some issue running the $methodName

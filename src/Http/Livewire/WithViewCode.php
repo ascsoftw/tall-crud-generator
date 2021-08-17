@@ -13,6 +13,8 @@ trait WithViewCode
         $code['add_link'] = $this->generateAddLink();
         $code['search_box'] = $this->generateSearchBox();
         $code['pagination_dropdown'] = $this->generatePaginationDropdown();
+        $code['hide_columns'] = $this->generateHideColumnsDropdown();
+        $code['bulk_action'] = $this->generateBulkAction();
         $code['table_header'] = $this->generateTableHeader();
         $code['table_slot'] = $this->generateTableSlot();
         $code['child_component'] = $this->includeChildComponent();
@@ -44,7 +46,7 @@ trait WithViewCode
     public function generateSearchBox()
     {
         if ($this->isSearchingEnabled()) {
-            return $this->getSearchBoxHtml();
+            return $this->getSearchBoxTemplate();
         }
         return '';
     }
@@ -52,7 +54,23 @@ trait WithViewCode
     public function generatePaginationDropdown()
     {
         if ($this->isPaginationDropdownEnabled()) {
-            return $this->getPaginationDropdownHtml();
+            return $this->getPaginationDropdownTemplate();
+        }
+        return '';
+    }
+
+    public function generateHideColumnsDropdown()
+    {
+        if ($this->isHideColumnsEnabled()) {
+            return $this->getHideColumnDropdownTemplate();
+        }
+        return '';
+    }
+
+    public function generateBulkAction()
+    {
+        if ($this->isBulkActionsEnabled()) {
+            return $this->getBulkActionTemplate();
         }
         return '';
     }
@@ -62,6 +80,10 @@ trait WithViewCode
 
         $fields = $this->getSortedListingFields();
         $headers = collect();
+
+        if ($this->isBulkActionsEnabled()) {
+            $headers->push($this->getTableColumnHtml('', 'width="10"'));
+        }
 
         foreach ($fields as $f) {
             [$label, $column, $isSortable] = $this->getTableColumnProps($f);
@@ -80,20 +102,24 @@ trait WithViewCode
         $fields = $this->getSortedListingFields();
         $columns = collect();
 
-        foreach ($fields as $f) {
-            $columns->push($this->getTableColumnHtml(
-                Str::replace(
-                    '##COLUMN_NAME##',
-                    $this->getTableSlotColumnValue($f),
-                    $this->getTableColumnTemplate()
+        if ($this->isBulkActionsEnabled()) {
+            $columns->push(
+                $this->getTableColumnHtml(
+                    $this->getBulkColumnCheckbox()
                 )
-            ));
+            );
+        }
+
+        foreach ($fields as $f) {
+            $columns->push($this->getTableSlotHtml($f));
         }
 
         if ($this->needsActionColumn()) {
-            $columns->push($this->getTableColumnHtml(
-                $this->getActionHtml()
-            ));
+            $columns->push(
+                $this->getTableColumnHtml(
+                    $this->getActionHtml()
+                )
+            );
         }
 
         return $columns->implode($this->newLines(1, 5));
@@ -205,11 +231,13 @@ trait WithViewCode
                 ],
                 $this->getEditButtonTemplate()
             );
-            $buttons->push($this->getButtonHtml(
-                $this->advancedSettings['text']['editLink'],
-                'edit',
-                $buttonParams
-            ));
+            $buttons->push(
+                $this->getButtonHtml(
+                    $this->advancedSettings['text']['editLink'],
+                    'edit',
+                    $buttonParams
+                )
+            );
         }
 
         if ($this->isDeleteFeatureEnabled()) {
@@ -225,14 +253,29 @@ trait WithViewCode
                 $this->getDeleteButtonTemplate()
             );
 
-            $buttons->push($this->getButtonHtml(
-                $this->advancedSettings['text']['deleteLink'],
-                'delete',
-                $buttonParams
-            ));
+            $buttons->push(
+                $this->getButtonHtml(
+                    $this->advancedSettings['text']['deleteLink'],
+                    'delete',
+                    $buttonParams
+                )
+            );
         }
 
-        return $this->newLines(1, 6) . $buttons->implode($this->newLines(1, 6)) . $this->newLines(1, 5);
+        return $buttons->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
+    }
+
+    public function getBulkColumnCheckbox()
+    {
+        $html = collect();
+        $html->push(
+            Str::replace(
+                '##PRIMARY_KEY##',
+                $this->getPrimaryKey(),
+                $this->getBulkCheckboxTemplate()
+            )
+        );
+        return $html->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
     }
 
     public function getWithTableSlot($r)
@@ -305,7 +348,7 @@ trait WithViewCode
                 $r['displayColumn'],
                 $r['relatedKey'],
             ],
-            $this->getBtmFieldTemplate()
+            $r['isMultiSelect'] ? $this->getBtmFieldMultiSelectTemplate() : $this->getBtmFieldTemplate()
         );
     }
 

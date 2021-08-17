@@ -160,4 +160,15 @@ trait WithFeatures
         }
         return true;
     }
+
+    public function isHideColumnsEnabled()
+    {
+        return $this->advancedSettings['table_settings']['showHideColumns'];
+    }
+
+    public function isBulkActionsEnabled()
+    {
+        return $this->advancedSettings['table_settings']['bulkActions'] &&
+            !empty($this->advancedSettings['table_settings']['bulkActionColumn']);
+    }
 }

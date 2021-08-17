@@ -4,9 +4,13 @@
     </div>
 
     <div class="mt-6">
-        <div class="flex [css_class]">[search_box][pagination_dropdown]
+        <div class="flex [css_class]">
+[search_box]
+            <div class="flex">
+[bulk_action][hide_columns][pagination_dropdown]
+            </div>
         </div>
-        <x:tall-crud-generator::table class="mt-4" wire:loading.class.delay="opacity-50">
+        <x:tall-crud-generator::table class="mt-4 shadow-2xl" wire:loading.class.delay="opacity-50">
             <x-slot name="header">
                 [table_header]
             </x-slot>

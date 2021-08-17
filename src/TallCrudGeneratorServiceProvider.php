@@ -8,6 +8,8 @@ use Illuminate\Support\ServiceProvider;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class TallCrudGeneratorServiceProvider extends ServiceProvider
 {
@@ -38,9 +40,12 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         Blade::component('tall-crud-generator::accordion-heading', 'tall-crud-accordion-heading');
         Blade::component('tall-crud-generator::accordion-wrapper', 'tall-crud-accordion-wrapper');
         Blade::component('tall-crud-generator::wizard-step', 'tall-crud-wizard-step');
-        Blade::component('tall-crud-generator::sort-fields-table', 'tall-crud-sort-fields-table');
         Blade::component('tall-crud-generator::loading-indicator', 'tall-crud-loading-indicator');
         Blade::component('tall-crud-generator::show-relations-table', 'tall-crud-show-relations-table');
+        Blade::component('tall-crud-generator::dropdown', 'tall-crud-dropdown');
+        Blade::component('tall-crud-generator::tooltip', 'tall-crud-tooltip');
+
+        $this->defineMacros();
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/tall-crud-generator')
@@ -60,5 +65,15 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/tall-crud-generator.php', 'tall-crud-generator');
+    }
+
+    public function defineMacros()
+    {
+        Collection::macro('prependAndJoin', function ($glue, $prepend = '', $lastGlue = '') {
+            if (empty($prepend)) {
+                $prepend = $glue;
+            }
+            return $prepend . $this->join($glue, $lastGlue);
+        });
     }
 }
