@@ -1,16 +1,25 @@
 <div>
     <ul>
-        <li>
-            <x:tall-crud-generator::button wire:click="showSortDialog('listing')">Listing </x:tall-crud-generator::button>
+        <li class="flex">
+            <span class="cursor-pointer text-blue-500 font-medium" wire:click="showSortDialog('listing')">Listing</span>
+            <x:tall-crud-generator::tooltip>
+                Change the Order of Columns displayed in the Listing
+            </x:tall-crud-generator::tooltip>
         </li>
         @if($this->addFeature)
-        <li class="mt-4">
-            <x:tall-crud-generator::button wire:click="showSortDialog('add')">Add Fields</x:tall-crud-generator::button>
+        <li class="flex mt-4">
+            <span class="cursor-pointer text-blue-500 font-medium" wire:click="showSortDialog('add')">Add Fields</span>
+            <x:tall-crud-generator::tooltip>
+                Change the Order of Fields displayed in the Add Form
+            </x:tall-crud-generator::tooltip>
         </li>
         @endif
         @if($this->editFeature)
-        <li class="mt-4">
-            <x:tall-crud-generator::button wire:click="showSortDialog('edit')">Edit Fields</x:tall-crud-generator::button>
+        <li class="flex mt-4">
+            <span class="cursor-pointer text-blue-500 font-medium" wire:click="showSortDialog('edit')">Edit Fields</span>
+            <x:tall-crud-generator::tooltip>
+                Change the Order of Fields displayed in the Edit Form
+            </x:tall-crud-generator::tooltip>
         </li>
         @endif
     </ul>
