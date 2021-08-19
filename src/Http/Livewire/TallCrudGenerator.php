@@ -2,11 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
-use Livewire\Component;
+use Exception;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Artisan;
-use Exception;
+use Livewire\Component;
 
 class TallCrudGenerator extends Component
 {
@@ -38,7 +38,7 @@ class TallCrudGenerator extends Component
     public $attributes = [
         'rules' => '',
         'type' => 'input',
-        'options' => ''
+        'options' => '',
     ];
 
     public $componentName = '';
@@ -71,7 +71,7 @@ class TallCrudGenerator extends Component
             'showHideColumns' => false,
             'bulkActions' => false,
             'bulkActionColumn' => '',
-        ]
+        ],
     ];
 
     public $flashMessages = [
@@ -80,7 +80,7 @@ class TallCrudGenerator extends Component
             'add' => 'Record Added Successfully',
             'edit' => 'Record Updated Successfully',
             'delete' => 'Record Deleted Successfully',
-        ]
+        ],
     ];
 
     public $showAdvanced = false;
@@ -114,7 +114,7 @@ class TallCrudGenerator extends Component
             case 1:
                 //Validate Model
                 $this->checkModel();
-                if (!$this->isValidModel) {
+                if (! $this->isValidModel) {
                     return;
                 }
                 break;
@@ -123,7 +123,7 @@ class TallCrudGenerator extends Component
                 break;
             case 3:
                 //Validate Fields
-                if (!$this->validateSettings()) {
+                if (! $this->validateSettings()) {
                     return;
                 }
 
@@ -149,6 +149,7 @@ class TallCrudGenerator extends Component
                 //Validate Generate Files
                 $this->validateOnly('componentName');
                 $this->generateFiles();
+
                 return;
                 break;
         }
@@ -178,7 +179,7 @@ class TallCrudGenerator extends Component
             $this->step = $this->totalSteps;
         }
 
-        if ($this->step > 1 && !$this->isValidModel) {
+        if ($this->step > 1 && ! $this->isValidModel) {
             $this->stp = 1;
         }
     }
@@ -193,8 +194,9 @@ class TallCrudGenerator extends Component
 
         //check class exists
         $this->resetValidation();
-        if (!class_exists($this->modelPath)) {
+        if (! class_exists($this->modelPath)) {
             $this->addError('modelPath', 'File does not exists');
+
             return;
         }
 
@@ -205,6 +207,7 @@ class TallCrudGenerator extends Component
             $this->modelProps['columns'] = $this->getColumns(Schema::getColumnListing($model->getTable()), $this->modelProps['primaryKey']);
         } catch (Exception $e) {
             $this->addError('modelPath', 'Not a Valid Model Class.');
+
             return;
         }
 
@@ -212,7 +215,7 @@ class TallCrudGenerator extends Component
         $this->advancedSettings['text']['title'] = Str::title($this->modelProps['tableName']);
     }
 
-    public function addField( $column = '')
+    public function addField($column = '')
     {
         $this->fields[] = [
             'column' => $column,
@@ -225,7 +228,7 @@ class TallCrudGenerator extends Component
             'attributes' => [
                 'rules' => '',
                 'type' => 'input',
-                'options' => '{"1" : "Yes", "0": "No"}'
+                'options' => '{"1" : "Yes", "0": "No"}',
             ],
         ];
         $this->resetValidation('fields');
@@ -240,7 +243,7 @@ class TallCrudGenerator extends Component
 
     public function addAllFields()
     {
-        foreach($this->modelProps['columns'] as $column) {
+        foreach ($this->modelProps['columns'] as $column) {
             $this->addField($column);
         }
     }
@@ -254,7 +257,7 @@ class TallCrudGenerator extends Component
 
     public function addRule($rule)
     {
-        $this->attributes['rules'] .= $rule . ',';
+        $this->attributes['rules'] .= $rule.',';
     }
 
     public function clearRules()
@@ -275,35 +278,41 @@ class TallCrudGenerator extends Component
 
         if (empty($this->fields)) {
             $this->addError('fields', 'At least 1 Field should be added.');
+
             return;
         }
 
-        if (!$this->validateEmptyColumns()) {
+        if (! $this->validateEmptyColumns()) {
             $this->addError('fields', 'Please select column for all fields.');
+
             return;
         }
 
-        if (!$this->validateUniqueFields()) {
+        if (! $this->validateUniqueFields()) {
             $this->addError('fields', 'Please do not select a column more than once.');
+
             return false;
         }
 
-        if (!$this->validateEachRow()) {
+        if (! $this->validateEachRow()) {
             return false;
         }
 
-        if (!$this->validateDisplayColumn()) {
+        if (! $this->validateDisplayColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Listing Column.');
+
             return false;
         }
 
-        if (!$this->validateCreateColumn()) {
+        if (! $this->validateCreateColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Create Column.');
+
             return false;
         }
 
-        if (!$this->validateEditColumn()) {
+        if (! $this->validateEditColumn()) {
             $this->addError('fields', 'Please select at least 1 Field to Display in Edit Column.');
+
             return false;
         }
 
@@ -336,8 +345,9 @@ class TallCrudGenerator extends Component
         $collection = collect($this->sortFields[$mode]);
         $orderCollection = collect($order);
         $map = $collection->map(function ($item) use ($orderCollection) {
-            $searchTerm = $item['type'] == 'withCount' ? $item['field'] . ' (Count)' : $item['field'];
+            $searchTerm = $item['type'] == 'withCount' ? $item['field'].' (Count)' : $item['field'];
             $item['order'] = $orderCollection->search($searchTerm) + 1;
+
             return $item;
         });
         $this->sortFields[$mode] = $this->sortFieldsByOrder($map);
@@ -345,7 +355,7 @@ class TallCrudGenerator extends Component
 
     public function showHideAccordion($selected)
     {
-        if($this->selected == $selected) {
+        if ($this->selected == $selected) {
             $this->selected = null;
         } else {
             $this->selected = $selected;
@@ -377,14 +387,14 @@ class TallCrudGenerator extends Component
         if ($this->exitCode == 0) {
             if ($this->isAddFeatureEnabled() || $this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
                 $this->exitCode = Artisan::call('livewire:tall-crud-generator', [
-                    'name' => $this->componentName . 'Child',
+                    'name' => $this->componentName.'Child',
                     'props' => $props,
                     '--child' => true,
                 ]);
             }
         }
 
-        $this->generatedCode = "@livewire('" . Str::kebab($this->componentName) . "')";
+        $this->generatedCode = "@livewire('".Str::kebab($this->componentName)."')";
         $this->isComplete = true;
     }
 

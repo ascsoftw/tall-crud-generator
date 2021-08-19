@@ -27,6 +27,7 @@ trait WithComponentCode
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
         $code['child_other_models'] = $this->generateOtherModelsCode();
         $code['child_vars'] = $this->getRelationVars();
+
         return $code;
     }
 
@@ -35,7 +36,7 @@ trait WithComponentCode
         $code = [
             'vars' => '',
             'query' => '',
-            'method' => ''
+            'method' => '',
         ];
         if ($this->isSortingEnabled()) {
             $code['vars'] = $this->getSortingVars();
@@ -51,7 +52,7 @@ trait WithComponentCode
         $code = [
             'vars' => '',
             'query' => '',
-            'method' => ''
+            'method' => '',
         ];
         if ($this->isSearchingEnabled()) {
             $code['vars'] = $this->getSearchingVars();
@@ -65,18 +66,19 @@ trait WithComponentCode
     public function generatePaginationDropdownCode()
     {
         $code = [
-            'method' => ''
+            'method' => '',
         ];
         if ($this->isPaginationDropdownEnabled()) {
             $code['method'] = $this->getPaginationDropdownMethod();
         }
+
         return $code;
     }
 
     public function generatePaginationCode()
     {
         $code = [
-            'vars' => ''
+            'vars' => '',
         ];
 
         $code['vars'] = $this->getPaginationVars();
@@ -156,7 +158,7 @@ trait WithComponentCode
     {
         $code = [
             'vars' => '',
-            'method' => ''
+            'method' => '',
         ];
         if ($this->isAddFeatureEnabled()) {
             $code['vars'] = $this->getAddVars();
@@ -170,7 +172,7 @@ trait WithComponentCode
     {
         $code = [
             'vars' => '',
-            'method' => ''
+            'method' => '',
         ];
         if ($this->isEditFeatureEnabled()) {
             $code['vars'] = $this->getEditVars();
@@ -184,7 +186,7 @@ trait WithComponentCode
     {
         $code = [
             'vars' => '',
-            'method' => ''
+            'method' => '',
         ];
         if ($this->isDeleteFeatureEnabled()) {
             $code['vars'] = $this->getDeleteVars();
@@ -257,6 +259,7 @@ trait WithComponentCode
             );
             $isFirst = false;
         }
+
         return Str::replace(
             '##SEARCH_QUERY##',
             $searchQuery->prependAndJoin($this->newLines(1, 6), $this->indent(5)),
@@ -323,7 +326,7 @@ trait WithComponentCode
                     ],
                     [
                         $field['column'],
-                        ($field['attributes']['type'] == 'checkbox') ? "0" : "''"
+                        ($field['attributes']['type'] == 'checkbox') ? '0' : "''",
                     ],
                     $this->getCreateFieldTemplate()
                 )
@@ -437,12 +440,12 @@ trait WithComponentCode
 
     public function generateOtherModelsCode()
     {
-        return $this->generateBtmModelsCode() . $this->generateBelongstoModelsCode();
+        return $this->generateBtmModelsCode().$this->generateBelongstoModelsCode();
     }
 
     public function generateBtmModelsCode()
     {
-        if (!$this->isBtmEnabled()) {
+        if (! $this->isBtmEnabled()) {
             return '';
         }
 
@@ -450,12 +453,13 @@ trait WithComponentCode
         foreach ($this->belongsToManyRelations as $r) {
             $modelsCode->push($this->getOtherModelCode($r['modelPath']));
         }
+
         return $modelsCode->implode('');
     }
 
     public function generateBelongstoModelsCode()
     {
-        if (!$this->isBelongsToEnabled()) {
+        if (! $this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -469,12 +473,12 @@ trait WithComponentCode
 
     public function getRelationVars()
     {
-        return $this->getBtmVars() . $this->getBelongsToVars();
+        return $this->getBtmVars().$this->getBelongsToVars();
     }
 
     public function getBtmVars()
     {
-        if (!$this->isBtmEnabled()) {
+        if (! $this->isBtmEnabled()) {
             return '';
         }
 
@@ -493,7 +497,7 @@ trait WithComponentCode
 
     public function getBelongsToVars()
     {
-        if (!$this->isBelongsToEnabled()) {
+        if (! $this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -511,7 +515,7 @@ trait WithComponentCode
 
     public function getAddFlashCode()
     {
-        if (!$this->isFlashMessageEnabled()) {
+        if (! $this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -520,7 +524,7 @@ trait WithComponentCode
 
     public function getEditFlashCode()
     {
-        if (!$this->isFlashMessageEnabled()) {
+        if (! $this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -529,7 +533,7 @@ trait WithComponentCode
 
     public function getDeleteFlashCode()
     {
-        if (!$this->isFlashMessageEnabled()) {
+        if (! $this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -538,13 +542,13 @@ trait WithComponentCode
 
     public function getBtmInitCode()
     {
-        if (!$this->isBtmAddEnabled()) {
+        if (! $this->isBtmAddEnabled()) {
             return '';
         }
 
         $initCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inAdd']) {
+            if (! $r['inAdd']) {
                 continue;
             }
 
@@ -572,13 +576,13 @@ trait WithComponentCode
 
     public function getBtmAttachCode()
     {
-        if (!$this->isBtmAddEnabled()) {
+        if (! $this->isBtmAddEnabled()) {
             return '';
         }
 
         $attachCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inAdd']) {
+            if (! $r['inAdd']) {
                 continue;
             }
 
@@ -590,25 +594,25 @@ trait WithComponentCode
                     ],
                     [
                         $r['relationName'],
-                        $this->getBtmFieldName($r['relationName'])
+                        $this->getBtmFieldName($r['relationName']),
                     ],
                     $this->getBtmAttachTemplate()
                 )
             );
         }
 
-        return $attachCode->implode('') . $this->newLines();
+        return $attachCode->implode('').$this->newLines();
     }
 
     public function getBtmFetchCode()
     {
-        if (!$this->isBtmEditEnabled()) {
+        if (! $this->isBtmEditEnabled()) {
             return '';
         }
 
         $btmFetchCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inEdit']) {
+            if (! $r['inEdit']) {
                 continue;
             }
 
@@ -640,13 +644,13 @@ trait WithComponentCode
 
     public function getBtmUpdateCode()
     {
-        if (!$this->isBtmEditEnabled()) {
+        if (! $this->isBtmEditEnabled()) {
             return '';
         }
 
         $btmUpdateCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inEdit']) {
+            if (! $r['inEdit']) {
                 continue;
             }
 
@@ -670,20 +674,19 @@ trait WithComponentCode
 
     public function getRulesForBelongsToFields()
     {
-
         $rules = collect();
         foreach ($this->belongsToRelations as $r) {
             $rules->push(
                 $this->getChildFieldCode($r['foreignKey'], 'required')
             );
         }
+
         return $rules->join($this->newLines(1, 2));
     }
 
     public function getAttributesForBelongsToFields()
     {
-
-        if (!$this->isBelongsToEnabled()) {
+        if (! $this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -696,16 +699,17 @@ trait WithComponentCode
                 )
             );
         }
+
         return $attributes->join($this->newLines(1, 2));
     }
 
     public function getBelongsToInitCode($isAdd = true)
     {
-        if ($isAdd && !$this->isBelongsToAddEnabled()) {
+        if ($isAdd && ! $this->isBelongsToAddEnabled()) {
             return '';
         }
 
-        if (!$isAdd && !$this->isBelongsToEditEnabled()) {
+        if (! $isAdd && ! $this->isBelongsToEditEnabled()) {
             return '';
         }
 
@@ -727,12 +731,13 @@ trait WithComponentCode
                 )
             );
         }
+
         return $initCode->prependAndJoin($this->newLines());
     }
 
     public function getBelongsToSaveCode()
     {
-        if (!$this->isBelongsToAddEnabled()) {
+        if (! $this->isBelongsToAddEnabled()) {
             return '';
         }
 
@@ -746,12 +751,13 @@ trait WithComponentCode
                     ],
                     [
                         $r['foreignKey'],
-                        0
+                        0,
                     ],
                     $this->getCreateFieldTemplate()
                 )
             );
         }
+
         return $saveCode->prependAndJoin($this->newLines(1, 3));
     }
 
@@ -807,8 +813,8 @@ trait WithComponentCode
             '##COLUMNS##',
             $this->getAllListingColumns(),
             $this->getHideColumnVarsTemplate()
-        ) .
-            $this->newLines() .
+        ).
+            $this->newLines().
             $this->getArrayCode('selectedColumns');
     }
 
@@ -842,7 +848,7 @@ trait WithComponentCode
 
     public function getBulkActionsVars()
     {
-        return $this->newLines() . $this->getArrayCode('selectedItems');
+        return $this->newLines().$this->getArrayCode('selectedItems');
     }
 
     public function getBulkActionMethod()

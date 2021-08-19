@@ -6,9 +6,10 @@ trait WithFeatures
 {
     public function hasAddAndEditFeaturesDisabled()
     {
-        if (!$this->isAddFeatureEnabled() && !$this->isEditFeatureEnabled()) {
+        if (! $this->isAddFeatureEnabled() && ! $this->isEditFeatureEnabled()) {
             return true;
         }
+
         return false;
     }
 
@@ -17,6 +18,7 @@ trait WithFeatures
         if ($this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
             return true;
         }
+
         return false;
     }
 
@@ -25,6 +27,7 @@ trait WithFeatures
         if ($this->primaryKeyProps['inList']) {
             return true;
         }
+
         return false;
     }
 
@@ -33,6 +36,7 @@ trait WithFeatures
         if ($this->componentProps['createAddModal']) {
             return true;
         }
+
         return false;
     }
 
@@ -41,6 +45,7 @@ trait WithFeatures
         if ($this->componentProps['createEditModal']) {
             return true;
         }
+
         return false;
     }
 
@@ -49,6 +54,7 @@ trait WithFeatures
         if ($this->componentProps['createDeleteButton']) {
             return true;
         }
+
         return false;
     }
 
@@ -59,10 +65,12 @@ trait WithFeatures
         }
 
         $collection = collect($this->fields);
+
         return $collection->contains(function ($f) {
             if (($this->hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['sortable']) {
                 return true;
             }
+
             return false;
         });
     }
@@ -70,10 +78,12 @@ trait WithFeatures
     public function isSearchingEnabled()
     {
         $collection = collect($this->fields);
+
         return $collection->contains(function ($f) {
             if (($this->hasAddAndEditFeaturesDisabled() || $f['inList']) && $f['searchable']) {
                 return true;
             }
+
             return false;
         });
     }
@@ -83,6 +93,7 @@ trait WithFeatures
         if ($this->needsPrimaryKeyInListing() && $this->primaryKeyProps['sortable']) {
             return true;
         }
+
         return false;
     }
 
@@ -123,6 +134,7 @@ trait WithFeatures
         if (is_null($c)) {
             return false;
         }
+
         return true;
     }
 
@@ -133,6 +145,7 @@ trait WithFeatures
         if (is_null($c)) {
             return false;
         }
+
         return true;
     }
 
@@ -148,6 +161,7 @@ trait WithFeatures
         if (is_null($c)) {
             return false;
         }
+
         return true;
     }
 
@@ -158,6 +172,7 @@ trait WithFeatures
         if (is_null($c)) {
             return false;
         }
+
         return true;
     }
 
@@ -169,6 +184,6 @@ trait WithFeatures
     public function isBulkActionsEnabled()
     {
         return $this->advancedSettings['table_settings']['bulkActions'] &&
-            !empty($this->advancedSettings['table_settings']['bulkActionColumn']);
+            ! empty($this->advancedSettings['table_settings']['bulkActionColumn']);
     }
 }

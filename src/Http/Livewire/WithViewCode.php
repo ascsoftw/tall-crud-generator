@@ -22,6 +22,7 @@ trait WithViewCode
         $code['child']['delete_modal'] = $this->generateDeleteModal();
         $code['child']['add_modal'] = $this->generateAddModal();
         $code['child']['edit_modal'] = $this->generateEditModal();
+
         return $code;
     }
 
@@ -33,13 +34,15 @@ trait WithViewCode
                 $this->getChildComponentName(),
                 $this->getAddButtonTemplate()
             );
-            return $this->newLines(1, 2) .
+
+            return $this->newLines(1, 2).
                 $this->getButtonHtml(
                     $this->advancedSettings['text']['addLink'],
                     'add',
                     $buttonParams
                 );
         }
+
         return '';
     }
 
@@ -48,6 +51,7 @@ trait WithViewCode
         if ($this->isSearchingEnabled()) {
             return $this->getSearchBoxTemplate();
         }
+
         return '';
     }
 
@@ -56,6 +60,7 @@ trait WithViewCode
         if ($this->isPaginationDropdownEnabled()) {
             return $this->getPaginationDropdownTemplate();
         }
+
         return '';
     }
 
@@ -64,6 +69,7 @@ trait WithViewCode
         if ($this->isHideColumnsEnabled()) {
             return $this->getHideColumnDropdownTemplate();
         }
+
         return '';
     }
 
@@ -72,12 +78,12 @@ trait WithViewCode
         if ($this->isBulkActionsEnabled()) {
             return $this->getBulkActionTemplate();
         }
+
         return '';
     }
 
     public function generateTableHeader()
     {
-
         $fields = $this->getSortedListingFields();
         $headers = collect();
 
@@ -129,7 +135,8 @@ trait WithViewCode
     {
         if ($this->isAddFeatureEnabled() || $this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
             $componentName = $this->getChildComponentName();
-            return $this->indent(1) . "@livewire('$componentName')";
+
+            return $this->indent(1)."@livewire('$componentName')";
         }
 
         return '';
@@ -138,7 +145,7 @@ trait WithViewCode
     public function includeFlashComponent()
     {
         if ($this->isFlashMessageEnabled()) {
-            return $this->newLines(1, 1) . $this->getFlashComponentTemplate();
+            return $this->newLines(1, 1).$this->getFlashComponentTemplate();
         }
 
         return '';
@@ -146,7 +153,7 @@ trait WithViewCode
 
     public function generateDeleteModal()
     {
-        if (!$this->isDeleteFeatureEnabled()) {
+        if (! $this->isDeleteFeatureEnabled()) {
             return '';
         }
 
@@ -165,7 +172,7 @@ trait WithViewCode
 
     public function generateAddModal()
     {
-        if (!$this->isAddFeatureEnabled()) {
+        if (! $this->isAddFeatureEnabled()) {
             return '';
         }
 
@@ -192,7 +199,7 @@ trait WithViewCode
 
     public function generateEditModal()
     {
-        if (!$this->isEditFeatureEnabled()) {
+        if (! $this->isEditFeatureEnabled()) {
             return '';
         }
         $fields = $this->getSortedFormFields(false);
@@ -227,7 +234,7 @@ trait WithViewCode
                 ],
                 [
                     $this->getChildComponentName(),
-                    $this->getPrimaryKey()
+                    $this->getPrimaryKey(),
                 ],
                 $this->getEditButtonTemplate()
             );
@@ -248,7 +255,7 @@ trait WithViewCode
                 ],
                 [
                     $this->getChildComponentName(),
-                    $this->getPrimaryKey()
+                    $this->getPrimaryKey(),
                 ],
                 $this->getDeleteButtonTemplate()
             );
@@ -262,7 +269,7 @@ trait WithViewCode
             );
         }
 
-        return $buttons->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
+        return $buttons->prependAndJoin($this->newLines(1, 6)).$this->newLines(1, 5);
     }
 
     public function getBulkColumnCheckbox()
@@ -275,7 +282,8 @@ trait WithViewCode
                 $this->getBulkCheckboxTemplate()
             )
         );
-        return $html->prependAndJoin($this->newLines(1, 6)) . $this->newLines(1, 5);
+
+        return $html->prependAndJoin($this->newLines(1, 6)).$this->newLines(1, 5);
     }
 
     public function getWithTableSlot($r)
@@ -316,7 +324,7 @@ trait WithViewCode
             ],
             [
                 $field['column'],
-                $this->getLabel($field['label'], $field['column'])
+                $this->getLabel($field['label'], $field['column']),
             ],
             $this->getFieldTemplate($field['attributes']['type'])
         );
@@ -328,6 +336,7 @@ trait WithViewCode
                 $html
             );
         }
+
         return $html;
     }
 
@@ -385,6 +394,7 @@ trait WithViewCode
             case 'withCount':
                 return $this->getColumnForWithCount($f['relationName']);
         }
+
         return '';
     }
 
@@ -398,6 +408,7 @@ trait WithViewCode
             case 'belongsTo':
                 return $this->getBelongsToFieldHtml($field);
         }
+
         return '';
     }
 

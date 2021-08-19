@@ -8,7 +8,7 @@ trait WithBaseHtml
 {
     public function getTableColumnHtml($slot, $params = '')
     {
-        return '<x:tall-crud-generator::table-column ' . $params .  '>' . $slot . '</x:tall-crud-generator::table-column>';
+        return '<x:tall-crud-generator::table-column '.$params.'>'.$slot.'</x:tall-crud-generator::table-column>';
     }
 
     public function getTableSlotHtml($f)
@@ -20,29 +20,29 @@ trait WithBaseHtml
                 '##LABEL##',
                 $props[0],
                 $this->getHideColumnIfTemplate()
-            ) . $this->newLines(1, 5);
-            $postTag = $this->newLines(1, 5) . '@endif';
+            ).$this->newLines(1, 5);
+            $postTag = $this->newLines(1, 5).'@endif';
         }
 
-        return $preTag .
+        return $preTag.
             $this->getTableColumnHtml(
                 Str::replace(
                     '##COLUMN_NAME##',
                     $this->getTableSlotColumnValue($f),
                     $this->getTableColumnTemplate()
                 )
-            ) .
+            ).
             $postTag;
     }
 
     public function getButtonHtml($slot, $mode = '', $params = '')
     {
-        return '<x:tall-crud-generator::button mode="' . $mode . '" ' . $params . '>' . $slot . '</x:tall-crud-generator::button>';
+        return '<x:tall-crud-generator::button mode="'.$mode.'" '.$params.'>'.$slot.'</x:tall-crud-generator::button>';
     }
 
     public function getSortIconHtml($column)
     {
-        return '<x:tall-crud-generator::sort-icon sortField="' . $column . '" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
+        return '<x:tall-crud-generator::sort-icon sortField="'.$column.'" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
     }
 
     public function getHeaderHtml($label, $column = null, $isSortable = false)
@@ -61,7 +61,7 @@ trait WithBaseHtml
                 ],
                 $this->getSortingHeaderTemplate()
             );
-            $slot = $this->newLines() . $html . $this->newLines(1, 4);
+            $slot = $this->newLines().$html.$this->newLines(1, 4);
         } else {
             $slot = $label;
         }
@@ -72,10 +72,11 @@ trait WithBaseHtml
                 '##LABEL##',
                 $label,
                 $this->getHideColumnIfTemplate()
-            ) . $this->newLines(1, 4);
-            $postTag = $this->newLines(1, 4) . '@endif';
+            ).$this->newLines(1, 4);
+            $postTag = $this->newLines(1, 4).'@endif';
         }
-        return $preTag . $this->getTableColumnHtml($slot) . $postTag;
+
+        return $preTag.$this->getTableColumnHtml($slot).$postTag;
     }
 
     public function getSelectOptionsHtml($options)
@@ -87,8 +88,9 @@ trait WithBaseHtml
 
         $html = '';
         foreach ($options as $key => $value) {
-            $html .= '<option value="' . $key . '">' . $value . '</option>';
+            $html .= '<option value="'.$key.'">'.$value.'</option>';
         }
+
         return $html;
     }
 }

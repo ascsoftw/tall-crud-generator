@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Schema;
 
 trait WithRelations
 {
-
     public $allRelations = [];
 
     public $confirmingBelongsToMany = false;
@@ -57,7 +56,7 @@ trait WithRelations
         $this->resetValidation('belongsToManyRelation.*');
         $this->belongsToManyRelation['isValid'] = false;
 
-        if (!$this->isValidBelongsToManyName()) {
+        if (! $this->isValidBelongsToManyName()) {
             return;
         }
 
@@ -68,12 +67,14 @@ trait WithRelations
     {
         if (empty($this->belongsToManyRelation['name'])) {
             $this->addError('belongsToManyRelation.name', 'Please select a Relation');
+
             return false;
         }
 
         foreach ($this->belongsToManyRelations as $k) {
             if ($k['relationName'] == $this->belongsToManyRelation['name']) {
                 $this->addError('belongsToManyRelation.name', 'Relation Already Defined.');
+
                 return false;
             }
         }
@@ -95,7 +96,7 @@ trait WithRelations
     public function addBelongsToManyRelation()
     {
         $this->resetValidation('belongsToManyRelation.*');
-        if (!$this->isValidBelongsToManyName()) {
+        if (! $this->isValidBelongsToManyName()) {
             return;
         }
         $this->validateOnly('belongsToManyRelation.displayColumn', [
@@ -147,7 +148,7 @@ trait WithRelations
         $this->resetValidation('belongsToRelation.*');
         $this->belongsToRelation['isValid'] = false;
 
-        if (!$this->isValidBelongsToName()) {
+        if (! $this->isValidBelongsToName()) {
             return;
         }
 
@@ -158,12 +159,14 @@ trait WithRelations
     {
         if (empty($this->belongsToRelation['name'])) {
             $this->addError('belongsToRelation.name', 'Please select a Relation');
+
             return false;
         }
 
         foreach ($this->belongsToRelations as $k) {
             if ($k['relationName'] == $this->belongsToRelation['name']) {
                 $this->addError('belongsToRelation.name', 'Relation Already Defined.');
+
                 return false;
             }
         }
@@ -186,7 +189,7 @@ trait WithRelations
     public function addBelongsToRelation()
     {
         $this->resetValidation('belongsToRelation.*');
-        if (!$this->isValidBelongsToName()) {
+        if (! $this->isValidBelongsToName()) {
             return;
         }
         $this->validateOnly('belongsToRelation.displayColumn', [
@@ -235,7 +238,7 @@ trait WithRelations
         $this->resetValidation('withRelation.*');
         $this->withRelation['isValid'] = false;
 
-        if (!$this->isValidWithName()) {
+        if (! $this->isValidWithName()) {
             return;
         }
 
@@ -246,12 +249,14 @@ trait WithRelations
     {
         if (empty($this->withRelation['name'])) {
             $this->addError('withRelation.name', 'Please select a Relation');
+
             return false;
         }
 
         foreach ($this->withRelations as $k) {
             if ($k['relationName'] == $this->withRelation['name']) {
                 $this->addError('withRelation.name', 'Relation Already Defined.');
+
                 return false;
             }
         }
@@ -272,7 +277,7 @@ trait WithRelations
     public function addWithRelation()
     {
         $this->resetValidation('withRelation.*');
-        if (!$this->isValidWithName()) {
+        if (! $this->isValidWithName()) {
             return;
         }
         $this->validateOnly('withRelation.displayColumn', [
@@ -314,7 +319,7 @@ trait WithRelations
         $this->resetValidation('withCountRelation.*');
         $this->withCountRelation['isValid'] = false;
 
-        if (!$this->isValidWithCountName()) {
+        if (! $this->isValidWithCountName()) {
             return;
         }
 
@@ -325,12 +330,14 @@ trait WithRelations
     {
         if (empty($this->withCountRelation['name'])) {
             $this->addError('withCountRelation.name', 'Please select a Relation');
+
             return false;
         }
 
         foreach ($this->withCountRelations as $k) {
             if ($k['relationName'] == $this->withCountRelation['name']) {
                 $this->addError('withCountRelation.name', 'Relation Already Defined.');
+
                 return false;
             }
         }
@@ -341,7 +348,7 @@ trait WithRelations
     public function addWithCountRelation()
     {
         $this->resetValidation('withCountRelation.*');
-        if (!$this->isValidWithCountName()) {
+        if (! $this->isValidWithCountName()) {
             return;
         }
 
@@ -369,7 +376,6 @@ trait WithRelations
 
     public function getAllRelations()
     {
-
         $this->resetRelationsForm();
 
         $this->allRelations = [];
@@ -392,7 +398,7 @@ trait WithRelations
                 $methodName = $m->getName();
                 $methodReturn = $model->{$methodName}();
 
-                if (!$methodReturn instanceof Relation) {
+                if (! $methodReturn instanceof Relation) {
                     return;
                 }
 
