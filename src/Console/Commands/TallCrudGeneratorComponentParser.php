@@ -2,23 +2,22 @@
 
 namespace Ascsoftw\TallCrudGenerator\Console\Commands;
 
-use Livewire\Commands\ComponentParser;
 use Illuminate\Support\Facades\File;
+use Livewire\Commands\ComponentParser;
 
 class TallCrudGeneratorComponentParser extends ComponentParser
 {
-
     public function classContents($child = false, $props = [])
     {
         $stubName = $child ? 'tall-crud.child.stub' : 'tall-crud.stub';
 
-        if (File::exists($stubPath = base_path('stubs/' . $stubName))) {
+        if (File::exists($stubPath = base_path('stubs/'.$stubName))) {
             $template = file_get_contents($stubPath);
         } else {
-            $template = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $stubName);
+            $template = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.$stubName);
         }
 
-        if (!$child) {
+        if (! $child) {
             $template = preg_replace_array(
                 [
                     '/\[namespace\]/',
@@ -112,17 +111,16 @@ class TallCrudGeneratorComponentParser extends ComponentParser
 
     public function viewContents($child = false, $props = [])
     {
-
         $stubName = $child ? 'tall-crud.child.view.stub' : 'tall-crud.view.stub';
 
-        if (File::exists($stubPath = base_path('stubs/' . $stubName))) {
+        if (File::exists($stubPath = base_path('stubs/'.$stubName))) {
             $template = file_get_contents($stubPath);
         } else {
-            $template = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $stubName);
+            $template = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.$stubName);
         }
 
-        if (!$child) {
-            $template =  preg_replace_array(
+        if (! $child) {
+            $template = preg_replace_array(
                 [
                     '/\[heading\]/',
                     '/\[css_class\]/',
@@ -152,7 +150,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                 $template
             );
         } else {
-            $template =  preg_replace_array(
+            $template = preg_replace_array(
                 [
                     '/\[delete_modal\]/',
                     '/\[add_modal\]/',

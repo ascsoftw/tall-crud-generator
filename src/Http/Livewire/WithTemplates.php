@@ -16,7 +16,7 @@ EOT;
 
     public function getSearchBoxTemplate()
     {
-        return <<<EOT
+        return <<<'EOT'
 
             <div class="flex">
                 <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
@@ -506,7 +506,6 @@ EOT;
 
     public function getBtmFieldTemplate()
     {
-
         return <<<'EOT'
 
 
@@ -524,7 +523,6 @@ EOT;
 
     public function getBtmFieldMultiSelectTemplate()
     {
-
         return <<<'EOT'
 
 
@@ -539,7 +537,6 @@ EOT;
 
     public function getBelongsToFieldTemplate()
     {
-
         return <<<'EOT'
 
 
@@ -557,7 +554,6 @@ EOT;
             </div>
 EOT;
     }
-
 
     public function getBelongsToInitTemplate()
     {

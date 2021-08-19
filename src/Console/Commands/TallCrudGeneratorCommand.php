@@ -2,8 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Console\Commands;
 
-use Livewire\Commands\FileManipulationCommand;
 use Illuminate\Support\Facades\File;
+use Livewire\Commands\FileManipulationCommand;
 
 class TallCrudGeneratorCommand extends FileManipulationCommand
 {
@@ -47,6 +47,7 @@ class TallCrudGeneratorCommand extends FileManipulationCommand
         if ($this->isReservedClassName($name = $this->parser->className())) {
             $this->line("<options=bold,reverse;fg=red> WHOOPS! </> 😳 \n");
             $this->line("<fg=red;options=bold>Class is reserved:</> {$name}");
+
             return;
         }
 
@@ -69,7 +70,7 @@ class TallCrudGeneratorCommand extends FileManipulationCommand
     {
         $classPath = $this->parser->classPath();
 
-        if (File::exists($classPath) && !$force) {
+        if (File::exists($classPath) && ! $force) {
             $this->line("<options=bold,reverse;fg=red> WHOOPS-IE-TOOTLES </> 😳 \n");
             $this->line("<fg=red;options=bold>Class already exists:</> {$this->parser->relativeClassPath()}");
 
@@ -87,7 +88,7 @@ class TallCrudGeneratorCommand extends FileManipulationCommand
     {
         $viewPath = $this->parser->viewPath();
 
-        if (File::exists($viewPath) && !$force) {
+        if (File::exists($viewPath) && ! $force) {
             $this->line("<fg=red;options=bold>View already exists:</> {$this->parser->relativeViewPath()}");
 
             return false;

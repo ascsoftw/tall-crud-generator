@@ -3,20 +3,19 @@
 namespace Ascsoftw\TallCrudGenerator;
 
 use Ascsoftw\TallCrudGenerator\Console\Commands\TallCrudGeneratorCommand;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
-use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class TallCrudGeneratorServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         Livewire::component('tall-crud-generator', TallCrudGenerator::class);
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tall-crud-generator');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'tall-crud-generator');
 
         $this->commands([
             TallCrudGeneratorCommand::class,
@@ -48,14 +47,14 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         $this->defineMacros();
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/tall-crud-generator')
+            __DIR__.'/../resources/views' => resource_path('views/vendor/tall-crud-generator'),
         ], 'views');
 
         $this->publishes([
-            __DIR__ . '/../config/tall-crud-generator.php' => base_path('config/tall-crud-generator.php')
+            __DIR__.'/../config/tall-crud-generator.php' => base_path('config/tall-crud-generator.php'),
         ], 'config');
 
-        if (!config('tall-crud-generator.disable_route')) {
+        if (! config('tall-crud-generator.disable_route')) {
             Route::get(config('tall-crud-generator.route'), function () {
                 return view('tall-crud-generator::tall-crud-generator');
             })->middleware(['web', 'auth']);
@@ -64,7 +63,7 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/tall-crud-generator.php', 'tall-crud-generator');
+        $this->mergeConfigFrom(__DIR__.'/../config/tall-crud-generator.php', 'tall-crud-generator');
     }
 
     public function defineMacros()
@@ -73,7 +72,8 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
             if (empty($prepend)) {
                 $prepend = $glue;
             }
-            return $prepend . $this->join($glue, $lastGlue);
+
+            return $prepend.$this->join($glue, $lastGlue);
         });
     }
 }

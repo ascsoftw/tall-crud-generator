@@ -12,6 +12,7 @@ trait WithHelpers
         if (empty($name)) {
             $name = $this->modelPath;
         }
+
         return Arr::last(Str::of($name)->explode('\\')->all());
     }
 
@@ -22,12 +23,12 @@ trait WithHelpers
 
     public function newLines($count = 1, $indent = 0)
     {
-        return str_repeat("\n" . $this->indent($indent), $count);
+        return str_repeat("\n".$this->indent($indent), $count);
     }
 
     public function spaces($count = 1)
     {
-        return str_repeat(" ", $count);
+        return str_repeat(' ', $count);
     }
 
     public function indent($step = 1)
@@ -61,6 +62,7 @@ trait WithHelpers
             if ($f['sortable']) {
                 return true;
             }
+
             return false;
         });
 
@@ -75,6 +77,7 @@ trait WithHelpers
                 $columns[] = $f;
             }
         }
+
         return $columns;
     }
 
@@ -93,6 +96,7 @@ trait WithHelpers
     {
         $collection = collect($this->fields);
         $filtered = $collection->duplicates('column')->all();
+
         return 0 == count($filtered);
     }
 
@@ -102,13 +106,15 @@ trait WithHelpers
             return true;
         }
         foreach ($this->fields as $f) {
-            if (!($f['inList'] ||
+            if (! ($f['inList'] ||
                 ($this->isAddFeatureEnabled() && $f['inAdd']) ||
-                ($this->isEditFeatureEnabled()  && $f['inEdit']))) {
-                $this->addError('fields', $f['column'] . ' Column should be selected to display in at least 1 view.');
+                ($this->isEditFeatureEnabled() && $f['inEdit']))) {
+                $this->addError('fields', $f['column'].' Column should be selected to display in at least 1 view.');
+
                 return false;
             }
         }
+
         return true;
     }
 
@@ -128,7 +134,7 @@ trait WithHelpers
 
     public function validateCreateColumn()
     {
-        if (!$this->isAddFeatureEnabled()) {
+        if (! $this->isAddFeatureEnabled()) {
             return true;
         }
 
@@ -142,7 +148,7 @@ trait WithHelpers
 
     public function validateEditColumn()
     {
-        if (!$this->isEditFeatureEnabled()) {
+        if (! $this->isEditFeatureEnabled()) {
             return true;
         }
 
@@ -156,7 +162,7 @@ trait WithHelpers
 
     public function getChildComponentName()
     {
-        return Str::kebab($this->componentName) . '-child';
+        return Str::kebab($this->componentName).'-child';
     }
 
     public function getNormalFormFields($addForm = true, $editForm = true)
@@ -180,7 +186,7 @@ trait WithHelpers
 
     public function getLabel($label = '', $column = '')
     {
-        if (!empty($label)) {
+        if (! empty($label)) {
             return $label;
         }
 
@@ -194,17 +200,17 @@ trait WithHelpers
 
     public function getLabelForWithCount($relation = '')
     {
-        return Str::ucfirst($relation) . ' Count';
+        return Str::ucfirst($relation).' Count';
     }
 
     public function getColumnForWithCount($relation = '')
     {
-        return $relation . '_count';
+        return $relation.'_count';
     }
 
     public function getBtmFieldName($relation)
     {
-        return 'checked' . Str::studly($relation);
+        return 'checked'.Str::studly($relation);
     }
 
     public function getBelongsToVarName($relation)
@@ -214,7 +220,6 @@ trait WithHelpers
 
     public function getListingFieldsToSort()
     {
-
         $order = 0;
         $collection = collect();
         if ($this->needsPrimaryKeyInListing()) {
@@ -240,33 +245,34 @@ trait WithHelpers
 
     public function getFormFieldsToSort($addForm = true)
     {
-        $collection = collect($this->getNormalFormFields($addForm, !$addForm));
+        $collection = collect($this->getNormalFormFields($addForm, ! $addForm));
         $map = $collection->map(function ($item, $key) {
             return ['field' => $item['column'], 'type' => 'normal', 'order' => ++$key];
         });
         //
         $order = $map->count();
         foreach ($this->belongsToManyRelations as $r) {
-            if ($addForm && !$r['inAdd']) {
+            if ($addForm && ! $r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['inEdit']) {
+            if (! $addForm && ! $r['inEdit']) {
                 continue;
             }
             $map->push(['field' => $r['relationName'], 'type' => 'btm', 'order' => ++$order]);
         }
 
         foreach ($this->belongsToRelations as $r) {
-            if ($addForm && !$r['inAdd']) {
+            if ($addForm && ! $r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['inEdit']) {
+            if (! $addForm && ! $r['inEdit']) {
                 continue;
             }
             $map->push(['field' => $r['relationName'], 'type' => 'belongsTo', 'order' => ++$order]);
         }
+
         return $map->all();
     }
 
@@ -276,13 +282,14 @@ trait WithHelpers
             $fields = collect($fields);
         }
         $sorted = $fields->sortBy('order');
+
         return $sorted->values()->all();
     }
 
     public function getSortedFormFields($addForm = true)
     {
         $sortFields = collect($this->sortFieldsByOrder($this->sortFields[$addForm ? 'add' : 'edit']));
-        $collection = collect($this->getNormalFormFields($addForm, !$addForm));
+        $collection = collect($this->getNormalFormFields($addForm, ! $addForm));
         $btmCollection = $this->getBtmCollection($addForm);
         $belongsToCollection = $this->getBelongsToCollection($addForm);
 
@@ -316,6 +323,7 @@ trait WithHelpers
                         ->merge(['type' => 'belongsTo'])
                         ->all();
             }
+
             return $collection->firstWhere('column', $i['field']);
         });
     }
@@ -372,6 +380,7 @@ trait WithHelpers
                 return true;
             }
         }
+
         return false;
     }
 
@@ -386,6 +395,7 @@ trait WithHelpers
                 return true;
             }
         }
+
         return false;
     }
 
@@ -393,15 +403,16 @@ trait WithHelpers
     {
         $btmCollection = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if ($addForm && !$r['inAdd']) {
+            if ($addForm && ! $r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['inEdit']) {
+            if (! $addForm && ! $r['inEdit']) {
                 continue;
             }
             $btmCollection->push($r);
         }
+
         return $btmCollection;
     }
 
@@ -409,15 +420,16 @@ trait WithHelpers
     {
         $belongsToCollection = collect();
         foreach ($this->belongsToRelations as $r) {
-            if ($addForm && !$r['inAdd']) {
+            if ($addForm && ! $r['inAdd']) {
                 continue;
             }
 
-            if (!$addForm && !$r['inEdit']) {
+            if (! $addForm && ! $r['inEdit']) {
                 continue;
             }
             $belongsToCollection->push($r);
         }
+
         return $belongsToCollection;
     }
 }
