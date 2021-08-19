@@ -17,6 +17,7 @@ trait WithComponentCode
         $code['with_count_query'] = $this->generateWithCountQueryCode();
         $code['hide_columns'] = $this->generateHideColumnsCode();
         $code['bulk_actions'] = $this->generateBulkActionsCode();
+        $code['filter'] = $this->generateFilterCode();
 
         $code['child_delete'] = $this->generateDeleteCode();
         $code['child_add'] = $this->generateAddCode();
@@ -135,6 +136,24 @@ trait WithComponentCode
         if ($this->isHideColumnsEnabled()) {
             $code['vars'] = $this->getHideColumnVars();
             $code['init'] = $this->getHideColumnInitCode();
+        }
+
+        return $code;
+    }
+
+    public function generateFilterCode()
+    {
+        $code = [
+            'vars' => '',
+            'init' => '',
+            'query' => '',
+            'method' => '',
+        ];
+        if ($this->isFilterEnabled()) {
+            $code['vars'] = $this->getFilterVars();
+            $code['init'] = $this->getFilterInitCode();
+            $code['query'] = $this->getFilterQuery();
+            $code['method'] = $this->getFilterMethod();
         }
 
         return $code;
@@ -440,12 +459,12 @@ trait WithComponentCode
 
     public function generateOtherModelsCode()
     {
-        return $this->generateBtmModelsCode().$this->generateBelongstoModelsCode();
+        return $this->generateBtmModelsCode() . $this->generateBelongstoModelsCode();
     }
 
     public function generateBtmModelsCode()
     {
-        if (! $this->isBtmEnabled()) {
+        if (!$this->isBtmEnabled()) {
             return '';
         }
 
@@ -459,7 +478,7 @@ trait WithComponentCode
 
     public function generateBelongstoModelsCode()
     {
-        if (! $this->isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -473,12 +492,12 @@ trait WithComponentCode
 
     public function getRelationVars()
     {
-        return $this->getBtmVars().$this->getBelongsToVars();
+        return $this->getBtmVars() . $this->getBelongsToVars();
     }
 
     public function getBtmVars()
     {
-        if (! $this->isBtmEnabled()) {
+        if (!$this->isBtmEnabled()) {
             return '';
         }
 
@@ -497,7 +516,7 @@ trait WithComponentCode
 
     public function getBelongsToVars()
     {
-        if (! $this->isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -515,7 +534,7 @@ trait WithComponentCode
 
     public function getAddFlashCode()
     {
-        if (! $this->isFlashMessageEnabled()) {
+        if (!$this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -524,7 +543,7 @@ trait WithComponentCode
 
     public function getEditFlashCode()
     {
-        if (! $this->isFlashMessageEnabled()) {
+        if (!$this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -533,7 +552,7 @@ trait WithComponentCode
 
     public function getDeleteFlashCode()
     {
-        if (! $this->isFlashMessageEnabled()) {
+        if (!$this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -542,13 +561,13 @@ trait WithComponentCode
 
     public function getBtmInitCode()
     {
-        if (! $this->isBtmAddEnabled()) {
+        if (!$this->isBtmAddEnabled()) {
             return '';
         }
 
         $initCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (! $r['inAdd']) {
+            if (!$r['inAdd']) {
                 continue;
             }
 
@@ -576,13 +595,13 @@ trait WithComponentCode
 
     public function getBtmAttachCode()
     {
-        if (! $this->isBtmAddEnabled()) {
+        if (!$this->isBtmAddEnabled()) {
             return '';
         }
 
         $attachCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (! $r['inAdd']) {
+            if (!$r['inAdd']) {
                 continue;
             }
 
@@ -601,18 +620,18 @@ trait WithComponentCode
             );
         }
 
-        return $attachCode->implode('').$this->newLines();
+        return $attachCode->implode('') . $this->newLines();
     }
 
     public function getBtmFetchCode()
     {
-        if (! $this->isBtmEditEnabled()) {
+        if (!$this->isBtmEditEnabled()) {
             return '';
         }
 
         $btmFetchCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (! $r['inEdit']) {
+            if (!$r['inEdit']) {
                 continue;
             }
 
@@ -644,13 +663,13 @@ trait WithComponentCode
 
     public function getBtmUpdateCode()
     {
-        if (! $this->isBtmEditEnabled()) {
+        if (!$this->isBtmEditEnabled()) {
             return '';
         }
 
         $btmUpdateCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (! $r['inEdit']) {
+            if (!$r['inEdit']) {
                 continue;
             }
 
@@ -686,7 +705,7 @@ trait WithComponentCode
 
     public function getAttributesForBelongsToFields()
     {
-        if (! $this->isBelongsToEnabled()) {
+        if (!$this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -705,11 +724,11 @@ trait WithComponentCode
 
     public function getBelongsToInitCode($isAdd = true)
     {
-        if ($isAdd && ! $this->isBelongsToAddEnabled()) {
+        if ($isAdd && !$this->isBelongsToAddEnabled()) {
             return '';
         }
 
-        if (! $isAdd && ! $this->isBelongsToEditEnabled()) {
+        if (!$isAdd && !$this->isBelongsToEditEnabled()) {
             return '';
         }
 
@@ -737,7 +756,7 @@ trait WithComponentCode
 
     public function getBelongsToSaveCode()
     {
-        if (! $this->isBelongsToAddEnabled()) {
+        if (!$this->isBelongsToAddEnabled()) {
             return '';
         }
 
@@ -813,8 +832,8 @@ trait WithComponentCode
             '##COLUMNS##',
             $this->getAllListingColumns(),
             $this->getHideColumnVarsTemplate()
-        ).
-            $this->newLines().
+        ) .
+            $this->newLines() .
             $this->getArrayCode('selectedColumns');
     }
 
@@ -848,7 +867,7 @@ trait WithComponentCode
 
     public function getBulkActionsVars()
     {
-        return $this->newLines().$this->getArrayCode('selectedItems');
+        return $this->newLines() . $this->getArrayCode('selectedItems');
     }
 
     public function getBulkActionMethod()
@@ -866,5 +885,92 @@ trait WithComponentCode
             ],
             $this->getBulkActionMethodTemplate()
         );
+    }
+
+    public function getFilterVars()
+    {
+        $vars = collect();
+        $vars->push($this->getArrayCode('filters'));
+        $vars->push($this->getArrayCode('selectedFilters'));
+        return $vars->prependAndJoin($this->newLines());
+    }
+
+    public function getFilterInitCode()
+    {
+        $filters = collect();
+        foreach ($this->filters as $f) {
+            $filterOptions = $this->generateFilterOptionsArray($f);
+            if ($filterOptions->isEmpty()) {
+                continue;
+            }
+            $filters->push(
+                Str::replace(
+                    [
+                        '##NAME##',
+                        '##VALUE##',
+                    ],
+                    [
+                        $f['column'],
+                        '[' . $filterOptions->prependAndJoin($this->newLines(1, 4)) . $this->newLines(1, 3) . '],'
+                    ],
+                    $this->getArrayKeyValueTemplate()
+                )
+            );
+        }
+
+        return Str::replace(
+            '##FILTERS##',
+            $filters->prependAndJoin($this->newLines(1, 3)) . $this->newLines(1, 2),
+            $this->getFilterInitTemplate()
+        );
+    }
+
+    public function generateFilterOptionsArray($f)
+    {
+        $filterOptions = collect();
+
+        $options = json_decode($f['options']);
+        if (is_null($options)) {
+            return $filterOptions;
+        }
+
+        foreach ($options as $k => $v) {
+            $filterOptions->push(
+                Str::replace(
+                    [
+                        '##KEY##',
+                        '##LABEL##',
+                    ],
+                    [
+                        $k,
+                        $v,
+                    ],
+                    $this->getFilterOptionTemplate()
+                )
+            );
+        }
+
+        return $filterOptions;
+    }
+
+    public function getFilterMethod()
+    {
+        return $this->getFilterMethodTemplate();
+    }
+
+    public function getFilterQuery()
+    {
+        $query = collect();
+        foreach ($this->filters as $f) {
+            $query->push(
+                Str::replace(
+                    '##COLUMN##',
+                    $f['column'],
+                    $this->getFilterQueryTemplate()
+                )
+            );
+        }
+
+        return $query->prependAndJoin($this->newLines());
     }
 }

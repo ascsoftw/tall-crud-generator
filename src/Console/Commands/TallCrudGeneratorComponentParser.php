@@ -11,13 +11,13 @@ class TallCrudGeneratorComponentParser extends ComponentParser
     {
         $stubName = $child ? 'tall-crud.child.stub' : 'tall-crud.stub';
 
-        if (File::exists($stubPath = base_path('stubs/'.$stubName))) {
+        if (File::exists($stubPath = base_path('stubs/' . $stubName))) {
             $template = file_get_contents($stubPath);
         } else {
-            $template = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.$stubName);
+            $template = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $stubName);
         }
 
-        if (! $child) {
+        if (!$child) {
             $template = preg_replace_array(
                 [
                     '/\[namespace\]/',
@@ -39,6 +39,10 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[hide_columns_init\]/',
                     '/\[bulk_vars\]/',
                     '/\[bulk_method\]/',
+                    '/\[filter_vars\]/',
+                    '/\[filter_init\]/',
+                    '/\[filter_query\]/',
+                    '/\[filter_method\]/',
                 ],
                 [
                     $this->classNamespace(),
@@ -60,6 +64,10 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['code']['hide_columns']['init'],
                     $props['code']['bulk_actions']['vars'],
                     $props['code']['bulk_actions']['method'],
+                    $props['code']['filter']['vars'],
+                    $props['code']['filter']['init'],
+                    $props['code']['filter']['query'],
+                    $props['code']['filter']['method'],
                 ],
                 $template
             );
@@ -113,17 +121,16 @@ class TallCrudGeneratorComponentParser extends ComponentParser
     {
         $stubName = $child ? 'tall-crud.child.view.stub' : 'tall-crud.view.stub';
 
-        if (File::exists($stubPath = base_path('stubs/'.$stubName))) {
+        if (File::exists($stubPath = base_path('stubs/' . $stubName))) {
             $template = file_get_contents($stubPath);
         } else {
-            $template = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.$stubName);
+            $template = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $stubName);
         }
 
-        if (! $child) {
+        if (!$child) {
             $template = preg_replace_array(
                 [
                     '/\[heading\]/',
-                    '/\[css_class\]/',
                     '/\[add_link\]/',
                     '/\[search_box\]/',
                     '/\[table_header\]/',
@@ -133,10 +140,10 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[pagination_dropdown\]/',
                     '/\[hide_columns\]/',
                     '/\[bulk_action\]/',
+                    '/\[filter_dropdown\]/',
                 ],
                 [
                     $props['advancedSettings']['text']['title'],
-                    $props['html']['css_class'],
                     $props['html']['add_link'],
                     $props['html']['search_box'],
                     $props['html']['table_header'],
@@ -146,6 +153,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['html']['pagination_dropdown'],
                     $props['html']['hide_columns'],
                     $props['html']['bulk_action'],
+                    $props['html']['filter_dropdown'],
                 ],
                 $template
             );

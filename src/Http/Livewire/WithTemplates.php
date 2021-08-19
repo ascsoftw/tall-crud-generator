@@ -43,7 +43,7 @@ EOT;
                         </x:tall-crud-generator::checkbox-wrapper>
                         @endforeach
                     </x-slot>
-                </x-dropdown>
+                </x:tall-crud-generator::dropdown>
 EOT;
     }
 
@@ -457,6 +457,13 @@ EOT;
 EOT;
     }
 
+    public function getArrayKeyValueTemplate()
+    {
+        return <<<'EOT'
+'##NAME##' => ##VALUE##
+EOT;
+    }
+
     public function getBtmInitTemplate()
     {
         return <<<'EOT'
@@ -658,10 +665,10 @@ EOT;
                     </x-slot>
 
                     <x-slot name="content">
-                        <button wire:click="changeStatus(1)">Activate</button>
+                        <button wire:click="changeStatus(1)">Activate</button><br />
                         <button wire:click="changeStatus(0)">Deactivate</button>
                     </x-slot>
-                </x-dropdown>
+                </x:tall-crud-generator::dropdown>
 EOT;
     }
 
@@ -669,6 +676,74 @@ EOT;
     {
         return <<<'EOT'
 <x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+EOT;
+    }
+
+    public function getFilterInitTemplate()
+    {
+        return <<<'EOT'
+$this->filters = [##FILTERS##];
+EOT;
+    }
+
+    public function getFilterOptionTemplate()
+    {
+        return <<<'EOT'
+['key' => '##KEY##', 'label' => '##LABEL##'],
+EOT;
+    }
+
+    public function getFilterDropdownTemplate()
+    {
+        return <<<'EOT'
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded px-4 cursor-pointer" width="w-72">
+                    <x-slot name="trigger">
+                        Filters
+                    </x-slot>
+                
+                    <x-slot name="content">
+                        @foreach($filters as $f => $options)
+                        <div class="mt-4">
+                            <x:tall-crud-generator::label class="font-sm font-bold">
+                                {{ucwords(str_replace('_', ' ', $f))}}
+                            </x:tall-crud-generator::label>
+                            <x:tall-crud-generator::select class="w-3/4" wire:model="selectedFilters.{{$f}}">
+                                @foreach($options as $o)
+                                <option value="{{$o['key']}}">{{$o['label']}}</option>
+                                @endforeach
+                            </x:tall-crud-generator::select>
+                        </div>
+                        @endforeach
+                    </x-slot>
+                </x:tall-crud-generator::dropdown>
+EOT;
+    }
+
+    public function getFilterMethodTemplate()
+    {
+        return <<<'EOT'
+
+    public function updatingSelectedFilters()
+    {
+        $this->resetPage();
+    }
+
+    public function getFilter($column)
+    {
+        if( isset($this->selectedFilters[$column]) && $this->selectedFilters[$column] != '') {
+            return true;
+        }
+        return false;
+    }
+EOT;
+    }
+
+    public function getFilterQueryTemplate()
+    {
+        return <<<'EOT'
+            ->when($this->getFilter('##COLUMN##'), function($query) {
+                return $query->where('##COLUMN##', $this->selectedFilters['##COLUMN##']);
+            })
 EOT;
     }
 }

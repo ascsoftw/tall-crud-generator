@@ -9,12 +9,12 @@ trait WithViewCode
     public function generateViewHtml()
     {
         $code = [];
-        $code['css_class'] = $this->isSearchingEnabled() ? 'justify-between' : 'justify-end';
         $code['add_link'] = $this->generateAddLink();
         $code['search_box'] = $this->generateSearchBox();
         $code['pagination_dropdown'] = $this->generatePaginationDropdown();
         $code['hide_columns'] = $this->generateHideColumnsDropdown();
         $code['bulk_action'] = $this->generateBulkAction();
+        $code['filter_dropdown'] = $this->generateFilterDropdown();
         $code['table_header'] = $this->generateTableHeader();
         $code['table_slot'] = $this->generateTableSlot();
         $code['child_component'] = $this->includeChildComponent();
@@ -77,6 +77,15 @@ trait WithViewCode
     {
         if ($this->isBulkActionsEnabled()) {
             return $this->getBulkActionTemplate();
+        }
+
+        return '';
+    }
+
+    public function generateFilterDropdown()
+    {
+        if ($this->isFilterEnabled()) {
+            return $this->getFilterDropdownTemplate();
         }
 
         return '';
