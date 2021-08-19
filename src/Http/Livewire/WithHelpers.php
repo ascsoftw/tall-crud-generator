@@ -156,7 +156,7 @@ trait WithHelpers
 
     public function getChildComponentName()
     {
-        return $this->componentName . '-child';
+        return Str::kebab($this->componentName) . '-child';
     }
 
     public function getNormalFormFields($addForm = true, $editForm = true)

@@ -384,7 +384,7 @@ class TallCrudGenerator extends Component
             }
         }
 
-        $this->generatedCode = "@livewire('" . $this->componentName . "')";
+        $this->generatedCode = "@livewire('" . Str::kebab($this->componentName) . "')";
         $this->isComplete = true;
     }
 

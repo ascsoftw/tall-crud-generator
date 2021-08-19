@@ -138,7 +138,7 @@ trait WithViewCode
     public function includeFlashComponent()
     {
         if ($this->isFlashMessageEnabled()) {
-            return $this->indent(1) . $this->getFlashComponentTemplate();
+            return $this->newLines(1, 1) . $this->getFlashComponentTemplate();
         }
 
         return '';
