@@ -18,12 +18,10 @@ EOT;
     {
         return <<<'EOT'
 
-            <div class="flex">
                 <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                 <span class="ml-3 mt-2" wire:loading.delay wire:target="q">
                     <x:tall-crud-generator::loading-indicator />
                 </span>
-            </div>
 EOT;
     }
 
@@ -696,9 +694,12 @@ EOT;
     public function getFilterDropdownTemplate()
     {
         return <<<'EOT'
-                <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded px-4 cursor-pointer" width="w-72">
+
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded ml-4 px-4 cursor-pointer" width="w-72">
                     <x-slot name="trigger">
-                        Filters
+                        <span class="flex">
+                        Filters <x:tall-crud-generator::filter-icon />
+                        </span>
                     </x-slot>
                 
                     <x-slot name="content">
@@ -714,6 +715,9 @@ EOT;
                             </x:tall-crud-generator::select>
                         </div>
                         @endforeach
+                        <div class="mt-4">
+                            <x:tall-crud-generator::button wire:click="resetFilters()">Reset</x:tall-crud-generator::button>
+                        </div>
                     </x-slot>
                 </x:tall-crud-generator::dropdown>
 EOT;
@@ -734,6 +738,11 @@ EOT;
             return true;
         }
         return false;
+    }
+
+    public function resetFilters()
+    {
+        $this->reset('selectedFilters');
     }
 EOT;
     }
