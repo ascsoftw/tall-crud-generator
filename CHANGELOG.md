@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.4.0] - 2021-08-10
+## [1.4.1] - 2021-08-19
+- Handling Code Generated for Camel Cased Component
+
+## [1.4.0] - 2021-08-17
 - Eager Load HasMany Relation
 - Add Tooltip Support to Accordion Header
 - Order BelongsTo and BelongsToMany Field using Display Column in Add and Edit Form
