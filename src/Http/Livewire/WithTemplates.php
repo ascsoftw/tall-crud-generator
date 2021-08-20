@@ -715,7 +715,7 @@ EOT;
                             </x:tall-crud-generator::select>
                         </div>
                         @endforeach
-                        <div class="mt-4">
+                        <div class="my-4">
                             <x:tall-crud-generator::button wire:click="resetFilters()">Reset</x:tall-crud-generator::button>
                         </div>
                     </x-slot>

@@ -320,7 +320,7 @@ trait WithComponentCode
             ],
             [
                 $this->getModelName(),
-                $this->componentName,
+                $this->getComponentName(),
                 $this->getDeleteFlashCode(),
             ],
             $this->getDeleteMethodTemplate()
@@ -365,7 +365,7 @@ trait WithComponentCode
             ],
             [
                 $this->getModelName(),
-                $this->componentName,
+                $this->getComponentName(),
                 $createFieldHtml->prependAndJoin($this->newLines(1, 3)),
                 $this->getAddFlashCode(),
                 $this->getBtmInitCode(),
@@ -397,7 +397,7 @@ trait WithComponentCode
             [
                 $this->getModelName(),
                 Str::lower($this->getModelName()),
-                $this->componentName,
+                $this->getComponentName(),
                 $this->getEditFlashCode(),
                 $this->getBtmFetchCode(),
                 $this->getBtmUpdateCode(),

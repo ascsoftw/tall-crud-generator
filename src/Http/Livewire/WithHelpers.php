@@ -160,9 +160,14 @@ trait WithHelpers
         return 0 != count($filtered->all());
     }
 
+    public function getComponentName()
+    {
+        return Str::kebab($this->componentName);
+    }
+
     public function getChildComponentName()
     {
-        return Str::kebab($this->componentName).'-child';
+        return $this->getComponentName() . '-child';
     }
 
     public function getNormalFormFields($addForm = true, $editForm = true)
