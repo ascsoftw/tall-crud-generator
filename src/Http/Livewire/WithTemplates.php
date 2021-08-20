@@ -625,7 +625,7 @@ EOT;
     public function getHideColumnInitCodeTemplate()
     {
         return <<<'EOT'
-$this->selectedColumns = $this->columns;
+        $this->selectedColumns = $this->columns;
 EOT;
     }
 
@@ -680,7 +680,8 @@ EOT;
     public function getFilterInitTemplate()
     {
         return <<<'EOT'
-$this->filters = [##FILTERS##];
+
+        $this->filters = [##FILTERS##];
 EOT;
     }
 

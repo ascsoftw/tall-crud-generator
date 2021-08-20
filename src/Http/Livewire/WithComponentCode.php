@@ -156,7 +156,6 @@ trait WithComponentCode
             $code['query'] = $this->getFilterQuery();
             $code['method'] = $this->getFilterMethod();
         }
-
         return $code;
     }
 
@@ -911,6 +910,11 @@ trait WithComponentCode
 
     public function getFilterInitCode()
     {
+        return $this->getNoRelationFilterInitCode() . $this->getBelongsToFilterInitCode();
+    }
+
+    public function getNoRelationFilterInitCode()
+    {
         $filters = collect();
         foreach ($this->filters as $f) {
             if($f['type'] != 'None') {
@@ -935,11 +939,15 @@ trait WithComponentCode
             );  
         }
 
+        if($filters->isEmpty()) {
+            return '';
+        }
+
         return Str::replace(
             '##FILTERS##',
             $filters->prependAndJoin($this->newLines(1, 3)) . $this->newLines(1, 2),
             $this->getFilterInitTemplate()
-        ) . $this->getBelongsToFilterInitCode();
+        ); 
     }
 
     public function getBelongsToFilterInitCode()
@@ -969,7 +977,6 @@ trait WithComponentCode
                 )
             );  
         }
-
         return $filters->implode('');
     }
 

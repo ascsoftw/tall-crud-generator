@@ -50,6 +50,7 @@ trait WithFilters
         $this->validateOnly('filter.relation', [
             'filter.relation' => 'required',
         ]);
+        //check filter.type == BelongsTo here.
         $this->fillBelongsToFilterFields();
     }
 

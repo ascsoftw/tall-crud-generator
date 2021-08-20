@@ -15,7 +15,7 @@ class [class] extends Component
 
     public function mount()
     {
-        [hide_columns_init][filter_init]
+[hide_columns_init][filter_init]
     }
 
     public function render()
