@@ -684,6 +684,18 @@ $this->filters = [##FILTERS##];
 EOT;
     }
 
+    public function getBelongsToFilterInitTemplate()
+    {
+        return <<<'EOT'
+
+
+        $##VAR## = ##MODEL##::pluck('##COLUMN##', '##OWNER_KEY##')->map(function($i, $k) {
+            return ['key' => $k, 'label' => $i];
+        })->toArray();
+        $this->filters['##FOREIGN_KEY##'] = ['0' => ['key' => '', 'label' => 'Any']] + $##VAR##;
+EOT;
+    }
+
     public function getFilterOptionTemplate()
     {
         return <<<'EOT'

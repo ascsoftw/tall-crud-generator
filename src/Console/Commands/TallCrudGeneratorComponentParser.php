@@ -43,6 +43,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[filter_init\]/',
                     '/\[filter_query\]/',
                     '/\[filter_method\]/',
+                    '/\[other_models\]/',
                 ],
                 [
                     $this->classNamespace(),
@@ -68,6 +69,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['code']['filter']['init'],
                     $props['code']['filter']['query'],
                     $props['code']['filter']['method'],
+                    $props['code']['other_models'],
                 ],
                 $template
             );

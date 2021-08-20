@@ -18,6 +18,7 @@ trait WithComponentCode
         $code['hide_columns'] = $this->generateHideColumnsCode();
         $code['bulk_actions'] = $this->generateBulkActionsCode();
         $code['filter'] = $this->generateFilterCode();
+        $code['other_models'] = $this->generateOtherModelsCode();
 
         $code['child_delete'] = $this->generateDeleteCode();
         $code['child_add'] = $this->generateAddCode();
@@ -26,7 +27,7 @@ trait WithComponentCode
         $code['child_item'] = $this->generateChildItem();
         $code['child_rules'] = $this->generateChildRules();
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
-        $code['child_other_models'] = $this->generateOtherModelsCode();
+        $code['child_other_models'] = $this->generateChildOtherModelsCode();
         $code['child_vars'] = $this->getRelationVars();
 
         return $code;
@@ -458,6 +459,19 @@ trait WithComponentCode
     }
 
     public function generateOtherModelsCode()
+    {
+        $modelsCode = collect();
+        foreach ($this->filters as $f) {
+            if($f['type'] != 'BelongsTo') {
+                continue;
+            }
+            $modelsCode->push($this->getOtherModelCode($f['modelPath']));
+        }
+
+        return $modelsCode->implode('');
+    }
+
+    public function generateChildOtherModelsCode()
     {
         return $this->generateBtmModelsCode() . $this->generateBelongstoModelsCode();
     }
@@ -899,7 +913,10 @@ trait WithComponentCode
     {
         $filters = collect();
         foreach ($this->filters as $f) {
-            $filterOptions = $this->generateFilterOptions($f);
+            if($f['type'] != 'None') {
+                continue;
+            }
+            $filterOptions = $this->generateFilterOptionsFromJson($f);
             if ($filterOptions->isEmpty()) {
                 continue;
             }
@@ -915,28 +932,55 @@ trait WithComponentCode
                     ],
                     $this->getArrayKeyValueTemplate()
                 )
-            );
+            );  
         }
 
         return Str::replace(
             '##FILTERS##',
             $filters->prependAndJoin($this->newLines(1, 3)) . $this->newLines(1, 2),
             $this->getFilterInitTemplate()
-        );
+        ) . $this->getBelongsToFilterInitCode();
     }
 
-    public function generateFilterOptions($f)
+    public function getBelongsToFilterInitCode()
     {
-        
-        if($f['type'] == 'None') {
-            $options = $this->generateFilterOptionsFromJson($f);
+        $filters = collect();
+        foreach ($this->filters as $f) {
+            if($f['type'] != 'BelongsTo') {
+                continue;
+            }
+            $filters->push(
+                Str::replace(
+                    [
+                        '##VAR##',
+                        '##MODEL##',
+                        '##COLUMN##',
+                        '##OWNER_KEY##',
+                        '##FOREIGN_KEY##',
+                    ],
+                    [
+                        Str::plural($f['relation']),
+                        $this->getModelName($f['modelPath']),
+                        $f['column'],
+                        $f['ownerKey'],
+                        $f['foreignKey'],
+                    ],
+                    $this->getBelongsToFilterInitTemplate()
+                )
+            );  
         }
 
-        if($f['type'] == 'BelongsTo') {
-            $options = $this->generateFilterOptionsFromRelation($f);
-        }
+        return $filters->implode('');
+    }
 
+    public function generateFilterOptionsFromJson($f)
+    {
         $filterOptions = collect();
+        $options = json_decode($f['options']);
+        if (is_null($options)) {
+            return $filterOptions;
+        }
+
         foreach ($options as $k => $v) {
             $filterOptions->push(
                 Str::replace(
@@ -954,20 +998,6 @@ trait WithComponentCode
         }
 
         return $filterOptions;
-    }
-
-    public function generateFilterOptionsFromJson($f)
-    {
-        $options = json_decode($f['options']);
-        if (is_null($options)) {
-            return [];
-        }
-        return $options;
-    }
-
-    public function generateFilterOptionsFromRelation($f)
-    {
-        return ['' => 'Any'] + $f['modelPath']::pluck($f['column'], $f['ownerKey'])->toArray();
     }
 
     public function getFilterMethod()
