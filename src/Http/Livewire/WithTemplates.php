@@ -727,6 +727,7 @@ EOT;
     {
         return <<<'EOT'
 
+
     public function updatingSelectedFilters()
     {
         $this->resetPage();

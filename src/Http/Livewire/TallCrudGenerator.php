@@ -99,8 +99,9 @@ class TallCrudGenerator extends Component
         'belongsToManyRelation.displayColumn.required' => 'Please select a value.',
         'belongsToRelation.displayColumn.required' => 'Please select a value.',
         'withRelation.displayColumn.required' => 'Please select a value.',
+        'filter.type.required' => 'Please select a value.',
         'filter.relation.required' => 'Please select a value.',
-        'filter.column.required' => 'Please select a Column.',
+        'filter.column.required' => 'Please select a value.',
     ];
 
     public $confirmingSorting = false;

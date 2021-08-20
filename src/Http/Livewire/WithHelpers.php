@@ -432,4 +432,9 @@ trait WithHelpers
 
         return $belongsToCollection;
     }
+
+    public function getFilterColumnName($filter)
+    {
+        return ($filter['type'] == 'None') ? $filter['column'] : $filter['foreignKey'];
+    }
 }

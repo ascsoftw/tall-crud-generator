@@ -899,7 +899,7 @@ trait WithComponentCode
     {
         $filters = collect();
         foreach ($this->filters as $f) {
-            $filterOptions = $this->generateFilterOptionsArray($f);
+            $filterOptions = $this->generateFilterOptions($f);
             if ($filterOptions->isEmpty()) {
                 continue;
             }
@@ -910,7 +910,7 @@ trait WithComponentCode
                         '##VALUE##',
                     ],
                     [
-                        $f['column'],
+                        $this->getFilterColumnName($f),
                         '[' . $filterOptions->prependAndJoin($this->newLines(1, 4)) . $this->newLines(1, 3) . '],'
                     ],
                     $this->getArrayKeyValueTemplate()
@@ -925,15 +925,18 @@ trait WithComponentCode
         );
     }
 
-    public function generateFilterOptionsArray($f)
+    public function generateFilterOptions($f)
     {
-        $filterOptions = collect();
-
-        $options = json_decode($f['options']);
-        if (is_null($options)) {
-            return $filterOptions;
+        
+        if($f['type'] == 'None') {
+            $options = $this->generateFilterOptionsFromJson($f);
         }
 
+        if($f['type'] == 'BelongsTo') {
+            $options = $this->generateFilterOptionsFromRelation($f);
+        }
+
+        $filterOptions = collect();
         foreach ($options as $k => $v) {
             $filterOptions->push(
                 Str::replace(
@@ -953,6 +956,20 @@ trait WithComponentCode
         return $filterOptions;
     }
 
+    public function generateFilterOptionsFromJson($f)
+    {
+        $options = json_decode($f['options']);
+        if (is_null($options)) {
+            return [];
+        }
+        return $options;
+    }
+
+    public function generateFilterOptionsFromRelation($f)
+    {
+        return ['' => 'Any'] + $f['modelPath']::pluck($f['column'], $f['ownerKey'])->toArray();
+    }
+
     public function getFilterMethod()
     {
         return $this->getFilterMethodTemplate();
@@ -965,7 +982,7 @@ trait WithComponentCode
             $query->push(
                 Str::replace(
                     '##COLUMN##',
-                    $f['column'],
+                    $this->getFilterColumnName($f),
                     $this->getFilterQueryTemplate()
                 )
             );
