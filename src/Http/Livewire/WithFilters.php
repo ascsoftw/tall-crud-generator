@@ -30,6 +30,7 @@ trait WithFilters
             'modelPath' => '',
             'ownerKey' => '',
             'foreignKey' => '',
+            'relatedKey' => '',
         ];
     }
 
@@ -50,8 +51,74 @@ trait WithFilters
         $this->validateOnly('filter.relation', [
             'filter.relation' => 'required',
         ]);
-        //check filter.type == BelongsTo here.
-        $this->fillBelongsToFilterFields();
+
+        if($this->filter['type'] == 'BelongsTo') {
+            $this->validateBelongsToRelation();
+            $this->fillBelongsToFilterFields();
+        }
+
+        if($this->filter['type'] == 'BelongsToMany') {
+            $this->validateBelongsToManyRelation();
+            $this->fillBelongsToManyFilterFields();
+        }
+    }
+
+    public function updatedFilterColumn()
+    {
+        if($this->filter['type'] != 'None') {
+            return true;
+        }
+
+        $this->validateColumnForNoRelation();
+    }
+
+    public function validateColumnForNoRelation()
+    {
+
+        foreach ($this->filters as $f) {
+            if($f['type'] != 'None') {
+                continue;
+            }
+            if ($f['column'] == $this->filter['column']) {
+                $this->addError('filter.column', 'Filter Already Defined.');
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function validateBelongsToRelation()
+    {
+        foreach ($this->filters as $f) {
+            if($f['type'] != 'BelongsTo') {
+                continue;
+            }
+            if ($f['relation'] == $this->filter['relation']) {
+                $this->addError('filter.relation', 'Filter Already Defined.');
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function validateBelongsToManyRelation()
+    {
+        foreach ($this->filters as $f) {
+            if($f['type'] != 'BelongsToMany') {
+                continue;
+            }
+            if ($f['relation'] == $this->filter['relation']) {
+                $this->addError('filter.relation', 'Filter Already Defined.');
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function fillFilterFields()
@@ -74,6 +141,16 @@ trait WithFilters
         $this->filter['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
+    public function fillBelongsToManyFilterFields()
+    {
+        $model = new $this->modelPath();
+        $relationName = $this->filter['relation'];
+        $relation = $model->{$relationName}();
+        $this->filter['modelPath'] = get_class($relation->getRelated());
+        $this->filter['relatedKey'] = $relation->getRelatedKeyName();
+        $this->filter['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
+    }
+
     public function addFilter()
     {
         $this->resetValidation('filter.*');
@@ -83,10 +160,22 @@ trait WithFilters
 
         switch($this->filter['type']) {
             case 'None':
+                if (! $this->validateColumnForNoRelation()) {
+                    return;
+                }
                 $this->addNoRelationFilter();
                 break;
             case 'BelongsTo':
+                if (! $this->validateBelongsToRelation()) {
+                    return;
+                }
                 $this->addBelongsToFilter();
+                break;
+            case 'BelongsToMany':
+                if (! $this->validateBelongsToManyRelation()) {
+                    return;
+                }
+                $this->addBelongsToManyFilter();
                 break;
         }
         $this->confirmingFilter = false;
@@ -111,6 +200,17 @@ trait WithFilters
             'modelPath' => $this->filter['modelPath'],
             'ownerKey' => $this->filter['ownerKey'],
             'foreignKey' => $this->filter['foreignKey'],
+        ];
+    }
+
+    public function addBelongsToManyFilter()
+    {
+        $this->filters[] = [
+            'type' => $this->filter['type'],
+            'relation' => $this->filter['relation'],
+            'column' => $this->filter['column'],
+            'modelPath' => $this->filter['modelPath'],
+            'relatedKey' => $this->filter['relatedKey'],
         ];
     }
 

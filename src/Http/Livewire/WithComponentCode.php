@@ -461,7 +461,7 @@ trait WithComponentCode
     {
         $modelsCode = collect();
         foreach ($this->filters as $f) {
-            if($f['type'] != 'BelongsTo') {
+            if($f['type'] == 'None') {
                 continue;
             }
             $modelsCode->push($this->getOtherModelCode($f['modelPath']));
@@ -910,7 +910,9 @@ trait WithComponentCode
 
     public function getFilterInitCode()
     {
-        return $this->getNoRelationFilterInitCode() . $this->getBelongsToFilterInitCode();
+        return $this->getNoRelationFilterInitCode() . 
+            $this->getBelongsToFilterInitCode() . 
+            $this->getBelongsToManyFilterInitCode();
     }
 
     public function getNoRelationFilterInitCode()
@@ -977,6 +979,37 @@ trait WithComponentCode
                 )
             );  
         }
+        // dd($filters);
+        return $filters->implode('');
+    }
+
+    public function getBelongsToManyFilterInitCode()
+    {
+        $filters = collect();
+        foreach ($this->filters as $f) {
+            if($f['type'] != 'BelongsToMany') {
+                continue;
+            }
+            $filters->push(
+                Str::replace(
+                    [
+                        '##VAR##',
+                        '##MODEL##',
+                        '##COLUMN##',
+                        '##OWNER_KEY##',
+                        '##FOREIGN_KEY##',
+                    ],
+                    [
+                        Str::plural($f['relation']),
+                        $this->getModelName($f['modelPath']),
+                        $f['column'],
+                        $f['relatedKey'],
+                        $f['relation'] . '_' . $f['relatedKey'],
+                    ],
+                    $this->getBelongsToFilterInitTemplate()
+                )
+            );  
+        }
         return $filters->implode('');
     }
 
@@ -1016,13 +1049,31 @@ trait WithComponentCode
     {
         $query = collect();
         foreach ($this->filters as $f) {
-            $query->push(
-                Str::replace(
-                    '##COLUMN##',
-                    $this->getFilterColumnName($f),
-                    $this->getFilterQueryTemplate()
-                )
-            );
+            if($f['type'] == 'BelongsToMany') {
+                $query->push(
+                    Str::replace(
+                        [
+                            '##COLUMN##',
+                            '##RELATION##',
+                            '##RELATED_KEY##',
+                        ],
+                        [
+                            $f['relation'] . '_' . $f['relatedKey'],
+                            $f['relation'],
+                            $f['relatedKey'],
+                        ],
+                        $this->getFilterQueryBtmTemplate()
+                    )
+                );
+            } else {
+                $query->push(
+                    Str::replace(
+                        '##COLUMN##',
+                        $this->getFilterColumnName($f),
+                        $this->getFilterQueryTemplate()
+                    )
+                );
+            }
         }
 
         return $query->prependAndJoin($this->newLines());

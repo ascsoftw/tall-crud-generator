@@ -769,4 +769,15 @@ EOT;
             })
 EOT;
     }
+
+    public function getFilterQueryBtmTemplate()
+    {
+        return <<<'EOT'
+            ->when($this->getFilter('##COLUMN##'), function($query) {
+                return $query->whereHas('##RELATION##', function($query) {
+                    return $query->where('##RELATION##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
+                });
+            })
+EOT;
+    }
 }

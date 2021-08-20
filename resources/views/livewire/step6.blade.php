@@ -113,7 +113,7 @@
                     <x:tall-crud-generator::table-column>
                          @if($v['type'] == 'None')
                             {{$v['column']}}
-                         @elseif($v['type'] == 'BelongsTo')
+                         @elseif($v['type'] == 'BelongsTo' || $v['type'] == 'BelongsToMany')
                             {{$v['relation']. '.' . $v['column']}}
                          @endif
                     </x:tall-crud-generator::table-column>
@@ -142,6 +142,7 @@
                     <option value="">-Please Select-</option>
                     <option value="None">None</option>
                     <option value="BelongsTo">Belongs To</option>
+                    <option value="BelongsToMany">Belongs To Many</option>
                 </x:tall-crud-generator::select>
                 @error('filter.type') <x:tall-crud-generator::error-message>{{$message}}
                 </x:tall-crud-generator::error-message> @enderror
@@ -155,7 +156,7 @@
                         Column
                     </x:tall-crud-generator::label>
                     <x:tall-crud-generator::select class="block mt-1 w-1/2"
-                        wire:model.defer="filter.column">
+                        wire:model.lazy="filter.column">
                         <option value="">-Please Select-</option>
                         @if (Arr::exists($filter, 'columns'))
                         @foreach ($filter['columns'] as $c)
@@ -183,6 +184,43 @@
                         <option value="">-Please Select-</option>
                         @if (Arr::exists($allRelations, 'belongsTo'))
                         @foreach ($allRelations['belongsTo'] as $c)
+                        <option value="{{$c['name']}}">{{$c['name']}}</option>
+                        @endforeach
+                        @endif
+                    </x:tall-crud-generator::select>
+                    @error('filter.relation') <x:tall-crud-generator::error-message>{{$message}}
+                    </x:tall-crud-generator::error-message> @enderror
+                </div>
+                @if ( !empty($filter['relation']))
+                <div class="mt-4">
+                    <x:tall-crud-generator::label>
+                        Column
+                    </x:tall-crud-generator::label>
+                    <x:tall-crud-generator::select class="block mt-1 w-1/2"
+                        wire:model.lazy="filter.column">
+                        <option value="">-Please Select-</option>
+                        @if (Arr::exists($filter, 'columns'))
+                        @foreach ($filter['columns'] as $c)
+                        <option value="{{$c}}">{{$c}}</option>
+                        @endforeach
+                        @endif
+                    </x:tall-crud-generator::select>
+                    @error('filter.column') <x:tall-crud-generator::error-message>{{$message}}
+                    </x:tall-crud-generator::error-message> @enderror
+                </div>
+                @endif
+                @endif
+
+                @if ( $filter['type'] == 'BelongsToMany')
+                <div class="mt-4">
+                    <x:tall-crud-generator::label>
+                        Relationship
+                    </x:tall-crud-generator::label>
+                    <x:tall-crud-generator::select class="block mt-1 w-1/2"
+                        wire:model.lazy="filter.relation">
+                        <option value="">-Please Select-</option>
+                        @if (Arr::exists($allRelations, 'belongsToMany'))
+                        @foreach ($allRelations['belongsToMany'] as $c)
                         <option value="{{$c['name']}}">{{$c['name']}}</option>
                         @endforeach
                         @endif
