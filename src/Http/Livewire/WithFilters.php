@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 trait WithFilters
 {
-
     public $confirmingFilter = false;
     public $filters = [];
     public $filter = [];
@@ -53,12 +52,12 @@ trait WithFilters
             'filter.relation' => 'required',
         ]);
 
-        if($this->filter['type'] == 'BelongsTo') {
+        if ($this->filter['type'] == 'BelongsTo') {
             $this->validateRelation('BelongsTo');
             $this->fillBelongsToFilterFields();
         }
 
-        if($this->filter['type'] == 'BelongsToMany') {
+        if ($this->filter['type'] == 'BelongsToMany') {
             $this->validateRelation('BelongsToMany');
             $this->fillBelongsToManyFilterFields();
         }
@@ -66,7 +65,7 @@ trait WithFilters
 
     public function updatedFilterColumn()
     {
-        if($this->filter['type'] != 'None') {
+        if ($this->filter['type'] != 'None') {
             return true;
         }
 
@@ -75,9 +74,8 @@ trait WithFilters
 
     public function validateColumnForNoRelation()
     {
-
         foreach ($this->filters as $f) {
-            if($f['type'] != 'None') {
+            if ($f['type'] != 'None') {
                 continue;
             }
             if ($f['column'] == $this->filter['column']) {
@@ -93,7 +91,7 @@ trait WithFilters
     public function validateRelation($type)
     {
         foreach ($this->filters as $f) {
-            if($f['type'] != $type) {
+            if ($f['type'] != $type) {
                 continue;
             }
             if ($f['relation'] == $this->filter['relation']) {
@@ -109,7 +107,7 @@ trait WithFilters
     public function fillFilterFields()
     {
         $this->filter['isValid'] = true;
-        if($this->filter['type'] == 'None') {
+        if ($this->filter['type'] == 'None') {
             $this->filter['columns'] = $this->modelProps['columns'];
             $this->filter['options'] = '{"": "Any", "0" : "No", "1": "Yes"}';
         }
@@ -144,7 +142,7 @@ trait WithFilters
             'filter.column' => 'required',
         ]);
 
-        switch($this->filter['type']) {
+        switch ($this->filter['type']) {
             case 'None':
                 if (! $this->validateColumnForNoRelation()) {
                     return;
@@ -169,7 +167,6 @@ trait WithFilters
 
     public function addNoRelationFilter()
     {
-
         $this->filters[] = [
             'type' => $this->filter['type'],
             'column' => $this->filter['column'],

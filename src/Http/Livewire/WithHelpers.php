@@ -167,7 +167,7 @@ trait WithHelpers
 
     public function getChildComponentName()
     {
-        return $this->getComponentName() . '-child';
+        return $this->getComponentName().'-child';
     }
 
     public function getNormalFormFields($addForm = true, $editForm = true)
@@ -445,7 +445,7 @@ trait WithHelpers
 
     public function getFilterLabelName($filter)
     {
-        if($filter['type'] == 'None') {
+        if ($filter['type'] == 'None') {
             return Str::ucfirst($filter['column']);
         }
 
@@ -454,7 +454,7 @@ trait WithHelpers
 
     public function getFilterOwnerKey($filter)
     {
-        if($filter['type'] == 'BelongsTo') {
+        if ($filter['type'] == 'BelongsTo') {
             return $filter['ownerKey'];
         }
 
@@ -463,10 +463,10 @@ trait WithHelpers
 
     public function getFilterForeignKey($filter)
     {
-        if($filter['type'] == 'BelongsTo') {
+        if ($filter['type'] == 'BelongsTo') {
             return $filter['foreignKey'];
         }
 
-        return $filter['relation'] . '_' . $filter['relatedKey'];
+        return $filter['relation'].'_'.$filter['relatedKey'];
     }
 }

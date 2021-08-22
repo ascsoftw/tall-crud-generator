@@ -11,13 +11,13 @@ class TallCrudGeneratorComponentParser extends ComponentParser
     {
         $stubName = $child ? 'tall-crud.child.stub' : 'tall-crud.stub';
 
-        if (File::exists($stubPath = base_path('stubs/' . $stubName))) {
+        if (File::exists($stubPath = base_path('stubs/'.$stubName))) {
             $template = file_get_contents($stubPath);
         } else {
-            $template = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $stubName);
+            $template = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.$stubName);
         }
 
-        if (!$child) {
+        if (! $child) {
             $template = preg_replace_array(
                 [
                     '/\[namespace\]/',
@@ -123,13 +123,13 @@ class TallCrudGeneratorComponentParser extends ComponentParser
     {
         $stubName = $child ? 'tall-crud.child.view.stub' : 'tall-crud.view.stub';
 
-        if (File::exists($stubPath = base_path('stubs/' . $stubName))) {
+        if (File::exists($stubPath = base_path('stubs/'.$stubName))) {
             $template = file_get_contents($stubPath);
         } else {
-            $template = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $stubName);
+            $template = file_get_contents(__DIR__.DIRECTORY_SEPARATOR.$stubName);
         }
 
-        if (!$child) {
+        if (! $child) {
             $template = preg_replace_array(
                 [
                     '/\[heading\]/',
