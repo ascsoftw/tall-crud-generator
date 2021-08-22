@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2021-08-22
+- Implemented Filters
+- Minor Bug Fixes
+
 ## [1.4.1] - 2021-08-19
 - Handling Code Generated for Camel Cased Component
 
