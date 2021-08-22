@@ -31,6 +31,7 @@ trait WithFilters
             'ownerKey' => '',
             'foreignKey' => '',
             'relatedKey' => '',
+            'relatedTableName' => '',
         ];
     }
 
@@ -148,6 +149,7 @@ trait WithFilters
         $relation = $model->{$relationName}();
         $this->filter['modelPath'] = get_class($relation->getRelated());
         $this->filter['relatedKey'] = $relation->getRelatedKeyName();
+        $this->filter['relatedTableName'] = $relation->getRelated()->getTable();
         $this->filter['columns'] = $this->getColumns(Schema::getColumnListing($relation->getRelated()->getTable()), null);
     }
 
@@ -211,6 +213,7 @@ trait WithFilters
             'column' => $this->filter['column'],
             'modelPath' => $this->filter['modelPath'],
             'relatedKey' => $this->filter['relatedKey'],
+            'relatedTableName' => $this->filter['relatedTableName'],
         ];
     }
 

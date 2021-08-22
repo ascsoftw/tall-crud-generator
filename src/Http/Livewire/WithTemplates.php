@@ -775,7 +775,7 @@ EOT;
         return <<<'EOT'
             ->when($this->getFilter('##COLUMN##'), function($query) {
                 return $query->whereHas('##RELATION##', function($query) {
-                    return $query->where('##RELATION##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
+                    return $query->where('##TABLE##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
                 });
             })
 EOT;

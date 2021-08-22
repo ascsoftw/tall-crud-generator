@@ -467,7 +467,7 @@ trait WithComponentCode
             $modelsCode->push($this->getOtherModelCode($f['modelPath']));
         }
 
-        return $modelsCode->implode('');
+        return $modelsCode->unique()->implode('');
     }
 
     public function generateChildOtherModelsCode()
@@ -486,7 +486,7 @@ trait WithComponentCode
             $modelsCode->push($this->getOtherModelCode($r['modelPath']));
         }
 
-        return $modelsCode->implode('');
+        return $modelsCode->unique()->implode('');
     }
 
     public function generateBelongstoModelsCode()
@@ -500,7 +500,7 @@ trait WithComponentCode
             $modelsCode->push($this->getOtherModelCode($r['modelPath']));
         }
 
-        return $modelsCode->implode('');
+        return $modelsCode->unique()->implode('');
     }
 
     public function getRelationVars()
@@ -1056,11 +1056,13 @@ trait WithComponentCode
                             '##COLUMN##',
                             '##RELATION##',
                             '##RELATED_KEY##',
+                            '##TABLE##',
                         ],
                         [
                             $f['relation'] . '_' . $f['relatedKey'],
                             $f['relation'],
                             $f['relatedKey'],
+                            $f['relatedTableName'],
                         ],
                         $this->getFilterQueryBtmTemplate()
                     )
