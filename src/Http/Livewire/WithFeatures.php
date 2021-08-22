@@ -186,4 +186,9 @@ trait WithFeatures
         return $this->advancedSettings['table_settings']['bulkActions'] &&
             ! empty($this->advancedSettings['table_settings']['bulkActionColumn']);
     }
+
+    public function isFilterEnabled()
+    {
+        return count($this->filters) > 0;
+    }
 }

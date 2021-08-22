@@ -4,8 +4,10 @@
     </div>
 
     <div class="mt-6">
-        <div class="flex [css_class]">
-[search_box]
+        <div class="flex justify-between">
+            <div class="flex">
+[search_box][filter_dropdown]
+            </div>
             <div class="flex">
 [bulk_action][hide_columns][pagination_dropdown]
             </div>

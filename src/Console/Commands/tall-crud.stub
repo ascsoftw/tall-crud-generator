@@ -5,17 +5,17 @@ namespace [namespace];
 use Livewire\Component;
 use Livewire\WithPagination;
 
-use [model_path];
+use [model_path];[other_models]
 
 class [class] extends Component
 {
     use WithPagination;
 
-    protected $listeners = ['refresh' => '$refresh'];[sort_public_vars][search_vars][pagination_vars][hide_columns_vars][bulk_vars]
+    protected $listeners = ['refresh' => '$refresh'];[sort_public_vars][search_vars][pagination_vars][hide_columns_vars][bulk_vars][filter_vars]
 
     public function mount()
     {
-        [hide_columns_init]
+[hide_columns_init][filter_init]
     }
 
     public function render()
@@ -26,10 +26,10 @@ class [class] extends Component
         return view('[view]', [
             'results' => $results
         ]);
-    }[sort_method][search_method][pagination_dropdown_method][bulk_method]
+    }[sort_method][search_method][pagination_dropdown_method][bulk_method][filter_method]
 
     public function query()
     {
-        return [model]::query();
+        return [model]::query()[filter_query];
     }
 }

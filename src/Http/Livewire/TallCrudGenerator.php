@@ -17,6 +17,7 @@ class TallCrudGenerator extends Component
     use WithComponentCode;
     use WithTemplates;
     use WithRelations;
+    use WithFilters;
 
     public $totalSteps = 7;
     public $step = 1;
@@ -98,6 +99,9 @@ class TallCrudGenerator extends Component
         'belongsToManyRelation.displayColumn.required' => 'Please select a value.',
         'belongsToRelation.displayColumn.required' => 'Please select a value.',
         'withRelation.displayColumn.required' => 'Please select a value.',
+        'filter.type.required' => 'Please select a value.',
+        'filter.relation.required' => 'Please select a value.',
+        'filter.column.required' => 'Please select a value.',
     ];
 
     public $confirmingSorting = false;
@@ -139,6 +143,8 @@ class TallCrudGenerator extends Component
                 break;
             case 5:
                 //Validate Sort Fields
+                //Prepare for Next Step.
+                $this->resetFilter();
                 break;
             case 6:
                 //Validate Advanced Section
@@ -394,7 +400,7 @@ class TallCrudGenerator extends Component
             }
         }
 
-        $this->generatedCode = "@livewire('".Str::kebab($this->componentName)."')";
+        $this->generatedCode = "@livewire('".$this->getComponentName()."')";
         $this->isComplete = true;
     }
 

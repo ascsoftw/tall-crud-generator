@@ -17,6 +17,8 @@ trait WithComponentCode
         $code['with_count_query'] = $this->generateWithCountQueryCode();
         $code['hide_columns'] = $this->generateHideColumnsCode();
         $code['bulk_actions'] = $this->generateBulkActionsCode();
+        $code['filter'] = $this->generateFilterCode();
+        $code['other_models'] = $this->generateOtherModelsCode();
 
         $code['child_delete'] = $this->generateDeleteCode();
         $code['child_add'] = $this->generateAddCode();
@@ -25,7 +27,7 @@ trait WithComponentCode
         $code['child_item'] = $this->generateChildItem();
         $code['child_rules'] = $this->generateChildRules();
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
-        $code['child_other_models'] = $this->generateOtherModelsCode();
+        $code['child_other_models'] = $this->generateChildOtherModelsCode();
         $code['child_vars'] = $this->getRelationVars();
 
         return $code;
@@ -135,6 +137,24 @@ trait WithComponentCode
         if ($this->isHideColumnsEnabled()) {
             $code['vars'] = $this->getHideColumnVars();
             $code['init'] = $this->getHideColumnInitCode();
+        }
+
+        return $code;
+    }
+
+    public function generateFilterCode()
+    {
+        $code = [
+            'vars' => '',
+            'init' => '',
+            'query' => '',
+            'method' => '',
+        ];
+        if ($this->isFilterEnabled()) {
+            $code['vars'] = $this->getFilterVars();
+            $code['init'] = $this->getFilterInitCode();
+            $code['query'] = $this->getFilterQuery();
+            $code['method'] = $this->getFilterMethod();
         }
 
         return $code;
@@ -301,7 +321,7 @@ trait WithComponentCode
             ],
             [
                 $this->getModelName(),
-                $this->componentName,
+                $this->getComponentName(),
                 $this->getDeleteFlashCode(),
             ],
             $this->getDeleteMethodTemplate()
@@ -346,7 +366,7 @@ trait WithComponentCode
             ],
             [
                 $this->getModelName(),
-                $this->componentName,
+                $this->getComponentName(),
                 $createFieldHtml->prependAndJoin($this->newLines(1, 3)),
                 $this->getAddFlashCode(),
                 $this->getBtmInitCode(),
@@ -378,7 +398,7 @@ trait WithComponentCode
             [
                 $this->getModelName(),
                 Str::lower($this->getModelName()),
-                $this->componentName,
+                $this->getComponentName(),
                 $this->getEditFlashCode(),
                 $this->getBtmFetchCode(),
                 $this->getBtmUpdateCode(),
@@ -440,6 +460,19 @@ trait WithComponentCode
 
     public function generateOtherModelsCode()
     {
+        $modelsCode = collect();
+        foreach ($this->filters as $f) {
+            if ($f['type'] == 'None') {
+                continue;
+            }
+            $modelsCode->push($this->getOtherModelCode($f['modelPath']));
+        }
+
+        return $modelsCode->unique()->implode('');
+    }
+
+    public function generateChildOtherModelsCode()
+    {
         return $this->generateBtmModelsCode().$this->generateBelongstoModelsCode();
     }
 
@@ -454,7 +487,7 @@ trait WithComponentCode
             $modelsCode->push($this->getOtherModelCode($r['modelPath']));
         }
 
-        return $modelsCode->implode('');
+        return $modelsCode->unique()->implode('');
     }
 
     public function generateBelongstoModelsCode()
@@ -468,7 +501,7 @@ trait WithComponentCode
             $modelsCode->push($this->getOtherModelCode($r['modelPath']));
         }
 
-        return $modelsCode->implode('');
+        return $modelsCode->unique()->implode('');
     }
 
     public function getRelationVars()
@@ -866,5 +899,161 @@ trait WithComponentCode
             ],
             $this->getBulkActionMethodTemplate()
         );
+    }
+
+    public function getFilterVars()
+    {
+        $vars = collect();
+        $vars->push($this->getArrayCode('filters'));
+        $vars->push($this->getArrayCode('selectedFilters'));
+
+        return $vars->prependAndJoin($this->newLines());
+    }
+
+    public function getFilterInitCode()
+    {
+        return $this->getNoRelationFilterInitCode().
+            $this->getRelationFilterInitCode('BelongsTo').
+            $this->getRelationFilterInitCode('BelongsToMany');
+    }
+
+    public function getNoRelationFilterInitCode()
+    {
+        $filters = collect();
+        foreach ($this->filters as $f) {
+            if ($f['type'] != 'None') {
+                continue;
+            }
+            $filterOptions = $this->generateFilterOptionsFromJson($f);
+            if ($filterOptions->isEmpty()) {
+                continue;
+            }
+            $filters->push(
+                Str::replace(
+                    [
+                        '##KEY##',
+                        '##LABEL##',
+                        '##OPTIONS##',
+                    ],
+                    [
+                        $this->getFilterColumnName($f),
+                        $this->getFilterLabelName($f),
+                        $filterOptions->prependAndJoin($this->newLines(1, 5)),
+                    ],
+                    $this->getNoRelationFilterInitTemplate()
+                )
+            );
+        }
+
+        if ($filters->isEmpty()) {
+            return '';
+        }
+
+        return Str::replace(
+            '##FILTERS##',
+            $filters->prependAndJoin($this->newLines(1, 1)).$this->newLines(1, 2),
+            $this->getFilterInitTemplate()
+        );
+    }
+
+    public function getRelationFilterInitCode($type)
+    {
+        $filters = collect();
+        foreach ($this->filters as $f) {
+            if ($f['type'] != $type) {
+                continue;
+            }
+            $filters->push(
+                Str::replace(
+                    [
+                        '##VAR##',
+                        '##MODEL##',
+                        '##COLUMN##',
+                        '##OWNER_KEY##',
+                        '##FOREIGN_KEY##',
+                        '##LABEL##',
+                    ],
+                    [
+                        Str::plural($f['relation']),
+                        $this->getModelName($f['modelPath']),
+                        $f['column'],
+                        $this->getFilterOwnerKey($f),
+                        $this->getFilterForeignKey($f),
+                        $this->getFilterLabelName($f),
+                    ],
+                    $this->getRelationFilterInitTemplate()
+                )
+            );
+        }
+
+        return $filters->implode('');
+    }
+
+    public function generateFilterOptionsFromJson($f)
+    {
+        $filterOptions = collect();
+        $options = json_decode($f['options']);
+        if (is_null($options)) {
+            return $filterOptions;
+        }
+
+        foreach ($options as $k => $v) {
+            $filterOptions->push(
+                Str::replace(
+                    [
+                        '##KEY##',
+                        '##LABEL##',
+                    ],
+                    [
+                        $k,
+                        $v,
+                    ],
+                    $this->getFilterOptionTemplate()
+                )
+            );
+        }
+
+        return $filterOptions;
+    }
+
+    public function getFilterMethod()
+    {
+        return $this->getFilterMethodTemplate();
+    }
+
+    public function getFilterQuery()
+    {
+        $query = collect();
+        foreach ($this->filters as $f) {
+            if ($f['type'] == 'BelongsToMany') {
+                $query->push(
+                    Str::replace(
+                        [
+                            '##COLUMN##',
+                            '##RELATION##',
+                            '##RELATED_KEY##',
+                            '##TABLE##',
+                        ],
+                        [
+                            $f['relation'].'_'.$f['relatedKey'],
+                            $f['relation'],
+                            $f['relatedKey'],
+                            $f['relatedTableName'],
+                        ],
+                        $this->getFilterQueryBtmTemplate()
+                    )
+                );
+            } else {
+                $query->push(
+                    Str::replace(
+                        '##COLUMN##',
+                        $this->getFilterColumnName($f),
+                        $this->getFilterQueryTemplate()
+                    )
+                );
+            }
+        }
+
+        return $query->prependAndJoin($this->newLines());
     }
 }

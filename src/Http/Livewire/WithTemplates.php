@@ -18,12 +18,10 @@ EOT;
     {
         return <<<'EOT'
 
-            <div class="flex">
                 <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                 <span class="ml-3 mt-2" wire:loading.delay wire:target="q">
                     <x:tall-crud-generator::loading-indicator />
                 </span>
-            </div>
 EOT;
     }
 
@@ -43,7 +41,7 @@ EOT;
                         </x:tall-crud-generator::checkbox-wrapper>
                         @endforeach
                     </x-slot>
-                </x-dropdown>
+                </x:tall-crud-generator::dropdown>
 EOT;
     }
 
@@ -457,6 +455,17 @@ EOT;
 EOT;
     }
 
+    public function getNoRelationFilterInitTemplate()
+    {
+        return <<<'EOT'
+        '##KEY##' => [
+                'label' => '##LABEL##',
+                'options' => [##OPTIONS##
+                ]
+            ],
+EOT;
+    }
+
     public function getBtmInitTemplate()
     {
         return <<<'EOT'
@@ -620,7 +629,7 @@ EOT;
     public function getHideColumnInitCodeTemplate()
     {
         return <<<'EOT'
-$this->selectedColumns = $this->columns;
+        $this->selectedColumns = $this->columns;
 EOT;
     }
 
@@ -658,10 +667,10 @@ EOT;
                     </x-slot>
 
                     <x-slot name="content">
-                        <button wire:click="changeStatus(1)">Activate</button>
+                        <button wire:click="changeStatus(1)">Activate</button><br />
                         <button wire:click="changeStatus(0)">Deactivate</button>
                     </x-slot>
-                </x-dropdown>
+                </x:tall-crud-generator::dropdown>
 EOT;
     }
 
@@ -669,6 +678,111 @@ EOT;
     {
         return <<<'EOT'
 <x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+EOT;
+    }
+
+    public function getFilterInitTemplate()
+    {
+        return <<<'EOT'
+
+        $this->filters = [##FILTERS##];
+EOT;
+    }
+
+    public function getRelationFilterInitTemplate()
+    {
+        return <<<'EOT'
+
+
+        $##VAR## = ##MODEL##::pluck('##COLUMN##', '##OWNER_KEY##')->map(function($i, $k) {
+            return ['key' => $k, 'label' => $i];
+        })->toArray();
+        $this->filters['##FOREIGN_KEY##']['label'] = '##LABEL##';
+        $this->filters['##FOREIGN_KEY##']['options'] = ['0' => ['key' => '', 'label' => 'Any']] + $##VAR##;
+EOT;
+    }
+
+    public function getFilterOptionTemplate()
+    {
+        return <<<'EOT'
+['key' => '##KEY##', 'label' => '##LABEL##'],
+EOT;
+    }
+
+    public function getFilterDropdownTemplate()
+    {
+        return <<<'EOT'
+
+                <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded ml-4 px-4 cursor-pointer" width="w-72">
+                    <x-slot name="trigger">
+                        <span class="flex">
+                        Filters <x:tall-crud-generator::filter-icon />
+                        </span>
+                    </x-slot>
+                
+                    <x-slot name="content">
+                        @foreach($filters as $f => $filter)
+                        <div class="mt-4">
+                            <x:tall-crud-generator::label class="font-sm font-bold">
+                                {{ $filter['label'] }}
+                            </x:tall-crud-generator::label>
+                            <x:tall-crud-generator::select class="w-3/4" wire:model="selectedFilters.{{$f}}">
+                                @foreach($filter['options'] as $o)
+                                <option value="{{$o['key']}}">{{$o['label']}}</option>
+                                @endforeach
+                            </x:tall-crud-generator::select>
+                        </div>
+                        @endforeach
+                        <div class="my-4">
+                            <x:tall-crud-generator::button wire:click="resetFilters()">Reset</x:tall-crud-generator::button>
+                        </div>
+                    </x-slot>
+                </x:tall-crud-generator::dropdown>
+EOT;
+    }
+
+    public function getFilterMethodTemplate()
+    {
+        return <<<'EOT'
+
+
+    public function updatingSelectedFilters()
+    {
+        $this->resetPage();
+    }
+
+    public function getFilter($column)
+    {
+        if( isset($this->selectedFilters[$column]) && $this->selectedFilters[$column] != '') {
+            return true;
+        }
+        return false;
+    }
+
+    public function resetFilters()
+    {
+        $this->reset('selectedFilters');
+    }
+EOT;
+    }
+
+    public function getFilterQueryTemplate()
+    {
+        return <<<'EOT'
+            ->when($this->getFilter('##COLUMN##'), function($query) {
+                return $query->where('##COLUMN##', $this->selectedFilters['##COLUMN##']);
+            })
+EOT;
+    }
+
+    public function getFilterQueryBtmTemplate()
+    {
+        return <<<'EOT'
+            ->when($this->getFilter('##COLUMN##'), function($query) {
+                return $query->whereHas('##RELATION##', function($query) {
+                    return $query->where('##TABLE##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
+                });
+            })
 EOT;
     }
 }
