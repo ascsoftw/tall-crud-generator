@@ -156,6 +156,7 @@ trait WithComponentCode
             $code['query'] = $this->getFilterQuery();
             $code['method'] = $this->getFilterMethod();
         }
+
         return $code;
     }
 
@@ -461,7 +462,7 @@ trait WithComponentCode
     {
         $modelsCode = collect();
         foreach ($this->filters as $f) {
-            if($f['type'] == 'None') {
+            if ($f['type'] == 'None') {
                 continue;
             }
             $modelsCode->push($this->getOtherModelCode($f['modelPath']));
@@ -472,12 +473,12 @@ trait WithComponentCode
 
     public function generateChildOtherModelsCode()
     {
-        return $this->generateBtmModelsCode() . $this->generateBelongstoModelsCode();
+        return $this->generateBtmModelsCode().$this->generateBelongstoModelsCode();
     }
 
     public function generateBtmModelsCode()
     {
-        if (!$this->isBtmEnabled()) {
+        if (! $this->isBtmEnabled()) {
             return '';
         }
 
@@ -491,7 +492,7 @@ trait WithComponentCode
 
     public function generateBelongstoModelsCode()
     {
-        if (!$this->isBelongsToEnabled()) {
+        if (! $this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -505,12 +506,12 @@ trait WithComponentCode
 
     public function getRelationVars()
     {
-        return $this->getBtmVars() . $this->getBelongsToVars();
+        return $this->getBtmVars().$this->getBelongsToVars();
     }
 
     public function getBtmVars()
     {
-        if (!$this->isBtmEnabled()) {
+        if (! $this->isBtmEnabled()) {
             return '';
         }
 
@@ -529,7 +530,7 @@ trait WithComponentCode
 
     public function getBelongsToVars()
     {
-        if (!$this->isBelongsToEnabled()) {
+        if (! $this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -547,7 +548,7 @@ trait WithComponentCode
 
     public function getAddFlashCode()
     {
-        if (!$this->isFlashMessageEnabled()) {
+        if (! $this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -556,7 +557,7 @@ trait WithComponentCode
 
     public function getEditFlashCode()
     {
-        if (!$this->isFlashMessageEnabled()) {
+        if (! $this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -565,7 +566,7 @@ trait WithComponentCode
 
     public function getDeleteFlashCode()
     {
-        if (!$this->isFlashMessageEnabled()) {
+        if (! $this->isFlashMessageEnabled()) {
             return '';
         }
 
@@ -574,13 +575,13 @@ trait WithComponentCode
 
     public function getBtmInitCode()
     {
-        if (!$this->isBtmAddEnabled()) {
+        if (! $this->isBtmAddEnabled()) {
             return '';
         }
 
         $initCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inAdd']) {
+            if (! $r['inAdd']) {
                 continue;
             }
 
@@ -608,13 +609,13 @@ trait WithComponentCode
 
     public function getBtmAttachCode()
     {
-        if (!$this->isBtmAddEnabled()) {
+        if (! $this->isBtmAddEnabled()) {
             return '';
         }
 
         $attachCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inAdd']) {
+            if (! $r['inAdd']) {
                 continue;
             }
 
@@ -633,18 +634,18 @@ trait WithComponentCode
             );
         }
 
-        return $attachCode->implode('') . $this->newLines();
+        return $attachCode->implode('').$this->newLines();
     }
 
     public function getBtmFetchCode()
     {
-        if (!$this->isBtmEditEnabled()) {
+        if (! $this->isBtmEditEnabled()) {
             return '';
         }
 
         $btmFetchCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inEdit']) {
+            if (! $r['inEdit']) {
                 continue;
             }
 
@@ -676,13 +677,13 @@ trait WithComponentCode
 
     public function getBtmUpdateCode()
     {
-        if (!$this->isBtmEditEnabled()) {
+        if (! $this->isBtmEditEnabled()) {
             return '';
         }
 
         $btmUpdateCode = collect();
         foreach ($this->belongsToManyRelations as $r) {
-            if (!$r['inEdit']) {
+            if (! $r['inEdit']) {
                 continue;
             }
 
@@ -718,7 +719,7 @@ trait WithComponentCode
 
     public function getAttributesForBelongsToFields()
     {
-        if (!$this->isBelongsToEnabled()) {
+        if (! $this->isBelongsToEnabled()) {
             return '';
         }
 
@@ -737,11 +738,11 @@ trait WithComponentCode
 
     public function getBelongsToInitCode($isAdd = true)
     {
-        if ($isAdd && !$this->isBelongsToAddEnabled()) {
+        if ($isAdd && ! $this->isBelongsToAddEnabled()) {
             return '';
         }
 
-        if (!$isAdd && !$this->isBelongsToEditEnabled()) {
+        if (! $isAdd && ! $this->isBelongsToEditEnabled()) {
             return '';
         }
 
@@ -769,7 +770,7 @@ trait WithComponentCode
 
     public function getBelongsToSaveCode()
     {
-        if (!$this->isBelongsToAddEnabled()) {
+        if (! $this->isBelongsToAddEnabled()) {
             return '';
         }
 
@@ -845,8 +846,8 @@ trait WithComponentCode
             '##COLUMNS##',
             $this->getAllListingColumns(),
             $this->getHideColumnVarsTemplate()
-        ) .
-            $this->newLines() .
+        ).
+            $this->newLines().
             $this->getArrayCode('selectedColumns');
     }
 
@@ -880,7 +881,7 @@ trait WithComponentCode
 
     public function getBulkActionsVars()
     {
-        return $this->newLines() . $this->getArrayCode('selectedItems');
+        return $this->newLines().$this->getArrayCode('selectedItems');
     }
 
     public function getBulkActionMethod()
@@ -905,13 +906,14 @@ trait WithComponentCode
         $vars = collect();
         $vars->push($this->getArrayCode('filters'));
         $vars->push($this->getArrayCode('selectedFilters'));
+
         return $vars->prependAndJoin($this->newLines());
     }
 
     public function getFilterInitCode()
     {
-        return $this->getNoRelationFilterInitCode() . 
-            $this->getRelationFilterInitCode('BelongsTo') . 
+        return $this->getNoRelationFilterInitCode().
+            $this->getRelationFilterInitCode('BelongsTo').
             $this->getRelationFilterInitCode('BelongsToMany');
     }
 
@@ -919,7 +921,7 @@ trait WithComponentCode
     {
         $filters = collect();
         foreach ($this->filters as $f) {
-            if($f['type'] != 'None') {
+            if ($f['type'] != 'None') {
                 continue;
             }
             $filterOptions = $this->generateFilterOptionsFromJson($f);
@@ -940,25 +942,25 @@ trait WithComponentCode
                     ],
                     $this->getNoRelationFilterInitTemplate()
                 )
-            ); 
+            );
         }
 
-        if($filters->isEmpty()) {
+        if ($filters->isEmpty()) {
             return '';
         }
 
         return Str::replace(
             '##FILTERS##',
-            $filters->prependAndJoin($this->newLines(1, 1)) . $this->newLines(1, 2),
+            $filters->prependAndJoin($this->newLines(1, 1)).$this->newLines(1, 2),
             $this->getFilterInitTemplate()
-        ); 
+        );
     }
 
     public function getRelationFilterInitCode($type)
     {
         $filters = collect();
         foreach ($this->filters as $f) {
-            if($f['type'] != $type) {
+            if ($f['type'] != $type) {
                 continue;
             }
             $filters->push(
@@ -981,8 +983,9 @@ trait WithComponentCode
                     ],
                     $this->getRelationFilterInitTemplate()
                 )
-            );  
+            );
         }
+
         return $filters->implode('');
     }
 
@@ -1022,7 +1025,7 @@ trait WithComponentCode
     {
         $query = collect();
         foreach ($this->filters as $f) {
-            if($f['type'] == 'BelongsToMany') {
+            if ($f['type'] == 'BelongsToMany') {
                 $query->push(
                     Str::replace(
                         [
@@ -1032,7 +1035,7 @@ trait WithComponentCode
                             '##TABLE##',
                         ],
                         [
-                            $f['relation'] . '_' . $f['relatedKey'],
+                            $f['relation'].'_'.$f['relatedKey'],
                             $f['relation'],
                             $f['relatedKey'],
                             $f['relatedTableName'],
