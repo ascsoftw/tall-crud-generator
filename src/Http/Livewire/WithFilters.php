@@ -54,12 +54,12 @@ trait WithFilters
         ]);
 
         if($this->filter['type'] == 'BelongsTo') {
-            $this->validateBelongsToRelation();
+            $this->validateRelation('BelongsTo');
             $this->fillBelongsToFilterFields();
         }
 
         if($this->filter['type'] == 'BelongsToMany') {
-            $this->validateBelongsToManyRelation();
+            $this->validateRelation('BelongsToMany');
             $this->fillBelongsToManyFilterFields();
         }
     }
@@ -90,26 +90,10 @@ trait WithFilters
         return true;
     }
 
-    public function validateBelongsToRelation()
+    public function validateRelation($type)
     {
         foreach ($this->filters as $f) {
-            if($f['type'] != 'BelongsTo') {
-                continue;
-            }
-            if ($f['relation'] == $this->filter['relation']) {
-                $this->addError('filter.relation', 'Filter Already Defined.');
-
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function validateBelongsToManyRelation()
-    {
-        foreach ($this->filters as $f) {
-            if($f['type'] != 'BelongsToMany') {
+            if($f['type'] != $type) {
                 continue;
             }
             if ($f['relation'] == $this->filter['relation']) {
@@ -168,13 +152,13 @@ trait WithFilters
                 $this->addNoRelationFilter();
                 break;
             case 'BelongsTo':
-                if (! $this->validateBelongsToRelation()) {
+                if (! $this->validateRelation('BelongsTo')) {
                     return;
                 }
                 $this->addBelongsToFilter();
                 break;
             case 'BelongsToMany':
-                if (! $this->validateBelongsToManyRelation()) {
+                if (! $this->validateRelation('BelongsToMany')) {
                     return;
                 }
                 $this->addBelongsToManyFilter();

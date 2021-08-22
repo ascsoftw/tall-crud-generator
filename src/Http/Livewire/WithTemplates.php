@@ -455,10 +455,14 @@ EOT;
 EOT;
     }
 
-    public function getArrayKeyValueTemplate()
+    public function getNoRelationFilterInitTemplate()
     {
         return <<<'EOT'
-'##NAME##' => ##VALUE##
+        '##KEY##' => [
+                'label' => '##LABEL##',
+                'options' => [##OPTIONS##
+                ]
+            ],
 EOT;
     }
 
@@ -685,7 +689,7 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToFilterInitTemplate()
+    public function getRelationFilterInitTemplate()
     {
         return <<<'EOT'
 
@@ -693,7 +697,8 @@ EOT;
         $##VAR## = ##MODEL##::pluck('##COLUMN##', '##OWNER_KEY##')->map(function($i, $k) {
             return ['key' => $k, 'label' => $i];
         })->toArray();
-        $this->filters['##FOREIGN_KEY##'] = ['0' => ['key' => '', 'label' => 'Any']] + $##VAR##;
+        $this->filters['##FOREIGN_KEY##']['label'] = '##LABEL##';
+        $this->filters['##FOREIGN_KEY##']['options'] = ['0' => ['key' => '', 'label' => 'Any']] + $##VAR##;
 EOT;
     }
 
@@ -716,13 +721,13 @@ EOT;
                     </x-slot>
                 
                     <x-slot name="content">
-                        @foreach($filters as $f => $options)
+                        @foreach($filters as $f => $filter)
                         <div class="mt-4">
                             <x:tall-crud-generator::label class="font-sm font-bold">
-                                {{ucwords(str_replace('_', ' ', $f))}}
+                                {{ $filter['label'] }}
                             </x:tall-crud-generator::label>
                             <x:tall-crud-generator::select class="w-3/4" wire:model="selectedFilters.{{$f}}">
-                                @foreach($options as $o)
+                                @foreach($filter['options'] as $o)
                                 <option value="{{$o['key']}}">{{$o['label']}}</option>
                                 @endforeach
                             </x:tall-crud-generator::select>

@@ -195,7 +195,7 @@ trait WithHelpers
             return $label;
         }
 
-        return Str::studly(Str::replace('_', ' ', $column));
+        return Str::title(Str::replace('_', ' ', $column));
     }
 
     public function getLabelForWith($relation = '')
@@ -441,5 +441,32 @@ trait WithHelpers
     public function getFilterColumnName($filter)
     {
         return ($filter['type'] == 'None') ? $filter['column'] : $filter['foreignKey'];
+    }
+
+    public function getFilterLabelName($filter)
+    {
+        if($filter['type'] == 'None') {
+            return Str::ucfirst($filter['column']);
+        }
+
+        return Str::ucfirst($filter['relation']);
+    }
+
+    public function getFilterOwnerKey($filter)
+    {
+        if($filter['type'] == 'BelongsTo') {
+            return $filter['ownerKey'];
+        }
+
+        return $filter['relatedKey'];
+    }
+
+    public function getFilterForeignKey($filter)
+    {
+        if($filter['type'] == 'BelongsTo') {
+            return $filter['foreignKey'];
+        }
+
+        return $filter['relation'] . '_' . $filter['relatedKey'];
     }
 }

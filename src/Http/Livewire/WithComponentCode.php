@@ -911,8 +911,8 @@ trait WithComponentCode
     public function getFilterInitCode()
     {
         return $this->getNoRelationFilterInitCode() . 
-            $this->getBelongsToFilterInitCode() . 
-            $this->getBelongsToManyFilterInitCode();
+            $this->getRelationFilterInitCode('BelongsTo') . 
+            $this->getRelationFilterInitCode('BelongsToMany');
     }
 
     public function getNoRelationFilterInitCode()
@@ -929,16 +929,18 @@ trait WithComponentCode
             $filters->push(
                 Str::replace(
                     [
-                        '##NAME##',
-                        '##VALUE##',
+                        '##KEY##',
+                        '##LABEL##',
+                        '##OPTIONS##',
                     ],
                     [
                         $this->getFilterColumnName($f),
-                        '[' . $filterOptions->prependAndJoin($this->newLines(1, 4)) . $this->newLines(1, 3) . '],'
+                        $this->getFilterLabelName($f),
+                        $filterOptions->prependAndJoin($this->newLines(1, 5)),
                     ],
-                    $this->getArrayKeyValueTemplate()
+                    $this->getNoRelationFilterInitTemplate()
                 )
-            );  
+            ); 
         }
 
         if($filters->isEmpty()) {
@@ -947,16 +949,16 @@ trait WithComponentCode
 
         return Str::replace(
             '##FILTERS##',
-            $filters->prependAndJoin($this->newLines(1, 3)) . $this->newLines(1, 2),
+            $filters->prependAndJoin($this->newLines(1, 1)) . $this->newLines(1, 2),
             $this->getFilterInitTemplate()
         ); 
     }
 
-    public function getBelongsToFilterInitCode()
+    public function getRelationFilterInitCode($type)
     {
         $filters = collect();
         foreach ($this->filters as $f) {
-            if($f['type'] != 'BelongsTo') {
+            if($f['type'] != $type) {
                 continue;
             }
             $filters->push(
@@ -967,46 +969,17 @@ trait WithComponentCode
                         '##COLUMN##',
                         '##OWNER_KEY##',
                         '##FOREIGN_KEY##',
+                        '##LABEL##',
                     ],
                     [
                         Str::plural($f['relation']),
                         $this->getModelName($f['modelPath']),
                         $f['column'],
-                        $f['ownerKey'],
-                        $f['foreignKey'],
+                        $this->getFilterOwnerKey($f),
+                        $this->getFilterForeignKey($f),
+                        $this->getFilterLabelName($f),
                     ],
-                    $this->getBelongsToFilterInitTemplate()
-                )
-            );  
-        }
-        // dd($filters);
-        return $filters->implode('');
-    }
-
-    public function getBelongsToManyFilterInitCode()
-    {
-        $filters = collect();
-        foreach ($this->filters as $f) {
-            if($f['type'] != 'BelongsToMany') {
-                continue;
-            }
-            $filters->push(
-                Str::replace(
-                    [
-                        '##VAR##',
-                        '##MODEL##',
-                        '##COLUMN##',
-                        '##OWNER_KEY##',
-                        '##FOREIGN_KEY##',
-                    ],
-                    [
-                        Str::plural($f['relation']),
-                        $this->getModelName($f['modelPath']),
-                        $f['column'],
-                        $f['relatedKey'],
-                        $f['relation'] . '_' . $f['relatedKey'],
-                    ],
-                    $this->getBelongsToFilterInitTemplate()
+                    $this->getRelationFilterInitTemplate()
                 )
             );  
         }
