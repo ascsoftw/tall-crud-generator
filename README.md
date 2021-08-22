@@ -92,6 +92,7 @@ Following are some of the Features that are supported:
 - Display Related Fields in the Listing using Eager Loading
 - Display Count of Related Fields in the Listing using Eager Loading Count
 - Having the Ability for User to Show / Hide Columns on Listing
+- Allow User to Define Filters
 
 ## Roadmap
 
@@ -104,7 +105,7 @@ Following Features are in the piepline:
 - ~~Sort Eager Loaded and Relation Fields~~
 - ~~Use Livewire Sorting for Sort ??~~
 - ~~Bulk Action~~
-- Add Filters
+- Add Date and Range Filters
 - Test Suite
 
 ## Troubleshooting
