@@ -79,6 +79,7 @@
     @error('fields') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
 </div>
 
+@if (!$this->addAndEditDisabled)
 <x:tall-crud-generator::dialog-modal wire:model="confirmingAttributes">
     <x-slot name="title">
         Attributes
@@ -122,3 +123,4 @@
         <x:tall-crud-generator::button mode="add" wire:click="setAttributes()">Save</x:tall-crud-generator::button>
     </x-slot>
 </x:tall-crud-generator::dialog-modal>
+@endif

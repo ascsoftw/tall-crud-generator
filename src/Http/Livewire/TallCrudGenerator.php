@@ -186,7 +186,7 @@ class TallCrudGenerator extends Component
         }
 
         if ($this->step > 1 && ! $this->isValidModel) {
-            $this->stp = 1;
+            $this->step = 1;
         }
     }
 
@@ -202,7 +202,6 @@ class TallCrudGenerator extends Component
         $this->resetValidation();
         if (! class_exists($this->modelPath)) {
             $this->addError('modelPath', 'File does not exists');
-
             return;
         }
 
@@ -372,7 +371,7 @@ class TallCrudGenerator extends Component
     {
         $code = $this->generateComponentCode();
         $html = $this->generateViewHtml();
-        $props = [
+        $this->props = [
             'modelPath' => $this->modelPath,
             'model' => $this->getModelName(),
             'modelProps' => $this->modelProps,
@@ -386,7 +385,7 @@ class TallCrudGenerator extends Component
 
         $this->exitCode = Artisan::call('livewire:tall-crud-generator', [
             'name' => $this->componentName,
-            'props' => $props,
+            'props' => $this->props,
             '--child' => false,
         ]);
 
@@ -394,7 +393,7 @@ class TallCrudGenerator extends Component
             if ($this->isAddFeatureEnabled() || $this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
                 $this->exitCode = Artisan::call('livewire:tall-crud-generator', [
                     'name' => $this->componentName.'Child',
-                    'props' => $props,
+                    'props' => $this->props,
                     '--child' => true,
                 ]);
             }
