@@ -3,13 +3,14 @@
 namespace [namespace];
 
 use Livewire\Component;
+use \Illuminate\View\View;
 use [model_path];[child_other_models]
 
 class [class] extends Component
 {
 [child_listeners][child_item][child_vars][child_rules][child_validation_attributes][child_delete_vars][child_add_vars][child_edit_vars]
 
-    public function render()
+    public function render(): View
     {
         return view('[view]');
     }[child_delete_method][child_add_method][child_edit_method]
