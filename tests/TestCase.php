@@ -5,6 +5,8 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 use Ascsoftw\TallCrudGenerator\TallCrudGeneratorServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Christophrumpel\MissingLivewireAssertions\MissingLivewireAssertionsServiceProvider;
+use Livewire\Testing\TestableLivewire;
+use Ascsoftw\TallCrudGenerator\Tests\Concerns\LivewireMethodMixin;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -12,6 +14,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
         // additional setup
+        TestableLivewire::mixin(new LivewireMethodMixin());
 
         // Brand::insert([
         //     [ 'id' => 1, 'name' => 'Brand Two', ],

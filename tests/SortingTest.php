@@ -7,6 +7,7 @@ use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 
 class SortingTest extends TestCase
 {
+
     public function setUp(): void
     {
         parent::setUp();
@@ -52,7 +53,15 @@ class SortingTest extends TestCase
         $this->assertNotEmpty($props['code']['sort']['query']);
         $this->assertNotEmpty($props['code']['sort']['method']);
 
+        $this->component->call('isPrimaryKeySortable')
+            ->assertReturnEquals('isPrimaryKeySortable', true);
+
+        $this->component->call('getDefaultSortableColumn')
+            ->assertReturnEquals('getDefaultSortableColumn', 'id');
+
+        $this->component->call('getSearchableColumns')
+            ->assertReturnEquals('getSearchableColumns', []);
+
+
     }
-
-
 }
