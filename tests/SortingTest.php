@@ -59,9 +59,5 @@ class SortingTest extends TestCase
         $this->component->call('getDefaultSortableColumn')
             ->assertReturnEquals('getDefaultSortableColumn', 'id');
 
-        $this->component->call('getSearchableColumns')
-            ->assertReturnEquals('getSearchableColumns', []);
-
-
     }
 }
