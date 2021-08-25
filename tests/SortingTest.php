@@ -12,40 +12,41 @@ class SortingTest extends TestCase
     {
         parent::setUp();
         // additional setup
-        $this->component = Livewire::test(TallCrudGenerator::class)
-            ->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Product')
-            ->call('moveAhead')
-            ->set('primaryKeyProps.sortable', true)
-            ->set('componentProps.createAddModal', false)
-            ->set('componentProps.createEditModal', false)
-            ->set('componentProps.createDeleteButton', false)
-            ->call('moveAhead')
-            ->call('addField')
-            ->set('fields.0.column', 'name')
-            ->call('moveAhead')
-            ->call('moveAhead')
-            ->call('moveAhead')
-            ->set('flashMessages.enable', false)
-            ->set('advancedSettings.table_settings.showPaginationDropdown', false)
-            ->call('moveAhead');
     }
 
     public function test_component_is_generated()
     {
 
-        $this->component
-            ->set('componentName', 'products')
-            ->call('moveAhead')
+        $this->component = Livewire::test(TallCrudGenerator::class)
+            ->step1()
+            ->disableModals()
+            ->pressNext()
+            ->call('addField')
+            ->set('fields.0.column', 'name')
+            ->pressNext(3)
+            ->disableFlashMessage()
+            ->disablePaginationDropdown()
+            ->pressNext()
+            ->generateFiles()
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
 
     }
 
-    public function test_sorting_code()
+    public function test_primary_key_is_sortable()
     {
-        $this->component
-            ->set('componentName', 'products')
-            ->call('moveAhead');
+
+        $this->component = Livewire::test(TallCrudGenerator::class)
+            ->step1()
+            ->disableModals()
+            ->pressNext()
+            ->call('addField')
+            ->set('fields.0.column', 'name')
+            ->pressNext(3)
+            ->disableFlashMessage()
+            ->disablePaginationDropdown()
+            ->pressNext()
+            ->generateFiles();
 
         $props = $this->component->get('props');
 
@@ -53,11 +54,48 @@ class SortingTest extends TestCase
         $this->assertNotEmpty($props['code']['sort']['query']);
         $this->assertNotEmpty($props['code']['sort']['method']);
 
+        $this->component->call('isSortingEnabled')
+            ->assertReturnEquals('isSortingEnabled', true);
+
         $this->component->call('isPrimaryKeySortable')
             ->assertReturnEquals('isPrimaryKeySortable', true);
 
         $this->component->call('getDefaultSortableColumn')
             ->assertReturnEquals('getDefaultSortableColumn', 'id');
+
+    }
+
+    public function test_other_column_is_sortable()
+    {
+
+        $this->component = Livewire::test(TallCrudGenerator::class)
+            ->step1()
+            ->disableModals()
+            ->makePrimaryKeyUnsortable()
+            ->pressNext()
+            ->call('addField')
+            ->set('fields.0.column', 'name')
+            ->set('fields.0.sortable', true)
+            ->pressNext(3)
+            ->disableFlashMessage()
+            ->disablePaginationDropdown()
+            ->pressNext()
+            ->generateFiles();
+
+        $props = $this->component->get('props');
+
+        $this->assertNotEmpty($props['code']['sort']['vars']);
+        $this->assertNotEmpty($props['code']['sort']['query']);
+        $this->assertNotEmpty($props['code']['sort']['method']);
+
+        $this->component->call('isSortingEnabled')
+            ->assertReturnEquals('isSortingEnabled', true);
+
+        $this->component->call('isPrimaryKeySortable')
+            ->assertReturnEquals('isPrimaryKeySortable', false);
+
+        $this->component->call('getDefaultSortableColumn')
+            ->assertReturnEquals('getDefaultSortableColumn', 'name');
 
     }
 }

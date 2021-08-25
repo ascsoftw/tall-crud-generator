@@ -12,8 +12,7 @@ class SecondStepTest extends TestCase
         parent::setUp();
         // additional setup
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Product')
-            ->call('moveAhead');
+            ->step1();
     }
 
     public function test_default_settings()

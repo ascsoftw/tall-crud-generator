@@ -12,20 +12,15 @@ class BasicTest extends TestCase
         parent::setUp();
         // additional setup
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Product')
-            ->call('moveAhead')
-            ->set('primaryKeyProps.inList', false)
-            ->set('componentProps.createAddModal', false)
-            ->set('componentProps.createEditModal', false)
-            ->set('componentProps.createDeleteButton', false)
-            ->call('moveAhead')
+            ->step1()
+            ->disableModals()
+            ->hidePrimaryKeyFromListing()
+            ->pressNext()
             ->call('addAllFields')
-            ->call('moveAhead')
-            ->call('moveAhead')
-            ->call('moveAhead')
-            ->set('flashMessages.enable', false)
-            ->set('advancedSettings.table_settings.showPaginationDropdown', false)
-            ->call('moveAhead');
+            ->pressNext(3)
+            ->disableFlashMessage()
+            ->disablePaginationDropdown()
+            ->pressNext();
     }
 
     public function test_default_settings()
@@ -43,7 +38,7 @@ class BasicTest extends TestCase
     {
 
         $this->component
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSee('Please enter the name of your component')
             ->assertHasErrors(['componentName' => 'required']);
     }
@@ -52,8 +47,7 @@ class BasicTest extends TestCase
     {
 
         $this->component
-            ->set('componentName', 'products')
-            ->call('moveAhead')
+            ->generateFiles()
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
         $generatedCode = $this->component->get('generatedCode');
@@ -63,11 +57,9 @@ class BasicTest extends TestCase
 
     public function test_various_features()
     {
-        $this->component
-            ->set('componentName', 'products')
-            ->call('moveAhead');
-        $props = $this->component->get('props');
+        $this->component->generateFiles();
 
+        $props = $this->component->get('props');
         $this->assertEmpty($props['code']['sort']['vars']);
         $this->assertEmpty($props['code']['sort']['query']);
         $this->assertEmpty($props['code']['sort']['method']);

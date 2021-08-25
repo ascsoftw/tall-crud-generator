@@ -26,7 +26,7 @@ class FirstStepTest extends TestCase
     public function test_model_is_required()
     {
         Livewire::test(TallCrudGenerator::class)
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSet('step', 1)
             ->assertSee('Please enter Path to your Model')
             ->assertSet('isValidModel', false)
@@ -37,7 +37,7 @@ class FirstStepTest extends TestCase
     {
         Livewire::test(TallCrudGenerator::class)
             ->set('modelPath', 'App\Models\NoModel')
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSet('step', 1)
             ->assertSee('File does not exists')
             ->assertSet('isValidModel', false);
@@ -47,7 +47,7 @@ class FirstStepTest extends TestCase
     {
         Livewire::test(TallCrudGenerator::class)
             ->set('modelPath', 'Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator')
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSet('step', 1)
             ->assertSee('Not a Valid Model Class.')
             ->assertSet('isValidModel', false);
@@ -57,7 +57,7 @@ class FirstStepTest extends TestCase
     {
         $component = Livewire::test(TallCrudGenerator::class)
             ->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Brand')
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSet('step', 2)
             ->assertSee('Previous')
             ->assertSet('isValidModel', true);
