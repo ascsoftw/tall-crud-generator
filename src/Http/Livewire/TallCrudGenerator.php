@@ -76,7 +76,7 @@ class TallCrudGenerator extends Component
     ];
 
     public $flashMessages = [
-        'enable' => 'true',
+        'enable' => true,
         'text' => [
             'add' => 'Record Added Successfully',
             'edit' => 'Record Updated Successfully',

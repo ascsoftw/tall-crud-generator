@@ -76,6 +76,30 @@ class LivewireMethodMixin
         };
     }
 
+    public function setStandardFields()
+    {
+        return function() {
+            $this->call('addField')
+                ->set('fields.0.column', 'name')
+                ->set('fields.0.searchable', true)
+                ->set('fields.0.sortable', true)
+                ->set('fields.0.attributes.rules', 'required,min:3,max:50,')
+                ->call('addField')
+                ->set('fields.1.column', 'price')
+                ->set('fields.0.sortable', true)
+                ->set('fields.1.attributes.rules', 'required,numeric,')
+                ->call('addField')
+                ->set('fields.2.column', 'sku')
+                ->set('fields.2.attributes.rules', 'required,min:3,')
+                ->call('addField')
+                ->set('fields.3.column', 'status')
+                ->set('fields.3.label', 'Is Active')
+                ->set('fields.3.inList', false)
+                ->set('fields.3.attributes.type', 'checkbox');
+            return $this;
+        };
+    }
+
     public function disableFlashMessage()
     {
         return function($enable = false) {

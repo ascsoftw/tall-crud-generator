@@ -12,12 +12,9 @@ class ThirdStepWithoutFeaturesTest extends TestCase
         parent::setUp();
         // additional setup
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Product')
-            ->call('moveAhead')
-            ->set('componentProps.createAddModal', false)
-            ->set('componentProps.createEditModal', false)
-            ->set('componentProps.createDeleteButton', false)
-            ->call('moveAhead');
+            ->step1()
+            ->disableModals()
+            ->pressNext();
     }
 
     public function test_default_settings()
@@ -63,7 +60,7 @@ class ThirdStepWithoutFeaturesTest extends TestCase
     public function test_that_at_least_one_field_is_added()
     {
         $this->component
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSet('step', 3)
             ->assertSee('At least 1 Field should be added.');
     }
@@ -72,7 +69,7 @@ class ThirdStepWithoutFeaturesTest extends TestCase
     {
         $this->component
             ->call('addField')
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSet('step', 3)
             ->assertCount('fields', 1)
             ->assertSee('Please select column for all fields.');
@@ -96,8 +93,6 @@ class ThirdStepWithoutFeaturesTest extends TestCase
         $this->component
             ->call('addField')
             ->assertCount('modelProps.columns', 7);
-        // $modelProps = $this->component->get('modelProps');
-        // $this->assertCount(7, $modelProps['columns']);
     }
 
     public function test_that_there_are_no_duplicate_columns()
@@ -108,7 +103,7 @@ class ThirdStepWithoutFeaturesTest extends TestCase
             ->call('addField')
             ->set('fields.1.column', 'name')
             ->assertCount('fields', 2)
-            ->call('moveAhead')
+            ->pressNext()
             ->assertSee('Please do not select a column more than once.');
     }
 

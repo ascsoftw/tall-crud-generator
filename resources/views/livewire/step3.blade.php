@@ -1,4 +1,4 @@
-@if(count($this->fields) == 0)
+@if(count($fields) == 0)
 <x:tall-crud-generator::button wire:click.prevent="addAllFields">
     Add All Fields
 </x:tall-crud-generator::button>
@@ -21,7 +21,7 @@
         <x:tall-crud-generator::table-column>Sortable</x:tall-crud-generator::table-column>
         <x:tall-crud-generator::table-column>Actions</x:tall-crud-generator::table-column>
     </x-slot>
-    @foreach ($this->fields as $i => $field)
+    @foreach ($fields as $i => $field)
     <tr>
         <x:tall-crud-generator::table-column>
             <select wire:model.defer="fields.{{$i}}.column" class="form-select rounded-md shadow-sm">
