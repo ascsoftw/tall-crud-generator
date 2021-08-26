@@ -52,7 +52,7 @@
                     <x:tall-crud-generator::table-column>{{$v['isSortable'] ? 'Yes' : 'No'}}
                     </x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>
-                        <x:tall-crud-generator::button wire:click.prevent="deleteWitCounthRelation({{$i}})"
+                        <x:tall-crud-generator::button wire:click.prevent="deleteWithCountRelation({{$i}})"
                             mode="delete">
                             Delete
                         </x:tall-crud-generator::button>
@@ -90,7 +90,7 @@
     </div>
 </div>
 
-
+@if ($this->addFeature || $this->editFeature)
 <x:tall-crud-generator::dialog-modal wire:model="confirmingBelongsToMany">
     <x-slot name="title">
         Add a Belongs to Many Relationship
@@ -218,6 +218,7 @@
         </x:tall-crud-generator::button>
     </x-slot>
 </x:tall-crud-generator::dialog-modal>
+@endif
 
 <x:tall-crud-generator::dialog-modal wire:model="confirmingWith">
     <x-slot name="title">
