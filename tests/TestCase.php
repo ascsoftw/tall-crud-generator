@@ -3,10 +3,10 @@
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\TallCrudGeneratorServiceProvider;
-use Livewire\LivewireServiceProvider;
-use Christophrumpel\MissingLivewireAssertions\MissingLivewireAssertionsServiceProvider;
-use Livewire\Testing\TestableLivewire;
 use Ascsoftw\TallCrudGenerator\Tests\Concerns\LivewireMethodMixin;
+use Christophrumpel\MissingLivewireAssertions\MissingLivewireAssertionsServiceProvider;
+use Livewire\LivewireServiceProvider;
+use Livewire\Testing\TestableLivewire;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

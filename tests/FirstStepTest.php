@@ -2,8 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class FirstStepTest extends TestCase
 {
@@ -61,7 +61,7 @@ class FirstStepTest extends TestCase
             ->assertSet('step', 2)
             ->assertSee('Previous')
             ->assertSet('isValidModel', true);
-        
+
         $modelProps = $component->get('modelProps');
         $this->assertEquals('brands', $modelProps['tableName']);
         $this->assertEquals('id', $modelProps['primaryKey']);

@@ -2,8 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class BasicTest extends TestCase
 {
@@ -25,7 +25,6 @@ class BasicTest extends TestCase
 
     public function test_default_settings()
     {
-
         $this->component
             ->assertSet('step', 7)
             ->assertSee('Previous')
@@ -36,7 +35,6 @@ class BasicTest extends TestCase
 
     public function test_component_name_is_required()
     {
-
         $this->component
             ->pressNext()
             ->assertSee('Please enter the name of your component')
@@ -45,7 +43,6 @@ class BasicTest extends TestCase
 
     public function test_component_is_generated()
     {
-
         $this->component
             ->generateFiles()
             ->assertSet('exitCode', 0)
