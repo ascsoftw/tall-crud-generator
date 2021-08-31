@@ -428,21 +428,25 @@ trait WithViewCode
                 $label = $this->getLabel($this->primaryKeyProps['label'], $this->getPrimaryKey());
                 $column = $this->getPrimaryKey();
                 $isSortable = $this->isPrimaryKeySortable();
+
                 break;
             case 'normal':
                 $label = $this->getLabel($field['label'], $field['column']);
                 $column = $field['column'];
                 $isSortable = $this->isColumnSortable($field['column']);
+
                 break;
             case 'with':
                 $label = $this->getLabelForWith($field['relationName']);
                 $column = null;
                 $isSortable = false;
+
                 break;
             case 'withCount':
                 $label = $this->getLabelForWithCount($field['relationName']);
                 $column = $this->getColumnForWithCount($field['relationName']);
                 $isSortable = $field['isSortable'];
+
                 break;
         }
 
