@@ -196,7 +196,7 @@ trait WithHelpers
             return $label;
         }
 
-        return Str::title(Str::replace('_', ' ', $column));
+        return Str::title(str_replace('_', ' ', $column));
     }
 
     public function getLabelForWith($relation = '')

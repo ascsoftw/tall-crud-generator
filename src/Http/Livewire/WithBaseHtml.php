@@ -2,8 +2,6 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
-use Illuminate\Support\Str;
-
 trait WithBaseHtml
 {
     public function getTableColumnHtml($slot, $params = '')
@@ -16,7 +14,7 @@ trait WithBaseHtml
         $preTag = $postTag = '';
         if ($this->isHideColumnsEnabled()) {
             $props = $this->getTableColumnProps($f);
-            $preTag = Str::replace(
+            $preTag = str_replace(
                 '##LABEL##',
                 $props[0],
                 $this->getHideColumnIfTemplate()
@@ -26,7 +24,7 @@ trait WithBaseHtml
 
         return $preTag.
             $this->getTableColumnHtml(
-                Str::replace(
+                str_replace(
                     '##COLUMN_NAME##',
                     $this->getTableSlotColumnValue($f),
                     $this->getTableColumnTemplate()
@@ -48,7 +46,7 @@ trait WithBaseHtml
     public function getHeaderHtml($label, $column = null, $isSortable = false)
     {
         if ($isSortable) {
-            $html = Str::replace(
+            $html = str_replace(
                 [
                     '##COLUMN##',
                     '##LABEL##',
@@ -68,7 +66,7 @@ trait WithBaseHtml
 
         $preTag = $postTag = '';
         if ($this->isHideColumnsEnabled()) {
-            $preTag = Str::replace(
+            $preTag = str_replace(
                 '##LABEL##',
                 $label,
                 $this->getHideColumnIfTemplate()

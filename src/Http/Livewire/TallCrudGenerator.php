@@ -419,4 +419,10 @@ class TallCrudGenerator extends Component
     {
         return $this->hasAddAndEditFeaturesDisabled();
     }
+
+    public function getAdvancedSettingLabel($key)
+    {
+        //Str::replace does not exist in pre v8.41.0
+        return Str::title(str_replace('-', ' ', Str::kebab($key)));
+    }
 }

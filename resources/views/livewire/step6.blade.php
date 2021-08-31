@@ -11,11 +11,7 @@
             @foreach ($advancedSettings['text'] as $key => $text)
             <div class="mt-4">
                 <x:tall-crud-generator::label>
-                    {{ Str::title(
-                        Str::replace(
-                            '-', ' ', Str::kebab($key)
-                        )) 
-                    }}
+                    {{ $this->getAdvancedSettingLabel($key)}}
                 </x:tall-crud-generator::label>
                 <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text"
                     wire:model.defer="advancedSettings.text.{{$key}}" />
