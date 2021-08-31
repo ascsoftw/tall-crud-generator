@@ -2,8 +2,6 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
-use Illuminate\Support\Str;
-
 trait WithBaseHtml
 {
     public function getTableColumnHtml($slot, $params = '')
