@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2021-08-31
+- Implemented PhpUnit Test Cases
+- Minor Bug Fixes
+
 ## [1.5.0] - 2021-08-22
 - Implemented Filters
 - Minor Bug Fixes
