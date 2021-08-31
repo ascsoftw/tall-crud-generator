@@ -121,6 +121,7 @@ class TallCrudGenerator extends Component
                 if (! $this->isValidModel) {
                     return;
                 }
+
                 break;
             case 2:
                 //Validate Features
@@ -133,6 +134,7 @@ class TallCrudGenerator extends Component
 
                 //Prepare for Next Step.
                 $this->getAllRelations();
+
                 break;
             case 4:
                 //Relation Fields
@@ -140,16 +142,19 @@ class TallCrudGenerator extends Component
                 //Prepare for Next Step.
                 $this->getSortFields();
                 $this->confirmingSorting = false;
+
                 break;
             case 5:
                 //Validate Sort Fields
                 //Prepare for Next Step.
                 $this->resetFilter();
+
                 break;
             case 6:
                 //Validate Advanced Section
                 //Prepare for Next Step.
                 $this->isComplete = false;
+
                 break;
             case 7:
                 //Validate Generate Files
@@ -157,6 +162,7 @@ class TallCrudGenerator extends Component
                 $this->generateFiles();
 
                 return;
+
                 break;
         }
 

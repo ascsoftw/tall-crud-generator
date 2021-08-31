@@ -148,18 +148,21 @@ trait WithFilters
                     return;
                 }
                 $this->addNoRelationFilter();
+
                 break;
             case 'BelongsTo':
                 if (! $this->validateRelation('BelongsTo')) {
                     return;
                 }
                 $this->addBelongsToFilter();
+
                 break;
             case 'BelongsToMany':
                 if (! $this->validateRelation('BelongsToMany')) {
                     return;
                 }
                 $this->addBelongsToManyFilter();
+
                 break;
         }
         $this->confirmingFilter = false;
