@@ -101,7 +101,7 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace(
+        return str_replace(
             '##RELATIONS##',
             $relations->implode(','),
             $this->getWithQueryTemplate()
@@ -121,7 +121,7 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace(
+        return str_replace(
             '##RELATIONS##',
             $relations->implode(','),
             $this->getWithCountQueryTemplate()
@@ -218,7 +218,7 @@ trait WithComponentCode
 
     public function generateChildListeners()
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##DELETE_LISTENER##',
                 '##ADD_LISTENER##',
@@ -235,7 +235,7 @@ trait WithComponentCode
 
     public function getSortingVars()
     {
-        return Str::replace(
+        return str_replace(
             '##SORT_COLUMN##',
             $this->getDefaultSortableColumn(),
             $this->getSortingVarsTemplate()
@@ -265,7 +265,7 @@ trait WithComponentCode
         $isFirst = true;
         foreach ($searchableColumns as $f) {
             $searchQuery->push(
-                Str::replace(
+                str_replace(
                     [
                         '##QUERY##',
                         '##COLUMN##',
@@ -280,7 +280,7 @@ trait WithComponentCode
             $isFirst = false;
         }
 
-        return Str::replace(
+        return str_replace(
             '##SEARCH_QUERY##',
             $searchQuery->prependAndJoin($this->newLines(1, 6), $this->indent(5)),
             $this->getSearchinQueryTemplate()
@@ -294,7 +294,7 @@ trait WithComponentCode
 
     public function getPaginationVars()
     {
-        return Str::replace(
+        return str_replace(
             '##PER_PAGE##',
             $this->advancedSettings['table_settings']['recordsPerPage'],
             $this->getPaginationVarsTemplate()
@@ -313,7 +313,7 @@ trait WithComponentCode
 
     public function getDeleteMethod()
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##MODEL##',
                 '##COMPONENT_NAME##',
@@ -339,7 +339,7 @@ trait WithComponentCode
         $createFieldHtml = collect();
         foreach ($fields as $field) {
             $createFieldHtml->push(
-                Str::replace(
+                str_replace(
                     [
                         '##COLUMN##',
                         '##DEFAULT_VALUE##',
@@ -353,7 +353,7 @@ trait WithComponentCode
             );
         }
 
-        return Str::replace(
+        return str_replace(
             [
                 '##MODEL##',
                 '##COMPONENT_NAME##',
@@ -385,7 +385,7 @@ trait WithComponentCode
 
     public function getEditMethod()
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##MODEL##',
                 '##MODEL_VAR##',
@@ -431,7 +431,7 @@ trait WithComponentCode
             $rules->push($this->getRulesForBelongsToFields());
         }
 
-        return Str::replace('##RULES##', $rules->prependAndJoin($this->newLines(1, 2)), $this->getChildRulesTemplate());
+        return str_replace('##RULES##', $rules->prependAndJoin($this->newLines(1, 2)), $this->getChildRulesTemplate());
     }
 
     public function generateChildValidationAttributes()
@@ -451,7 +451,7 @@ trait WithComponentCode
             $attributes->push($this->getAttributesForBelongsToFields());
         }
 
-        return Str::replace(
+        return str_replace(
             '##ATTRIBUTES##',
             $attributes->prependAndJoin($this->newLines(1, 2)),
             $this->getChildValidationAttributesTemplate()
@@ -586,7 +586,7 @@ trait WithComponentCode
             }
 
             $initCode->push(
-                Str::replace(
+                str_replace(
                     [
                         '##RELATION##',
                         '##MODEL##',
@@ -620,7 +620,7 @@ trait WithComponentCode
             }
 
             $attachCode->push(
-                Str::replace(
+                str_replace(
                     [
                         '##RELATION##',
                         '##FIELD_NAME##',
@@ -650,7 +650,7 @@ trait WithComponentCode
             }
 
             $btmFetchCode->push(
-                Str::replace(
+                str_replace(
                     [
                         '##RELATION##',
                         '##FIELD_NAME##',
@@ -688,7 +688,7 @@ trait WithComponentCode
             }
 
             $btmUpdateCode->push(
-                Str::replace(
+                str_replace(
                     [
                         '##RELATION##',
                         '##FIELD_NAME##',
@@ -749,7 +749,7 @@ trait WithComponentCode
         $initCode = collect();
         foreach ($this->belongsToRelations as $r) {
             $initCode->push(
-                Str::replace(
+                str_replace(
                     [
                         '##BELONGS_TO_VAR##',
                         '##MODEL##',
@@ -777,7 +777,7 @@ trait WithComponentCode
         $saveCode = collect();
         foreach ($this->belongsToRelations as $r) {
             $saveCode->push(
-                Str::replace(
+                str_replace(
                     [
                         '##COLUMN##',
                         '##DEFAULT_VALUE##',
@@ -796,7 +796,7 @@ trait WithComponentCode
 
     public function getOtherModelCode($modelPath)
     {
-        return Str::replace(
+        return str_replace(
             '##MODEL##',
             $modelPath,
             $this->getOtherModelTemplate()
@@ -805,7 +805,7 @@ trait WithComponentCode
 
     public function getArrayCode($name, $type = 'array')
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##NAME##',
                 '##TYPE##',
@@ -824,7 +824,7 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace(
+        return str_replace(
             '##MESSAGE##',
             $message,
             $this->getFlashTriggerTemplate()
@@ -833,7 +833,7 @@ trait WithComponentCode
 
     public function getChildFieldCode($columnName, $value)
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##COLUMN_NAME##',
                 '##VALUE##',
@@ -848,7 +848,7 @@ trait WithComponentCode
 
     public function getHideColumnVars()
     {
-        return Str::replace(
+        return str_replace(
             '##COLUMNS##',
             $this->getAllListingColumns(),
             $this->getHideColumnVarsTemplate()
@@ -874,7 +874,7 @@ trait WithComponentCode
         $columns = collect();
         $labels->each(function ($label) use ($columns) {
             $columns->push(
-                Str::replace(
+                str_replace(
                     '##VALUE##',
                     $label,
                     $this->getArrayValueTemplate()
@@ -892,7 +892,7 @@ trait WithComponentCode
 
     public function getBulkActionMethod()
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##MODEL##',
                 '##PRIMARY_KEY##',
@@ -935,7 +935,7 @@ trait WithComponentCode
                 continue;
             }
             $filters->push(
-                Str::replace(
+                str_replace(
                     [
                         '##KEY##',
                         '##LABEL##',
@@ -955,7 +955,7 @@ trait WithComponentCode
             return '';
         }
 
-        return Str::replace(
+        return str_replace(
             '##FILTERS##',
             $filters->prependAndJoin($this->newLines(1, 1)).$this->newLines(1, 2),
             $this->getFilterInitTemplate()
@@ -970,7 +970,7 @@ trait WithComponentCode
                 continue;
             }
             $filters->push(
-                Str::replace(
+                str_replace(
                     [
                         '##VAR##',
                         '##MODEL##',
@@ -1005,7 +1005,7 @@ trait WithComponentCode
 
         foreach ($options as $k => $v) {
             $filterOptions->push(
-                Str::replace(
+                str_replace(
                     [
                         '##KEY##',
                         '##LABEL##',
@@ -1033,7 +1033,7 @@ trait WithComponentCode
         foreach ($this->filters as $f) {
             if ($f['type'] == 'BelongsToMany') {
                 $query->push(
-                    Str::replace(
+                    str_replace(
                         [
                             '##COLUMN##',
                             '##RELATION##',
@@ -1051,7 +1051,7 @@ trait WithComponentCode
                 );
             } else {
                 $query->push(
-                    Str::replace(
+                    str_replace(
                         '##COLUMN##',
                         $this->getFilterColumnName($f),
                         $this->getFilterQueryTemplate()

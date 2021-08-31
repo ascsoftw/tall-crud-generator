@@ -29,7 +29,7 @@ trait WithViewCode
     public function generateAddLink()
     {
         if ($this->isAddFeatureEnabled()) {
-            $buttonParams = Str::replace(
+            $buttonParams = str_replace(
                 '##COMPONENT_NAME##',
                 $this->getChildComponentName(),
                 $this->getAddButtonTemplate()
@@ -166,7 +166,7 @@ trait WithViewCode
             return '';
         }
 
-        return Str::replace(
+        return str_replace(
             [
                 '##CANCEL_BTN_TEXT##',
                 '##DELETE_BTN_TEXT##',
@@ -191,7 +191,7 @@ trait WithViewCode
             $fieldsHtml->push($this->getFieldHtml($field));
         }
 
-        return Str::replace(
+        return str_replace(
             [
                 '##CANCEL_BTN_TEXT##',
                 '##CREATE_BTN_TEXT##',
@@ -217,7 +217,7 @@ trait WithViewCode
             $fieldsHtml->push($this->getFieldHtml($field));
         }
 
-        return Str::replace(
+        return str_replace(
             [
                 '##CANCEL_BTN_TEXT##',
                 '##EDIT_BTN_TEXT##',
@@ -236,7 +236,7 @@ trait WithViewCode
     {
         $buttons = collect();
         if ($this->isEditFeatureEnabled()) {
-            $buttonParams = Str::replace(
+            $buttonParams = str_replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
@@ -257,7 +257,7 @@ trait WithViewCode
         }
 
         if ($this->isDeleteFeatureEnabled()) {
-            $buttonParams = Str::replace(
+            $buttonParams = str_replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
@@ -285,7 +285,7 @@ trait WithViewCode
     {
         $html = collect();
         $html->push(
-            Str::replace(
+            str_replace(
                 '##PRIMARY_KEY##',
                 $this->getPrimaryKey(),
                 $this->getBulkCheckboxTemplate()
@@ -298,7 +298,7 @@ trait WithViewCode
     public function getWithTableSlot($r)
     {
         if ($this->isBelongsToManyRelation($r['relationName']) || $this->isHasManyRelation($r['relationName'])) {
-            return Str::replace(
+            return str_replace(
                 [
                     '##RELATION##',
                     '##DISPLAY_COLUMN##',
@@ -311,7 +311,7 @@ trait WithViewCode
             );
         }
 
-        return Str::replace(
+        return str_replace(
             [
                 '##RELATION##',
                 '##DISPLAY_COLUMN##',
@@ -326,7 +326,7 @@ trait WithViewCode
 
     public function getNormalFieldHtml($field)
     {
-        $html = Str::replace(
+        $html = str_replace(
             [
                 '##COLUMN##',
                 '##LABEL##',
@@ -339,7 +339,7 @@ trait WithViewCode
         );
 
         if ($field['attributes']['type'] == 'select') {
-            $html = Str::replace(
+            $html = str_replace(
                 '##OPTIONS##',
                 $this->getSelectOptionsHtml($field['attributes']['options']),
                 $html
@@ -351,7 +351,7 @@ trait WithViewCode
 
     public function getBtmFieldHtml($r)
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##HEADING##',
                 '##RELATION##',
@@ -372,7 +372,7 @@ trait WithViewCode
 
     public function getBelongsToFieldHtml($r)
     {
-        return Str::replace(
+        return str_replace(
             [
                 '##LABEL##',
                 '##FOREIGN_KEY##',
