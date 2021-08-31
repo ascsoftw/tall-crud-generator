@@ -422,6 +422,7 @@ class TallCrudGenerator extends Component
 
     public function getAdvancedSettingLabel($key)
     {
-        return Str::title(Str::replace('-', ' ', Str::kebab($key)));
+        //Str::replace does not exist in pre v8.41.0
+        return Str::title(str_replace('-', ' ', Str::kebab($key)));
     }
 }
