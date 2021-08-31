@@ -56,9 +56,10 @@ trait WithHelpers
         $collection = collect($this->getSortedListingFields());
 
         $field = $collection->first(function ($f) {
-            if (isset($f['isPrimaryKey']) && $f['isPrimaryKey']) {
+            if ($f['type'] == 'primary') {
                 return false;
             }
+
             if ($f['sortable']) {
                 return true;
             }

@@ -803,11 +803,17 @@ trait WithComponentCode
         );
     }
 
-    public function getArrayCode($name)
+    public function getArrayCode($name, $type = 'array')
     {
         return Str::replace(
-            '##NAME##',
-            $name,
+            [
+                '##NAME##',
+                '##TYPE##',
+            ],
+            [
+                $name,
+                $type,
+            ],
             $this->getArrayTemplate()
         );
     }

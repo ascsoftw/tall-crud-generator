@@ -84,13 +84,13 @@ EOT;
         return <<<'EOT'
 
 
-    public function showDeleteForm($id)
+    public function showDeleteForm(int $id): void
     {
         $this->confirmingItemDeletion = true;
         $this->primaryKey = $id;
     }
 
-    public function deleteItem()
+    public function deleteItem(): void
     {
         ##MODEL##::destroy($this->primaryKey);
         $this->confirmingItemDeletion = false;
@@ -106,14 +106,14 @@ EOT;
     {
         return <<<'EOT'
  
-    public function showCreateForm()
+    public function showCreateForm(): void
     {
         $this->confirmingItemCreation = true;
         $this->resetErrorBag();
         $this->reset(['item']);##BTM_INIT####BELONGS_TO_INIT##
     }
 
-    public function createItem() 
+    public function createItem(): void
     {
         $this->validate();
         $item = ##MODEL##::create([##CREATE_FIELDS####BELONGS_TO_SAVE##
@@ -136,14 +136,14 @@ EOT;
     {
         return <<<'EOT'
  
-    public function showEditForm(##MODEL## $##MODEL_VAR##)
+    public function showEditForm(##MODEL## $##MODEL_VAR##): void
     {
         $this->resetErrorBag();
         $this->item = $##MODEL_VAR##;
         $this->confirmingItemEdition = true;##BTM_FETCH####BELONGS_TO_INIT##
     }
 
-    public function editItem() 
+    public function editItem(): void
     {
         $this->validate();
         $this->item->save();##BTM_UPDATE##
@@ -158,6 +158,9 @@ EOT;
     public function getChildListenerTemplate()
     {
         return <<<'EOT'
+    /**
+     * @var array
+     */
     protected $listeners = [
         '##DELETE_LISTENER##',
         '##ADD_LISTENER##',
@@ -172,7 +175,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function sortBy($field)
+    public function sortBy(string $field): void
     {
         if ($field == $this->sortBy) {
             $this->sortAsc = !$this->sortAsc;
@@ -187,7 +190,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingQ()
+    public function updatingQ(): void
     {
         $this->resetPage();
     }
@@ -199,7 +202,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingPerPage()
+    public function updatingPerPage(): void
     {
         $this->resetPage();
     }
@@ -217,8 +220,14 @@ EOT;
     {
         return <<<'EOT'
 
-
+    /**
+     * @var string
+     */
     public $sortBy = '##SORT_COLUMN##';
+
+    /**
+     * @var bool
+     */
     public $sortAsc = true;
 
 EOT;
@@ -235,9 +244,16 @@ EOT;
     public function getDeleteVarsTemplate()
     {
         return <<<'EOT'
-
+    /**
+     * @var bool
+     */
     public $confirmingItemDeletion = false;
+
+    /**
+     * @var string | int
+     */
     public $primaryKey;
+
 EOT;
     }
 
@@ -245,7 +261,11 @@ EOT;
     {
         return <<<'EOT'
 
+    /**
+     * @var bool
+     */
     public $confirmingItemCreation = false;
+
 EOT;
     }
 
@@ -253,6 +273,9 @@ EOT;
     {
         return <<<'EOT'
 
+    /**
+     * @var bool
+     */
     public $confirmingItemEdition = false;
 EOT;
     }
@@ -261,7 +284,11 @@ EOT;
     {
         return <<<'EOT'
 
+    /**
+     * @var string
+     */
     public $q;
+
 EOT;
     }
 
@@ -269,7 +296,11 @@ EOT;
     {
         return <<<'EOT'
 
+    /**
+     * @var int
+     */
     public $per_page = ##PER_PAGE##;
+
 EOT;
     }
 
@@ -304,9 +335,12 @@ EOT;
     {
         return <<<'EOT'
 
-
+    /**
+     * @var array
+     */
     protected $rules = [##RULES##
     ];
+
 EOT;
     }
 
@@ -321,9 +355,12 @@ EOT;
     {
         return <<<'EOT'
 
-
+    /**
+     * @var array
+     */
     protected $validationAttributes = [##ATTRIBUTES##
     ];
+
 
 EOT;
     }
@@ -451,7 +488,11 @@ EOT;
     public function getArrayTemplate()
     {
         return <<<'EOT'
+    /**
+     * @var ##TYPE##
+     */
     public $##NAME## = [];
+
 EOT;
     }
 
@@ -613,9 +654,13 @@ EOT;
     {
         return <<<'EOT'
 
+    /**
+     * @var array
+     */
     public $columns = [
 ##COLUMNS##
     ];
+
 EOT;
     }
 
@@ -645,7 +690,7 @@ EOT;
         return <<<'EOT'
 
 
-    public function changeStatus($status)
+    public function changeStatus(string $status): void
     {
         if (!empty($this->selectedItems)) {
             ##MODEL##::whereIn('##PRIMARY_KEY##', $this->selectedItems)->update(['##COLUMN##' => $status]);
@@ -746,12 +791,12 @@ EOT;
         return <<<'EOT'
 
 
-    public function updatingSelectedFilters()
+    public function updatingSelectedFilters(): void
     {
         $this->resetPage();
     }
 
-    public function getFilter($column)
+    public function isFilterSet(string $column): bool
     {
         if( isset($this->selectedFilters[$column]) && $this->selectedFilters[$column] != '') {
             return true;
@@ -759,7 +804,7 @@ EOT;
         return false;
     }
 
-    public function resetFilters()
+    public function resetFilters(): void
     {
         $this->reset('selectedFilters');
     }
@@ -769,7 +814,7 @@ EOT;
     public function getFilterQueryTemplate()
     {
         return <<<'EOT'
-            ->when($this->getFilter('##COLUMN##'), function($query) {
+            ->when($this->isFilterSet('##COLUMN##'), function($query) {
                 return $query->where('##COLUMN##', $this->selectedFilters['##COLUMN##']);
             })
 EOT;
@@ -778,7 +823,7 @@ EOT;
     public function getFilterQueryBtmTemplate()
     {
         return <<<'EOT'
-            ->when($this->getFilter('##COLUMN##'), function($query) {
+            ->when($this->isFilterSet('##COLUMN##'), function($query) {
                 return $query->whereHas('##RELATION##', function($query) {
                     return $query->where('##TABLE##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
                 });
