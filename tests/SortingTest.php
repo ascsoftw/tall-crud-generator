@@ -2,12 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class SortingTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -16,7 +15,6 @@ class SortingTest extends TestCase
 
     public function test_component_is_generated()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->disableModals()
@@ -30,12 +28,10 @@ class SortingTest extends TestCase
             ->generateFiles()
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
-
     }
 
     public function test_primary_key_is_sortable()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->disableModals()
@@ -62,12 +58,10 @@ class SortingTest extends TestCase
 
         $this->component->call('getDefaultSortableColumn')
             ->assertReturnEquals('getDefaultSortableColumn', 'id');
-
     }
 
     public function test_other_column_is_sortable()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->disableModals()
@@ -96,6 +90,5 @@ class SortingTest extends TestCase
 
         $this->component->call('getDefaultSortableColumn')
             ->assertReturnEquals('getDefaultSortableColumn', 'name');
-
     }
 }

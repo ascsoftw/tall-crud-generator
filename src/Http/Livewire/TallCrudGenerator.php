@@ -202,6 +202,7 @@ class TallCrudGenerator extends Component
         $this->resetValidation();
         if (! class_exists($this->modelPath)) {
             $this->addError('modelPath', 'File does not exists');
+
             return;
         }
 

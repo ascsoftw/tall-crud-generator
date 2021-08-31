@@ -2,12 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class EagerLoadCountTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -16,7 +15,6 @@ class EagerLoadCountTest extends TestCase
 
     public function test_adding_a_eager_load_count_relation()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->disableModals()
@@ -55,7 +53,7 @@ class EagerLoadCountTest extends TestCase
 
             ->assertCount('withCountRelations', 2)
             ->assertSeeInOrder(['tags', 'No',  'categories', 'Yes'])
-        
+
             ->call('deleteWithCountRelation', 0)
             ->assertCount('withCountRelations', 1)
             ->assertSeeInOrder(['categories', 'Yes'])
@@ -63,11 +61,8 @@ class EagerLoadCountTest extends TestCase
             ->pressNext(3)
             ->generateFiles()
             ->assertCount('withCountRelations', 1);
-        
+
         $props = $this->component->get('props');
         $this->assertNotEmpty($props['code']['with_count_query']);
-
     }
-
-
 }

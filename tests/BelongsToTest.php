@@ -2,12 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class BelongsToTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -16,7 +15,6 @@ class BelongsToTest extends TestCase
 
     public function test_belongs_to_is_visible()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->pressNext()
@@ -28,7 +26,6 @@ class BelongsToTest extends TestCase
 
     public function test_adding_a_belongs_to_relation()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->pressNext()

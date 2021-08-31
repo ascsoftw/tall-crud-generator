@@ -2,8 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class SecondStepTest extends TestCase
 {
@@ -17,7 +17,6 @@ class SecondStepTest extends TestCase
 
     public function test_default_settings()
     {
-
         $this->component
             ->assertSet('step', 2)
             ->assertSee('Previous')

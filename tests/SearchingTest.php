@@ -2,12 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class SearchingTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -16,7 +15,6 @@ class SearchingTest extends TestCase
 
     public function test_component_is_generated()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->disableModals()
@@ -31,12 +29,10 @@ class SearchingTest extends TestCase
             ->generateFiles()
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
-
     }
 
     public function test_search_is_setup()
     {
-
         $this->component = Livewire::test(TallCrudGenerator::class)
             ->step1()
             ->disableModals()
@@ -52,17 +48,16 @@ class SearchingTest extends TestCase
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
 
-            $props = $this->component->get('props');
+        $props = $this->component->get('props');
 
-            $this->assertNotEmpty($props['code']['search']['vars']);
-            $this->assertNotEmpty($props['code']['search']['query']);
-            $this->assertNotEmpty($props['code']['search']['method']);
-    
-            $this->component->call('isSearchingEnabled')
+        $this->assertNotEmpty($props['code']['search']['vars']);
+        $this->assertNotEmpty($props['code']['search']['query']);
+        $this->assertNotEmpty($props['code']['search']['method']);
+
+        $this->component->call('isSearchingEnabled')
                 ->assertReturnEquals('isSearchingEnabled', true);
-    
-            $this->component->call('getSearchableColumns')
-                ->assertReturnCount('getSearchableColumns', 1);
 
+        $this->component->call('getSearchableColumns')
+                ->assertReturnCount('getSearchableColumns', 1);
     }
 }

@@ -2,12 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Livewire\Livewire;
 
 class SortTest extends TestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -28,7 +27,5 @@ class SortTest extends TestCase
             ->assertSeeInOrder(['id', 'name', 'price', 'sku'])
             ->call('reorder', ['id', 'sku', 'name', 'price'])
             ->assertSeeInOrder(['id', 'sku', 'name', 'price']);
-
     }
-
 }
