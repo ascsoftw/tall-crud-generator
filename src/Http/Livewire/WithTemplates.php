@@ -170,7 +170,7 @@ EOT;
 EOT;
     }
 
-    public function getSortingMethodTemplate()
+    public static function getSortingMethodTemplate()
     {
         return <<<'EOT'
 
@@ -185,7 +185,7 @@ EOT;
 EOT;
     }
 
-    public function getSearchingMethodTemplate()
+    public static function getSearchMethodTemplate()
     {
         return <<<'EOT'
 
@@ -216,7 +216,7 @@ EOT;
 EOT;
     }
 
-    public function getSortingVarsTemplate()
+    public static function getSortingVarsTemplate()
     {
         return <<<'EOT'
 
@@ -233,7 +233,7 @@ EOT;
 EOT;
     }
 
-    public function getSortingQueryTemplate()
+    public static function getSortingQueryTemplate()
     {
         return <<<'EOT'
 
@@ -280,7 +280,7 @@ EOT;
 EOT;
     }
 
-    public function getSearchingVarsTemplate()
+    public static function getSearchingVarsTemplate()
     {
         return <<<'EOT'
 
@@ -304,19 +304,19 @@ EOT;
 EOT;
     }
 
-    public function getSearchinQueryTemplate()
+    public static function getSearchQueryTemplate()
     {
         return <<<'EOT'
 
             ->when($this->q, function ($query) {
                 return $query->where(function ($query) {
-##SEARCH_QUERY##;
+##WHERE_CLAUSE##;
                 });
             })
 EOT;
     }
 
-    public function getSearchingQueryWhereTemplate()
+    public static function getSearchQueryWhereTemplate()
     {
         return <<<'EOT'
 ##QUERY##('##COLUMN##', 'like', '%' . $this->q . '%')
@@ -546,7 +546,16 @@ EOT;
 EOT;
     }
 
+    //todo remove this.
     public function getOtherModelTemplate()
+    {
+        return <<<'EOT'
+
+use ##MODEL##;
+EOT;
+    }
+
+    public static function getUseModelTemplate()
     {
         return <<<'EOT'
 

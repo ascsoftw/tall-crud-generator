@@ -4,6 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
 
 class SortingTest extends TestCase
 {
@@ -44,20 +45,18 @@ class SortingTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $props = $this->component->get('props');
+        $tallComponent = $this->component->get('tallComponent');
+        $sortCode = $tallComponent->getSortCode();
 
-        $this->assertNotEmpty($props['code']['sort']['vars']);
-        $this->assertNotEmpty($props['code']['sort']['query']);
-        $this->assertNotEmpty($props['code']['sort']['method']);
-
-        $this->component->call('isSortingEnabled')
-            ->assertReturnEquals('isSortingEnabled', true);
+        $this->assertEquals(true, $tallComponent->getSorting());
+        $this->assertEquals('id', $tallComponent->getDefaultSortableColumn());
+        $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $tallComponent->getSortingQuery());
+        $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $tallComponent->getSortingMethod());
+        $this->assertNotEmpty($sortCode['vars']);
 
         $this->component->call('isPrimaryKeySortable')
             ->assertReturnEquals('isPrimaryKeySortable', true);
 
-        $this->component->call('getDefaultSortableColumn')
-            ->assertReturnEquals('getDefaultSortableColumn', 'id');
     }
 
     public function test_other_column_is_sortable()

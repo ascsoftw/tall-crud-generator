@@ -8,9 +8,23 @@ trait WithComponentCode
 {
     public function generateComponentCode()
     {
+        $this->tallComponent = new TallComponent();
+        //Sorting
+        $this->tallComponent->setSorting($this->isSortingEnabled());
+        if($this->tallComponent->getSorting()) {
+            $this->tallComponent->setDefaultSortableColumn($this->getDefaultSortableColumn());
+        }
+        //Searching
+        $this->tallComponent->setSearching($this->isSearchingEnabled());
+        if($this->tallComponent->getSearching()) {
+            $this->tallComponent->setSearchableColumns($this->getSearchableColumns());
+        }
+        //Other Models
+        $this->tallComponent->setOtherModels($this->filters);
+
         $code = [];
-        $code['sort'] = $this->generateSortCode();
-        $code['search'] = $this->generateSearchCode();
+        $code['sort'] = $this->tallComponent->getSortCode();
+        $code['search'] = $this->tallComponent->getSearchCode();
         $code['pagination_dropdown'] = $this->generatePaginationDropdownCode();
         $code['pagination'] = $this->generatePaginationCode();
         $code['with_query'] = $this->generateWithQueryCode();
@@ -18,7 +32,7 @@ trait WithComponentCode
         $code['hide_columns'] = $this->generateHideColumnsCode();
         $code['bulk_actions'] = $this->generateBulkActionsCode();
         $code['filter'] = $this->generateFilterCode();
-        $code['other_models'] = $this->generateOtherModelsCode();
+        $code['other_models'] = $this->tallComponent->getOtherModelsCode();
 
         $code['child_delete'] = $this->generateDeleteCode();
         $code['child_add'] = $this->generateAddCode();
@@ -29,38 +43,6 @@ trait WithComponentCode
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
         $code['child_other_models'] = $this->generateChildOtherModelsCode();
         $code['child_vars'] = $this->getRelationVars();
-
-        return $code;
-    }
-
-    public function generateSortCode()
-    {
-        $code = [
-            'vars' => '',
-            'query' => '',
-            'method' => '',
-        ];
-        if ($this->isSortingEnabled()) {
-            $code['vars'] = $this->getSortingVars();
-            $code['query'] = $this->getSortingQuery();
-            $code['method'] = $this->getSortingMethod();
-        }
-
-        return $code;
-    }
-
-    public function generateSearchCode()
-    {
-        $code = [
-            'vars' => '',
-            'query' => '',
-            'method' => '',
-        ];
-        if ($this->isSearchingEnabled()) {
-            $code['vars'] = $this->getSearchingVars();
-            $code['query'] = $this->getSearchingQuery();
-            $code['method'] = $this->getSearchingMethod();
-        }
 
         return $code;
     }
@@ -233,65 +215,6 @@ trait WithComponentCode
         );
     }
 
-    public function getSortingVars()
-    {
-        return str_replace(
-            '##SORT_COLUMN##',
-            $this->getDefaultSortableColumn(),
-            $this->getSortingVarsTemplate()
-        );
-    }
-
-    public function getSortingQuery()
-    {
-        return $this->getSortingQueryTemplate();
-    }
-
-    public function getSortingMethod()
-    {
-        return $this->getSortingMethodTemplate();
-    }
-
-    public function getSearchingVars()
-    {
-        return $this->getSearchingVarsTemplate();
-    }
-
-    public function getSearchingQuery()
-    {
-        $searchQuery = collect();
-
-        $searchableColumns = $this->getSearchableColumns();
-        $isFirst = true;
-        foreach ($searchableColumns as $f) {
-            $searchQuery->push(
-                str_replace(
-                    [
-                        '##QUERY##',
-                        '##COLUMN##',
-                    ],
-                    [
-                        $isFirst ? '$query->where' : '->orWhere',
-                        $f['column'],
-                    ],
-                    $this->getSearchingQueryWhereTemplate(),
-                )
-            );
-            $isFirst = false;
-        }
-
-        return str_replace(
-            '##SEARCH_QUERY##',
-            $searchQuery->prependAndJoin($this->newLines(1, 6), $this->indent(5)),
-            $this->getSearchinQueryTemplate()
-        );
-    }
-
-    public function getSearchingMethod()
-    {
-        return $this->getSearchingMethodTemplate();
-    }
-
     public function getPaginationVars()
     {
         return str_replace(
@@ -456,19 +379,6 @@ trait WithComponentCode
             $attributes->prependAndJoin($this->newLines(1, 2)),
             $this->getChildValidationAttributesTemplate()
         );
-    }
-
-    public function generateOtherModelsCode()
-    {
-        $modelsCode = collect();
-        foreach ($this->filters as $f) {
-            if ($f['type'] == 'None') {
-                continue;
-            }
-            $modelsCode->push($this->getOtherModelCode($f['modelPath']));
-        }
-
-        return $modelsCode->unique()->implode('');
     }
 
     public function generateChildOtherModelsCode()

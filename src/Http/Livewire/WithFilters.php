@@ -138,6 +138,16 @@ trait WithFilters
     public function addFilter()
     {
         $this->resetValidation('filter.*');
+        $this->validateOnly('filter.type', [
+            'filter.type' => 'required',
+        ]);
+
+        if($this->filter['type'] != 'None') {
+            $this->validateOnly('filter.relation', [
+                'filter.relation' => 'required',
+            ]);
+        }
+
         $this->validateOnly('filter.column', [
             'filter.column' => 'required',
         ]);

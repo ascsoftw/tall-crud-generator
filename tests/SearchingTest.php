@@ -4,6 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
 
 class SearchingTest extends TestCase
 {
@@ -48,16 +49,24 @@ class SearchingTest extends TestCase
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
 
-        $props = $this->component->get('props');
+        $tallComponent = $this->component->get('tallComponent');
+        $searchCode = $tallComponent->getSearchCode();
 
-        $this->assertNotEmpty($props['code']['search']['vars']);
-        $this->assertNotEmpty($props['code']['search']['query']);
-        $this->assertNotEmpty($props['code']['search']['method']);
+        $this->assertEquals(true, $tallComponent->getSearching());
+        $this->assertEquals(['name'], $tallComponent->getSearchableColumns()->toArray());
+        $this->assertEquals(WithTemplates::getSearchingVarsTemplate(), $tallComponent->getSearchVars());
+        $this->assertEquals(WithTemplates::getSearchMethodTemplate(), $tallComponent->getSearchMethod());
+        $whereClauseStr = <<<'EOT'
+$query->where('name', 'like', '%' . $this->q . '%')
+EOT;
+        $this->assertEquals($whereClauseStr, $tallComponent->getSearchWhereClause()->toArray()[0]);
+        $this->assertStringContainsString($whereClauseStr, $searchCode['query']);
+        $this->assertNotEmpty($searchCode['query']);
 
-        $this->component->call('isSearchingEnabled')
-                ->assertReturnEquals('isSearchingEnabled', true);
-
-        $this->component->call('getSearchableColumns')
-                ->assertReturnCount('getSearchableColumns', 1);
     }
+
+    // public function test_search_on_two_columns()
+    // {
+
+    // }
 }
