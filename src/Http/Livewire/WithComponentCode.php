@@ -3,33 +3,49 @@
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\App;
 
 trait WithComponentCode
 {
     public function generateComponentCode()
     {
-        $this->tallComponent = new TallComponent();
+
+        $this->tallComponent = App::make(TallComponent::class);
         //Sorting
-        $this->tallComponent->setSorting($this->isSortingEnabled());
-        if($this->tallComponent->getSorting()) {
+        $this->tallComponent->setSortingFlag($this->isSortingEnabled());
+        if($this->tallComponent->getSortingFlag()) {
             $this->tallComponent->setDefaultSortableColumn($this->getDefaultSortableColumn());
         }
         //Searching
-        $this->tallComponent->setSearching($this->isSearchingEnabled());
-        if($this->tallComponent->getSearching()) {
+        $this->tallComponent->setSearchingFlag($this->isSearchingEnabled());
+        if($this->tallComponent->getSearchingFlag()) {
             $this->tallComponent->setSearchableColumns($this->getSearchableColumns());
         }
+        //Pagination Dropdown
+        $this->tallComponent->setPaginationDropdownFlag($this->isPaginationDropdownEnabled());
+        //Records Per Page
+        $this->tallComponent->setRecordsPerPage($this->advancedSettings['table_settings']['recordsPerPage']);
+        //Eager Load Models
+        $this->tallComponent->setEagerLoadModels($this->withRelations);
+        //Eager Load Count Models
+        $this->tallComponent->setEagerLoadCountModels($this->withCountRelations);
+        //Hide Flag
+        $this->tallComponent->setHideColumnsFlag($this->isHideColumnsEnabled());
+        if($this->tallComponent->getHideColumnsFlag()) {
+            $this->tallComponent->setListingColumns($this->getAllListingColumns());
+        }
+        
         //Other Models
         $this->tallComponent->setOtherModels($this->filters);
 
         $code = [];
         $code['sort'] = $this->tallComponent->getSortCode();
         $code['search'] = $this->tallComponent->getSearchCode();
-        $code['pagination_dropdown'] = $this->generatePaginationDropdownCode();
-        $code['pagination'] = $this->generatePaginationCode();
-        $code['with_query'] = $this->generateWithQueryCode();
-        $code['with_count_query'] = $this->generateWithCountQueryCode();
-        $code['hide_columns'] = $this->generateHideColumnsCode();
+        $code['pagination_dropdown'] = $this->tallComponent->getPaginationDropdownCode();
+        $code['pagination'] = $this->tallComponent->getPaginationCode();
+        $code['with_query'] = $this->tallComponent->getWithQueryCode();
+        $code['with_count_query'] = $this->tallComponent->getWithCountQueryCode();
+        $code['hide_columns'] = $this->tallComponent->getHideColumnsCode();
         $code['bulk_actions'] = $this->generateBulkActionsCode();
         $code['filter'] = $this->generateFilterCode();
         $code['other_models'] = $this->tallComponent->getOtherModelsCode();
@@ -43,83 +59,6 @@ trait WithComponentCode
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
         $code['child_other_models'] = $this->generateChildOtherModelsCode();
         $code['child_vars'] = $this->getRelationVars();
-
-        return $code;
-    }
-
-    public function generatePaginationDropdownCode()
-    {
-        $code = [
-            'method' => '',
-        ];
-        if ($this->isPaginationDropdownEnabled()) {
-            $code['method'] = $this->getPaginationDropdownMethod();
-        }
-
-        return $code;
-    }
-
-    public function generatePaginationCode()
-    {
-        $code = [
-            'vars' => '',
-        ];
-
-        $code['vars'] = $this->getPaginationVars();
-
-        return $code;
-    }
-
-    public function generateWithQueryCode()
-    {
-        $relations = collect();
-        foreach ($this->withRelations as $r) {
-            $relations->push(
-                Str::of($r['relationName'])->append("'")->prepend("'")
-            );
-        }
-
-        if ($relations->isEmpty()) {
-            return '';
-        }
-
-        return str_replace(
-            '##RELATIONS##',
-            $relations->implode(','),
-            $this->getWithQueryTemplate()
-        );
-    }
-
-    public function generateWithCountQueryCode()
-    {
-        $relations = collect();
-        foreach ($this->withCountRelations as $r) {
-            $relations->push(
-                Str::of($r['relationName'])->append("'")->prepend("'")
-            );
-        }
-
-        if ($relations->isEmpty()) {
-            return '';
-        }
-
-        return str_replace(
-            '##RELATIONS##',
-            $relations->implode(','),
-            $this->getWithCountQueryTemplate()
-        );
-    }
-
-    public function generateHideColumnsCode()
-    {
-        $code = [
-            'vars' => '',
-            'init' => '',
-        ];
-        if ($this->isHideColumnsEnabled()) {
-            $code['vars'] = $this->getHideColumnVars();
-            $code['init'] = $this->getHideColumnInitCode();
-        }
 
         return $code;
     }
@@ -756,22 +695,6 @@ trait WithComponentCode
         );
     }
 
-    public function getHideColumnVars()
-    {
-        return str_replace(
-            '##COLUMNS##',
-            $this->getAllListingColumns(),
-            $this->getHideColumnVarsTemplate()
-        ).
-            $this->newLines().
-            $this->getArrayCode('selectedColumns');
-    }
-
-    public function getHideColumnInitCode()
-    {
-        return $this->getHideColumnInitCodeTemplate();
-    }
-
     public function getAllListingColumns()
     {
         $fields = $this->getSortedListingFields();
@@ -781,18 +704,7 @@ trait WithComponentCode
             $labels->push($props[0]);
         }
 
-        $columns = collect();
-        $labels->each(function ($label) use ($columns) {
-            $columns->push(
-                str_replace(
-                    '##VALUE##',
-                    $label,
-                    $this->getArrayValueTemplate()
-                )
-            );
-        });
-
-        return $columns->prependAndJoin($this->newLines(1, 2), $this->indent(2));
+        return $labels;
     }
 
     public function getBulkActionsVars()

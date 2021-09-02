@@ -197,7 +197,7 @@ EOT;
 EOT;
     }
 
-    public function getPaginationDropdownMethodTemplate()
+    public static function getPaginationDropdownMethodTemplate()
     {
         return <<<'EOT'
 
@@ -292,7 +292,7 @@ EOT;
 EOT;
     }
 
-    public function getPaginationVarsTemplate()
+    public static function getPaginationVarsTemplate()
     {
         return <<<'EOT'
 
@@ -485,7 +485,19 @@ EOT;
 EOT;
     }
 
+    //todo remove this
     public function getArrayTemplate()
+    {
+        return <<<'EOT'
+    /**
+     * @var ##TYPE##
+     */
+    public $##NAME## = [];
+
+EOT;
+    }
+
+    public static function getEmptyArrayTemplate()
     {
         return <<<'EOT'
     /**
@@ -622,7 +634,7 @@ EOT;
 EOT;
     }
 
-    public function getWithQueryTemplate()
+    public static function getWithQueryTemplate()
     {
         return <<<'EOT'
 
@@ -630,7 +642,7 @@ EOT;
 EOT;
     }
 
-    public function getWithCountQueryTemplate()
+    public static function getWithCountQueryTemplate()
     {
         return <<<'EOT'
 
@@ -659,16 +671,14 @@ EOT;
 EOT;
     }
 
-    public function getHideColumnVarsTemplate()
+    public static function getAllColumnsTemplate()
     {
         return <<<'EOT'
 
     /**
      * @var array
      */
-    public $columns = [
-##COLUMNS##
-    ];
+    public $columns = [##COLUMNS##];
 
 EOT;
     }
@@ -680,7 +690,7 @@ EOT;
 EOT;
     }
 
-    public function getHideColumnInitCodeTemplate()
+    public static function getHideColumnInitTemplate()
     {
         return <<<'EOT'
         $this->selectedColumns = $this->columns;

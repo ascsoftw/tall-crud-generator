@@ -48,7 +48,7 @@ class SortingTest extends TestCase
         $tallComponent = $this->component->get('tallComponent');
         $sortCode = $tallComponent->getSortCode();
 
-        $this->assertEquals(true, $tallComponent->getSorting());
+        $this->assertEquals(true, $tallComponent->getSortingFlag());
         $this->assertEquals('id', $tallComponent->getDefaultSortableColumn());
         $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $tallComponent->getSortingQuery());
         $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $tallComponent->getSortingMethod());

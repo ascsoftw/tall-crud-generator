@@ -2,15 +2,28 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
+use Illuminate\Support\Str;
+
 class TallComponent 
 {
     public $otherModels;
 
-    public $sorting;
+    public $sortingFlag;
     public $defaultSortableColumn;
 
-    public $searching;
+    public $searchingFlag;
     public $searchableColumns;
+
+    public $paginationDropdownFlag;
+
+    public $recordsPerPage;
+
+    public $eagerLoadModels;
+
+    public $eagerLoadCountModels;
+
+    public $hideColumnsFlag;
+    public $listingColumns;
 
     public function setOtherModels($filters)
     {
@@ -50,14 +63,14 @@ class TallComponent
         );
     }
 
-    public function setSorting($sorting)
+    public function setSortingFlag($sortingFlag)
     {
-        $this->sorting = $sorting;
+        $this->sortingFlag = $sortingFlag;
     }
     
-    public function getSorting()
+    public function getSortingFlag()
     {
-        return $this->sorting;
+        return $this->sortingFlag;
     }
 
     public function setDefaultSortableColumn($defaultSortableColumn)
@@ -77,7 +90,7 @@ class TallComponent
             'query' => '',
             'method' => '',
         ];
-        if ($this->getSorting()) {
+        if ($this->getSortingFlag()) {
             $code['vars'] = $this->getSortingVars();
             $code['query'] = $this->getSortingQuery();
             $code['method'] = $this->getSortingMethod();
@@ -105,14 +118,14 @@ class TallComponent
         return WithTemplates::getSortingMethodTemplate();
     }
 
-    public function setSearching($searching)
+    public function setSearchingFlag($searchingFlag)
     {
-        $this->searching = $searching;
+        $this->searchingFlag = $searchingFlag;
     }
     
-    public function getSearching()
+    public function getSearchingFlag()
     {
-        return $this->searching;
+        return $this->searchingFlag;
     }
 
     public function setSearchableColumns($columns)
@@ -136,7 +149,7 @@ class TallComponent
             'query' => '',
             'method' => '',
         ];
-        if ($this->getSearching()) {
+        if ($this->getSearchingFlag()) {
             $code['vars'] = $this->getSearchVars();
             $code['query'] = $this->getSearchQuery();
             $code['method'] = $this->getSearchMethod();
@@ -188,6 +201,194 @@ class TallComponent
     public function getSearchMethod()
     {
         return WithTemplates::getSearchMethodTemplate();
+    }
+
+    public function setPaginationDropdownFlag($paginationDropdownFlag)
+    {
+        $this->paginationDropdownFlag = $paginationDropdownFlag;
+    }
+    
+    public function getPaginationDropdownFlag()
+    {
+        return $this->paginationDropdownFlag;
+    }
+
+    public function getPaginationDropdownCode()
+    {
+        $code = [
+            'method' => '',
+        ];
+        if ($this->getPaginationDropdownFlag()) {
+            $code['method'] = $this->getPaginationDropdownMethod();
+        }
+
+        return $code;
+    }
+
+    public function getPaginationDropdownMethod()
+    {
+        return WithTemplates::getPaginationDropdownMethodTemplate();
+    }
+
+    public function setRecordsPerPage($recordsPerPage)
+    {
+        $this->recordsPerPage = $recordsPerPage;
+    }
+    
+    public function getRecordsPerPage()
+    {
+        return $this->recordsPerPage;
+    }
+
+    public function getPaginationCode()
+    {
+        $code = [
+            'vars' => '',
+        ];
+
+        $code['vars'] = $this->getPaginationVars();
+
+        return $code;
+    }
+
+    public function getPaginationVars()
+    {
+        return str_replace(
+            '##PER_PAGE##',
+            $this->getRecordsPerPage(),
+            WithTemplates::getPaginationVarsTemplate()
+        );
+    }
+
+    public function setEagerLoadModels($relations)
+    {
+        $this->eagerLoadModels = collect();
+        foreach ($relations as $r) {
+            $this->eagerLoadModels->push($r['relationName']);
+        }
+    }
+    
+    public function getEagerLoadModels()
+    {
+        return $this->eagerLoadModels;
+    }
+
+    public function getWithQueryCode()
+    {
+        $models = $this->getEagerLoadModels();
+        if ($models->isEmpty()) {
+            return '';
+        }
+
+        return str_replace(
+            '##RELATIONS##',
+            $this->wrapInQuotesAndJoin($models),
+            WithTemplates::getWithQueryTemplate()
+        );
+    }
+
+    public function setEagerLoadCountModels($relations)
+    {
+        $this->eagerLoadCountModels = collect();
+        foreach ($relations as $r) {
+            $this->eagerLoadCountModels->push($r['relationName']);
+        }
+    }
+    
+    public function getEagerLoadCountModels()
+    {
+        return $this->eagerLoadCountModels;
+    }
+
+    public function getWithCountQueryCode()
+    {
+        $models = $this->getEagerLoadCountModels();
+        if ($models->isEmpty()) {
+            return '';
+        }
+
+        return str_replace(
+            '##RELATIONS##',
+            $this->wrapInQuotesAndJoin($models),
+            WithTemplates::getWithCountQueryTemplate()
+        );
+    }
+
+    public function setHideColumnsFlag($hideColumnsFlag)
+    {
+        $this->hideColumnsFlag = $hideColumnsFlag;
+    }
+    
+    public function getHideColumnsFlag()
+    {
+        return $this->hideColumnsFlag;
+    }
+
+    public function setListingColumns($listingColumns)
+    {
+        $this->listingColumns = $listingColumns;
+    }
+    
+    public function getListingColumns()
+    {
+        return $this->listingColumns;
+    }
+
+    public function getHideColumnsCode()
+    {
+        $code = [
+            'vars' => '',
+            'init' => '',
+        ];
+        if ($this->getHideColumnsFlag()) {
+            $code['vars'] = $this->getHideColumnVars();
+            $code['init'] = $this->getHideColumnInitCode();
+        }
+
+        return $code;
+    }
+
+    public function getHideColumnVars()
+    {
+        return $this->getAllColumnsVars().
+            $this->newLines().
+            self::getEmtpyArray('selectedColumns');
+    }
+
+    public function getAllColumnsVars()
+    {
+        return str_replace(
+            '##COLUMNS##',
+            $this->wrapInQuotesAndJoin($this->getListingColumns()),
+            WithTemplates::getAllColumnsTemplate()
+        );
+    }
+
+    public function getHideColumnInitCode()
+    {
+        return WithTemplates::getHideColumnInitTemplate();
+    }
+
+    public function wrapInQuotesAndJoin($collection, $glue = ',')
+    {
+        return $collection->map(function ($m) {
+            return Str::of($m)->append("'")->prepend("'");
+        })->implode($glue);
+    }
+
+    public static function getEmtpyArray($name, $type = 'array')
+    {
+        return str_replace(
+            [
+                '##NAME##',
+                '##TYPE##',
+            ],
+            [
+                $name,
+                $type,
+            ],
+            WithTemplates::getEmptyArrayTemplate()
+        );
     }
 
     public function newLines($count = 1, $indent = 0)
