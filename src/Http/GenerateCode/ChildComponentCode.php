@@ -81,6 +81,11 @@ class ChildComponentCode extends BaseCode
         );
     }
 
+    public function getChildItemCode()
+    {
+        return WithTemplates::getChildItemTemplate();
+    }
+
     public function getDeleteVars()
     {
         return WithTemplates::getDeleteVarsTemplate();
@@ -169,24 +174,21 @@ class ChildComponentCode extends BaseCode
     public function getAddFieldsCode()
     {
         $addFields = $this->tallProperties->getSelfFAddFields();
-        $addFieldsCode = collect();
-        foreach ($addFields as $field) {
-            $addFieldsCode->push(
-                str_replace(
-                    [
-                        '##COLUMN##',
-                        '##DEFAULT_VALUE##',
-                    ],
-                    [
-                        $field['column'],
-                        ($field['attributes']['type'] == 'checkbox') ? '0' : "''",
-                    ],
-                    WithTemplates::getAddFieldTemplate()
-                )
-            );
-        }
 
-        return $addFieldsCode->prependAndJoin($this->newLines(1, 3));
+        return $addFields->map(function ($field) {
+            return str_replace(
+                [
+                    '##COLUMN##',
+                    '##DEFAULT_VALUE##',
+                ],
+                [
+                    $field['column'],
+                    ($field['attributes']['type'] == 'checkbox') ? '0' : "''",
+                ],
+                WithTemplates::getAddFieldTemplate()
+            );
+        })->prependAndJoin($this->newLines(1, 3));
+
     }
 
     public function getBtmInitCode()
@@ -196,28 +198,24 @@ class ChildComponentCode extends BaseCode
             return '';
         }
 
-        $initCode = collect();
-        foreach ($btmFields as $r) {
-            $initCode->push(
-                str_replace(
-                    [
-                        '##RELATION##',
-                        '##MODEL##',
-                        '##FIELD_NAME##',
-                        '##DISPLAY_COLUMN##',
-                    ],
-                    [
-                        $r['relationName'],
-                        $this->tallProperties->getModelName($r['modelPath']),
-                        $this->getBtmFieldName($r['relationName']),
-                        $r['displayColumn'],
-                    ],
-                    $this->getBtmInitTemplate()
-                )
+        return $btmFields->map(function($r) {
+            return str_replace(
+                [
+                    '##RELATION##',
+                    '##MODEL##',
+                    '##FIELD_NAME##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->tallProperties->getModelName($r['modelPath']),
+                    $this->getBtmFieldName($r['relationName']),
+                    $r['displayColumn'],
+                ],
+                WithTemplates::getBtmInitTemplate()
             );
-        }
+        })->implode('');
 
-        return $initCode->implode('');
     }
 
     public function getBtmAttachCode()
@@ -227,24 +225,20 @@ class ChildComponentCode extends BaseCode
             return '';
         }
 
-        $attachCode = collect();
-        foreach ($btmFields as $r) {
-            $attachCode->push(
-                str_replace(
-                    [
-                        '##RELATION##',
-                        '##FIELD_NAME##',
-                    ],
-                    [
-                        $r['relationName'],
-                        $this->getBtmFieldName($r['relationName']),
-                    ],
-                    $this->getBtmAttachTemplate()
-                )
+        return $btmFields->map(function($r) {
+            return str_replace(
+                [
+                    '##RELATION##',
+                    '##FIELD_NAME##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->getBtmFieldName($r['relationName']),
+                ],
+                WithTemplates::getBtmAttachTemplate()
             );
-        }
+        })->implode('') . $this->newLines();
 
-        return $attachCode->implode('') . $this->newLines();
     }
 
     public function getBtmFetchCode()
@@ -254,32 +248,27 @@ class ChildComponentCode extends BaseCode
             return '';
         }
 
-        $btmFetchCode = collect();
-        foreach ($btmFields as $r) {
-            $btmFetchCode->push(
-                str_replace(
-                    [
-                        '##RELATION##',
-                        '##FIELD_NAME##',
-                        '##KEY##',
-                        '##MODEL##',
-                        '##MODEL_VAR##',
-                        '##DISPLAY_COLUMN##',
-                    ],
-                    [
-                        $r['relationName'],
-                        $this->getBtmFieldName($r['relationName']),
-                        $r['relatedKey'],
-                        $this->tallProperties->getModelName($r['modelPath']),
-                        Str::lower($this->tallProperties->getModelName()),
-                        $r['displayColumn'],
-                    ],
-                    $this->getBtmFetchTemplate()
-                )
+        return $btmFields->map(function ($r) {
+            return str_replace(
+                [
+                    '##RELATION##',
+                    '##FIELD_NAME##',
+                    '##KEY##',
+                    '##MODEL##',
+                    '##MODEL_VAR##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->getBtmFieldName($r['relationName']),
+                    $r['relatedKey'],
+                    $this->tallProperties->getModelName($r['modelPath']),
+                    Str::lower($this->tallProperties->getModelName()),
+                    $r['displayColumn'],
+                ],
+                WithTemplates::getBtmFetchTemplate()
             );
-        }
-
-        return $btmFetchCode->prependAndJoin('', $this->newLines());
+        })->prependAndJoin('', $this->newLines());
     }
 
     public function getBtmUpdateCode()
@@ -289,24 +278,20 @@ class ChildComponentCode extends BaseCode
             return '';
         }
 
-        $btmUpdateCode = collect();
-        foreach ($btmFields as $r) {
-            $btmUpdateCode->push(
-                str_replace(
-                    [
-                        '##RELATION##',
-                        '##FIELD_NAME##',
-                    ],
-                    [
-                        $r['relationName'],
-                        $this->getBtmFieldName($r['relationName']),
-                    ],
-                    $this->getBtmUpdateTemplate()
-                )
+        return $btmFields->map(function( $r) {
+            return str_replace(
+                [
+                    '##RELATION##',
+                    '##FIELD_NAME##',
+                ],
+                [
+                    $r['relationName'],
+                    $this->getBtmFieldName($r['relationName']),
+                ],
+                WithTemplates::getBtmUpdateTemplate()
             );
-        }
+        })->prependAndJoin($this->newLines());
 
-        return $btmUpdateCode->prependAndJoin($this->newLines());
     }
 
     public function getBelongsToInitCode($isAdd = true)
@@ -321,26 +306,22 @@ class ChildComponentCode extends BaseCode
             return '';
         }
 
-        $initCode = collect();
-        foreach ($belongsToFields as $r) {
-            $initCode->push(
-                str_replace(
-                    [
-                        '##BELONGS_TO_VAR##',
-                        '##MODEL##',
-                        '##DISPLAY_COLUMN##',
-                    ],
-                    [
-                        $this->getBelongsToVarName($r['relationName']),
-                        $this->tallProperties->getModelName($r['modelPath']),
-                        $r['displayColumn'],
-                    ],
-                    $this->getBelongsToInitTemplate()
-                )
+        return $belongsToFields->map(function($r) {
+            return str_replace(
+                [
+                    '##BELONGS_TO_VAR##',
+                    '##MODEL##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    $this->getBelongsToVarName($r['relationName']),
+                    $this->tallProperties->getModelName($r['modelPath']),
+                    $r['displayColumn'],
+                ],
+                WithTemplates::getBelongsToInitTemplate()
             );
-        }
+        })->prependAndJoin($this->newLines());
 
-        return $initCode->prependAndJoin($this->newLines());
     }
 
     public function getBelongsToSaveCode()
@@ -351,24 +332,20 @@ class ChildComponentCode extends BaseCode
             return '';
         }
 
-        $saveCode = collect();
-        foreach ($belongsToFields as $r) {
-            $saveCode->push(
-                str_replace(
-                    [
-                        '##COLUMN##',
-                        '##DEFAULT_VALUE##',
-                    ],
-                    [
-                        $r['foreignKey'],
-                        0,
-                    ],
-                    WithTemplates::getAddFieldTemplate()
-                )
+        return $belongsToFields->map(function($r) {
+            return str_replace(
+                [
+                    '##COLUMN##',
+                    '##DEFAULT_VALUE##',
+                ],
+                [
+                    $r['foreignKey'],
+                    0,
+                ],
+                WithTemplates::getAddFieldTemplate()
             );
-        }
+        })->prependAndJoin($this->newLines(1, 3));
 
-        return $saveCode->prependAndJoin($this->newLines(1, 3));
     }
 
     public function getAddFlashCode()

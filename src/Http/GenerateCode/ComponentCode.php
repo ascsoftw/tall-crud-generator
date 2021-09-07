@@ -19,12 +19,9 @@ class ComponentCode extends BaseCode
     public function getOtherModelsCode()
     {
         $models = $this->tallProperties->getOtherModels();
-        $modelsCode = collect();
-        foreach ($models as $model) {
-            $modelsCode->push($this->getUseModelCode($model));
-        }
-
-        return $modelsCode->implode('');
+        return $models->map(function ($m) {
+            return $this->getUseModelCode($m);
+        })->implode('');
     }
 
     public function getUseModelCode($modelPath)
@@ -213,8 +210,8 @@ class ComponentCode extends BaseCode
 
     public function getHideColumnVars()
     {
-        return $this->getAllColumnsVars().
-            $this->newLines().
+        return $this->getAllColumnsVars() .
+            $this->newLines() .
             self::getEmtpyArray('selectedColumns');
     }
 
@@ -265,7 +262,7 @@ class ComponentCode extends BaseCode
 
     public function getBulkActionsVars()
     {
-        return $this->newLines() . 
+        return $this->newLines() .
             self::getEmtpyArray('selectedItems');
     }
 
@@ -365,33 +362,29 @@ class ComponentCode extends BaseCode
 
     public function getRelationFilterInitCode()
     {
-        $code = collect();
         $filters = $this->tallProperties->btmFilters->merge($this->tallProperties->belongsToFilters);
-        foreach ($filters as $f) {
-            $code->push(
-                str_replace(
-                    [
-                        '##VAR##',
-                        '##MODEL##',
-                        '##COLUMN##',
-                        '##OWNER_KEY##',
-                        '##FOREIGN_KEY##',
-                        '##LABEL##',
-                    ],
-                    [
-                        Str::plural($f['relation']),
-                        $this->tallProperties->getModelName($f['modelPath']),
-                        $f['column'],
-                        $this->getFilterOwnerKey($f),
-                        $this->getFilterForeignKey($f),
-                        $this->getFilterLabelName($f),
-                    ],
-                    WithTemplates::getRelationFilterInitTemplate()
-                )
-            );
-        }
 
-        return $code->implode('');
+        return $filters->map(function ($f) {
+            return str_replace(
+                [
+                    '##VAR##',
+                    '##MODEL##',
+                    '##COLUMN##',
+                    '##OWNER_KEY##',
+                    '##FOREIGN_KEY##',
+                    '##LABEL##',
+                ],
+                [
+                    Str::plural($f['relation']),
+                    $this->tallProperties->getModelName($f['modelPath']),
+                    $f['column'],
+                    $this->getFilterOwnerKey($f),
+                    $this->getFilterForeignKey($f),
+                    $this->getFilterLabelName($f),
+                ],
+                WithTemplates::getRelationFilterInitTemplate()
+            );
+        })->implode('');
     }
 
     public function getFilterQuery()
@@ -401,45 +394,38 @@ class ComponentCode extends BaseCode
 
     public function getSelfFilterQuery()
     {
-        $query = collect();
         $filters = $this->tallProperties->selfFilters->merge($this->tallProperties->belongsToFilters);
-        foreach ($filters as $f) {
-            $query->push(
-                str_replace(
-                    '##COLUMN##',
-                    $this->getFilterColumnName($f),
-                    WithTemplates::getFilterQueryTemplate()
-                )
-            );
-        }
 
-        return $query->prependAndJoin($this->newLines());
+        return $filters->map(function ($f) {
+            return str_replace(
+                '##COLUMN##',
+                $this->getFilterColumnName($f),
+                WithTemplates::getFilterQueryTemplate()
+            );
+        })->prependAndJoin($this->newLines());
     }
 
     public function getBtmFilterQuery()
     {
-        $query = collect();
-        foreach ($this->tallProperties->btmFilters as $f) {
-            $query->push(
-                str_replace(
-                    [
-                        '##COLUMN##',
-                        '##RELATION##',
-                        '##RELATED_KEY##',
-                        '##TABLE##',
-                    ],
-                    [
-                        $f['relation'] . '_' . $f['relatedKey'],
-                        $f['relation'],
-                        $f['relatedKey'],
-                        $f['relatedTableName'],
-                    ],
-                    WithTemplates::getFilterQueryBtmTemplate()
-                )
-            );
-        }
+        $filters = $this->tallProperties->btmFilters;
 
-        return $query->prependAndJoin($this->newLines());
+        return $filters->map(function ($f) {
+            return str_replace(
+                [
+                    '##COLUMN##',
+                    '##RELATION##',
+                    '##RELATED_KEY##',
+                    '##TABLE##',
+                ],
+                [
+                    $f['relation'] . '_' . $f['relatedKey'],
+                    $f['relation'],
+                    $f['relatedKey'],
+                    $f['relatedTableName'],
+                ],
+                WithTemplates::getFilterQueryBtmTemplate()
+            );
+        })->prependAndJoin($this->newLines());
     }
 
     public function getFilterMethod()
@@ -476,6 +462,6 @@ class ComponentCode extends BaseCode
             return $filter['foreignKey'];
         }
 
-        return $filter['relation'].'_'.$filter['relatedKey'];
+        return $filter['relation'] . '_' . $filter['relatedKey'];
     }
 }

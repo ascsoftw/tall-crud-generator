@@ -323,7 +323,7 @@ EOT;
 EOT;
     }
 
-    public function getChildItemTemplate()
+    public static function getChildItemTemplate()
     {
         return <<<'EOT'
 
@@ -519,7 +519,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmInitTemplate()
+    public static function getBtmInitTemplate()
     {
         return <<<'EOT'
 
@@ -529,7 +529,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmAttachTemplate()
+    public static function getBtmAttachTemplate()
     {
         return <<<'EOT'
 
@@ -537,7 +537,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmFetchTemplate()
+    public static function getBtmFetchTemplate()
     {
         return <<<'EOT'
 
@@ -549,7 +549,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmUpdateTemplate()
+    public static function getBtmUpdateTemplate()
     {
         return <<<'EOT'
 
@@ -626,7 +626,7 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToInitTemplate()
+    public static function getBelongsToInitTemplate()
     {
         return <<<'EOT'
 

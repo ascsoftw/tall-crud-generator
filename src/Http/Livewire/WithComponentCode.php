@@ -83,18 +83,14 @@ trait WithComponentCode
         $code['child_add'] = $this->childComponentCode->getAddCode();
         $code['child_edit'] = $this->childComponentCode->getEditCode();
         $code['child_listeners'] = $this->childComponentCode->getChildListenersCode();
-        $code['child_item'] = $this->generateChildItem();
+        $code['child_item'] = $this->childComponentCode->getChildItemCode();
+        // $code['child_rules'] = $this->childComponentCode->getChildRulesCode();
         $code['child_rules'] = $this->generateChildRules();
         $code['child_validation_attributes'] = $this->generateChildValidationAttributes();
         $code['child_other_models'] = $this->generateChildOtherModelsCode();
         $code['child_vars'] = $this->getRelationVars();
 
         return $code;
-    }
-
-    public function generateChildItem()
-    {
-        return $this->getChildItemTemplate();
     }
 
     public function generateChildRules()
@@ -217,16 +213,6 @@ trait WithComponentCode
         return $vars->prependAndJoin($this->newLines());
     }
 
-    public function getEditFlashCode()
-    {
-        if (!$this->isFlashMessageEnabled()) {
-            return '';
-        }
-
-        return $this->getFlashCode($this->flashMessages['text']['edit']);
-    }
-
-
     public function getRulesForBelongsToFields()
     {
         $rules = collect();
@@ -258,37 +244,6 @@ trait WithComponentCode
         return $attributes->join($this->newLines(1, 2));
     }
 
-    public function getBelongsToInitCode($isAdd = true)
-    {
-        if ($isAdd && !$this->isBelongsToAddEnabled()) {
-            return '';
-        }
-
-        if (!$isAdd && !$this->isBelongsToEditEnabled()) {
-            return '';
-        }
-
-        $initCode = collect();
-        foreach ($this->belongsToRelations as $r) {
-            $initCode->push(
-                str_replace(
-                    [
-                        '##BELONGS_TO_VAR##',
-                        '##MODEL##',
-                        '##DISPLAY_COLUMN##',
-                    ],
-                    [
-                        $this->getBelongsToVarName($r['relationName']),
-                        $this->getModelName($r['modelPath']),
-                        $r['displayColumn'],
-                    ],
-                    $this->getBelongsToInitTemplate()
-                )
-            );
-        }
-
-        return $initCode->prependAndJoin($this->newLines());
-    }
 
     public function getOtherModelCode($modelPath)
     {
