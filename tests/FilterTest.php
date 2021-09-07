@@ -89,8 +89,10 @@ class FilterTest extends TestCase
             ->pressNext()
             ->generateFiles();
         
-        $tallComponent = $this->component->get('tallComponent');
-        $otherModels = $tallComponent->getOtherModels()->toArray();
+        $tallProperties = $this->component->get('tallProperties');
+        $componentCode = $this->component->get('componentCode');
+        // $tallComponent = $this->component->get('tallComponent');
+        $otherModels = $tallProperties->getOtherModels()->toArray();
         $this->assertCount(2, $otherModels);
         $this->assertEquals(
             [
@@ -100,6 +102,7 @@ class FilterTest extends TestCase
             $otherModels
         );
 
-        $this->assertEquals("\nuse App\Model\Brand;", $tallComponent->getUseModelCode('App\Model\Brand'));
+        // $tallComponentCode = $this->component->get('tallComponentCode');
+        $this->assertEquals("\nuse App\Model\Brand;", $componentCode->getUseModelCode('App\Model\Brand'));
     }
 }

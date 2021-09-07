@@ -80,11 +80,11 @@ class BelongsToManyTest extends TestCase
             ->generateFiles()
             ->assertCount('belongsToManyRelations', 1);
 
-        $this->component->call('isBtmAddEnabled')
-            ->assertReturnEquals('isBtmAddEnabled', true);
+        // $this->component->call('isBtmAddEnabled')
+        //     ->assertReturnEquals('isBtmAddEnabled', true);
 
-        $this->component->call('isBtmEditEnabled')
-            ->assertReturnEquals('isBtmEditEnabled', true);
+        // $this->component->call('isBtmEditEnabled')
+        //     ->assertReturnEquals('isBtmEditEnabled', true);
 
         $this->component->call('isBtmEnabled')
             ->assertReturnEquals('isBtmEnabled', true);

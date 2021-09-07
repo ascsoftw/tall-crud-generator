@@ -80,11 +80,11 @@ class BelongsToTest extends TestCase
             ->generateFiles()
             ->assertCount('belongsToRelations', 1);
 
-        $this->component->call('isBelongsToAddEnabled')
-            ->assertReturnEquals('isBelongsToAddEnabled', true);
+        // $this->component->call('isBelongsToAddEnabled')
+        //     ->assertReturnEquals('isBelongsToAddEnabled', true);
 
-        $this->component->call('isBelongsToEditEnabled')
-            ->assertReturnEquals('isBelongsToEditEnabled', true);
+        // $this->component->call('isBelongsToEditEnabled')
+        //     ->assertReturnEquals('isBelongsToEditEnabled', true);
 
         $this->component->call('isBelongsToEnabled')
             ->assertReturnEquals('isBelongsToEnabled', true);

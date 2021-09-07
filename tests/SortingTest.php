@@ -45,13 +45,14 @@ class SortingTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $tallComponent = $this->component->get('tallComponent');
-        $sortCode = $tallComponent->getSortCode();
+        $tallProperties = $this->component->get('tallProperties');
+        $componentCode = $this->component->get('componentCode');
+        $sortCode = $componentCode->getSortCode();
 
-        $this->assertEquals(true, $tallComponent->getSortingFlag());
-        $this->assertEquals('id', $tallComponent->getDefaultSortableColumn());
-        $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $tallComponent->getSortingQuery());
-        $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $tallComponent->getSortingMethod());
+        $this->assertEquals(true, $tallProperties->getSortingFlag());
+        $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
+        $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $componentCode->getSortingQuery());
+        $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $componentCode->getSortingMethod());
         $this->assertNotEmpty($sortCode['vars']);
 
         $this->component->call('isPrimaryKeySortable')

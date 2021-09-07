@@ -79,7 +79,7 @@ wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm',  {{ $result->##PRIMARY
 EOT;
     }
 
-    public function getDeleteMethodTemplate()
+    public static function getDeleteMethodTemplate()
     {
         return <<<'EOT'
 
@@ -102,7 +102,7 @@ EOT;
 EOT;
     }
 
-    public function getAddMethodTemplate()
+    public static function getAddMethodTemplate()
     {
         return <<<'EOT'
  
@@ -125,7 +125,7 @@ EOT;
 EOT;
     }
 
-    public function getCreateFieldTemplate()
+    public static function getAddFieldTemplate()
     {
         return <<<'EOT'
 '##COLUMN##' => $this->item['##COLUMN##'] ?? ##DEFAULT_VALUE##, 
@@ -155,7 +155,7 @@ EOT;
 EOT;
     }
 
-    public function getChildListenerTemplate()
+    public static function getChildListenerTemplate()
     {
         return <<<'EOT'
     /**
@@ -241,7 +241,7 @@ EOT;
 EOT;
     }
 
-    public function getDeleteVarsTemplate()
+    public static function getDeleteVarsTemplate()
     {
         return <<<'EOT'
     /**
@@ -257,7 +257,7 @@ EOT;
 EOT;
     }
 
-    public function getAddVarsTemplate()
+    public static function getAddVarsTemplate()
     {
         return <<<'EOT'
 
@@ -269,7 +269,7 @@ EOT;
 EOT;
     }
 
-    public function getEditVarsTemplate()
+    public static function getEditVarsTemplate()
     {
         return <<<'EOT'
 
@@ -477,7 +477,7 @@ EOT;
         }
     }
 
-    public function getFlashTriggerTemplate()
+    public static function getFlashTemplate()
     {
         return <<<'EOT'
 
@@ -508,7 +508,7 @@ EOT;
 EOT;
     }
 
-    public function getNoRelationFilterInitTemplate()
+    public static function getSelfFilterInitTemplate()
     {
         return <<<'EOT'
         '##KEY##' => [
@@ -704,7 +704,7 @@ EOT;
 EOT;
     }
 
-    public function getBulkActionMethodTemplate()
+    public static function getBulkActionMethodTemplate()
     {
         return <<<'EOT'
 
@@ -745,7 +745,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterInitTemplate()
+    public static function getFilterInitTemplate()
     {
         return <<<'EOT'
 
@@ -753,7 +753,7 @@ EOT;
 EOT;
     }
 
-    public function getRelationFilterInitTemplate()
+    public static function getRelationFilterInitTemplate()
     {
         return <<<'EOT'
 
@@ -766,7 +766,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterOptionTemplate()
+    public static function getKeyLabelTemplate()
     {
         return <<<'EOT'
 ['key' => '##KEY##', 'label' => '##LABEL##'],
@@ -805,7 +805,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterMethodTemplate()
+    public static function getFilterMethodTemplate()
     {
         return <<<'EOT'
 
@@ -830,7 +830,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterQueryTemplate()
+    public static function getFilterQueryTemplate()
     {
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {
@@ -839,7 +839,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterQueryBtmTemplate()
+    public static function getFilterQueryBtmTemplate()
     {
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {

@@ -127,53 +127,9 @@ trait WithFeatures
         return count($this->belongsToManyRelations) > 0;
     }
 
-    public function isBtmAddEnabled()
-    {
-        $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('inAdd', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isBtmEditEnabled()
-    {
-        $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('inEdit', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function isBelongsToEnabled()
     {
         return count($this->belongsToRelations) > 0;
-    }
-
-    public function isBelongsToAddEnabled()
-    {
-        $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('inAdd', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isBelongsToEditEnabled()
-    {
-        $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('inEdit', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
     }
 
     public function isHideColumnsEnabled()

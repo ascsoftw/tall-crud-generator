@@ -55,7 +55,8 @@ class BasicTest extends TestCase
     public function test_various_features()
     {
         $this->component->generateFiles();
-        $tallComponent = $this->component->get('tallComponent');
+        $tallProperties = $this->component->get('tallProperties');
+        $componentCode = $this->component->get('componentCode');
 
         $props = $this->component->get('props');
         $this->assertEmpty($props['code']['sort']['vars']);
@@ -71,12 +72,12 @@ class BasicTest extends TestCase
             ->assertReturnEquals('isSearchingEnabled', false);
 
         $this->assertEmpty($props['code']['pagination_dropdown']['method']);
-        $this->assertEquals(false, $tallComponent->getPaginationDropdownFlag());
-        $paginationCode = $tallComponent->getPaginationDropdownCode();
+        $this->assertEquals(false, $tallProperties->getPaginationDropdownFlag());
+        $paginationCode = $componentCode->getPaginationDropdownCode();
         $this->assertEmpty($paginationCode['method']);
 
         $this->assertNotEmpty($props['code']['pagination']['vars']);
-        $this->assertEquals(15, $tallComponent->getRecordsPerPage());
+        $this->assertEquals(15, $tallProperties->getRecordsPerPage());
 
         $this->assertEmpty($props['code']['with_query']);
         $this->assertEmpty($props['code']['with_count_query']);

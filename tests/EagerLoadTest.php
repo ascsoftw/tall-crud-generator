@@ -81,7 +81,13 @@ class EagerLoadTest extends TestCase
             ->generateFiles()
             ->assertCount('withRelations', 1);
 
-        $props = $this->component->get('props');
-        $this->assertNotEmpty($props['code']['with_query']);
+            $tallProperties = $this->component->get('tallProperties');
+            $componentCode = $this->component->get('componentCode');
+
+            $this->assertEquals( ['brand'], $tallProperties->getEagerLoadModels()->toArray());
+            $findString = <<<'EOT'
+->with(['brand'])
+EOT;
+            $this->assertStringContainsString($findString, $componentCode->getWithQueryCode());
     }
 }

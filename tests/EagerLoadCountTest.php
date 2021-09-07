@@ -62,7 +62,13 @@ class EagerLoadCountTest extends TestCase
             ->generateFiles()
             ->assertCount('withCountRelations', 1);
 
-        $props = $this->component->get('props');
-        $this->assertNotEmpty($props['code']['with_count_query']);
+        $tallProperties = $this->component->get('tallProperties');
+        $componentCode = $this->component->get('componentCode');
+
+        $this->assertEquals(['categories'], $tallProperties->getEagerLoadCountModels()->toArray());
+        $findString = <<<'EOT'
+->withCount(['categories'])
+EOT;
+        $this->assertStringContainsString($findString, $componentCode->getWithCountQueryCode());
     }
 }

@@ -78,8 +78,8 @@
                 <x:tall-crud-generator::select class="block mt-1 w-1/6 ml-2"
                     wire:model="advancedSettings.table_settings.bulkActionColumn">
                     <option value="">-Select Column-</option>
-                    @if (Arr::exists($this->modelProps, 'columns'))
-                    @foreach ($this->modelProps['columns'] as $column)
+                    @if (Arr::exists($modelProps, 'columns'))
+                    @foreach ($modelProps['columns'] as $column)
                     <option value="{{$column}}">{{$column}}</option>
                     @endforeach
                     @endif

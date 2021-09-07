@@ -49,17 +49,18 @@ class SearchingTest extends TestCase
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
 
-        $tallComponent = $this->component->get('tallComponent');
-        $searchCode = $tallComponent->getSearchCode();
+        $tallProperties = $this->component->get('tallProperties');
+        $componentCode = $this->component->get('componentCode');
+        $searchCode = $componentCode->getSearchCode();
 
-        $this->assertEquals(true, $tallComponent->getSearchingFlag());
-        $this->assertEquals(['name'], $tallComponent->getSearchableColumns()->toArray());
-        $this->assertEquals(WithTemplates::getSearchingVarsTemplate(), $tallComponent->getSearchVars());
-        $this->assertEquals(WithTemplates::getSearchMethodTemplate(), $tallComponent->getSearchMethod());
+        $this->assertEquals(true, $tallProperties->getSearchingFlag());
+        $this->assertEquals(['name'], $tallProperties->getSearchableColumns()->toArray());
+        $this->assertEquals(WithTemplates::getSearchingVarsTemplate(), $componentCode->getSearchVars());
+        $this->assertEquals(WithTemplates::getSearchMethodTemplate(), $componentCode->getSearchMethod());
         $whereClauseStr = <<<'EOT'
 $query->where('name', 'like', '%' . $this->q . '%')
 EOT;
-        $this->assertEquals($whereClauseStr, $tallComponent->getSearchWhereClause()->toArray()[0]);
+        $this->assertEquals($whereClauseStr, $componentCode->getSearchWhereClause()->toArray()[0]);
         $this->assertStringContainsString($whereClauseStr, $searchCode['query']);
         $this->assertNotEmpty($searchCode['query']);
 
