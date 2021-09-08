@@ -86,6 +86,65 @@ class ChildComponentCode extends BaseCode
         return WithTemplates::getChildItemTemplate();
     }
 
+    public function getChildRulesCode()
+    {
+        $fields = $this->tallProperties->getSelfFormFields();
+        $rules = collect();
+
+        foreach ($fields as $field) {
+            $rules->push(
+                $this->getChildFieldCode(
+                    $field['column'],
+                    Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
+                )
+            );
+        }
+
+        $rules->push($this->getRulesForBelongsToFields());
+
+        return str_replace(
+            '##RULES##', 
+            $rules->prependAndJoin($this->newLines(1, 2)), 
+            WithTemplates::getChildRulesTemplate()
+        );
+    }
+
+    public function getChildValidationAttributes()
+    {
+        $fields = $this->tallProperties->getSelfFormFields();
+        $attributes = collect();
+        foreach ($fields as $field) {
+            $attributes->push(
+                $this->getChildFieldCode(
+                    $field['column'],
+                    $this->getLabel($field['label'], $field['column'])
+                )
+            );
+        }
+
+        $attributes->push($this->getAttributesForBelongsToFields());
+
+        return str_replace(
+            '##ATTRIBUTES##',
+            $attributes->prependAndJoin($this->newLines(1, 2)),
+            $this->getChildValidationAttributesTemplate()
+        );
+    }
+
+    public function getChildOtherModelsCode()
+    {
+
+        $fields = $this->tallProperties->getBtmRelations()->merge($this->tallProperties->getBelongsToRelations());
+        return $fields->map(function($r) {
+            return $this->getUseModelCode($r['modelPath']);
+        })->unique()->implode('');
+    }
+
+    public function getRelationVars()
+    {
+        return $this->getBtmVars() . $this->getBelongsToVars();
+    }
+
     public function getDeleteVars()
     {
         return WithTemplates::getDeleteVarsTemplate();
@@ -348,6 +407,69 @@ class ChildComponentCode extends BaseCode
 
     }
 
+    public function getRulesForBelongsToFields()
+    {
+        $fields = $this->tallProperties->getBelongsToRelations();
+
+        // if($fields->isEmpty()) {
+        //     return '';
+        // }
+
+        return $fields->map(function ($r) {
+            return $this->getChildFieldCode($r['foreignKey'], 'required');
+        })->join($this->newLines(1, 2));
+
+    }
+
+    public function getAttributesForBelongsToFields()
+    {
+        $fields = $this->tallProperties->getBelongsToRelations();
+
+        return $fields->map(function ($r) {
+            return $this->getChildFieldCode(
+                $r['foreignKey'],
+                Str::ucfirst($r['relationName'])
+            );
+        })->join($this->newLines(1, 2));
+    }
+
+    public function getBtmVars()
+    {
+        $relations = $this->tallProperties->getBtmRelations();
+        if($relations->isEmpty()) {
+            return '';
+        }
+        $vars = collect();
+        foreach ($relations as $r) {
+            $vars->push(self::getEmtpyArray($r['relationName']));
+            $vars->push(
+                self::getEmtpyArray(
+                    $this->getBtmFieldName($r['relationName'])
+                )
+            );
+        }
+
+        return $vars->prependAndJoin($this->newLines());
+    }
+
+    public function getBelongsToVars()
+    {
+        $relations = $this->tallProperties->getBelongsToRelations();
+        if($relations->isEmpty()) {
+            return '';
+        }
+        $vars = collect();
+        foreach ($relations as $r) {
+            $vars->push(
+                self::getEmtpyArray(
+                    $this->getBelongsToVarName($r['relationName'])
+                )
+            );
+        }
+
+        return $vars->prependAndJoin($this->newLines());
+    }
+
     public function getAddFlashCode()
     {
         return $this->getFlashCode($this->tallProperties->getFlashMessageText('add'));
@@ -379,5 +501,20 @@ class ChildComponentCode extends BaseCode
     public function getBelongsToVarName($relation)
     {
         return Str::plural($relation);
+    }
+
+    public function getChildFieldCode($columnName, $value)
+    {
+        return str_replace(
+            [
+                '##COLUMN_NAME##',
+                '##VALUE##',
+            ],
+            [
+                $columnName,
+                $value,
+            ],
+            WithTemplates::getChildFieldTemplate()
+        );
     }
 }

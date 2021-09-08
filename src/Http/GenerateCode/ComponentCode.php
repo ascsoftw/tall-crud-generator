@@ -24,15 +24,6 @@ class ComponentCode extends BaseCode
         })->implode('');
     }
 
-    public function getUseModelCode($modelPath)
-    {
-        return str_replace(
-            '##MODEL##',
-            $modelPath,
-            WithTemplates::getUseModelTemplate()
-        );
-    }
-
     public function getSortCode()
     {
         $code = [

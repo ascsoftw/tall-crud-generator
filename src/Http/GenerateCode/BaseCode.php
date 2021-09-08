@@ -9,6 +9,15 @@ class BaseCode
 {
     use WithTemplates;
 
+    public function getUseModelCode($modelPath)
+    {
+        return str_replace(
+            '##MODEL##',
+            $modelPath,
+            WithTemplates::getUseModelTemplate()
+        );
+    }
+
     public function wrapInQuotesAndJoin($collection, $glue = ',')
     {
         return $collection->map(function ($m) {
@@ -49,5 +58,14 @@ class BaseCode
     public function getBtmFieldName($relation)
     {
         return 'checked'.Str::studly($relation);
+    }
+
+    public function getLabel($label = '', $column = '')
+    {
+        if (! empty($label)) {
+            return $label;
+        }
+
+        return Str::title(str_replace('_', ' ', $column));
     }
 }

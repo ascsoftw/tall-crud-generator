@@ -331,7 +331,7 @@ EOT;
 EOT;
     }
 
-    public function getChildRulesTemplate()
+    public static function getChildRulesTemplate()
     {
         return <<<'EOT'
 
@@ -344,7 +344,7 @@ EOT;
 EOT;
     }
 
-    public function getChildFieldTemplate()
+    public static function getChildFieldTemplate()
     {
         return <<<'EOT'
 'item.##COLUMN_NAME##' => '##VALUE##',
