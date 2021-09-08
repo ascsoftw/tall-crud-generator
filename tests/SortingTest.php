@@ -49,14 +49,11 @@ class SortingTest extends TestCase
         $componentCode = $this->component->get('componentCode');
         $sortCode = $componentCode->getSortCode();
 
-        $this->assertEquals(true, $tallProperties->getSortingFlag());
+        $this->assertTrue($tallProperties->getSortingFlag());
         $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
         $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $componentCode->getSortingQuery());
         $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $componentCode->getSortingMethod());
         $this->assertNotEmpty($sortCode['vars']);
-
-        $this->component->call('isPrimaryKeySortable')
-            ->assertReturnEquals('isPrimaryKeySortable', true);
 
     }
 
@@ -77,18 +74,13 @@ class SortingTest extends TestCase
             ->generateFiles();
 
         $props = $this->component->get('props');
+        $tallProperties = $this->component->get('tallProperties');
 
         $this->assertNotEmpty($props['code']['sort']['vars']);
         $this->assertNotEmpty($props['code']['sort']['query']);
         $this->assertNotEmpty($props['code']['sort']['method']);
 
-        $this->component->call('isSortingEnabled')
-            ->assertReturnEquals('isSortingEnabled', true);
-
-        $this->component->call('isPrimaryKeySortable')
-            ->assertReturnEquals('isPrimaryKeySortable', false);
-
-        $this->component->call('getDefaultSortableColumn')
-            ->assertReturnEquals('getDefaultSortableColumn', 'name');
+        $this->assertTrue($tallProperties->getSortingFlag());
+        $this->assertEquals('name', $tallProperties->getDefaultSortableColumn());
     }
 }

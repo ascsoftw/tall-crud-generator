@@ -7,27 +7,27 @@ use PHPUnit\Framework\Assert as PHPUnit;
 
 class LivewireMethodMixin
 {
-    public function assertReturnEquals(): Closure
-    {
-        return function (string $method, $expected, $message = '') {
-            $jsonResponse = json_decode($this->lastResponse->content());
-            $actual = $jsonResponse->effects->returns->$method;
-            PHPUnit::assertEquals($expected, $actual, $message);
+    // public function assertReturnEquals(): Closure
+    // {
+    //     return function (string $method, $expected, $message = '') {
+    //         $jsonResponse = json_decode($this->lastResponse->content());
+    //         $actual = $jsonResponse->effects->returns->$method;
+    //         PHPUnit::assertEquals($expected, $actual, $message);
 
-            return $this;
-        };
-    }
+    //         return $this;
+    //     };
+    // }
 
-    public function assertReturnCount()
-    {
-        return function (string $method, $expected, $message = '') {
-            $jsonResponse = json_decode($this->lastResponse->content());
-            $actual = $jsonResponse->effects->returns->$method;
-            PHPUnit::assertCount($expected, $actual, $message);
+    // public function assertReturnCount()
+    // {
+    //     return function (string $method, $expected, $message = '') {
+    //         $jsonResponse = json_decode($this->lastResponse->content());
+    //         $actual = $jsonResponse->effects->returns->$method;
+    //         PHPUnit::assertCount($expected, $actual, $message);
 
-            return $this;
-        };
-    }
+    //         return $this;
+    //     };
+    // }
 
     public function pressNext()
     {
@@ -100,6 +100,39 @@ class LivewireMethodMixin
                 ->set('fields.3.inList', false)
                 ->set('fields.3.attributes.type', 'checkbox');
 
+            return $this;
+        };
+    }
+
+    public function eagerLoadStandardRelations()
+    {
+        return function () {
+            $this->call('createNewWithRelation')
+                ->set('withRelation.name', 'brand')
+                ->set('withRelation.displayColumn', 'name')
+                ->call('addWithRelation')
+                ->call('createNewWithRelation')
+                ->set('withRelation.name', 'categories')
+                ->set('withRelation.displayColumn', 'name')
+                ->call('addWithRelation')
+                ->call('createNewWithRelation')
+                ->set('withRelation.name', 'tags')
+                ->set('withRelation.displayColumn', 'name')
+                ->call('addWithRelation');
+
+            return $this;
+        };
+    }
+
+    public function eagerLoadCountStandardRelations()
+    {
+        return function () {
+            $this->call('createNewWithCountRelation')
+                ->set('withCountRelation.name', 'tags')
+                ->call('addWithCountRelation')
+                ->call('createNewWithCountRelation')
+                ->set('withCountRelation.name', 'categories')
+                ->call('addWithCountRelation');
             return $this;
         };
     }

@@ -122,15 +122,15 @@ trait WithFeatures
         return $this->advancedSettings['table_settings']['showPaginationDropdown'];
     }
 
-    public function isBtmEnabled()
-    {
-        return count($this->belongsToManyRelations) > 0;
-    }
+    // public function isBtmEnabled()
+    // {
+    //     return count($this->belongsToManyRelations) > 0;
+    // }
 
-    public function isBelongsToEnabled()
-    {
-        return count($this->belongsToRelations) > 0;
-    }
+    // public function isBelongsToEnabled()
+    // {
+    //     return count($this->belongsToRelations) > 0;
+    // }
 
     public function isHideColumnsEnabled()
     {

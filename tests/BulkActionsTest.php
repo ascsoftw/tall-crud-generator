@@ -27,7 +27,7 @@ class BulkActionsTest extends TestCase
         $tallProperties = $this->component->get('tallProperties');
         $componentCode = $this->component->get('componentCode');
 
-        $this->assertEquals(false, $tallProperties->getBulkActionFlag());
+        $this->assertFalse($tallProperties->getBulkActionFlag());
         $bulkActionCode = $componentCode->getBulkActionsCode();
         $this->assertEmpty($bulkActionCode['vars']);
         $this->assertEmpty($bulkActionCode['method']);
@@ -44,7 +44,7 @@ class BulkActionsTest extends TestCase
         $tallProperties = $this->component->get('tallProperties');
         $componentCode = $this->component->get('componentCode');
 
-        $this->assertEquals(false, $tallProperties->getBulkActionFlag());
+        $this->assertFalse($tallProperties->getBulkActionFlag());
         $bulkActionCode = $componentCode->getBulkActionsCode();
         $this->assertEmpty($bulkActionCode['vars']);
         $this->assertEmpty($bulkActionCode['method']);
@@ -67,7 +67,7 @@ class BulkActionsTest extends TestCase
         $tallProperties = $this->component->get('tallProperties');
         $componentCode = $this->component->get('componentCode');
         
-        $this->assertEquals(true, $tallProperties->getBulkActionFlag());
+        $this->assertTrue($tallProperties->getBulkActionFlag());
         $this->assertEquals('status', $tallProperties->getBulkActionColumn());
         $this->assertEquals('Product', $tallProperties->getModelName());
         $this->assertEquals('id', $tallProperties->getPrimaryKey());

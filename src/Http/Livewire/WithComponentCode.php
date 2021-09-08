@@ -91,31 +91,4 @@ trait WithComponentCode
 
         return $code;
     }
-
-    public function getArrayCode($name, $type = 'array')
-    {
-        return str_replace(
-            [
-                '##NAME##',
-                '##TYPE##',
-            ],
-            [
-                $name,
-                $type,
-            ],
-            $this->getArrayTemplate()
-        );
-    }
-
-    public function getAllListingColumns()
-    {
-        $fields = $this->getSortedListingFields();
-        $labels = collect();
-        foreach ($fields as $f) {
-            $props = $this->getTableColumnProps($f);
-            $labels->push($props[0]);
-        }
-
-        return $labels;
-    }
 }

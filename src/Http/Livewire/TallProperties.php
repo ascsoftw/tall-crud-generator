@@ -308,7 +308,7 @@ class TallProperties
 
     public function getFlashMessageText($mode)
     {
-        return $this->flashMessageText[$mode];
+        return $this->flashMessageText[$mode] ?? '';
     }
 
     public function setSelfFormFields($selfFormFields)

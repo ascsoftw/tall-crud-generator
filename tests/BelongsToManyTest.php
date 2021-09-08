@@ -86,7 +86,7 @@ class BelongsToManyTest extends TestCase
         // $this->component->call('isBtmEditEnabled')
         //     ->assertReturnEquals('isBtmEditEnabled', true);
 
-        $this->component->call('isBtmEnabled')
-            ->assertReturnEquals('isBtmEnabled', true);
+        // $this->component->call('isBtmEnabled')
+        //     ->assertReturnEquals('isBtmEnabled', true);
     }
 }

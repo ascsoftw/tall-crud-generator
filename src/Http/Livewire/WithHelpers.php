@@ -470,4 +470,16 @@ trait WithHelpers
 
         return $filter['relation'].'_'.$filter['relatedKey'];
     }
+
+    public function getAllListingColumns()
+    {
+        $fields = $this->getSortedListingFields();
+        $labels = collect();
+        foreach ($fields as $f) {
+            $props = $this->getTableColumnProps($f);
+            $labels->push($props[0]);
+        }
+
+        return $labels;
+    }
 }

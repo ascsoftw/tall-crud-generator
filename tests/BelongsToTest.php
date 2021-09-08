@@ -86,7 +86,7 @@ class BelongsToTest extends TestCase
         // $this->component->call('isBelongsToEditEnabled')
         //     ->assertReturnEquals('isBelongsToEditEnabled', true);
 
-        $this->component->call('isBelongsToEnabled')
-            ->assertReturnEquals('isBelongsToEnabled', true);
+        // $this->component->call('isBelongsToEnabled')
+        //     ->assertReturnEquals('isBelongsToEnabled', true);
     }
 }

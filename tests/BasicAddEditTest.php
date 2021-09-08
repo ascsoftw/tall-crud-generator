@@ -4,6 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
 
 class BasicAddEditTest extends TestCase
 {
@@ -99,76 +100,67 @@ class BasicAddEditTest extends TestCase
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
 
+        $tallProperties = $this->component->get('tallProperties');
+        $componentCode = $this->component->get('componentCode');
         $props = $this->component->get('props');
+
         $this->assertNotEmpty($props['code']['sort']['vars']);
         $this->assertNotEmpty($props['code']['sort']['query']);
         $this->assertNotEmpty($props['code']['sort']['method']);
-        $this->component->call('isSortingEnabled')
-                ->assertReturnEquals('isSortingEnabled', true);
-        $this->component->call('isPrimaryKeySortable')
-                ->assertReturnEquals('isPrimaryKeySortable', true);
-        $this->component->call('getDefaultSortableColumn')
-                ->assertReturnEquals('getDefaultSortableColumn', 'id');
+        $this->assertTrue($tallProperties->getSortingFlag());
+        $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
+        $sortProperty = <<<'EOT'
+public $sortBy = 'id';
+EOT;
+        $this->assertStringContainsString($sortProperty, $props['code']['sort']['vars']);
 
         $this->assertNotEmpty($props['code']['search']['vars']);
         $this->assertNotEmpty($props['code']['search']['query']);
         $this->assertNotEmpty($props['code']['search']['method']);
-        $this->component->call('isSearchingEnabled')
-                ->assertReturnEquals('isSearchingEnabled', true);
-        $this->component->call('getSearchableColumns')
-                ->assertReturnCount('getSearchableColumns', 1);
+        $this->assertTrue($tallProperties->getSearchingFlag());
+        $this->assertCount(1, $tallProperties->getSearchableColumns());
+        $this->assertEquals(['name'], $tallProperties->getSearchableColumns()->toArray());
 
         $this->assertNotEmpty($props['code']['pagination_dropdown']['method']);
-        $this->component->call('isPaginationDropdownEnabled')
-                ->assertReturnEquals('isPaginationDropdownEnabled', true);
+        $this->assertTrue($tallProperties->getPaginationDropdownFlag());
+        $this->assertEquals(WithTemplates::getPaginationDropdownMethodTemplate(), $componentCode->getPaginationDropdownMethod());
 
         $this->assertNotEmpty($props['code']['pagination']['vars']);
-        $advancedSettings = $this->component->get('advancedSettings');
-        $this->assertEquals(15, $advancedSettings['table_settings']['recordsPerPage']);
+        $this->assertEquals(15, $tallProperties->getRecordsPerPage());
 
         $this->assertEmpty($props['code']['with_query']);
         $this->assertEmpty($props['code']['with_count_query']);
 
         $this->assertEmpty($props['code']['hide_columns']['vars']);
         $this->assertEmpty($props['code']['hide_columns']['init']);
-        $this->component->call('isHideColumnsEnabled')
-                ->assertReturnEquals('isHideColumnsEnabled', false);
+        $this->assertFalse($tallProperties->getHideColumnsFlag());
 
         $this->assertEmpty($props['code']['bulk_actions']['vars']);
         $this->assertEmpty($props['code']['bulk_actions']['method']);
-        $this->component->call('isBulkActionsEnabled')
-                ->assertReturnEquals('isBulkActionsEnabled', false);
+        $this->assertFalse($tallProperties->getBulkActionFlag());
 
         $this->assertEmpty($props['code']['filter']['vars']);
         $this->assertEmpty($props['code']['filter']['init']);
         $this->assertEmpty($props['code']['filter']['query']);
         $this->assertEmpty($props['code']['filter']['method']);
-        $this->component->call('isFilterEnabled')
-                ->assertReturnEquals('isFilterEnabled', false);
+        $this->assertFalse($tallProperties->getFilterFlag());
 
         $this->assertEmpty($props['code']['other_models']);
 
         $this->assertNotEmpty($props['code']['child_delete']['vars']);
         $this->assertNotEmpty($props['code']['child_delete']['method']);
-        $this->component->call('isDeleteFeatureEnabled')
-                ->assertReturnEquals('isDeleteFeatureEnabled', true);
+        $this->assertTrue($tallProperties->getDeleteFeatureFlag());
 
         $this->assertNotEmpty($props['code']['child_add']['vars']);
         $this->assertNotEmpty($props['code']['child_add']['method']);
-        $this->component->call('isAddFeatureEnabled')
-                ->assertReturnEquals('isAddFeatureEnabled', true);
+        $this->assertTrue($tallProperties->getAddFeatureFlag());
 
         $this->assertNotEmpty($props['code']['child_edit']['vars']);
         $this->assertNotEmpty($props['code']['child_edit']['method']);
-        $this->component->call('isEditFeatureEnabled')
-                ->assertReturnEquals('isEditFeatureEnabled', true);
+        $this->assertTrue($tallProperties->getEditFeatureFlag());
 
         $this->assertEmpty($props['code']['child_other_models']);
         $this->assertEmpty($props['code']['child_vars']);
-        $this->component->call('isBtmEnabled')
-                ->assertReturnEquals('isBtmEnabled', false);
-        $this->component->call('isBelongsToEnabled')
-                ->assertReturnEquals('isBelongsToEnabled', false);
 
         //Test View Code
         $this->assertNotEmpty($props['html']['add_link']);
@@ -186,8 +178,7 @@ class BasicAddEditTest extends TestCase
         $this->assertNotEmpty($props['html']['child_component']);
 
         $this->assertNotEmpty($props['html']['flash_component']);
-        $this->component->call('isFlashMessageEnabled')
-                ->assertReturnEquals('isFlashMessageEnabled', true);
+        $this->assertTrue($tallProperties->getFlashMessageFlag());
 
         $this->assertNotEmpty($props['html']['child']['delete_modal']);
         $this->assertNotEmpty($props['html']['child']['add_modal']);
