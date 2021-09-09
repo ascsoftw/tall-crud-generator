@@ -14,7 +14,7 @@ trait WithTemplates
 EOT;
     }
 
-    public function getSearchBoxTemplate()
+    public static function getSearchBoxTemplate()
     {
         return <<<'EOT'
 
@@ -25,7 +25,7 @@ EOT;
 EOT;
     }
 
-    public function getHideColumnDropdownTemplate()
+    public static function getHideColumnDropdownTemplate()
     {
         return <<<'EOT'
 
@@ -45,7 +45,7 @@ EOT;
 EOT;
     }
 
-    public function getPaginationDropdownTemplate()
+    public static function getPaginationDropdownTemplate()
     {
         return <<<'EOT'
 
@@ -65,7 +65,7 @@ wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm',  {{ $result->##PRIMA
 EOT;
     }
 
-    public function getAddButtonTemplate()
+    public static function getAddButtonTemplate()
     {
         return <<<'EOT'
 wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');"
@@ -365,7 +365,7 @@ EOT;
 EOT;
     }
 
-    public function getDeleteModalTemplate()
+    public static function getDeleteModalTemplate()
     {
         return <<<'EOT'
 
@@ -722,7 +722,7 @@ EOT;
 EOT;
     }
 
-    public function getBulkActionTemplate()
+    public static function getBulkActionTemplate()
     {
         return <<<'EOT'
                 <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
@@ -773,7 +773,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterDropdownTemplate()
+    public static function getFilterDropdownTemplate()
     {
         return <<<'EOT'
 

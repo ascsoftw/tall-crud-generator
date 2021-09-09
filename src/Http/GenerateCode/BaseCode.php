@@ -68,4 +68,14 @@ class BaseCode
 
         return Str::title(str_replace('_', ' ', $column));
     }
+
+    public function getButtonHtml($slot, $mode = '', $params = '')
+    {
+        return '<x:tall-crud-generator::button mode="'.$mode.'" '.$params.'>'.$slot.'</x:tall-crud-generator::button>';
+    }
+
+    public function getSortIconHtml($column)
+    {
+        return '<x:tall-crud-generator::sort-icon sortField="'.$column.'" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
+    }
 }

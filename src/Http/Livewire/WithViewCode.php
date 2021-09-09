@@ -3,92 +3,32 @@
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 use Illuminate\Support\Str;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
 
 trait WithViewCode
 {
     public function generateViewHtml()
     {
         $code = [];
-        $code['add_link'] = $this->generateAddLink();
-        $code['search_box'] = $this->generateSearchBox();
-        $code['pagination_dropdown'] = $this->generatePaginationDropdown();
-        $code['hide_columns'] = $this->generateHideColumnsDropdown();
-        $code['bulk_action'] = $this->generateBulkAction();
-        $code['filter_dropdown'] = $this->generateFilterDropdown();
+        $this->viewCode = new ViewCode($this->tallProperties);
+        $code['add_link'] = $this->viewCode->getAddLink();
+        $code['search_box'] = $this->viewCode->getSearchBox();
+        $code['pagination_dropdown'] = $this->viewCode->getPaginationDropdown();
+        $code['hide_columns'] = $this->viewCode->getHideColumnsDropdown();
+        $code['bulk_action'] = $this->viewCode->getBulkActionDropdown();
+        $code['filter_dropdown'] = $this->viewCode->getFilterDropdown();
         $code['table_header'] = $this->generateTableHeader();
         $code['table_slot'] = $this->generateTableSlot();
         $code['child_component'] = $this->includeChildComponent();
         $code['flash_component'] = $this->includeFlashComponent();
-        $code['child']['delete_modal'] = $this->generateDeleteModal();
+
+        $this->childViewCode = new ChildViewCode($this->tallProperties);
+        $code['child']['delete_modal'] = $this->childViewCode->getDeleteModal();
         $code['child']['add_modal'] = $this->generateAddModal();
         $code['child']['edit_modal'] = $this->generateEditModal();
 
         return $code;
-    }
-
-    public function generateAddLink()
-    {
-        if ($this->isAddFeatureEnabled()) {
-            $buttonParams = str_replace(
-                '##COMPONENT_NAME##',
-                $this->getChildComponentName(),
-                $this->getAddButtonTemplate()
-            );
-
-            return $this->newLines(1, 2).
-                $this->getButtonHtml(
-                    $this->advancedSettings['text']['addLink'],
-                    'add',
-                    $buttonParams
-                );
-        }
-
-        return '';
-    }
-
-    public function generateSearchBox()
-    {
-        if ($this->isSearchingEnabled()) {
-            return $this->getSearchBoxTemplate();
-        }
-
-        return '';
-    }
-
-    public function generatePaginationDropdown()
-    {
-        if ($this->isPaginationDropdownEnabled()) {
-            return $this->getPaginationDropdownTemplate();
-        }
-
-        return '';
-    }
-
-    public function generateHideColumnsDropdown()
-    {
-        if ($this->isHideColumnsEnabled()) {
-            return $this->getHideColumnDropdownTemplate();
-        }
-
-        return '';
-    }
-
-    public function generateBulkAction()
-    {
-        if ($this->isBulkActionsEnabled()) {
-            return $this->getBulkActionTemplate();
-        }
-
-        return '';
-    }
-
-    public function generateFilterDropdown()
-    {
-        if ($this->isFilterEnabled()) {
-            return $this->getFilterDropdownTemplate();
-        }
-
-        return '';
     }
 
     public function generateTableHeader()
@@ -158,25 +98,6 @@ trait WithViewCode
         }
 
         return '';
-    }
-
-    public function generateDeleteModal()
-    {
-        if (! $this->isDeleteFeatureEnabled()) {
-            return '';
-        }
-
-        return str_replace(
-            [
-                '##CANCEL_BTN_TEXT##',
-                '##DELETE_BTN_TEXT##',
-            ],
-            [
-                $this->advancedSettings['text']['cancelButton'],
-                $this->advancedSettings['text']['deleteButton'],
-            ],
-            $this->getDeleteModalTemplate()
-        );
     }
 
     public function generateAddModal()

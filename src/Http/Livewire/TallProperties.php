@@ -50,6 +50,8 @@ class TallProperties
     public $btmRelations;
     public $belongsToRelations;
 
+    public $advancedSettingsText;
+
     public function setModelPath($modelPath)
     {
         $this->modelPath = $modelPath;
@@ -87,6 +89,11 @@ class TallProperties
     public function getComponentName()
     {
         return $this->componentName;
+    }
+
+    public function getChildComponentName()
+    {
+        return $this->getComponentName().'-child';
     }
 
     public function setOtherModels($filters)
@@ -374,5 +381,16 @@ class TallProperties
         return $this->getBelongsToRelations()->filter(function($item) {
             return $item['inEdit'];
         });
+    }
+
+
+    public function setAdvancedSettingsText($advancedSettingsText)
+    {
+        $this->advancedSettingsText = $advancedSettingsText;
+    }
+
+    public function getAdvancedSettingsText($key)
+    {
+        return $this->advancedSettingsText[$key] ?? '';
     }
 }

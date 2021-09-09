@@ -439,38 +439,6 @@ trait WithHelpers
         return $belongsToCollection;
     }
 
-    public function getFilterColumnName($filter)
-    {
-        return ($filter['type'] == 'None') ? $filter['column'] : $filter['foreignKey'];
-    }
-
-    public function getFilterLabelName($filter)
-    {
-        if ($filter['type'] == 'None') {
-            return Str::ucfirst($filter['column']);
-        }
-
-        return Str::ucfirst($filter['relation']);
-    }
-
-    public function getFilterOwnerKey($filter)
-    {
-        if ($filter['type'] == 'BelongsTo') {
-            return $filter['ownerKey'];
-        }
-
-        return $filter['relatedKey'];
-    }
-
-    public function getFilterForeignKey($filter)
-    {
-        if ($filter['type'] == 'BelongsTo') {
-            return $filter['foreignKey'];
-        }
-
-        return $filter['relation'].'_'.$filter['relatedKey'];
-    }
-
     public function getAllListingColumns()
     {
         $fields = $this->getSortedListingFields();

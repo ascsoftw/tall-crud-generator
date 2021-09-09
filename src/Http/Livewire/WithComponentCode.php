@@ -4,7 +4,6 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\App;
 
 trait WithComponentCode
@@ -63,6 +62,8 @@ trait WithComponentCode
         $this->tallProperties->setSelfFormFields($this->getNormalFormFields());
         $this->tallProperties->setBtmRelations($this->belongsToManyRelations);
         $this->tallProperties->setBelongsToRelations($this->belongsToRelations);
+
+        $this->tallProperties->setAdvancedSettingsText($this->advancedSettings['text']);
 
         $this->componentCode = new ComponentCode($this->tallProperties);
 
