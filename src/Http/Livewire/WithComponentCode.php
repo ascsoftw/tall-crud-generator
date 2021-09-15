@@ -65,7 +65,7 @@ trait WithComponentCode
 
         $this->tallProperties->setAdvancedSettingsText($this->advancedSettings['text']);
 
-        $this->componentCode = new ComponentCode($this->tallProperties);
+        $this->componentCode = App::make(ComponentCode::class);
 
         $code = [];
         $code['sort'] = $this->componentCode->getSortCode();
@@ -79,7 +79,7 @@ trait WithComponentCode
         $code['filter'] = $this->componentCode->getFilterCode();
         $code['other_models'] = $this->componentCode->getOtherModelsCode();
 
-        $this->childComponentCode = new ChildComponentCode($this->tallProperties);
+        $this->childComponentCode = App::make(ChildComponentCode::class);
         $code['child_delete'] = $this->childComponentCode->getDeleteCode();
         $code['child_add'] = $this->childComponentCode->getAddCode();
         $code['child_edit'] = $this->childComponentCode->getEditCode();

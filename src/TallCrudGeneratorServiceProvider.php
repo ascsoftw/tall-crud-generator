@@ -3,12 +3,17 @@
 namespace Ascsoftw\TallCrudGenerator;
 
 use Ascsoftw\TallCrudGenerator\Console\Commands\TallCrudGeneratorCommand;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
 
 class TallCrudGeneratorServiceProvider extends ServiceProvider
 {
@@ -65,6 +70,25 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/tall-crud-generator.php', 'tall-crud-generator');
+        $this->app->singleton(TallProperties::class, function ($app) {
+            return new TallProperties();
+        });
+
+        $this->app->bind(ComponentCode::class, function ($app) {
+            return new ComponentCode($app->make(TallProperties::class));
+        });
+
+        $this->app->bind(ChildComponentCode::class, function ($app) {
+            return new ChildComponentCode($app->make(TallProperties::class));
+        });
+
+        $this->app->bind(ViewCode::class, function ($app) {
+            return new ViewCode($app->make(TallProperties::class));
+        });
+
+        $this->app->bind(ChildViewCode::class, function ($app) {
+            return new ChildViewCode($app->make(TallProperties::class));
+        });
     }
 
     public function defineMacros()

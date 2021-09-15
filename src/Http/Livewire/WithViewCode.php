@@ -5,13 +5,14 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 use Illuminate\Support\Str;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
+use Illuminate\Support\Facades\App;
 
 trait WithViewCode
 {
     public function generateViewHtml()
     {
         $code = [];
-        $this->viewCode = new ViewCode($this->tallProperties);
+        $this->viewCode = App::make(ViewCode::class);
         $code['add_link'] = $this->viewCode->getAddLink();
         $code['search_box'] = $this->viewCode->getSearchBox();
         $code['pagination_dropdown'] = $this->viewCode->getPaginationDropdown();
@@ -23,7 +24,7 @@ trait WithViewCode
         $code['child_component'] = $this->includeChildComponent();
         $code['flash_component'] = $this->includeFlashComponent();
 
-        $this->childViewCode = new ChildViewCode($this->tallProperties);
+        $this->childViewCode = App::make(ChildViewCode::class);
         $code['child']['delete_modal'] = $this->childViewCode->getDeleteModal();
         $code['child']['add_modal'] = $this->generateAddModal();
         $code['child']['edit_modal'] = $this->generateEditModal();

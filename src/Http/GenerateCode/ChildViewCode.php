@@ -3,7 +3,7 @@
 namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
-use Illuminate\Support\Str;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
 
 class ChildViewCode extends BaseCode
 {
@@ -11,7 +11,7 @@ class ChildViewCode extends BaseCode
 
     public $tallProperties;
 
-    public function __construct($tallProperties)
+    public function __construct(TallProperties $tallProperties)
     {
         $this->tallProperties = $tallProperties;
     }
