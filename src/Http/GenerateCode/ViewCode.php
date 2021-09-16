@@ -22,18 +22,11 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        $buttonParams = str_replace(
+        return str_replace(
             '##COMPONENT_NAME##',
             $this->tallProperties->getChildComponentName(),
             WithTemplates::getAddButtonTemplate()
         );
-
-        return $this->newLines(1, 2).
-            $this->getButtonHtml(
-                $this->tallProperties->getAdvancedSettingsText('addLink'),
-                'add',
-                $buttonParams
-            );
     }
 
     public function getSearchBox()

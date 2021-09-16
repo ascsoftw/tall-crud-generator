@@ -58,9 +58,6 @@ class TallCrudGenerator extends Component
     public $advancedSettings = [
         'text' => [
             'title' => '',
-            'addLink' => 'Create New',
-            'editLink' => 'Edit',
-            'deleteLink' => 'Delete',
             'createButton' => 'Save',
             'editButton' => 'Save',
             'cancelButton' => 'Cancel',
@@ -72,6 +69,11 @@ class TallCrudGenerator extends Component
             'showHideColumns' => false,
             'bulkActions' => false,
             'bulkActionColumn' => '',
+            'thClass' => 'text-left font-bold bg-blue-400',
+            'trHoverClass' => 'bg-blue-300',
+            'trEvenClass' => 'bg-blue-100',
+            'trBottomBorder' => 'blue-400',
+            'tdClass' => 'px-3 py-2',
         ],
     ];
 

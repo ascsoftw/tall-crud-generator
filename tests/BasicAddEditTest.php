@@ -184,7 +184,7 @@ EOT;
         $this->assertNotEmpty($props['html']['child']['add_modal']);
         $this->assertNotEmpty($props['html']['child']['edit_modal']);
 
-        $this->assertEquals(5, substr_count($props['html']['table_header'], '</x:tall-crud-generator::table-column>'));
-        $this->assertEquals(5, substr_count($props['html']['table_slot'], '</x:tall-crud-generator::table-column>'));
+        $this->assertEquals(5, substr_count($props['html']['table_header'], '</td>'));
+        $this->assertEquals(5, substr_count($props['html']['table_slot'], '</td>'));
     }
 }

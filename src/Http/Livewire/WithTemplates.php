@@ -61,21 +61,30 @@ EOT;
     public function getDeleteButtonTemplate()
     {
         return <<<'EOT'
-wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm',  {{ $result->##PRIMARY_KEY##}});"
+
+                        <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm', {{ $result->##PRIMARY_KEY##}});" class="text-red-500">
+                            <x:tall-crud-generator::icon-delete />
+                        </button>
 EOT;
     }
 
     public static function getAddButtonTemplate()
     {
         return <<<'EOT'
-wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');"
+
+        <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');" class="text-blue-500">
+            <x:tall-crud-generator::icon-add />
+        </button>
 EOT;
     }
 
     public function getEditButtonTemplate()
     {
         return <<<'EOT'
-wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm',  {{ $result->##PRIMARY_KEY##}});"
+
+                        <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm', {{ $result->##PRIMARY_KEY##}});" class="text-green-500">
+                            <x:tall-crud-generator::icon-edit />
+                        </button>
 EOT;
     }
 
@@ -700,7 +709,7 @@ EOT;
     public function getHideColumnIfTemplate()
     {
         return <<<'EOT'
-@if(in_array('##LABEL##', $this->selectedColumns))
+@if(in_array('##LABEL##', $selectedColumns))
 EOT;
     }
 
@@ -780,7 +789,7 @@ EOT;
                 <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded ml-4 px-4 cursor-pointer" width="w-72">
                     <x-slot name="trigger">
                         <span class="flex">
-                        Filters <x:tall-crud-generator::filter-icon />
+                        Filters <x:tall-crud-generator::icon-filter />
                         </span>
                     </x-slot>
                 

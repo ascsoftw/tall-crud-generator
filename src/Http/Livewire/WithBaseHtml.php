@@ -6,7 +6,7 @@ trait WithBaseHtml
 {
     public function getTableColumnHtml($slot, $params = '')
     {
-        return '<x:tall-crud-generator::table-column '.$params.'>'.$slot.'</x:tall-crud-generator::table-column>';
+        return '<td class="'.$this->advancedSettings['table_settings']['tdClass'].'"'.$params.'>'.$slot.'</td>';
     }
 
     public function getTableSlotHtml($f)

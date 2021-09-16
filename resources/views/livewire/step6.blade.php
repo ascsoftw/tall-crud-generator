@@ -86,6 +86,31 @@
                 </x:tall-crud-generator::select>
             </x:tall-crud-generator::checkbox-wrapper>
             @endif
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Class on th:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.thClass" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Hover Class on tr:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.trHoverClass" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Even Row Class:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.trEvenClass" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Table Row Divide Class:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.trBottomBorder" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Class on td:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.tdClass" />
+            </div>
         </x:tall-crud-generator::accordion-wrapper>
         <x:tall-crud-generator::accordion-header tab="4">
             Filters

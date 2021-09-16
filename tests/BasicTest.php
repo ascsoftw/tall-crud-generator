@@ -135,7 +135,7 @@ class BasicTest extends TestCase
         $this->assertEmpty($props['html']['child']['add_modal']);
         $this->assertEmpty($props['html']['child']['edit_modal']);
 
-        $this->assertEquals(7, substr_count($props['html']['table_header'], '</x:tall-crud-generator::table-column>'));
-        $this->assertEquals(7, substr_count($props['html']['table_slot'], '</x:tall-crud-generator::table-column>'));
+        $this->assertEquals(7, substr_count($props['html']['table_header'], '</td>'));
+        $this->assertEquals(7, substr_count($props['html']['table_slot'], '</td>'));
     }
 }

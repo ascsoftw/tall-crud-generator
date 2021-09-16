@@ -23,6 +23,7 @@ trait WithViewCode
         $code['table_slot'] = $this->generateTableSlot();
         $code['child_component'] = $this->includeChildComponent();
         $code['flash_component'] = $this->includeFlashComponent();
+        $code['classes'] = $this->getTableClasses();
 
         $this->childViewCode = App::make(ChildViewCode::class);
         $code['child']['delete_modal'] = $this->childViewCode->getDeleteModal();
@@ -158,7 +159,7 @@ trait WithViewCode
     {
         $buttons = collect();
         if ($this->isEditFeatureEnabled()) {
-            $buttonParams = str_replace(
+            $buttons->push(str_replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
@@ -168,18 +169,11 @@ trait WithViewCode
                     $this->getPrimaryKey(),
                 ],
                 $this->getEditButtonTemplate()
-            );
-            $buttons->push(
-                $this->getButtonHtml(
-                    $this->advancedSettings['text']['editLink'],
-                    'edit',
-                    $buttonParams
-                )
-            );
+            ));
         }
 
         if ($this->isDeleteFeatureEnabled()) {
-            $buttonParams = str_replace(
+            $buttons->push(str_replace(
                 [
                     '##COMPONENT_NAME##',
                     '##PRIMARY_KEY##',
@@ -189,18 +183,10 @@ trait WithViewCode
                     $this->getPrimaryKey(),
                 ],
                 $this->getDeleteButtonTemplate()
-            );
-
-            $buttons->push(
-                $this->getButtonHtml(
-                    $this->advancedSettings['text']['deleteLink'],
-                    'delete',
-                    $buttonParams
-                )
-            );
+            ));
         }
 
-        return $buttons->prependAndJoin($this->newLines(1, 6)).$this->newLines(1, 5);
+        return $buttons->join('').$this->newLines(1, 5);
     }
 
     public function getBulkColumnCheckbox()
@@ -373,5 +359,27 @@ trait WithViewCode
         }
 
         return [$label, $column, $isSortable];
+    }
+
+    public function getTableClasses()
+    {
+        $classes = [
+            'th' => '',
+            'trBottomBorder' => '',
+            'trHover' => '',
+            'trEven' => '',
+        ];
+
+        $classes['th'] = $this->advancedSettings['table_settings']['thClass'];
+        $classes['trBottomBorder'] = $this->advancedSettings['table_settings']['trBottomBorder'];
+        if (!empty($this->advancedSettings['table_settings']['trEvenClass'])) {
+            $classes['trEven'] = '{{ ($loop->even ) ? "' . $this->advancedSettings['table_settings']['trEvenClass'] . '" : ""}}';
+        }
+        if (!empty($this->advancedSettings['table_settings']['trHoverClass'])) {
+            $classes['trHover'] = 'hover:' . $this->advancedSettings['table_settings']['trHoverClass'];
+        }
+
+        return $classes;
+
     }
 }

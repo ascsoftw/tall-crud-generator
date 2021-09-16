@@ -143,6 +143,10 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[hide_columns\]/',
                     '/\[bulk_action\]/',
                     '/\[filter_dropdown\]/',
+                    '/\[th_class\]/',
+                    '/\[tr_bottom_border\]/',
+                    '/\[tr_hover_class\]/',
+                    '/\[tr_even_class\]/',
                 ],
                 [
                     $props['advancedSettings']['text']['title'],
@@ -156,6 +160,10 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['html']['hide_columns'],
                     $props['html']['bulk_action'],
                     $props['html']['filter_dropdown'],
+                    $props['html']['classes']['th'],
+                    $props['html']['classes']['trBottomBorder'],
+                    $props['html']['classes']['trHover'],
+                    $props['html']['classes']['trEven'],
                 ],
                 $template
             );
