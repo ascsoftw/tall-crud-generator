@@ -18,7 +18,7 @@ class ViewCode extends BaseCode
 
     public function getAddLink()
     {
-        if (!$this->tallProperties->getAddFeatureFlag()) {
+        if (!$this->tallProperties->isAddFeatureEnabled()) {
             return '';
         }
 
@@ -31,7 +31,7 @@ class ViewCode extends BaseCode
 
     public function getSearchBox()
     {
-        if (!$this->tallProperties->getSearchingFlag()) {
+        if (!$this->tallProperties->isSearchingEnabled()) {
             return '';
         }
 
@@ -40,7 +40,7 @@ class ViewCode extends BaseCode
 
     public function getPaginationDropdown()
     {
-        if (!$this->tallProperties->getPaginationDropdownFlag()) {
+        if (!$this->tallProperties->isPaginationDropdownEnabled()) {
             return '';
         }
 
@@ -49,7 +49,7 @@ class ViewCode extends BaseCode
 
     public function getHideColumnsDropdown()
     {
-        if (!$this->tallProperties->getHideColumnsFlag()) {
+        if (!$this->tallProperties->isHideColumnsEnabled()) {
             return '';
         }
 
@@ -58,7 +58,7 @@ class ViewCode extends BaseCode
 
     public function getBulkActionDropdown()
     {
-        if (!$this->tallProperties->getBulkActionFlag()) {
+        if (!$this->tallProperties->isBulkActionsEnabled()) {
             return '';
         }
 
@@ -67,7 +67,7 @@ class ViewCode extends BaseCode
 
     public function getFilterDropdown()
     {
-        if (!$this->tallProperties->getFilterFlag()) {
+        if (!$this->tallProperties->isFilterEnabled()) {
             return'';
         }
 

@@ -18,12 +18,12 @@ trait WithComponentCode
         $this->tallProperties->setComponentName($this->getComponentName());
         //Sorting
         $this->tallProperties->setSortingFlag($this->isSortingEnabled());
-        if ($this->tallProperties->getSortingFlag()) {
+        if ($this->tallProperties->isSortingEnabled()) {
             $this->tallProperties->setDefaultSortableColumn($this->getDefaultSortableColumn());
         }
         //Searching
         $this->tallProperties->setSearchingFlag($this->isSearchingEnabled());
-        if ($this->tallProperties->getSearchingFlag()) {
+        if ($this->tallProperties->isSearchingEnabled()) {
             $this->tallProperties->setSearchableColumns($this->getSearchableColumns());
         }
         //Pagination Dropdown
@@ -36,17 +36,17 @@ trait WithComponentCode
         $this->tallProperties->setEagerLoadCountModels($this->withCountRelations);
         //Hide Column
         $this->tallProperties->setHideColumnsFlag($this->isHideColumnsEnabled());
-        if ($this->tallProperties->getHideColumnsFlag()) {
+        if ($this->tallProperties->isHideColumnsEnabled()) {
             $this->tallProperties->setListingColumns($this->getAllListingColumns());
         }
         //Bulk Actions
         $this->tallProperties->setBulkActionFlag($this->isBulkActionsEnabled());
-        if ($this->tallProperties->getBulkActionFlag()) {
+        if ($this->tallProperties->isBulkActionsEnabled()) {
             $this->tallProperties->setBulkActionColumn($this->advancedSettings['table_settings']['bulkActionColumn']);
         }
         //Filters
         $this->tallProperties->setFilterFlag($this->isFilterEnabled());
-        if ($this->tallProperties->getFilterFlag()) {
+        if ($this->tallProperties->isFilterEnabled()) {
             $this->tallProperties->setFilters($this->filters);
         }
         //Other Models
@@ -56,7 +56,7 @@ trait WithComponentCode
         $this->tallProperties->setAddFeatureFlag($this->isAddFeatureEnabled());
         $this->tallProperties->setEditFeatureFlag($this->isEditFeatureEnabled());
         $this->tallProperties->setFlashMessageFlag($this->isFlashMessageEnabled());
-        if ($this->tallProperties->getFlashMessageFlag()) {
+        if ($this->tallProperties->isFlashMessageEnabled()) {
             $this->tallProperties->setFlashMessageText($this->flashMessages['text']);
         }
         $this->tallProperties->setSelfFormFields($this->getNormalFormFields());

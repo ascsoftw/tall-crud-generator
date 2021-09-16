@@ -18,7 +18,7 @@ class ChildViewCode extends BaseCode
 
     public function getDeleteModal()
     {
-        if (!$this->tallProperties->getDeleteFeatureFlag()) {
+        if (!$this->tallProperties->isDeleteFeatureEnabled()) {
             return '';
         }
 

@@ -32,7 +32,7 @@ class ComponentCode extends BaseCode
             'query' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getSortingFlag()) {
+        if ($this->tallProperties->isSortingEnabled()) {
             $code['vars'] = $this->getSortingVars();
             $code['query'] = $this->getSortingQuery();
             $code['method'] = $this->getSortingMethod();
@@ -67,7 +67,7 @@ class ComponentCode extends BaseCode
             'query' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getSearchingFlag()) {
+        if ($this->tallProperties->isSearchingEnabled()) {
             $code['vars'] = $this->getSearchVars();
             $code['query'] = $this->getSearchQuery();
             $code['method'] = $this->getSearchMethod();
@@ -126,7 +126,7 @@ class ComponentCode extends BaseCode
         $code = [
             'method' => '',
         ];
-        if ($this->tallProperties->getPaginationDropdownFlag()) {
+        if ($this->tallProperties->isPaginationDropdownEnabled()) {
             $code['method'] = $this->getPaginationDropdownMethod();
         }
 
@@ -191,10 +191,12 @@ class ComponentCode extends BaseCode
         $code = [
             'vars' => '',
             'init' => '',
+            'method' => '',
         ];
-        if ($this->tallProperties->getHideColumnsFlag()) {
+        if ($this->tallProperties->isHideColumnsEnabled()) {
             $code['vars'] = $this->getHideColumnVars();
             $code['init'] = $this->getHideColumnInitCode();
+            $code['method'] = $this->getHideColumnMethod();
         }
 
         return $code;
@@ -227,12 +229,17 @@ class ComponentCode extends BaseCode
             'vars' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getBulkActionFlag()) {
+        if ($this->tallProperties->isBulkActionsEnabled()) {
             $code['vars'] = $this->getBulkActionsVars();
             $code['method'] = $this->getBulkActionMethod();
         }
 
         return $code;
+    }
+
+    public function getHideColumnMethod()
+    {
+        return WithTemplates::getHideColumnMethodTemplate();
     }
 
     public function getBulkActionMethod()
@@ -266,7 +273,7 @@ class ComponentCode extends BaseCode
             'query' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getFilterFlag()) {
+        if ($this->tallProperties->isFilterEnabled()) {
             $code['vars'] = $this->getFilterVars();
             $code['init'] = $this->getFilterInitCode();
             $code['query'] = $this->getFilterQuery();

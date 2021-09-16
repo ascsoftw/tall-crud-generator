@@ -49,7 +49,7 @@ class SortingTest extends TestCase
         $componentCode = $this->component->get('componentCode');
         $sortCode = $componentCode->getSortCode();
 
-        $this->assertTrue($tallProperties->getSortingFlag());
+        $this->assertTrue($tallProperties->isSortingEnabled());
         $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
         $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $componentCode->getSortingQuery());
         $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $componentCode->getSortingMethod());
@@ -80,7 +80,7 @@ class SortingTest extends TestCase
         $this->assertNotEmpty($props['code']['sort']['query']);
         $this->assertNotEmpty($props['code']['sort']['method']);
 
-        $this->assertTrue($tallProperties->getSortingFlag());
+        $this->assertTrue($tallProperties->isSortingEnabled());
         $this->assertEquals('name', $tallProperties->getDefaultSortableColumn());
     }
 }

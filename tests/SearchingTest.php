@@ -53,7 +53,7 @@ class SearchingTest extends TestCase
         $componentCode = $this->component->get('componentCode');
         $searchCode = $componentCode->getSearchCode();
 
-        $this->assertTrue($tallProperties->getSearchingFlag());
+        $this->assertTrue($tallProperties->isSearchingEnabled());
         $this->assertEquals(['name'], $tallProperties->getSearchableColumns()->toArray());
         $this->assertEquals(WithTemplates::getSearchingVarsTemplate(), $componentCode->getSearchVars());
         $this->assertEquals(WithTemplates::getSearchMethodTemplate(), $componentCode->getSearchMethod());

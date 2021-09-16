@@ -34,7 +34,7 @@ class FlashMessageTest extends TestCase
             ->generateFiles();
 
         $tallProperties = $this->component->get('tallProperties');
-        $this->assertFalse($tallProperties->getFlashMessageFlag());
+        $this->assertFalse($tallProperties->isFlashMessageEnabled());
     }
 
     public function test_flash_message_code_is_generated()
@@ -45,7 +45,7 @@ class FlashMessageTest extends TestCase
         $tallProperties = $this->component->get('tallProperties');
         $childComponentCode = $this->component->get('childComponentCode');
 
-        $this->assertTrue($tallProperties->getFlashMessageFlag());
+        $this->assertTrue($tallProperties->isFlashMessageEnabled());
         $flashCodeStr = <<<'EOT'
 $this->emitTo('livewire-toast', 'show', 'Record Added Successfully');
 EOT;
@@ -66,7 +66,7 @@ EOT;
         $tallProperties = $this->component->get('tallProperties');
         $childComponentCode = $this->component->get('childComponentCode');
 
-        $this->assertTrue($tallProperties->getFlashMessageFlag());
+        $this->assertTrue($tallProperties->isFlashMessageEnabled());
         $this->assertEmpty($childComponentCode->getAddFlashCode());
         $this->assertNotEmpty($childComponentCode->getEditFlashCode());
         $this->assertNotEmpty($childComponentCode->getDeleteFlashCode());

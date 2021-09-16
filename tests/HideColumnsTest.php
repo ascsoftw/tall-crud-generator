@@ -31,7 +31,7 @@ class HideColumnsTest extends TestCase
         $tallProperties = $this->component->get('tallProperties');
         $componentCode = $this->component->get('componentCode');
 
-        $this->assertFalse($tallProperties->getHideColumnsFlag());
+        $this->assertFalse($tallProperties->isHideColumnsEnabled());
         $code = $componentCode->getHideColumnsCode();
         $this->assertEmpty($code['vars']);
         $this->assertEmpty($code['init']);
@@ -50,7 +50,7 @@ class HideColumnsTest extends TestCase
         $tallProperties = $this->component->get('tallProperties');
         $componentCode = $this->component->get('componentCode');
         
-        $this->assertTrue($tallProperties->getHideColumnsFlag());
+        $this->assertTrue($tallProperties->isHideColumnsEnabled());
 
         $code = $componentCode->getHideColumnsCode();
         $this->assertNotEmpty($code['vars']);

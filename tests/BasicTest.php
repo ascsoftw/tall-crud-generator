@@ -63,15 +63,15 @@ class BasicTest extends TestCase
         $this->assertEmpty($props['code']['sort']['vars']);
         $this->assertEmpty($props['code']['sort']['query']);
         $this->assertEmpty($props['code']['sort']['method']);
-        $this->assertFalse($tallProperties->getSortingFlag());
+        $this->assertFalse($tallProperties->isSortingEnabled());
 
         $this->assertEmpty($props['code']['search']['vars']);
         $this->assertEmpty($props['code']['search']['query']);
         $this->assertEmpty($props['code']['search']['method']);
-        $this->assertFalse($tallProperties->getSearchingFlag());
+        $this->assertFalse($tallProperties->isSearchingEnabled());
 
         $this->assertEmpty($props['code']['pagination_dropdown']['method']);
-        $this->assertFalse($tallProperties->getPaginationDropdownFlag());
+        $this->assertFalse($tallProperties->isPaginationDropdownEnabled());
         $paginationCode = $componentCode->getPaginationDropdownCode();
         $this->assertEmpty($paginationCode['method']);
 
@@ -84,31 +84,31 @@ class BasicTest extends TestCase
 
         $this->assertEmpty($props['code']['hide_columns']['vars']);
         $this->assertEmpty($props['code']['hide_columns']['init']);
-        $this->assertFalse($tallProperties->getHideColumnsFlag());
+        $this->assertFalse($tallProperties->isHideColumnsEnabled());
 
         $this->assertEmpty($props['code']['bulk_actions']['vars']);
         $this->assertEmpty($props['code']['bulk_actions']['method']);
-        $this->assertFalse($tallProperties->getBulkActionFlag());
+        $this->assertFalse($tallProperties->isBulkActionsEnabled());
 
         $this->assertEmpty($props['code']['filter']['vars']);
         $this->assertEmpty($props['code']['filter']['init']);
         $this->assertEmpty($props['code']['filter']['query']);
         $this->assertEmpty($props['code']['filter']['method']);
-        $this->assertFalse($tallProperties->getFilterFlag());
+        $this->assertFalse($tallProperties->isFilterEnabled());
 
         $this->assertEmpty($props['code']['other_models']);
 
         $this->assertEmpty($props['code']['child_delete']['vars']);
         $this->assertEmpty($props['code']['child_delete']['method']);
-        $this->assertFalse($tallProperties->getDeleteFeatureFlag());
+        $this->assertFalse($tallProperties->isDeleteFeatureEnabled());
 
         $this->assertEmpty($props['code']['child_add']['vars']);
         $this->assertEmpty($props['code']['child_add']['method']);
-        $this->assertFalse($tallProperties->getAddFeatureFlag());
+        $this->assertFalse($tallProperties->isAddFeatureEnabled());
 
         $this->assertEmpty($props['code']['child_edit']['vars']);
         $this->assertEmpty($props['code']['child_edit']['method']);
-        $this->assertFalse($tallProperties->getEditFeatureFlag());
+        $this->assertFalse($tallProperties->isEditFeatureEnabled());
 
         $this->assertEmpty($props['code']['child_other_models']);
         $this->assertEmpty($props['code']['child_vars']);
@@ -129,7 +129,7 @@ class BasicTest extends TestCase
         $this->assertEmpty($props['html']['child_component']);
 
         $this->assertEmpty($props['html']['flash_component']);
-        $this->assertFalse($tallProperties->getFlashMessageFlag());
+        $this->assertFalse($tallProperties->isFlashMessageEnabled());
 
         $this->assertEmpty($props['html']['child']['delete_modal']);
         $this->assertEmpty($props['html']['child']['add_modal']);

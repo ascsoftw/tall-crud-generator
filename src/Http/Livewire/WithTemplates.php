@@ -706,10 +706,17 @@ EOT;
 EOT;
     }
 
+    public static function getHideColumnMethodTemplate()
+    {
+        return <<<'EOT'
+        $this->selectedColumns = $this->columns;
+EOT;
+    }
+
     public function getHideColumnIfTemplate()
     {
         return <<<'EOT'
-@if(in_array('##LABEL##', $selectedColumns))
+@if($this->showColumn('##LABEL##'))
 EOT;
     }
 
@@ -718,15 +725,9 @@ EOT;
         return <<<'EOT'
 
 
-    public function changeStatus(string $status): void
+    public function showColumn($column)
     {
-        if (!empty($this->selectedItems)) {
-            ##MODEL##::whereIn('##PRIMARY_KEY##', $this->selectedItems)->update(['##COLUMN##' => $status]);
-            $this->selectedItems = [];
-            $this->emitTo('livewire-toast', 'show', 'Records Updated Successfully.');
-        } else {
-            $this->emitTo('livewire-toast', 'showWarning', 'Please select some Records.');
-        }
+        return in_array($column, $this->selectedColumns);
     }
 EOT;
     }

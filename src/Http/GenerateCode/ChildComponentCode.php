@@ -23,7 +23,7 @@ class ChildComponentCode extends BaseCode
             'vars' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getDeleteFeatureFlag()) {
+        if ($this->tallProperties->isDeleteFeatureEnabled()) {
             $code['vars'] = $this->getDeleteVars();
             $code['method'] = $this->getDeleteMethod();
         }
@@ -37,7 +37,7 @@ class ChildComponentCode extends BaseCode
             'vars' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getAddFeatureFlag()) {
+        if ($this->tallProperties->isAddFeatureEnabled()) {
             $code['vars'] = $this->getAddVars();
             $code['method'] = $this->getAddMethod();
         }
@@ -51,7 +51,7 @@ class ChildComponentCode extends BaseCode
             'vars' => '',
             'method' => '',
         ];
-        if ($this->tallProperties->getEditFeatureFlag()) {
+        if ($this->tallProperties->isEditFeatureEnabled()) {
             $code['vars'] = $this->getEditVars();
             $code['method'] = $this->getEditMethod();
         }
@@ -61,9 +61,9 @@ class ChildComponentCode extends BaseCode
 
     public function getChildListenersCode()
     {
-        if (!($this->tallProperties->getAddFeatureFlag() ||
-            $this->tallProperties->getDeleteFeatureFlag() ||
-            $this->tallProperties->getEditFeatureFlag())) {
+        if (!($this->tallProperties->isAddFeatureEnabled() ||
+            $this->tallProperties->isDeleteFeatureEnabled() ||
+            $this->tallProperties->isEditFeatureEnabled())) {
             return '';
         }
 
@@ -74,9 +74,9 @@ class ChildComponentCode extends BaseCode
                 '##EDIT_LISTENER##',
             ],
             [
-                $this->tallProperties->getDeleteFeatureFlag() ? 'showDeleteForm' : '',
-                $this->tallProperties->getAddFeatureFlag() ? 'showCreateForm' : '',
-                $this->tallProperties->getEditFeatureFlag() ? 'showEditForm' : '',
+                $this->tallProperties->isDeleteFeatureEnabled() ? 'showDeleteForm' : '',
+                $this->tallProperties->isAddFeatureEnabled() ? 'showCreateForm' : '',
+                $this->tallProperties->isEditFeatureEnabled() ? 'showEditForm' : '',
             ],
             WithTemplates::getChildListenerTemplate(),
         );
@@ -469,7 +469,7 @@ class ChildComponentCode extends BaseCode
 
     public function getFlashCode($message)
     {
-        if (empty($message) || !$this->tallProperties->getFlashMessageFlag()) {
+        if (empty($message) || !$this->tallProperties->isFlashMessageEnabled()) {
             return '';
         }
 

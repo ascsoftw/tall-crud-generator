@@ -119,7 +119,7 @@ class TallProperties
         $this->sortingFlag = $sortingFlag;
     }
     
-    public function getSortingFlag()
+    public function isSortingEnabled()
     {
         return $this->sortingFlag;
     }
@@ -139,7 +139,7 @@ class TallProperties
         $this->searchingFlag = $searchingFlag;
     }
     
-    public function getSearchingFlag()
+    public function isSearchingEnabled()
     {
         return $this->searchingFlag;
     }
@@ -163,7 +163,7 @@ class TallProperties
         $this->paginationDropdownFlag = $paginationDropdownFlag;
     }
     
-    public function getPaginationDropdownFlag()
+    public function isPaginationDropdownEnabled()
     {
         return $this->paginationDropdownFlag;
     }
@@ -209,7 +209,7 @@ class TallProperties
         $this->hideColumnsFlag = $hideColumnsFlag;
     }
     
-    public function getHideColumnsFlag()
+    public function isHideColumnsEnabled()
     {
         return $this->hideColumnsFlag;
     }
@@ -229,7 +229,7 @@ class TallProperties
         $this->bulkActionFlag = $bulkActionFlag;
     }
     
-    public function getBulkActionFlag()
+    public function isBulkActionsEnabled()
     {
         return $this->bulkActionFlag;
     }
@@ -249,7 +249,7 @@ class TallProperties
         $this->filterFlag = $filterFlag;
     }
 
-    public function getFilterFlag()
+    public function isFilterEnabled()
     {
         return $this->filterFlag;
     }
@@ -273,7 +273,7 @@ class TallProperties
         $this->deleteFeaureFlag = $deleteFeaureFlag;
     }
 
-    public function getDeleteFeatureFlag()
+    public function isDeleteFeatureEnabled()
     {
         return $this->deleteFeaureFlag;
     }
@@ -283,7 +283,7 @@ class TallProperties
         $this->addFeaureFlag = $addFeaureFlag;
     }
 
-    public function getAddFeatureFlag()
+    public function isAddFeatureEnabled()
     {
         return $this->addFeaureFlag;
     }
@@ -293,7 +293,7 @@ class TallProperties
         $this->editFeaureFlag = $editFeaureFlag;
     }
 
-    public function getEditFeatureFlag()
+    public function isEditFeatureEnabled()
     {
         return $this->editFeaureFlag;
     }
@@ -303,7 +303,7 @@ class TallProperties
         $this->flashMessageFlag = $flashMessageFlag;
     }
 
-    public function getFlashMessageFlag()
+    public function isFlashMessageEnabled()
     {
         return $this->flashMessageFlag;
     }
@@ -382,7 +382,6 @@ class TallProperties
             return $item['inEdit'];
         });
     }
-
 
     public function setAdvancedSettingsText($advancedSettingsText)
     {
