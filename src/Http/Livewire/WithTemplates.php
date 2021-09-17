@@ -396,7 +396,7 @@ EOT;
 EOT;
     }
 
-    public function getAddModalTemplate()
+    public static function getAddModalTemplate()
     {
         return <<<'EOT'
 
@@ -417,7 +417,7 @@ EOT;
 EOT;
     }
 
-    public function getEditModalTemplate()
+    public static function getEditModalTemplate()
     {
         return <<<'EOT'
 

@@ -146,6 +146,28 @@ class ViewCode extends BaseCode
         return $slot->implode($this->newLines(1, 5));
     }
 
+    public function getTableClasses()
+    {
+        $classes = [
+            'th' => '',
+            'trBottomBorder' => '',
+            'trHover' => '',
+            'trEven' => '',
+        ];
+
+        $classes['th'] = $this->tallProperties->getTableClasses('th');
+        $classes['trBottomBorder'] = $this->tallProperties->getTableClasses('trBottomBorder');
+        if (!empty($this->tallProperties->getTableClasses('trEven'))) {
+            $classes['trEven'] = '{{ ($loop->even ) ? "' . $this->tallProperties->getTableClasses('trEven') . '" : ""}}';
+        }
+        if (!empty($this->tallProperties->getTableClasses('trHover'))) {
+            $classes['trHover'] = 'hover:' . $this->tallProperties->getTableClasses('trHover');
+        }
+
+        return $classes;
+
+    }
+
     public function getActionHtml()
     {
         $buttons = collect();

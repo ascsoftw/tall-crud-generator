@@ -53,6 +53,8 @@ class TallProperties
     public $advancedSettingsText;
 
     public $tableClasses;
+    public $addFormFields;
+    public $editFormFields;
 
     public function setModelPath($modelPath)
     {
@@ -412,5 +414,27 @@ class TallProperties
         }
 
         return false;
+    }
+
+    //todo setFormFields
+    //todo remove selfFormFields
+    public function setAddFormFields($addFormFields)
+    {
+        $this->addFormFields = $addFormFields;
+    }
+
+    public function getAddFormFields()
+    {
+        return $this->addFormFields;
+    }
+
+    public function setEditFormFields($editFormFields)
+    {
+        $this->editFormFields = $editFormFields;
+    }
+
+    public function getEditFormFields()
+    {
+        return $this->editFormFields;
     }
 }

@@ -16,6 +16,10 @@ trait WithComponentCode
         $this->tallProperties->setPrimaryKey($this->getPrimaryKey());
         $this->tallProperties->setModelPath($this->modelPath);
         $this->tallProperties->setComponentName($this->getComponentName());
+        $this->tallProperties->setDeleteFeatureFlag($this->isDeleteFeatureEnabled());
+        $this->tallProperties->setAddFeatureFlag($this->isAddFeatureEnabled());
+        $this->tallProperties->setEditFeatureFlag($this->isEditFeatureEnabled());
+
         //Sorting
         $this->tallProperties->setSortingFlag($this->isSortingEnabled());
         if ($this->tallProperties->isSortingEnabled()) {
@@ -49,9 +53,6 @@ trait WithComponentCode
         //Other Models
         $this->tallProperties->setOtherModels($this->filters);
 
-        $this->tallProperties->setDeleteFeatureFlag($this->isDeleteFeatureEnabled());
-        $this->tallProperties->setAddFeatureFlag($this->isAddFeatureEnabled());
-        $this->tallProperties->setEditFeatureFlag($this->isEditFeatureEnabled());
         $this->tallProperties->setFlashMessageFlag($this->flashMessages['enable']);
         if ($this->tallProperties->isFlashMessageEnabled()) {
             $this->tallProperties->setFlashMessageText($this->flashMessages['text']);
@@ -64,6 +65,12 @@ trait WithComponentCode
         $this->tallProperties->setTableClasses($this->advancedSettings['table_settings']['classes']);
 
         $this->tallProperties->setListingColumns($this->getListingColumns());
+        if ($this->tallProperties->isAddFeatureEnabled()) {
+            $this->tallProperties->setAddFormFields($this->getSortedFormFields(true));
+        }
+        if ($this->tallProperties->isEditFeatureEnabled()) {
+            $this->tallProperties->setEditFormFields($this->getSortedFormFields(false));
+        }
 
         $this->componentCode = App::make(ComponentCode::class);
 

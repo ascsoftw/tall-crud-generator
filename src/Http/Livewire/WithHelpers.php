@@ -440,9 +440,73 @@ trait WithHelpers
         $headers = collect();
 
         foreach ($fields as $f) {
-            $props = $this->getTableColumnProps($f);
-            $headers->push(['label' => $props[0], 'column' => $props[1], 'isSortable' => $props[2], 'slot' => $props[3]]);
+            $headers->push($this->getTableColumnProps($f));
         }
         return $headers;
+    }
+
+    public function getTableColumnProps($field)
+    {
+        switch ($field['type']) {
+            case 'primary':
+                $label = $this->getLabel($this->primaryKeyProps['label'], $this->getPrimaryKey());
+                $column = $this->getPrimaryKey();
+                $isSortable = $this->isPrimaryKeySortable();
+                $slot = $this->getPrimaryKey();
+
+                break;
+            case 'normal':
+                $label = $this->getLabel($field['label'], $field['column']);
+                $column = $field['column'];
+                $isSortable = $this->isColumnSortable($field['column']);
+                $slot = $field['column'];
+
+                break;
+            case 'with':
+                $label = $this->getLabelForWith($field['relationName']);
+                $column = null;
+                $isSortable = false;
+                $slot = $this->getWithTableSlot($field);
+
+                break;
+            case 'withCount':
+                $label = $this->getLabelForWithCount($field['relationName']);
+                $column = $this->getColumnForWithCount($field['relationName']);
+                $isSortable = $field['isSortable'];
+                $slot = $this->getColumnForWithCount($field['relationName']);
+
+                break;
+        }
+
+        return ['label' => $label, 'column' => $column, 'isSortable' => $isSortable, 'slot' => $slot];
+    }
+
+    public function getWithTableSlot($r)
+    {
+        if ($this->isBelongsToManyRelation($r['relationName']) || $this->isHasManyRelation($r['relationName'])) {
+            return str_replace(
+                [
+                    '##RELATION##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    $r['relationName'],
+                    $r['displayColumn'],
+                ],
+                $this->getBelongsToManyTableSlotTemplate()
+            );
+        }
+
+        return str_replace(
+            [
+                '##RELATION##',
+                '##DISPLAY_COLUMN##',
+            ],
+            [
+                $r['relationName'],
+                $r['displayColumn'],
+            ],
+            $this->getBelongsToTableSlotTemplate()
+        );
     }
 }
