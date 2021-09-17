@@ -52,6 +52,8 @@ class TallProperties
 
     public $advancedSettingsText;
 
+    public $tableClasses;
+
     public function setModelPath($modelPath)
     {
         $this->modelPath = $modelPath;
@@ -328,7 +330,7 @@ class TallProperties
         return $this->selfFormFields;
     }
 
-    public function getSelfFAddFields()
+    public function getSelfAddFields()
     {
         return $this->getSelfFormFields()->filter(function($item) {
             return $item['inAdd'];
@@ -391,5 +393,24 @@ class TallProperties
     public function getAdvancedSettingsText($key)
     {
         return $this->advancedSettingsText[$key] ?? '';
+    }
+
+    public function setTableClasses($tableClasses)
+    {
+        $this->tableClasses = $tableClasses;
+    }
+
+    public function getTableClasses($key)
+    {
+        return $this->tableClasses[$key] ?? '';
+    }
+
+    public function needsActionColumn()
+    {
+        if ($this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
+            return true;
+        }
+
+        return false;
     }
 }

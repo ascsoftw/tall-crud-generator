@@ -89,27 +89,27 @@
             <div class="mt-4">
                 <x:tall-crud-generator::label>Class on th:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
-                    wire:model.defer="advancedSettings.table_settings.thClass" />
+                    wire:model.defer="advancedSettings.table_settings.classes.th" />
             </div>
             <div class="mt-4">
                 <x:tall-crud-generator::label>Hover Class on tr:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
-                    wire:model.defer="advancedSettings.table_settings.trHoverClass" />
+                    wire:model.defer="advancedSettings.table_settings.classes.trHover" />
             </div>
             <div class="mt-4">
                 <x:tall-crud-generator::label>Even Row Class:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
-                    wire:model.defer="advancedSettings.table_settings.trEvenClass" />
+                    wire:model.defer="advancedSettings.table_settings.classes.trEven" />
             </div>
             <div class="mt-4">
                 <x:tall-crud-generator::label>Table Row Divide Class:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
-                    wire:model.defer="advancedSettings.table_settings.trBottomBorder" />
+                    wire:model.defer="advancedSettings.table_settings.classes.trBottomBorder" />
             </div>
             <div class="mt-4">
                 <x:tall-crud-generator::label>Class on td:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
-                    wire:model.defer="advancedSettings.table_settings.tdClass" />
+                    wire:model.defer="advancedSettings.table_settings.classes.td" />
             </div>
         </x:tall-crud-generator::accordion-wrapper>
         <x:tall-crud-generator::accordion-header tab="4">

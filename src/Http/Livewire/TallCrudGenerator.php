@@ -12,7 +12,6 @@ class TallCrudGenerator extends Component
 {
     use WithFeatures;
     use WithHelpers;
-    use WithBaseHtml;
     use WithViewCode;
     use WithComponentCode;
     use WithTemplates;
@@ -69,11 +68,13 @@ class TallCrudGenerator extends Component
             'showHideColumns' => false,
             'bulkActions' => false,
             'bulkActionColumn' => '',
-            'thClass' => 'text-left font-bold bg-blue-400',
-            'trHoverClass' => 'bg-blue-300',
-            'trEvenClass' => 'bg-blue-100',
-            'trBottomBorder' => 'blue-400',
-            'tdClass' => 'px-3 py-2',
+            'classes' => [
+                'th' => 'text-left font-bold bg-blue-400',
+                'trHover' => 'bg-blue-300',
+                'trEven' => 'bg-blue-100',
+                'trBottomBorder' => 'blue-400',
+                'td' => 'px-3 py-2',
+            ],
         ],
     ];
 

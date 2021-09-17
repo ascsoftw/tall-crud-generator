@@ -27,7 +27,7 @@ trait WithComponentCode
             $this->tallProperties->setSearchableColumns($this->getSearchableColumns());
         }
         //Pagination Dropdown
-        $this->tallProperties->setPaginationDropdownFlag($this->isPaginationDropdownEnabled());
+        $this->tallProperties->setPaginationDropdownFlag($this->advancedSettings['table_settings']['showPaginationDropdown']);
         //Records Per Page
         $this->tallProperties->setRecordsPerPage($this->advancedSettings['table_settings']['recordsPerPage']);
         //Eager Load Models
@@ -36,16 +36,13 @@ trait WithComponentCode
         $this->tallProperties->setEagerLoadCountModels($this->withCountRelations);
         //Hide Column
         $this->tallProperties->setHideColumnsFlag($this->isHideColumnsEnabled());
-        if ($this->tallProperties->isHideColumnsEnabled()) {
-            $this->tallProperties->setListingColumns($this->getAllListingColumns());
-        }
         //Bulk Actions
         $this->tallProperties->setBulkActionFlag($this->isBulkActionsEnabled());
         if ($this->tallProperties->isBulkActionsEnabled()) {
             $this->tallProperties->setBulkActionColumn($this->advancedSettings['table_settings']['bulkActionColumn']);
         }
         //Filters
-        $this->tallProperties->setFilterFlag($this->isFilterEnabled());
+        $this->tallProperties->setFilterFlag(count($this->filters) > 0);
         if ($this->tallProperties->isFilterEnabled()) {
             $this->tallProperties->setFilters($this->filters);
         }
@@ -55,7 +52,7 @@ trait WithComponentCode
         $this->tallProperties->setDeleteFeatureFlag($this->isDeleteFeatureEnabled());
         $this->tallProperties->setAddFeatureFlag($this->isAddFeatureEnabled());
         $this->tallProperties->setEditFeatureFlag($this->isEditFeatureEnabled());
-        $this->tallProperties->setFlashMessageFlag($this->isFlashMessageEnabled());
+        $this->tallProperties->setFlashMessageFlag($this->flashMessages['enable']);
         if ($this->tallProperties->isFlashMessageEnabled()) {
             $this->tallProperties->setFlashMessageText($this->flashMessages['text']);
         }
@@ -64,6 +61,9 @@ trait WithComponentCode
         $this->tallProperties->setBelongsToRelations($this->belongsToRelations);
 
         $this->tallProperties->setAdvancedSettingsText($this->advancedSettings['text']);
+        $this->tallProperties->setTableClasses($this->advancedSettings['table_settings']['classes']);
+
+        $this->tallProperties->setListingColumns($this->getListingColumns());
 
         $this->componentCode = App::make(ComponentCode::class);
 

@@ -219,11 +219,6 @@ trait WithHelpers
         return 'checked'.Str::studly($relation);
     }
 
-    // public function getBelongsToVarName($relation)
-    // {
-    //     return Str::plural($relation);
-    // }
-
     public function getListingFieldsToSort()
     {
         $order = 0;
@@ -439,15 +434,15 @@ trait WithHelpers
         return $belongsToCollection;
     }
 
-    public function getAllListingColumns()
+    public function getListingColumns()
     {
         $fields = $this->getSortedListingFields();
-        $labels = collect();
+        $headers = collect();
+
         foreach ($fields as $f) {
             $props = $this->getTableColumnProps($f);
-            $labels->push($props[0]);
+            $headers->push(['label' => $props[0], 'column' => $props[1], 'isSortable' => $props[2], 'slot' => $props[3]]);
         }
-
-        return $labels;
+        return $headers;
     }
 }

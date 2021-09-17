@@ -56,9 +56,13 @@ class HideColumnsTest extends TestCase
         $this->assertNotEmpty($code['vars']);
         $this->assertNotEmpty($code['init']);
 
+        $columns = $tallProperties->getListingColumns();
+        $labels = $columns->map(function ($c) {
+            return $c['label'];
+        })->toArray();
         $this->assertEquals(
             ['Id', 'Name', 'Price', 'Sku', 'Brand', 'Categories', 'Tags', 'Tags Count', 'Categories Count'], 
-            $tallProperties->getListingColumns()->toArray()
+            $labels
         );
 
         $columnStr = <<<'EOT'

@@ -58,7 +58,7 @@ EOT;
 EOT;
     }
 
-    public function getDeleteButtonTemplate()
+    public static function getDeleteButtonTemplate()
     {
         return <<<'EOT'
 
@@ -78,7 +78,7 @@ EOT;
 EOT;
     }
 
-    public function getEditButtonTemplate()
+    public static function getEditButtonTemplate()
     {
         return <<<'EOT'
 
@@ -673,10 +673,11 @@ EOT;
 EOT;
     }
 
-    public function getFlashComponentTemplate()
+    public static function getFlashComponentTemplate()
     {
         return <<<'EOT'
-@livewire('livewire-toast')
+
+    @livewire('livewire-toast')
 EOT;
     }
 
@@ -748,10 +749,12 @@ EOT;
 EOT;
     }
 
-    public function getBulkCheckboxTemplate()
+    public static function getBulkCheckboxTemplate()
     {
         return <<<'EOT'
-<x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+
+                        <x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+
 EOT;
     }
 

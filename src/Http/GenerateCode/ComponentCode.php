@@ -211,9 +211,13 @@ class ComponentCode extends BaseCode
 
     public function getAllColumnsVars()
     {
+        $columns = $this->tallProperties->getListingColumns();
+        $labels = $columns->map(function ($c) {
+            return $c['label'];
+        });
         return str_replace(
             '##COLUMNS##',
-            $this->wrapInQuotesAndJoin($this->tallProperties->getListingColumns()),
+            $this->wrapInQuotesAndJoin($labels),
             WithTemplates::getAllColumnsTemplate()
         );
     }

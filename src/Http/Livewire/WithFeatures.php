@@ -112,16 +112,6 @@ trait WithFeatures
         return false;
     }
 
-    public function isFlashMessageEnabled()
-    {
-        return $this->flashMessages['enable'];
-    }
-
-    public function isPaginationDropdownEnabled()
-    {
-        return $this->advancedSettings['table_settings']['showPaginationDropdown'];
-    }
-
     public function isHideColumnsEnabled()
     {
         return $this->advancedSettings['table_settings']['showHideColumns'];
@@ -131,10 +121,5 @@ trait WithFeatures
     {
         return $this->advancedSettings['table_settings']['bulkActions'] &&
             ! empty($this->advancedSettings['table_settings']['bulkActionColumn']);
-    }
-
-    public function isFilterEnabled()
-    {
-        return count($this->filters) > 0;
     }
 }

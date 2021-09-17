@@ -233,7 +233,7 @@ class ChildComponentCode extends BaseCode
 
     public function getAddFieldsCode()
     {
-        $addFields = $this->tallProperties->getSelfFAddFields();
+        $addFields = $this->tallProperties->getSelfAddFields();
 
         return $addFields->map(function ($field) {
             return str_replace(
