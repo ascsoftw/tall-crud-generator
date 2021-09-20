@@ -57,7 +57,6 @@ trait WithComponentCode
         if ($this->tallProperties->isFlashMessageEnabled()) {
             $this->tallProperties->setFlashMessageText($this->flashMessages['text']);
         }
-        $this->tallProperties->setSelfFormFields($this->getNormalFormFields());
         $this->tallProperties->setBtmRelations($this->belongsToManyRelations);
         $this->tallProperties->setBelongsToRelations($this->belongsToRelations);
 

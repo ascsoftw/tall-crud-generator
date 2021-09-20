@@ -104,6 +104,31 @@ class LivewireMethodMixin
         };
     }
 
+    public function setStandardFilters()
+    {
+        return function () {
+            $this->call('addField')
+                ->call('createNewFilter')
+                ->set('filter.type', 'None')
+                ->set('filter.column', 'name')
+                ->call('addFilter')
+
+                ->call('createNewFilter')
+                ->set('filter.type', 'BelongsTo')
+                ->set('filter.relation', 'brand')
+                ->set('filter.column', 'name')
+                ->call('addFilter')
+
+                ->call('createNewFilter')
+                ->set('filter.type', 'BelongsToMany')
+                ->set('filter.relation', 'categories')
+                ->set('filter.column', 'name')
+                ->call('addFilter');
+
+            return $this;
+        };
+    }
+
     public function eagerLoadStandardRelations()
     {
         return function () {

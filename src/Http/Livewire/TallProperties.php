@@ -46,7 +46,6 @@ class TallProperties
     public $flashMessageFlag;
     public $flashMessageText;
 
-    public $selfFormFields;
     public $btmRelations;
     public $belongsToRelations;
 
@@ -59,11 +58,6 @@ class TallProperties
     public function setModelPath($modelPath)
     {
         $this->modelPath = $modelPath;
-    }
-
-    public function getModelPath()
-    {
-        return $this->modelPath;
     }
 
     public function getModelName($name = '')
@@ -322,23 +316,6 @@ class TallProperties
         return $this->flashMessageText[$mode] ?? '';
     }
 
-    public function setSelfFormFields($selfFormFields)
-    {
-        $this->selfFormFields = collect($selfFormFields);
-    }
-
-    public function getSelfFormFields()
-    {
-        return $this->selfFormFields;
-    }
-
-    public function getSelfAddFields()
-    {
-        return $this->getSelfFormFields()->filter(function($item) {
-            return $item['inAdd'];
-        });
-    }
-
     public function setBtmRelations($btmRelations)
     {
         $this->btmRelations = collect($btmRelations);
@@ -416,8 +393,6 @@ class TallProperties
         return false;
     }
 
-    //todo setFormFields
-    //todo remove selfFormFields
     public function setAddFormFields($addFormFields)
     {
         $this->addFormFields = $addFormFields;
@@ -436,5 +411,21 @@ class TallProperties
     public function getEditFormFields()
     {
         return $this->editFormFields;
+    }
+
+    public function getSelfFormFields()
+    {
+        $addFields = $this->getAddFormFields() ?? collect();
+        $fields = $addFields->merge($this->getEditFormFields());
+        return $fields->filter(function($field) {
+            return $field['type'] == 'normal';
+        })->unique('column');
+    }
+
+    public function getSelfAddFields()
+    {
+        return $this->getAddFormFields()->filter(function($item) {
+            return $item['type'] == 'normal';
+        });
     }
 }

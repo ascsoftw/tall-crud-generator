@@ -53,29 +53,25 @@ trait WithFilters
         ]);
 
         if ($this->filter['type'] == 'BelongsTo') {
-            $this->validateRelation('BelongsTo');
+            $this->validateFilterRelation('BelongsTo');
             $this->fillBelongsToFilterFields();
         }
 
         if ($this->filter['type'] == 'BelongsToMany') {
-            $this->validateRelation('BelongsToMany');
+            $this->validateFilterRelation('BelongsToMany');
             $this->fillBelongsToManyFilterFields();
         }
     }
 
     public function updatedFilterColumn()
     {
-        if ($this->filter['type'] != 'None') {
-            return true;
-        }
-
-        $this->validateColumnForNoRelation();
+        $this->validateFilterColumn();
     }
 
-    public function validateColumnForNoRelation()
+    public function validateFilterColumn()
     {
         foreach ($this->filters as $f) {
-            if ($f['type'] != 'None') {
+            if ($this->filter['type'] != 'None') {
                 continue;
             }
             if ($f['column'] == $this->filter['column']) {
@@ -88,7 +84,7 @@ trait WithFilters
         return true;
     }
 
-    public function validateRelation($type)
+    public function validateFilterRelation($type)
     {
         foreach ($this->filters as $f) {
             if ($f['type'] != $type) {
@@ -154,21 +150,21 @@ trait WithFilters
 
         switch ($this->filter['type']) {
             case 'None':
-                if (! $this->validateColumnForNoRelation()) {
+                if (! $this->validateFilterColumn()) {
                     return;
                 }
                 $this->addNoRelationFilter();
 
                 break;
             case 'BelongsTo':
-                if (! $this->validateRelation('BelongsTo')) {
+                if (! $this->validateFilterRelation('BelongsTo')) {
                     return;
                 }
                 $this->addBelongsToFilter();
 
                 break;
             case 'BelongsToMany':
-                if (! $this->validateRelation('BelongsToMany')) {
+                if (! $this->validateFilterRelation('BelongsToMany')) {
                     return;
                 }
                 $this->addBelongsToManyFilter();
