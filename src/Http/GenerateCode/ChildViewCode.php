@@ -166,7 +166,7 @@ class ChildViewCode extends BaseCode
                 $r['ownerKey'],
                 $r['displayColumn'],
             ],
-            $this->getBelongsToFieldTemplate()
+            WithTemplates::getBelongsToFieldTemplate()
         );
     }
 

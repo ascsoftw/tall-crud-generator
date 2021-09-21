@@ -129,6 +129,18 @@ class LivewireMethodMixin
         };
     }
 
+    public function setStandardBelongsToRelation()
+    {
+        return function() {
+            $this->call('createNewBelongsToRelation')
+                ->set('belongsToRelation.name', 'brand')
+                ->set('belongsToRelation.displayColumn', 'name')
+                ->call('addBelongsToRelation');
+
+            return $this;
+        };
+    }
+
     public function eagerLoadStandardRelations()
     {
         return function () {

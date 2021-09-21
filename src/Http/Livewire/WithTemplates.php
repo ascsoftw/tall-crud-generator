@@ -615,7 +615,7 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToFieldTemplate()
+    public static function getBelongsToFieldTemplate()
     {
         return <<<'EOT'
 
