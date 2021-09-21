@@ -13,15 +13,6 @@ trait WithFeatures
         return false;
     }
 
-    public function needsActionColumn()
-    {
-        if ($this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function needsPrimaryKeyInListing()
     {
         if ($this->primaryKeyProps['inList']) {

@@ -21,21 +21,6 @@ trait WithHelpers
         return $this->modelProps['primaryKey'];
     }
 
-    public function newLines($count = 1, $indent = 0)
-    {
-        return str_repeat("\n".$this->indent($indent), $count);
-    }
-
-    public function spaces($count = 1)
-    {
-        return str_repeat(' ', $count);
-    }
-
-    public function indent($step = 1)
-    {
-        return $this->spaces($step * 4);
-    }
-
     public function getColumns($columns, $primaryKey)
     {
         $collection = collect($columns);
@@ -166,11 +151,6 @@ trait WithHelpers
         return Str::kebab($this->componentName);
     }
 
-    public function getChildComponentName()
-    {
-        return $this->getComponentName().'-child';
-    }
-
     public function getNormalFormFields($addForm = true, $editForm = true)
     {
         if ($this->hasAddAndEditFeaturesDisabled()) {
@@ -212,11 +192,6 @@ trait WithHelpers
     public function getColumnForWithCount($relation = '')
     {
         return $relation.'_count';
-    }
-
-    public function getBtmFieldName($relation)
-    {
-        return 'checked'.Str::studly($relation);
     }
 
     public function getListingFieldsToSort()

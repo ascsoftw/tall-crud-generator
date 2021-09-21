@@ -31,7 +31,7 @@ class [class] extends Component
         return view('[view]', [
             'results' => $results
         ]);
-    }[sort_method][search_method][pagination_dropdown_method][bulk_method][filter_method]
+    }[sort_method][search_method][pagination_dropdown_method][bulk_method][filter_method][hide_columns_method]
 
     public function query(): Builder
     {

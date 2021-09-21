@@ -145,7 +145,7 @@ class ChildViewCode extends BaseCode
                 $r['displayColumn'],
                 $r['relatedKey'],
             ],
-            $r['isMultiSelect'] ? $this->getBtmFieldMultiSelectTemplate() : $this->getBtmFieldTemplate()
+            $r['isMultiSelect'] ? WithTemplates::getBtmFieldMultiSelectTemplate() : WithTemplates::getBtmFieldTemplate()
         );
     }
 

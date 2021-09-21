@@ -494,18 +494,6 @@ EOT;
 EOT;
     }
 
-    //todo remove this
-    public function getArrayTemplate()
-    {
-        return <<<'EOT'
-    /**
-     * @var ##TYPE##
-     */
-    public $##NAME## = [];
-
-EOT;
-    }
-
     public static function getEmptyArrayTemplate()
     {
         return <<<'EOT'
@@ -584,7 +572,7 @@ use ##MODEL##;
 EOT;
     }
 
-    public function getBtmFieldTemplate()
+    public static function getBtmFieldTemplate()
     {
         return <<<'EOT'
 
@@ -601,7 +589,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmFieldMultiSelectTemplate()
+    public static function getBtmFieldMultiSelectTemplate()
     {
         return <<<'EOT'
 
@@ -693,13 +681,6 @@ EOT;
 EOT;
     }
 
-    public function getArrayValueTemplate()
-    {
-        return <<<'EOT'
-'##VALUE##', 
-EOT;
-    }
-
     public static function getHideColumnInitTemplate()
     {
         return <<<'EOT'
@@ -710,7 +691,12 @@ EOT;
     public static function getHideColumnMethodTemplate()
     {
         return <<<'EOT'
-        $this->selectedColumns = $this->columns;
+
+
+    public function showColumn($column)
+    {
+        return in_array($column, $this->selectedColumns);
+    }
 EOT;
     }
 
@@ -726,9 +712,15 @@ EOT;
         return <<<'EOT'
 
 
-    public function showColumn($column)
+    public function changeStatus(string $status): void
     {
-        return in_array($column, $this->selectedColumns);
+        if (!empty($this->selectedItems)) {
+            ##MODEL##::whereIn('##PRIMARY_KEY##', $this->selectedItems)->update(['##COLUMN##' => $status]);
+            $this->selectedItems = [];
+            $this->emitTo('livewire-toast', 'show', 'Records Updated Successfully.');
+        } else {
+            $this->emitTo('livewire-toast', 'showWarning', 'Please select some Records.');
+        }
     }
 EOT;
     }

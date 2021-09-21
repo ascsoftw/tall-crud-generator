@@ -141,6 +141,24 @@ class LivewireMethodMixin
         };
     }
 
+    public function setStandardBtmRelations()
+    {
+        return function() {
+            $this->call('createNewBelongsToManyRelation')
+                ->set('belongsToManyRelation.name', 'tags')
+                ->set('belongsToManyRelation.displayColumn', 'name')
+                ->call('addBelongsToManyRelation')
+                ->call('createNewBelongsToManyRelation')
+
+                ->set('belongsToManyRelation.name', 'categories')
+                ->set('belongsToManyRelation.displayColumn', 'name')
+                ->set('belongsToManyRelation.isMultiSelect', true)
+                ->call('addBelongsToManyRelation');
+
+            return $this;
+        };
+    }
+
     public function eagerLoadStandardRelations()
     {
         return function () {

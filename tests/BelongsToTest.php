@@ -236,10 +236,10 @@ EOT;
             ->generateFiles();
         
         $childViewCode = $this->component->get('childViewCode');
-        $addModalCode = $childViewCode->getEditModal();
+        $editModalCode = $childViewCode->getEditModal();
 
-        $this->assertStringContainsString('wire:model.defer="item.brand_id"', $addModalCode);
-        $this->assertStringContainsString("@error('item.brand_id')", $addModalCode);
-        $this->assertStringContainsString('@foreach($brands as $c)', $addModalCode);
+        $this->assertStringContainsString('wire:model.defer="item.brand_id"', $editModalCode);
+        $this->assertStringContainsString("@error('item.brand_id')", $editModalCode);
+        $this->assertStringContainsString('@foreach($brands as $c)', $editModalCode);
     }
 }
