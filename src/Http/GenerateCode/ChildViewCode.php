@@ -105,6 +105,17 @@ class ChildViewCode extends BaseCode
 
     public function getNormalFieldHtml($field)
     {
+
+        switch ($field['attributes']['type']) {
+            case 'checkbox':
+                $fieldTemplate = WithTemplates::getCheckboxFieldTemplate();
+            case 'select':
+                $fieldTemplate = WithTemplates::getSelectFieldTemplate();
+            case 'input':
+            default:
+                $fieldTemplate = WithTemplates::getInputFieldTemplate();
+        }
+
         $html = str_replace(
             [
                 '##COLUMN##',
@@ -114,7 +125,7 @@ class ChildViewCode extends BaseCode
                 $field['column'],
                 $this->getLabel($field['label'], $field['column']),
             ],
-            $this->getFieldTemplate($field['attributes']['type'])
+            $fieldTemplate
         );
 
         if ($field['attributes']['type'] == 'select') {

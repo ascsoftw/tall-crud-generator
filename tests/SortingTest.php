@@ -17,7 +17,7 @@ class SortingTest extends TestCase
     public function test_component_is_generated()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -34,7 +34,7 @@ class SortingTest extends TestCase
     public function test_primary_key_is_sortable()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -60,7 +60,7 @@ class SortingTest extends TestCase
     public function test_other_column_is_sortable()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->makePrimaryKeyUnsortable()
             ->pressNext()

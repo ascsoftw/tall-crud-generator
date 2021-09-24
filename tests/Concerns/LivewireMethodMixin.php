@@ -40,7 +40,7 @@ class LivewireMethodMixin
         };
     }
 
-    public function step1()
+    public function finishStep1()
     {
         return function () {
             $this->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Product')
@@ -159,7 +159,7 @@ class LivewireMethodMixin
         };
     }
 
-    public function eagerLoadStandardRelations()
+    public function setStandardEagerLoadRelations()
     {
         return function () {
             $this->call('createNewWithRelation')
@@ -179,7 +179,7 @@ class LivewireMethodMixin
         };
     }
 
-    public function eagerLoadCountStandardRelations()
+    public function setStandardEagerLoadCountRelations()
     {
         return function () {
             $this->call('createNewWithCountRelation')
@@ -187,6 +187,7 @@ class LivewireMethodMixin
                 ->call('addWithCountRelation')
                 ->call('createNewWithCountRelation')
                 ->set('withCountRelation.name', 'categories')
+                ->set('withCountRelation.isSortable', true)
                 ->call('addWithCountRelation');
             return $this;
         };

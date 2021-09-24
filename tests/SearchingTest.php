@@ -17,7 +17,7 @@ class SearchingTest extends TestCase
     public function test_component_is_generated()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -35,7 +35,7 @@ class SearchingTest extends TestCase
     public function test_search_is_setup()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')

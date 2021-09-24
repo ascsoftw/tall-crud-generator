@@ -11,64 +11,125 @@ class EagerLoadCountTest extends TestCase
     {
         parent::setUp();
         // additional setup
+        $this->component = Livewire::test(TallCrudGenerator::class)
+            ->finishStep1()
+            ->pressNext()
+            ->setStandardFields()
+            ->pressNext();
     }
 
-    public function test_adding_a_eager_load_count_relation()
+    public function test_relations_is_wired()
     {
-        $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
-            ->disableModals()
-            ->pressNext()
-            ->call('addField')
-            ->set('fields.0.column', 'name')
-            ->pressNext()
-
+        $this->component
             ->call('createNewWithCountRelation')
             ->assertPropertyWired('withCountRelation.name')
-            ->call('addWithCountRelation')
-            ->assertHasErrors('withCountRelation.name')
-            ->assertSee('Please select a Relation')
             ->assertSeeHtml('<option value="categories">categories</option>')
             ->assertSeeHtml('<option value="tags">tags</option>')
             ->assertSeeHtml('<option value="tracks">tracks</option>')
             ->assertSeeHtml('<option value="comments">comments</option>')
-            ->assertSeeHtml('<option value="brand">brand</option>')
+            ->assertSeeHtml('<option value="brand">brand</option>');
+    }
 
+    public function test_relation_is_required()
+    {
+        $this->component
+            ->call('createNewWithCountRelation')
+            ->call('addWithCountRelation')
+            ->assertHasErrors('withCountRelation.name')
+            ->assertSee('Please select a Relation');
+    }
+
+    public function test_selecting_relation_shows_other_fields()
+    {
+        $this->component
+            ->call('createNewWithCountRelation')
             ->set('withCountRelation.name', 'tags')
             ->assertPropertyWired('withCountRelation.isSortable')
-            ->call('addWithCountRelation')
+            ->assertSet('withCountRelation.isSortable', false);
+    }
 
+    public function test_eager_load_count_can_be_added()
+    {
+        $this->component
+            ->call('createNewWithCountRelation')
+            ->set('withCountRelation.name', 'tags')
+            ->call('addWithCountRelation')
             ->assertViewHas('withCountRelations')
             ->assertCount('withCountRelations', 1)
             ->assertMethodWired('deleteWithCountRelation')
+            ->assertSeeInOrder(['tags', 'No']);
+    }
 
+    public function test_duplicate_can_not_be_added()
+    {
+        $this->component
+            ->setStandardEagerLoadCountRelations()
             ->call('createNewWithCountRelation')
             ->set('withCountRelation.name', 'tags')
             ->assertHasErrors('withCountRelation.name')
-            ->assertSee('Relation Already Defined.')
+            ->assertSee('Relation Already Defined.');
+    }
 
-            ->set('withCountRelation.name', 'categories')
-            ->set('withCountRelation.isSortable', 11)
-            ->call('addWithCountRelation')
-
-            ->assertCount('withCountRelations', 2)
-            ->assertSeeInOrder(['tags', 'No',  'categories', 'Yes'])
-
+    public function test_eager_load_can_be_deleted()
+    {
+        $this->component
+            ->setStandardEagerLoadCountRelations()
             ->call('deleteWithCountRelation', 0)
             ->assertCount('withCountRelations', 1)
-            ->assertSeeInOrder(['categories', 'Yes'])
+            ->assertSeeInOrder(['categories', 'Yes']);
+    }
 
+    public function test_query_eager_loads_the_relations()
+    {
+        $this->component
+            ->setStandardEagerLoadCountRelations()
             ->pressNext(3)
-            ->generateFiles()
-            ->assertCount('withCountRelations', 1);
+            ->generateFiles();
 
         $tallProperties = $this->component->get('tallProperties');
         $componentCode = $this->component->get('componentCode');
+        $props = $this->component->get('props');
 
-        $this->assertEquals(['categories'], $tallProperties->getEagerLoadCountModels()->toArray());
-        $findString = <<<'EOT'
-->withCount(['categories'])
-EOT;
-        $this->assertStringContainsString($findString, $componentCode->getWithCountQueryCode());
+        $this->assertEquals(['tags', 'categories'], $tallProperties->getEagerLoadCountModels()->toArray());
+        $this->assertStringContainsString("->withCount(['tags','categories'])", $componentCode->getWithCountQueryCode());
+        $this->assertStringContainsString("->withCount(['tags','categories'])", $props['code']['with_count_query']);
+    }
+
+    public function test_view_contain_eager_loaded_count_columns()
+    {
+
+        $this->component
+            ->setStandardEagerLoadCountRelations()
+            ->pressNext(3)
+            ->generateFiles();
+
+        $tallProperties = $this->component->get('tallProperties');
+        $props = $this->component->get('props');
+
+        $columns = $tallProperties->getListingColumns();
+        $labels = $columns->map(function ($c) {
+            return $c['label'];
+        })->toArray();
+        $this->assertEquals(
+            ['Id', 'Name', 'Price', 'Sku', 'Tags Count', 'Categories Count'],
+            $labels
+        );
+
+        $this->assertStringContainsString("Tags Count</td>", $props['html']['table_header']);
+        $this->assertStringContainsString("Categories Count</button>", $props['html']['table_header']);
+    }
+
+    public function test_slot_contain_eager_loaded_count_columns()
+    {
+
+        $this->component
+            ->setStandardEagerLoadCountRelations()
+            ->pressNext(3)
+            ->generateFiles();
+
+        $props = $this->component->get('props');
+
+        $this->assertStringContainsString('{{ $result->tags_count}}</td>', $props['html']['table_slot']);
+        $this->assertStringContainsString('{{ $result->categories_count}}</td>', $props['html']['table_slot']);
     }
 }

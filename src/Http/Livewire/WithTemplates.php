@@ -437,7 +437,7 @@ EOT;
 EOT;
     }
 
-    public function getInputFieldTemplate()
+    public static function getInputFieldTemplate()
     {
         return <<<'EOT'
 
@@ -449,7 +449,7 @@ EOT;
 EOT;
     }
 
-    public function getSelectFieldTemplate()
+    public static function getSelectFieldTemplate()
     {
         return <<<'EOT'
 
@@ -462,7 +462,7 @@ EOT;
 EOT;
     }
 
-    public function getCheckboxFieldTemplate()
+    public static function getCheckboxFieldTemplate()
     {
         return <<<'EOT'
 
@@ -471,19 +471,6 @@ EOT;
             </x:tall-crud-generator::checkbox-wrapper>
             @error('item.##COLUMN##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
 EOT;
-    }
-
-    public function getFieldTemplate($type = 'input')
-    {
-        switch ($type) {
-            case 'checkbox':
-                return $this->getCheckboxFieldTemplate();
-            case 'select':
-                return $this->getSelectFieldTemplate();
-            case 'input':
-            default:
-                return $this->getInputFieldTemplate();
-        }
     }
 
     public static function getFlashTemplate()
