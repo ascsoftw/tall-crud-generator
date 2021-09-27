@@ -215,7 +215,7 @@ class ViewCode extends BaseCode
 
     public function getTableColumnHtml($slot, $params = '')
     {
-        return '<td class="'.$this->tallProperties->getTableClasses('td').'"'.$params.'>'.$slot.'</td>';
+        return '<td class="'.$this->tallProperties->getTableClasses('td').'" '.$params.'>'.$slot.'</td>';
     }
 
     public function getSortIconHtml($column)
