@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 class SearchingTest extends TestCase
 {
@@ -55,8 +55,8 @@ class SearchingTest extends TestCase
 
         $this->assertTrue($tallProperties->isSearchingEnabled());
         $this->assertEquals(['name'], $tallProperties->getSearchableColumns()->toArray());
-        $this->assertEquals(WithTemplates::getSearchingVarsTemplate(), $componentCode->getSearchVars());
-        $this->assertEquals(WithTemplates::getSearchMethodTemplate(), $componentCode->getSearchMethod());
+        $this->assertEquals(Template::getSearchingVarsTemplate(), $componentCode->getSearchVars());
+        $this->assertEquals(Template::getSearchMethodTemplate(), $componentCode->getSearchMethod());
         $whereClauseStr = <<<'EOT'
 $query->where('name', 'like', '%' . $this->q . '%')
 EOT;

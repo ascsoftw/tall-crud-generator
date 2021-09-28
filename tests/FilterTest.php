@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Illuminate\Support\Str;
 
 class FilterTest extends TestCase
@@ -287,7 +287,7 @@ class FilterTest extends TestCase
             ->generateFiles();
         
         $viewCode = $this->component->get('viewCode');
-        $this->assertEquals(WithTemplates::getFilterDropdownTemplate(), $viewCode->getFilterDropdown());
+        $this->assertEquals(Template::getFilterDropdownTemplate(), $viewCode->getFilterDropdown());
 
     }
 
@@ -363,7 +363,7 @@ EOT;
         $this->assertStringContainsString($btmFilterQuery, $props['code']['filter']['query']);
 
         $this->assertNotEmpty($props['code']['filter']['method']);
-        $this->assertEquals(WithTemplates::getFilterMethodTemplate(), $componentCode->getFilterMethod());
+        $this->assertEquals(Template::getFilterMethodTemplate(), $componentCode->getFilterMethod());
 
     }
 }

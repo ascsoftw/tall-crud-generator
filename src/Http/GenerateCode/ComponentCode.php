@@ -2,14 +2,10 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
 use Illuminate\Support\Str;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
 
 class ComponentCode extends BaseCode
 {
-    use WithTemplates;
-
     public $tallProperties;
 
     public function __construct(TallProperties $tallProperties)
@@ -46,18 +42,18 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##SORT_COLUMN##',
             $this->tallProperties->getDefaultSortableColumn(),
-            WithTemplates::getSortingVarsTemplate()
+            Template::getSortingVarsTemplate()
         );
     }
 
     public function getSortingQuery()
     {
-        return WithTemplates::getSortingQueryTemplate();
+        return Template::getSortingQueryTemplate();
     }
 
     public function getSortingMethod()
     {
-        return WithTemplates::getSortingMethodTemplate();
+        return Template::getSortingMethodTemplate();
     }
 
     public function getSearchCode()
@@ -78,7 +74,7 @@ class ComponentCode extends BaseCode
 
     public function getSearchVars()
     {
-        return WithTemplates::getSearchingVarsTemplate();
+        return Template::getSearchingVarsTemplate();
     }
 
     public function getSearchQuery()
@@ -88,7 +84,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##WHERE_CLAUSE##',
             $whereClause->prependAndJoin($this->newLines(1, 6), $this->indent(5)),
-            WithTemplates::getSearchQueryTemplate()
+            Template::getSearchQueryTemplate()
         );
     }
 
@@ -108,7 +104,7 @@ class ComponentCode extends BaseCode
                         $isFirst ? '$query->where' : '->orWhere',
                         $column,
                     ],
-                    WithTemplates::getSearchQueryWhereTemplate(),
+                    Template::getSearchQueryWhereTemplate(),
                 )
             );
             $isFirst = false;
@@ -118,7 +114,7 @@ class ComponentCode extends BaseCode
 
     public function getSearchMethod()
     {
-        return WithTemplates::getSearchMethodTemplate();
+        return Template::getSearchMethodTemplate();
     }
 
     public function getPaginationDropdownCode()
@@ -135,7 +131,7 @@ class ComponentCode extends BaseCode
 
     public function getPaginationDropdownMethod()
     {
-        return WithTemplates::getPaginationDropdownMethodTemplate();
+        return Template::getPaginationDropdownMethodTemplate();
     }
 
     public function getPaginationCode()
@@ -154,7 +150,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##PER_PAGE##',
             $this->tallProperties->getRecordsPerPage(),
-            WithTemplates::getPaginationVarsTemplate()
+            Template::getPaginationVarsTemplate()
         );
     }
 
@@ -168,7 +164,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##RELATIONS##',
             $this->wrapInQuotesAndJoin($models),
-            WithTemplates::getWithQueryTemplate()
+            Template::getWithQueryTemplate()
         );
     }
 
@@ -182,7 +178,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##RELATIONS##',
             $this->wrapInQuotesAndJoin($models),
-            WithTemplates::getWithCountQueryTemplate()
+            Template::getWithCountQueryTemplate()
         );
     }
 
@@ -218,13 +214,13 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##COLUMNS##',
             $this->wrapInQuotesAndJoin($labels),
-            WithTemplates::getAllColumnsTemplate()
+            Template::getAllColumnsTemplate()
         );
     }
 
     public function getHideColumnInitCode()
     {
-        return WithTemplates::getHideColumnInitTemplate();
+        return Template::getHideColumnInitTemplate();
     }
 
     public function getBulkActionsCode()
@@ -243,7 +239,7 @@ class ComponentCode extends BaseCode
 
     public function getHideColumnMethod()
     {
-        return WithTemplates::getHideColumnMethodTemplate();
+        return Template::getHideColumnMethodTemplate();
     }
 
     public function getBulkActionMethod()
@@ -259,7 +255,7 @@ class ComponentCode extends BaseCode
                 $this->tallProperties->getPrimaryKey(),
                 $this->tallProperties->getBulkActionColumn(),
             ],
-            WithTemplates::getBulkActionMethodTemplate()
+            Template::getBulkActionMethodTemplate()
         );
     }
 
@@ -320,7 +316,7 @@ class ComponentCode extends BaseCode
                         $this->getFilterLabelName($f),
                         $filterOptions->prependAndJoin($this->newLines(1, 5)),
                     ],
-                    WithTemplates::getSelfFilterInitTemplate()
+                    Template::getSelfFilterInitTemplate()
                 )
             );
         }
@@ -332,7 +328,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##FILTERS##',
             $filters->prependAndJoin($this->newLines(1, 1)) . $this->newLines(1, 2),
-            WithTemplates::getFilterInitTemplate()
+            Template::getFilterInitTemplate()
         );
     }
 
@@ -355,7 +351,7 @@ class ComponentCode extends BaseCode
                         $k,
                         $v,
                     ],
-                    WithTemplates::getKeyLabelTemplate()
+                    Template::getKeyLabelTemplate()
                 )
             );
         }
@@ -385,7 +381,7 @@ class ComponentCode extends BaseCode
                     $this->getFilterForeignKey($f),
                     $this->getFilterLabelName($f),
                 ],
-                WithTemplates::getRelationFilterInitTemplate()
+                Template::getRelationFilterInitTemplate()
             );
         })->implode('');
     }
@@ -403,7 +399,7 @@ class ComponentCode extends BaseCode
             return str_replace(
                 '##COLUMN##',
                 $this->getFilterColumnName($f),
-                WithTemplates::getFilterQueryTemplate()
+                Template::getFilterQueryTemplate()
             );
         })->prependAndJoin($this->newLines());
     }
@@ -426,14 +422,14 @@ class ComponentCode extends BaseCode
                     $f['relatedKey'],
                     $f['relatedTableName'],
                 ],
-                WithTemplates::getFilterQueryBtmTemplate()
+                Template::getFilterQueryBtmTemplate()
             );
         })->prependAndJoin($this->newLines());
     }
 
     public function getFilterMethod()
     {
-        return WithTemplates::getFilterMethodTemplate();
+        return Template::getFilterMethodTemplate();
     }
 
     public function getFilterColumnName($filter)

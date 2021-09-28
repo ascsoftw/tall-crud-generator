@@ -2,19 +2,16 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
 use Illuminate\Support\Str;
 
 class BaseCode
 {
-    use WithTemplates;
-
     public function getUseModelCode($modelPath)
     {
         return str_replace(
             '##MODEL##',
             $modelPath,
-            WithTemplates::getUseModelTemplate()
+            Template::getUseModelTemplate()
         );
     }
 
@@ -36,7 +33,7 @@ class BaseCode
                 $name,
                 $type,
             ],
-            WithTemplates::getEmptyArrayTemplate()
+            Template::getEmptyArrayTemplate()
         );
     }
 

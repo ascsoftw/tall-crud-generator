@@ -14,7 +14,6 @@ class TallCrudGenerator extends Component
     use WithHelpers;
     use WithViewCode;
     use WithComponentCode;
-    use WithTemplates;
     use WithRelations;
     use WithFilters;
 
@@ -383,7 +382,8 @@ class TallCrudGenerator extends Component
         $html = $this->generateViewHtml();
         $this->props = [
             'modelPath' => $this->modelPath,
-            'model' => $this->getModelName(),
+            // 'model' => $this->getModelName(),
+            'model' => $this->tallProperties->getModelName(),
             'modelProps' => $this->modelProps,
             'fields' => $this->fields,
             'componentProps' => $this->componentProps,

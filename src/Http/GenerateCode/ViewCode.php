@@ -2,13 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
-
 class ViewCode extends BaseCode
 {
-    use WithTemplates;
-
     public $tallProperties;
 
     public function __construct(TallProperties $tallProperties)
@@ -25,7 +20,7 @@ class ViewCode extends BaseCode
         return str_replace(
             '##COMPONENT_NAME##',
             $this->tallProperties->getChildComponentName(),
-            WithTemplates::getAddButtonTemplate()
+            Template::getAddButtonTemplate()
         );
     }
 
@@ -35,7 +30,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return WithTemplates::getSearchBoxTemplate();
+        return Template::getSearchBoxTemplate();
     }
 
     public function getPaginationDropdown()
@@ -44,7 +39,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return WithTemplates::getPaginationDropdownTemplate();
+        return Template::getPaginationDropdownTemplate();
     }
 
     public function getHideColumnsDropdown()
@@ -53,7 +48,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return WithTemplates::getHideColumnDropdownTemplate();
+        return Template::getHideColumnDropdownTemplate();
     }
 
     public function getBulkActionDropdown()
@@ -62,7 +57,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return WithTemplates::getBulkActionTemplate();
+        return Template::getBulkActionTemplate();
     }
 
     public function getFilterDropdown()
@@ -71,7 +66,7 @@ class ViewCode extends BaseCode
             return'';
         }
 
-        return WithTemplates::getFilterDropdownTemplate();
+        return Template::getFilterDropdownTemplate();
     }
 
     public function getChildComponent()
@@ -93,7 +88,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return WithTemplates::getFlashComponentTemplate();
+        return Template::getFlashComponentTemplate();
 
     }
 
@@ -181,7 +176,7 @@ class ViewCode extends BaseCode
                     $this->tallProperties->getChildComponentName(),
                     $this->tallProperties->getPrimaryKey(),
                 ],
-                WithTemplates::getEditButtonTemplate()
+                Template::getEditButtonTemplate()
             ));
         }
 
@@ -195,7 +190,7 @@ class ViewCode extends BaseCode
                     $this->tallProperties->getChildComponentName(),
                     $this->tallProperties->getPrimaryKey(),
                 ],
-                WithTemplates::getDeleteButtonTemplate()
+                Template::getDeleteButtonTemplate()
             ));
         }
 
@@ -208,7 +203,7 @@ class ViewCode extends BaseCode
             str_replace(
                 '##PRIMARY_KEY##',
                 $this->tallProperties->getPrimaryKey(),
-                WithTemplates::getBulkCheckboxTemplate()
+                Template::getBulkCheckboxTemplate()
             );
 
     }
@@ -237,7 +232,7 @@ class ViewCode extends BaseCode
                     $label,
                     $this->getSortIconHtml($column),
                 ],
-                $this->getSortingHeaderTemplate()
+                Template::getSortingHeaderTemplate()
             );
             $slot = $this->newLines().$html.$this->newLines(1, 4);
         } else {
@@ -249,7 +244,7 @@ class ViewCode extends BaseCode
             $preTag = str_replace(
                 '##LABEL##',
                 $label,
-                $this->getHideColumnIfTemplate()
+                Template::getHideColumnIfTemplate()
             ).$this->newLines(1, 4);
             $postTag = $this->newLines(1, 4).'@endif';
         }
@@ -264,7 +259,7 @@ class ViewCode extends BaseCode
             $preTag = str_replace(
                 '##LABEL##',
                 $f['label'],
-                $this->getHideColumnIfTemplate()
+                Template::getHideColumnIfTemplate()
             ).$this->newLines(1, 5);
             $postTag = $this->newLines(1, 5).'@endif';
         }
@@ -274,7 +269,7 @@ class ViewCode extends BaseCode
                 str_replace(
                     '##COLUMN_NAME##',
                     $f['slot'],
-                    $this->getTableColumnTemplate()
+                    Template::getTableColumnTemplate()
                 )
             ).
             $postTag;

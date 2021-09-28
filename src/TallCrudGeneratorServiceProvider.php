@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 
 class TallCrudGeneratorServiceProvider extends ServiceProvider
 {
@@ -59,20 +59,10 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
             __DIR__.'/../resources/views' => resource_path('views/vendor/tall-crud-generator'),
         ], 'views');
 
-        $this->publishes([
-            __DIR__.'/../config/tall-crud-generator.php' => base_path('config/tall-crud-generator.php'),
-        ], 'config');
-
-        if (! config('tall-crud-generator.disable_route')) {
-            Route::get(config('tall-crud-generator.route'), function () {
-                return view('tall-crud-generator::tall-crud-generator');
-            })->middleware(['web', 'auth']);
-        }
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/tall-crud-generator.php', 'tall-crud-generator');
         $this->app->singleton(TallProperties::class, function ($app) {
             return new TallProperties();
         });

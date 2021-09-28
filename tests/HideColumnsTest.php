@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 class HideColumnsTest extends TestCase
 {
@@ -87,11 +87,11 @@ EOT;
         $this->assertStringContainsString($columnStr, $props['code']['hide_columns']['vars']);
         $this->assertStringContainsString('public $selectedColumns = []', $props['code']['hide_columns']['vars']);
 
-        $this->assertEquals(WithTemplates::getHideColumnInitTemplate(), $props['code']['hide_columns']['init']);
-        $this->assertEquals(WithTemplates::getHideColumnInitTemplate(), $componentCode->getHideColumnInitCode());
+        $this->assertEquals(Template::getHideColumnInitTemplate(), $props['code']['hide_columns']['init']);
+        $this->assertEquals(Template::getHideColumnInitTemplate(), $componentCode->getHideColumnInitCode());
 
-        $this->assertEquals(WithTemplates::getHideColumnMethodTemplate(), $props['code']['hide_columns']['method']);
-        $this->assertEquals(WithTemplates::getHideColumnMethodTemplate(), $componentCode->getHideColumnMethod());
+        $this->assertEquals(Template::getHideColumnMethodTemplate(), $props['code']['hide_columns']['method']);
+        $this->assertEquals(Template::getHideColumnMethodTemplate(), $componentCode->getHideColumnMethod());
     }
 
 
@@ -106,7 +106,7 @@ EOT;
 
         $props = $this->component->get('props');
 
-        $this->assertEquals(WithTemplates::getHideColumnDropdownTemplate(), $props['html']['hide_columns']);
+        $this->assertEquals(Template::getHideColumnDropdownTemplate(), $props['html']['hide_columns']);
     }
 
     public function test_table_header_has_hide_columns_code()

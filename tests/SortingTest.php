@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 class SortingTest extends TestCase
 {
@@ -51,8 +51,8 @@ class SortingTest extends TestCase
 
         $this->assertTrue($tallProperties->isSortingEnabled());
         $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
-        $this->assertEquals(WithTemplates::getSortingQueryTemplate(), $componentCode->getSortingQuery());
-        $this->assertEquals(WithTemplates::getSortingMethodTemplate(), $componentCode->getSortingMethod());
+        $this->assertEquals(Template::getSortingQueryTemplate(), $componentCode->getSortingQuery());
+        $this->assertEquals(Template::getSortingMethodTemplate(), $componentCode->getSortingMethod());
         $this->assertNotEmpty($sortCode['vars']);
 
     }

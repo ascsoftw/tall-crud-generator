@@ -103,11 +103,6 @@ trait WithFeatures
         return false;
     }
 
-    public function isHideColumnsEnabled()
-    {
-        return $this->advancedSettings['table_settings']['showHideColumns'];
-    }
-
     public function isBulkActionsEnabled()
     {
         return $this->advancedSettings['table_settings']['bulkActions'] &&

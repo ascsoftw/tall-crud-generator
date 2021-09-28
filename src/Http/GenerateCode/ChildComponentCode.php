@@ -2,14 +2,10 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
 use Illuminate\Support\Str;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
 
 class ChildComponentCode extends BaseCode
 {
-    use WithTemplates;
-
     public $tallProperties;
 
     public function __construct(TallProperties $tallProperties)
@@ -78,13 +74,13 @@ class ChildComponentCode extends BaseCode
                 $this->tallProperties->isAddFeatureEnabled() ? 'showCreateForm' : '',
                 $this->tallProperties->isEditFeatureEnabled() ? 'showEditForm' : '',
             ],
-            WithTemplates::getChildListenerTemplate(),
+            Template::getChildListenerTemplate(),
         );
     }
 
     public function getChildItemCode()
     {
-        return WithTemplates::getChildItemTemplate();
+        return Template::getChildItemTemplate();
     }
 
     public function getChildRulesCode()
@@ -106,7 +102,7 @@ class ChildComponentCode extends BaseCode
         return str_replace(
             '##RULES##',
             $rules->filter()->prependAndJoin($this->newLines(1, 2)),
-            WithTemplates::getChildRulesTemplate()
+            Template::getChildRulesTemplate()
         );
     }
 
@@ -128,7 +124,7 @@ class ChildComponentCode extends BaseCode
         return str_replace(
             '##ATTRIBUTES##',
             $attributes->filter()->prependAndJoin($this->newLines(1, 2)),
-            $this->getChildValidationAttributesTemplate()
+            Template::getChildValidationAttributesTemplate()
         );
     }
 
@@ -148,17 +144,17 @@ class ChildComponentCode extends BaseCode
 
     public function getDeleteVars()
     {
-        return WithTemplates::getDeleteVarsTemplate();
+        return Template::getDeleteVarsTemplate();
     }
 
     public function getAddVars()
     {
-        return WithTemplates::getAddVarsTemplate();
+        return Template::getAddVarsTemplate();
     }
 
     public function getEditVars()
     {
-        return WithTemplates::getEditVarsTemplate();
+        return Template::getEditVarsTemplate();
     }
 
     public function getDeleteMethod()
@@ -174,7 +170,7 @@ class ChildComponentCode extends BaseCode
                 $this->tallProperties->getComponentName(),
                 $this->getDeleteFlashCode(),
             ],
-            WithTemplates::getDeleteMethodTemplate()
+            Template::getDeleteMethodTemplate()
         );
     }
 
@@ -202,7 +198,7 @@ class ChildComponentCode extends BaseCode
                 $this->getBelongsToInitCode(),
                 $this->getBelongsToSaveCode(),
             ],
-            WithTemplates::getAddMethodTemplate()
+            Template::getAddMethodTemplate()
         );
     }
 
@@ -227,7 +223,7 @@ class ChildComponentCode extends BaseCode
                 $this->getBtmUpdateCode(),
                 $this->getBelongsToInitCode(false),
             ],
-            $this->getEditMethodTemplate()
+            Template::getEditMethodTemplate()
         );
     }
 
@@ -245,7 +241,7 @@ class ChildComponentCode extends BaseCode
                     $field['column'],
                     ($field['attributes']['type'] == 'checkbox') ? '0' : "''",
                 ],
-                WithTemplates::getAddFieldTemplate()
+                Template::getAddFieldTemplate()
             );
         })->prependAndJoin($this->newLines(1, 3));
     }
@@ -271,7 +267,7 @@ class ChildComponentCode extends BaseCode
                     $this->getBtmFieldName($r['relationName']),
                     $r['displayColumn'],
                 ],
-                WithTemplates::getBtmInitTemplate()
+                Template::getBtmInitTemplate()
             );
         })->implode('');
     }
@@ -293,7 +289,7 @@ class ChildComponentCode extends BaseCode
                     $r['relationName'],
                     $this->getBtmFieldName($r['relationName']),
                 ],
-                WithTemplates::getBtmAttachTemplate()
+                Template::getBtmAttachTemplate()
             );
         })->implode('') . $this->newLines();
     }
@@ -323,7 +319,7 @@ class ChildComponentCode extends BaseCode
                     Str::lower($this->tallProperties->getModelName()),
                     $r['displayColumn'],
                 ],
-                WithTemplates::getBtmFetchTemplate()
+                Template::getBtmFetchTemplate()
             );
         })->prependAndJoin('', $this->newLines());
     }
@@ -345,7 +341,7 @@ class ChildComponentCode extends BaseCode
                     $r['relationName'],
                     $this->getBtmFieldName($r['relationName']),
                 ],
-                WithTemplates::getBtmUpdateTemplate()
+                Template::getBtmUpdateTemplate()
             );
         })->prependAndJoin($this->newLines());
     }
@@ -374,7 +370,7 @@ class ChildComponentCode extends BaseCode
                     $this->tallProperties->getModelName($r['modelPath']),
                     $r['displayColumn'],
                 ],
-                WithTemplates::getBelongsToInitTemplate()
+                Template::getBelongsToInitTemplate()
             );
         })->prependAndJoin($this->newLines());
     }
@@ -397,7 +393,7 @@ class ChildComponentCode extends BaseCode
                     $r['foreignKey'],
                     0,
                 ],
-                WithTemplates::getAddFieldTemplate()
+                Template::getAddFieldTemplate()
             );
         })->prependAndJoin($this->newLines(1, 3));
     }
@@ -476,7 +472,7 @@ class ChildComponentCode extends BaseCode
         return str_replace(
             '##MESSAGE##',
             $message,
-            WithTemplates::getFlashTemplate()
+            Template::getFlashTemplate()
         );
     }
 
@@ -496,7 +492,7 @@ class ChildComponentCode extends BaseCode
                 $columnName,
                 $value,
             ],
-            WithTemplates::getChildFieldTemplate()
+            Template::getChildFieldTemplate()
         );
     }
 }

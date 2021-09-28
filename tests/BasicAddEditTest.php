@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 class BasicAddEditTest extends TestCase
 {
@@ -123,7 +123,7 @@ EOT;
 
         $this->assertNotEmpty($props['code']['pagination_dropdown']['method']);
         $this->assertTrue($tallProperties->isPaginationDropdownEnabled());
-        $this->assertEquals(WithTemplates::getPaginationDropdownMethodTemplate(), $componentCode->getPaginationDropdownMethod());
+        $this->assertEquals(Template::getPaginationDropdownMethodTemplate(), $componentCode->getPaginationDropdownMethod());
 
         $this->assertNotEmpty($props['code']['pagination']['vars']);
         $this->assertEquals(15, $tallProperties->getRecordsPerPage());

@@ -2,14 +2,10 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallProperties;
 use Illuminate\Support\Str;
 
 class ChildViewCode extends BaseCode
 {
-    use WithTemplates;
-
     public $tallProperties;
 
     public function __construct(TallProperties $tallProperties)
@@ -32,7 +28,7 @@ class ChildViewCode extends BaseCode
                 $this->tallProperties->getAdvancedSettingsText('cancelButton'),
                 $this->tallProperties->getAdvancedSettingsText('deleteButton'),
             ],
-            WithTemplates::getDeleteModalTemplate()
+            Template::getDeleteModalTemplate()
         );
     }
 
@@ -59,7 +55,7 @@ class ChildViewCode extends BaseCode
                 $this->tallProperties->getAdvancedSettingsText('createButton'),
                 $fieldsHtml->implode(''),
             ],
-            WithTemplates::getAddModalTemplate()
+            Template::getAddModalTemplate()
         );
     }
 
@@ -85,7 +81,7 @@ class ChildViewCode extends BaseCode
                 $this->tallProperties->getAdvancedSettingsText('editButton'),
                 $fieldsHtml->implode(''),
             ],
-            WithTemplates::getEditModalTemplate()
+            Template::getEditModalTemplate()
         );
     }
 
@@ -108,12 +104,12 @@ class ChildViewCode extends BaseCode
 
         switch ($field['attributes']['type']) {
             case 'checkbox':
-                $fieldTemplate = WithTemplates::getCheckboxFieldTemplate();
+                $fieldTemplate = Template::getCheckboxFieldTemplate();
             case 'select':
-                $fieldTemplate = WithTemplates::getSelectFieldTemplate();
+                $fieldTemplate = Template::getSelectFieldTemplate();
             case 'input':
             default:
-                $fieldTemplate = WithTemplates::getInputFieldTemplate();
+                $fieldTemplate = Template::getInputFieldTemplate();
         }
 
         $html = str_replace(
@@ -156,7 +152,7 @@ class ChildViewCode extends BaseCode
                 $r['displayColumn'],
                 $r['relatedKey'],
             ],
-            $r['isMultiSelect'] ? WithTemplates::getBtmFieldMultiSelectTemplate() : WithTemplates::getBtmFieldTemplate()
+            $r['isMultiSelect'] ? Template::getBtmFieldMultiSelectTemplate() : Template::getBtmFieldTemplate()
         );
     }
 
@@ -177,7 +173,7 @@ class ChildViewCode extends BaseCode
                 $r['ownerKey'],
                 $r['displayColumn'],
             ],
-            WithTemplates::getBelongsToFieldTemplate()
+            Template::getBelongsToFieldTemplate()
         );
     }
 

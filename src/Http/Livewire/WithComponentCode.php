@@ -5,6 +5,7 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
 use Illuminate\Support\Facades\App;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 
 trait WithComponentCode
 {
@@ -39,7 +40,7 @@ trait WithComponentCode
         //Eager Load Count Models
         $this->tallProperties->setEagerLoadCountModels($this->withCountRelations);
         //Hide Column
-        $this->tallProperties->setHideColumnsFlag($this->isHideColumnsEnabled());
+        $this->tallProperties->setHideColumnsFlag($this->advancedSettings['table_settings']['showHideColumns']);
         //Bulk Actions
         $this->tallProperties->setBulkActionFlag($this->isBulkActionsEnabled());
         if ($this->tallProperties->isBulkActionsEnabled()) {

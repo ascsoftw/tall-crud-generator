@@ -3,7 +3,7 @@
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
-use Ascsoftw\TallCrudGenerator\Http\Livewire\WithTemplates;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Livewire\Livewire;
 
 class BulkActionsTest extends TestCase
@@ -77,7 +77,7 @@ class BulkActionsTest extends TestCase
         $bulkActionCode = $componentCode->getBulkActionsCode();
         
         $this->assertStringContainsString('public $selectedItems = []', $bulkActionCode['vars']);
-        $this->assertEquals(WithTemplates::getHideColumnInitTemplate(), $componentCode->getHideColumnInitCode());
+        $this->assertEquals(Template::getHideColumnInitTemplate(), $componentCode->getHideColumnInitCode());
         $this->assertStringContainsString('public $selectedItems = []', $props['code']['bulk_actions']['vars']);
     }
 
@@ -91,7 +91,7 @@ class BulkActionsTest extends TestCase
         
         $props = $this->component->get('props');
 
-        $this->assertEquals(WithTemplates::getBulkActionTemplate(), $props['html']['bulk_action']);
+        $this->assertEquals(Template::getBulkActionTemplate(), $props['html']['bulk_action']);
     }
 
     public function test_table_header_contains_bulk_column()

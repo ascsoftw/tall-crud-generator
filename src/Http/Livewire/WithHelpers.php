@@ -4,17 +4,18 @@ namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 trait WithHelpers
 {
-    public function getModelName($name = '')
-    {
-        if (empty($name)) {
-            $name = $this->modelPath;
-        }
+    // public function getModelName($name = '')
+    // {
+    //     if (empty($name)) {
+    //         $name = $this->modelPath;
+    //     }
 
-        return Arr::last(Str::of($name)->explode('\\')->all());
-    }
+    //     return Arr::last(Str::of($name)->explode('\\')->all());
+    // }
 
     public function getPrimaryKey()
     {
@@ -468,7 +469,7 @@ trait WithHelpers
                     $r['relationName'],
                     $r['displayColumn'],
                 ],
-                $this->getBelongsToManyTableSlotTemplate()
+                Template::getBelongsToManyTableSlotTemplate()
             );
         }
 
@@ -481,7 +482,7 @@ trait WithHelpers
                 $r['relationName'],
                 $r['displayColumn'],
             ],
-            $this->getBelongsToTableSlotTemplate()
+            Template::getBelongsToTableSlotTemplate()
         );
     }
 }

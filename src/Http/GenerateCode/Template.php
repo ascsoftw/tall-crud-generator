@@ -1,10 +1,10 @@
 <?php
 
-namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
+namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-trait WithTemplates
+class Template
 {
-    public function getSortingHeaderTemplate()
+    public static function getSortingHeaderTemplate()
     {
         return <<<'EOT'
                     <div class="flex items-center">
@@ -141,7 +141,7 @@ EOT;
 EOT;
     }
 
-    public function getEditMethodTemplate()
+    public static function getEditMethodTemplate()
     {
         return <<<'EOT'
  
@@ -218,7 +218,7 @@ EOT;
 EOT;
     }
 
-    public function getTableColumnTemplate()
+    public static function getTableColumnTemplate()
     {
         return <<<'EOT'
 {{ $result->##COLUMN_NAME##}}
@@ -360,7 +360,7 @@ EOT;
 EOT;
     }
 
-    public function getChildValidationAttributesTemplate()
+    public static function getChildValidationAttributesTemplate()
     {
         return <<<'EOT'
 
@@ -542,14 +542,14 @@ EOT;
 EOT;
     }
 
-    //todo remove this.
-    public function getOtherModelTemplate()
-    {
-        return <<<'EOT'
+//     //todo remove this.
+//     public function getOtherModelTemplate()
+//     {
+//         return <<<'EOT'
 
-use ##MODEL##;
-EOT;
-    }
+// use ##MODEL##;
+// EOT;
+//     }
 
     public static function getUseModelTemplate()
     {
@@ -634,14 +634,14 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToManyTableSlotTemplate()
+    public static function getBelongsToManyTableSlotTemplate()
     {
         return <<<'EOT'
 ##RELATION##->implode('##DISPLAY_COLUMN##', ',')
 EOT;
     }
 
-    public function getBelongsToTableSlotTemplate()
+    public static function getBelongsToTableSlotTemplate()
     {
         return <<<'EOT'
 ##RELATION##?->##DISPLAY_COLUMN##
@@ -687,7 +687,7 @@ EOT;
 EOT;
     }
 
-    public function getHideColumnIfTemplate()
+    public static function getHideColumnIfTemplate()
     {
         return <<<'EOT'
 @if($this->showColumn('##LABEL##'))
