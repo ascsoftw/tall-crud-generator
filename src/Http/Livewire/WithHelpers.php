@@ -2,21 +2,10 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 trait WithHelpers
 {
-    // public function getModelName($name = '')
-    // {
-    //     if (empty($name)) {
-    //         $name = $this->modelPath;
-    //     }
-
-    //     return Arr::last(Str::of($name)->explode('\\')->all());
-    // }
-
     public function getPrimaryKey()
     {
         return $this->modelProps['primaryKey'];
@@ -347,27 +336,12 @@ trait WithHelpers
         });
     }
 
-    public function isBelongsToManyRelation($relation)
+    public function isBelongsToRelation($relation)
     {
-        if (empty($this->allRelations['belongsToMany'])) {
+        if (empty($this->allRelations['belongsTo'])) {
             return false;
         }
-        foreach ($this->allRelations['belongsToMany'] as $k) {
-            if ($k['name'] == $relation) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isHasManyRelation($relation)
-    {
-        if (empty($this->allRelations['hasMany'])) {
-            return false;
-        }
-
-        foreach ($this->allRelations['hasMany'] as $k) {
+        foreach ($this->allRelations['belongsTo'] as $k) {
             if ($k['name'] == $relation) {
                 return true;
             }
@@ -423,6 +397,14 @@ trait WithHelpers
 
     public function getTableColumnProps($field)
     {
+        $label = '';
+        $column = '';
+        $isSortable = false;
+        $slot = '';
+        $relationName = '';
+        $displayColumn = '';
+        $isBelongsToRelation = false;
+
         switch ($field['type']) {
             case 'primary':
                 $label = $this->getLabel($this->primaryKeyProps['label'], $this->getPrimaryKey());
@@ -440,9 +422,9 @@ trait WithHelpers
                 break;
             case 'with':
                 $label = $this->getLabelForWith($field['relationName']);
-                $column = null;
-                $isSortable = false;
-                $slot = $this->getWithTableSlot($field);
+                $relationName = $field['relationName'];
+                $displayColumn = $field['displayColumn'];
+                $isBelongsToRelation = $this->isBelongsToRelation($field['relationName']);
 
                 break;
             case 'withCount':
@@ -454,35 +436,15 @@ trait WithHelpers
                 break;
         }
 
-        return ['label' => $label, 'column' => $column, 'isSortable' => $isSortable, 'slot' => $slot];
-    }
-
-    public function getWithTableSlot($r)
-    {
-        if ($this->isBelongsToManyRelation($r['relationName']) || $this->isHasManyRelation($r['relationName'])) {
-            return str_replace(
-                [
-                    '##RELATION##',
-                    '##DISPLAY_COLUMN##',
-                ],
-                [
-                    $r['relationName'],
-                    $r['displayColumn'],
-                ],
-                Template::getBelongsToManyTableSlotTemplate()
-            );
-        }
-
-        return str_replace(
-            [
-                '##RELATION##',
-                '##DISPLAY_COLUMN##',
-            ],
-            [
-                $r['relationName'],
-                $r['displayColumn'],
-            ],
-            Template::getBelongsToTableSlotTemplate()
-        );
+        return [
+            'type' => $field['type'],
+            'label' => $label,
+            'column' => $column,
+            'isSortable' => $isSortable,
+            'slot' => $slot,
+            'relationName' => $relationName,
+            'displayColumn' => $displayColumn,
+            'isBelongsToRelation' => $isBelongsToRelation,
+        ];
     }
 }

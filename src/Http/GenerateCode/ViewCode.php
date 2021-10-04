@@ -239,39 +239,73 @@ class ViewCode extends BaseCode
             $slot = $label;
         }
 
-        $preTag = $postTag = '';
-        if ($this->tallProperties->isHideColumnsEnabled()) {
-            $preTag = str_replace(
-                '##LABEL##',
-                $label,
-                Template::getHideColumnIfTemplate()
-            ).$this->newLines(1, 4);
-            $postTag = $this->newLines(1, 4).'@endif';
-        }
-
-        return $preTag.$this->getTableColumnHtml($slot).$postTag;
+        return $this->encapsulateTableColumn($this->getTableColumnHtml($slot), $label, 4);
     }
 
     public function getTableSlotHtml($f)
     {
-        $preTag = $postTag = '';
-        if ($this->tallProperties->isHideColumnsEnabled()) {
-            $preTag = str_replace(
-                '##LABEL##',
-                $f['label'],
-                Template::getHideColumnIfTemplate()
-            ).$this->newLines(1, 5);
-            $postTag = $this->newLines(1, 5).'@endif';
+
+        if($f['type'] == 'with')
+        {
+            $slot = $this->getTableSlotForEagerLoad($f);
+        } else {
+            $slot = $f['slot'];
         }
 
-        return $preTag.
-            $this->getTableColumnHtml(
+        $html = $this->getTableColumnHtml(
                 str_replace(
                     '##COLUMN_NAME##',
-                    $f['slot'],
+                    $slot,
                     Template::getTableColumnTemplate()
                 )
-            ).
-            $postTag;
+        );
+        return $this->encapsulateTableColumn($html, $f['label'], 5);
     }
+
+    public function encapsulateTableColumn($slot, $label, $indent = 4)
+    {
+        if (!$this->tallProperties->isHideColumnsEnabled()) {
+            return $slot;
+        }
+
+        $preTag = str_replace(
+            '##LABEL##',
+            $label,
+            Template::getHideColumnIfTemplate()
+        ).$this->newLines(1, $indent);
+        $postTag = $this->newLines(1, $indent).'@endif';
+
+        return $preTag . $slot . $postTag;
+    }
+
+    public function getTableSlotForEagerLoad($field)
+    {
+        if ($field['isBelongsToRelation']) {
+            return str_replace(
+                [
+                    '##RELATION##',
+                    '##DISPLAY_COLUMN##',
+                ],
+                [
+                    $field['relationName'],
+                    $field['displayColumn'],
+                ],
+                Template::getBelongsToTableSlotTemplate()
+            );
+        }
+
+        return str_replace(
+            [
+                '##RELATION##',
+                '##DISPLAY_COLUMN##',
+            ],
+            [
+                $field['relationName'],
+                $field['displayColumn'],
+            ],
+            Template::getBelongsToManyTableSlotTemplate()
+        );
+    }
+
+    
 }
