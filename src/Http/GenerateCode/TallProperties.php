@@ -46,9 +46,6 @@ class TallProperties
     public $flashMessageFlag;
     public $flashMessageText;
 
-    public $btmRelations;
-    public $belongsToRelations;
-
     public $advancedSettingsText;
 
     public $tableClasses;
@@ -316,51 +313,43 @@ class TallProperties
         return $this->flashMessageText[$mode] ?? '';
     }
 
-    public function setBtmRelations($btmRelations)
-    {
-        $this->btmRelations = collect($btmRelations);
-    }
-
     public function getBtmRelations()
     {
-        return $this->btmRelations;
+        return $this->getBtmAddFields()->merge($this->getBtmEditFields())
+            ->unique('relationName');
     }
 
     public function getBtmAddFields()
     {
-        return $this->getBtmRelations()->filter(function($item) {
-            return $item['inAdd'];
+        return $this->getAddFormFields()->filter(function($item) {
+            return $item['type'] == 'btm';
         });
     }
 
     public function getBtmEditFields()
     {
-        return $this->getBtmRelations()->filter(function($item) {
-            return $item['inEdit'];
+        return $this->getEditFormFields()->filter(function($item) {
+            return $item['type'] == 'btm';
         });
-    }
-
-    public function setBelongsToRelations($belongsToRelations)
-    {
-        $this->belongsToRelations = collect($belongsToRelations);
     }
 
     public function getBelongsToRelations()
     {
-        return $this->belongsToRelations;
+        return $this->getBelongsToAddFields()->merge($this->getBelongsToEditFields())
+            ->unique('relationName');
     }
 
     public function getBelongsToAddFields()
     {
-        return $this->getBelongsToRelations()->filter(function($item) {
-            return $item['inAdd'];
+        return $this->getAddFormFields()->filter(function($item) {
+            return $item['type'] == 'belongsTo';
         });
     }
 
     public function getBelongsToEditFields()
     {
-        return $this->getBelongsToRelations()->filter(function($item) {
-            return $item['inEdit'];
+        return $this->getEditFormFields()->filter(function($item) {
+            return $item['type'] == 'belongsTo';
         });
     }
 
@@ -400,7 +389,7 @@ class TallProperties
 
     public function getAddFormFields()
     {
-        return $this->addFormFields;
+        return $this->addFormFields ?? collect();
     }
 
     public function setEditFormFields($editFormFields)
@@ -410,13 +399,12 @@ class TallProperties
 
     public function getEditFormFields()
     {
-        return $this->editFormFields;
+        return $this->editFormFields ?? collect();
     }
 
     public function getSelfFormFields()
     {
-        $addFields = $this->getAddFormFields() ?? collect();
-        $fields = $addFields->merge($this->getEditFormFields());
+        $fields = $this->getAddFormFields()->merge($this->getEditFormFields());
         return $fields->filter(function($field) {
             return $field['type'] == 'normal';
         })->unique('column');

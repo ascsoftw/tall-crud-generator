@@ -103,10 +103,6 @@ class BelongsToManyTest extends TestCase
             ->call('deleteBelongsToManyRelation', 0)
             ->assertCount('belongsToManyRelations', 0);
     }
-    
-    //getBtmRelations
-    //getBtmAddFields
-    //getBtmEditFields
 
     public function test_other_models_code_is_added()
     {

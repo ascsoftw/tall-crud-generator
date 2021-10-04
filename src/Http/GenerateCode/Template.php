@@ -149,14 +149,14 @@ EOT;
     {
         $this->resetErrorBag();
         $this->item = $##MODEL_VAR##;
-        $this->confirmingItemEdition = true;##BTM_FETCH####BELONGS_TO_INIT##
+        $this->confirmingItemEdit = true;##BTM_FETCH####BELONGS_TO_INIT##
     }
 
     public function editItem(): void
     {
         $this->validate();
         $this->item->save();##BTM_UPDATE##
-        $this->confirmingItemEdition = false;
+        $this->confirmingItemEdit = false;
         $this->primaryKey = '';
         $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
     }
@@ -285,7 +285,7 @@ EOT;
     /**
      * @var bool
      */
-    public $confirmingItemEdition = false;
+    public $confirmingItemEdit = false;
 EOT;
     }
 
@@ -421,7 +421,7 @@ EOT;
     {
         return <<<'EOT'
 
-    <x:tall-crud-generator::dialog-modal wire:model="confirmingItemEdition">
+    <x:tall-crud-generator::dialog-modal wire:model="confirmingItemEdit">
         <x-slot name="title">
             Edit Record
         </x-slot>
@@ -430,7 +430,7 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdition', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdit', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
             <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EDIT_BTN_TEXT##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::dialog-modal>
@@ -541,15 +541,6 @@ EOT;
         $this->##FIELD_NAME## = [];
 EOT;
     }
-
-//     //todo remove this.
-//     public function getOtherModelTemplate()
-//     {
-//         return <<<'EOT'
-
-// use ##MODEL##;
-// EOT;
-//     }
 
     public static function getUseModelTemplate()
     {
