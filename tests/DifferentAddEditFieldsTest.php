@@ -30,12 +30,12 @@ class DifferentAddEditFieldsTest extends TestCase
 
         $tallProperties = App::make(TallProperties::class);
 
-        $addColumns = $tallProperties->getAddFormFields()->map(function($f) {
+        $addColumns = $tallProperties->getAddFormFields()->map(function ($f) {
             return $f['column'];
         })->toArray();
         $this->assertEquals(['name', 'price', 'sku'], $addColumns);
 
-        $editColumns = $tallProperties->getEditFormFields()->map(function($f) {
+        $editColumns = $tallProperties->getEditFormFields()->map(function ($f) {
             return $f['column'];
         })->toArray();
         $this->assertEquals(['name', 'price', 'status'], $editColumns);
@@ -64,46 +64,46 @@ class DifferentAddEditFieldsTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
 
-            $childComponentCode = App::make(ChildComponentCode::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
 
-            $btmInitCode = $childComponentCode->getBtmInitCode();
+        $btmInitCode = $childComponentCode->getBtmInitCode();
 
-            $tagInitCode = <<<'EOT'
+        $tagInitCode = <<<'EOT'
 $this->tags = Tag::orderBy('name')->get();
 EOT;
 
-            $categoryInitCode = <<<'EOT'
+        $categoryInitCode = <<<'EOT'
 $this->categories = Category::orderBy('name')->get();
 EOT;
 
-            $this->assertStringContainsString($tagInitCode, $btmInitCode);
-            $this->assertStringNotContainsString($categoryInitCode, $btmInitCode);
+        $this->assertStringContainsString($tagInitCode, $btmInitCode);
+        $this->assertStringNotContainsString($categoryInitCode, $btmInitCode);
 
-            $btmAttachCode = $childComponentCode->getBtmAttachCode();
-            $tagAttachCode = '$item->tags()->attach($this->checkedTags);';
-            $categoryAttachCode = '$item->categories()->attach($this->checkedCategories);';
+        $btmAttachCode = $childComponentCode->getBtmAttachCode();
+        $tagAttachCode = '$item->tags()->attach($this->checkedTags);';
+        $categoryAttachCode = '$item->categories()->attach($this->checkedCategories);';
     
-            $this->assertStringContainsString($tagAttachCode, $btmAttachCode);
-            $this->assertStringNotContainsString($categoryAttachCode, $btmAttachCode);
+        $this->assertStringContainsString($tagAttachCode, $btmAttachCode);
+        $this->assertStringNotContainsString($categoryAttachCode, $btmAttachCode);
 
-            $btmFetchCode = $childComponentCode->getBtmFetchCode();
-            $fetchTagCode = <<<'EOT'
+        $btmFetchCode = $childComponentCode->getBtmFetchCode();
+        $fetchTagCode = <<<'EOT'
     $this->tags = Tag::orderBy('name')->get();
     EOT;
-            $fetchCategoryCode = <<<'EOT'
+        $fetchCategoryCode = <<<'EOT'
     $this->categories = Category::orderBy('name')->get();
     EOT;
     
-            $this->assertStringNotContainsString($fetchTagCode, $btmFetchCode);
-            $this->assertStringContainsString($fetchCategoryCode, $btmFetchCode);
+        $this->assertStringNotContainsString($fetchTagCode, $btmFetchCode);
+        $this->assertStringContainsString($fetchCategoryCode, $btmFetchCode);
 
-            $btmUpdateCode = $childComponentCode->getBtmUpdateCode();
+        $btmUpdateCode = $childComponentCode->getBtmUpdateCode();
 
-            $tagSyncCode = '$this->item->tags()->sync($this->checkedTags);';
-            $categorySyncCode = '$this->item->categories()->sync($this->checkedCategories);';
+        $tagSyncCode = '$this->item->tags()->sync($this->checkedTags);';
+        $categorySyncCode = '$this->item->categories()->sync($this->checkedCategories);';
     
-            $this->assertStringNotContainsString($tagSyncCode, $btmUpdateCode);
-            $this->assertStringContainsString($categorySyncCode, $btmUpdateCode);
+        $this->assertStringNotContainsString($tagSyncCode, $btmUpdateCode);
+        $this->assertStringContainsString($categorySyncCode, $btmUpdateCode);
     }
 
     public function test_belongs_to_in_add_only()
@@ -120,16 +120,16 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
 
-            $childComponentCode = App::make(ChildComponentCode::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
 
-            $code = $childComponentCode->getBelongsToInitCode();
-            $belongsToInitCode = <<<'EOT'
+        $code = $childComponentCode->getBelongsToInitCode();
+        $belongsToInitCode = <<<'EOT'
 $this->brands = Brand::orderBy('name')->get();
 EOT;
-            $this->assertStringContainsString($belongsToInitCode, $code);
+        $this->assertStringContainsString($belongsToInitCode, $code);
 
-            $code = $childComponentCode->getBelongsToInitCode(false);
-            $this->assertEmpty($code);
+        $code = $childComponentCode->getBelongsToInitCode(false);
+        $this->assertEmpty($code);
     }
 
     public function test_belongs_to_in_edit_only()
@@ -146,15 +146,15 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
 
-            $childComponentCode = App::make(ChildComponentCode::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
 
-            $code = $childComponentCode->getBelongsToInitCode(false);
-            $belongsToInitCode = <<<'EOT'
+        $code = $childComponentCode->getBelongsToInitCode(false);
+        $belongsToInitCode = <<<'EOT'
 $this->brands = Brand::orderBy('name')->get();
 EOT;
-            $this->assertStringContainsString($belongsToInitCode, $code);
+        $this->assertStringContainsString($belongsToInitCode, $code);
 
-            $code = $childComponentCode->getBelongsToInitCode();
-            $this->assertEmpty($code);
+        $code = $childComponentCode->getBelongsToInitCode();
+        $this->assertEmpty($code);
     }
 }

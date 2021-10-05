@@ -2,9 +2,9 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
 use Illuminate\Support\Facades\App;
@@ -66,6 +66,5 @@ EOT;
         $this->assertEquals($whereClauseStr, $componentCode->getSearchWhereClause()->toArray()[0]);
         $this->assertStringContainsString($whereClauseStr, $searchCode['query']);
         $this->assertNotEmpty($searchCode['query']);
-
     }
 }

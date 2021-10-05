@@ -3,17 +3,16 @@
 namespace Ascsoftw\TallCrudGenerator;
 
 use Ascsoftw\TallCrudGenerator\Console\Commands\TallCrudGeneratorCommand;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 
 class TallCrudGeneratorServiceProvider extends ServiceProvider
 {
@@ -58,7 +57,6 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/tall-crud-generator'),
         ], 'views');
-
     }
 
     public function register()

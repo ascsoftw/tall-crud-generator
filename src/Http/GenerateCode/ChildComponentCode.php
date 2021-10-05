@@ -57,7 +57,7 @@ class ChildComponentCode extends BaseCode
 
     public function getListenersArray()
     {
-        if (!($this->tallProperties->isAddFeatureEnabled() ||
+        if (! ($this->tallProperties->isAddFeatureEnabled() ||
             $this->tallProperties->isDeleteFeatureEnabled() ||
             $this->tallProperties->isEditFeatureEnabled())) {
             return '';
@@ -130,8 +130,8 @@ class ChildComponentCode extends BaseCode
 
     public function getOtherModelsCode()
     {
-
         $fields = $this->tallProperties->getBtmRelations()->merge($this->tallProperties->getBelongsToRelations());
+
         return $fields->map(function ($r) {
             return $this->getUseModelCode($r['modelPath']);
         })->unique()->implode('');
@@ -176,7 +176,6 @@ class ChildComponentCode extends BaseCode
 
     public function getAddMethod()
     {
-
         return str_replace(
             [
                 '##MODEL##',
@@ -465,7 +464,7 @@ class ChildComponentCode extends BaseCode
 
     public function getFlashCode($message)
     {
-        if (empty($message) || !$this->tallProperties->isFlashMessageEnabled()) {
+        if (empty($message) || ! $this->tallProperties->isFlashMessageEnabled()) {
             return '';
         }
 

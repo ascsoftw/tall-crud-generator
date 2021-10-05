@@ -100,7 +100,6 @@ class EagerLoadCountTest extends TestCase
 
     public function test_view_contain_eager_loaded_count_columns()
     {
-
         $this->component
             ->setStandardEagerLoadCountRelations()
             ->pressNext(3)
@@ -124,7 +123,6 @@ class EagerLoadCountTest extends TestCase
 
     public function test_slot_contain_eager_loaded_count_columns()
     {
-
         $this->component
             ->setStandardEagerLoadCountRelations()
             ->pressNext(3)

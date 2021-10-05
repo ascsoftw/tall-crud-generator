@@ -392,6 +392,7 @@ trait WithHelpers
         foreach ($fields as $f) {
             $headers->push($this->getTableColumnProps($f));
         }
+
         return $headers;
     }
 

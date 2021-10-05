@@ -13,7 +13,7 @@ class ViewCode extends BaseCode
 
     public function getAddLink()
     {
-        if (!$this->tallProperties->isAddFeatureEnabled()) {
+        if (! $this->tallProperties->isAddFeatureEnabled()) {
             return '';
         }
 
@@ -26,7 +26,7 @@ class ViewCode extends BaseCode
 
     public function getSearchBox()
     {
-        if (!$this->tallProperties->isSearchingEnabled()) {
+        if (! $this->tallProperties->isSearchingEnabled()) {
             return '';
         }
 
@@ -35,7 +35,7 @@ class ViewCode extends BaseCode
 
     public function getPaginationDropdown()
     {
-        if (!$this->tallProperties->isPaginationDropdownEnabled()) {
+        if (! $this->tallProperties->isPaginationDropdownEnabled()) {
             return '';
         }
 
@@ -44,7 +44,7 @@ class ViewCode extends BaseCode
 
     public function getHideColumnsDropdown()
     {
-        if (!$this->tallProperties->isHideColumnsEnabled()) {
+        if (! $this->tallProperties->isHideColumnsEnabled()) {
             return '';
         }
 
@@ -53,7 +53,7 @@ class ViewCode extends BaseCode
 
     public function getBulkActionDropdown()
     {
-        if (!$this->tallProperties->isBulkActionsEnabled()) {
+        if (! $this->tallProperties->isBulkActionsEnabled()) {
             return '';
         }
 
@@ -62,7 +62,7 @@ class ViewCode extends BaseCode
 
     public function getFilterDropdown()
     {
-        if (!$this->tallProperties->isFilterEnabled()) {
+        if (! $this->tallProperties->isFilterEnabled()) {
             return'';
         }
 
@@ -71,7 +71,7 @@ class ViewCode extends BaseCode
 
     public function getChildComponent()
     {
-        if (!($this->tallProperties->isAddFeatureEnabled() ||
+        if (! ($this->tallProperties->isAddFeatureEnabled() ||
             $this->tallProperties->isDeleteFeatureEnabled() ||
             $this->tallProperties->isEditFeatureEnabled())) {
             return '';
@@ -79,17 +79,15 @@ class ViewCode extends BaseCode
         $componentName = $this->tallProperties->getChildComponentName();
 
         return $this->indent(1)."@livewire('$componentName')";
-
     }
 
     public function getFlashComponent()
     {
-        if (!$this->tallProperties->isFlashMessageEnabled()) {
+        if (! $this->tallProperties->isFlashMessageEnabled()) {
             return '';
         }
 
         return Template::getFlashComponent();
-
     }
 
     public function getTableHeader()
@@ -152,15 +150,14 @@ class ViewCode extends BaseCode
 
         $classes['th'] = $this->tallProperties->getTableClasses('th');
         $classes['trBottomBorder'] = $this->tallProperties->getTableClasses('trBottomBorder');
-        if (!empty($this->tallProperties->getTableClasses('trEven'))) {
+        if (! empty($this->tallProperties->getTableClasses('trEven'))) {
             $classes['trEven'] = '{{ ($loop->even ) ? "' . $this->tallProperties->getTableClasses('trEven') . '" : ""}}';
         }
-        if (!empty($this->tallProperties->getTableClasses('trHover'))) {
+        if (! empty($this->tallProperties->getTableClasses('trHover'))) {
             $classes['trHover'] = 'hover:' . $this->tallProperties->getTableClasses('trHover');
         }
 
         return $classes;
-
     }
 
     public function getActionHtml()
@@ -199,13 +196,12 @@ class ViewCode extends BaseCode
 
     public function getBulkColumnCheckbox()
     {
-        return 
+        return
             str_replace(
                 '##PRIMARY_KEY##',
                 $this->tallProperties->getPrimaryKey(),
                 Template::getBulkColumnCheckbox()
             );
-
     }
 
     public function getTableColumnHtml($slot, $params = '')
@@ -244,27 +240,26 @@ class ViewCode extends BaseCode
 
     public function getTableSlotHtml($f)
     {
-
-        if($f['type'] == 'with')
-        {
+        if ($f['type'] == 'with') {
             $slot = $this->getTableSlotForEagerLoad($f);
         } else {
             $slot = $f['slot'];
         }
 
         $html = $this->getTableColumnHtml(
-                str_replace(
+            str_replace(
                     '##COLUMN_NAME##',
                     $slot,
                     Template::getTableColumnSlot()
                 )
         );
+
         return $this->encapsulateTableColumn($html, $f['label'], 5);
     }
 
     public function encapsulateTableColumn($slot, $label, $indent = 4)
     {
-        if (!$this->tallProperties->isHideColumnsEnabled()) {
+        if (! $this->tallProperties->isHideColumnsEnabled()) {
             return $slot;
         }
 
@@ -306,6 +301,4 @@ class ViewCode extends BaseCode
             Template::getBtmTableSlot()
         );
     }
-
-    
 }

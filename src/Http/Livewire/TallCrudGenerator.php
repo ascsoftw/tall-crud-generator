@@ -2,17 +2,17 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
 use Exception;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
-use Illuminate\Support\Facades\App;
 
 class TallCrudGenerator extends Component
 {

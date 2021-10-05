@@ -2,10 +2,10 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
-use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
@@ -104,15 +104,14 @@ class FilterTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-            $tallProperties = App::make(TallProperties::class);
-            $props = $this->component->get('props');
-    
-            $this->assertTrue($tallProperties->isFilterEnabled());
-            $this->assertNotEmpty($props['code']['filter']['vars']);
-            $this->assertEmpty($props['code']['filter']['init']);
-            $this->assertNotEmpty($props['code']['filter']['query']);
-            $this->assertNotEmpty($props['code']['filter']['method']);
-    
+        $tallProperties = App::make(TallProperties::class);
+        $props = $this->component->get('props');
+
+        $this->assertTrue($tallProperties->isFilterEnabled());
+        $this->assertNotEmpty($props['code']['filter']['vars']);
+        $this->assertEmpty($props['code']['filter']['init']);
+        $this->assertNotEmpty($props['code']['filter']['query']);
+        $this->assertNotEmpty($props['code']['filter']['method']);
     }
 
     public function test_belongs_to_filter_shows_other_fields()
@@ -258,7 +257,6 @@ class FilterTest extends TestCase
             ->assertViewHas('filters')
             ->assertCount('filters', 3)
             ->assertSeeInOrder(['None', 'name', 'BelongsTo', 'brand.name', 'BelongsToMany', 'categories.name']);
-
     }
 
     public function test_other_models_code_is_added()
@@ -274,9 +272,9 @@ class FilterTest extends TestCase
         $this->assertCount(2, $otherModels);
         $this->assertEquals(
             [
-                'Ascsoftw\TallCrudGenerator\Tests\Models\Brand', 
-                'Ascsoftw\TallCrudGenerator\Tests\Models\Category'
-            ], 
+                'Ascsoftw\TallCrudGenerator\Tests\Models\Brand',
+                'Ascsoftw\TallCrudGenerator\Tests\Models\Category',
+            ],
             $otherModels
         );
 
@@ -292,7 +290,6 @@ class FilterTest extends TestCase
         
         $viewCode = App::make(ViewCode::class);
         $this->assertEquals(Template::getFilterDropdownTemplate(), $viewCode->getFilterDropdown());
-
     }
 
     public function test_filter_code_is_added_to_component()
@@ -368,6 +365,5 @@ EOT;
 
         $this->assertNotEmpty($props['code']['filter']['method']);
         $this->assertEquals(Template::getFilterMethodTemplate(), $componentCode->getFilterMethod());
-
     }
 }

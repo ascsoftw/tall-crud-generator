@@ -174,7 +174,6 @@ EOT;
 
         $this->assertStringContainsString($belongsToInitCode, $childComponentCode->getBelongsToInitCode());
         $this->assertStringContainsString($belongsToInitCode, $props['code']['child_add']['method']);
-        
     }
 
     public function test_edit_init_code()
@@ -193,7 +192,6 @@ EOT;
 
         $this->assertStringContainsString($belongsToInitCode, $childComponentCode->getBelongsToInitCode(false));
         $this->assertStringContainsString($belongsToInitCode, $props['code']['child_edit']['method']);
-        
     }
 
     public function test_save_code()
@@ -212,12 +210,10 @@ EOT;
 
         $this->assertStringContainsString($belongsToInitCode, $childComponentCode->getBelongsToSaveCode());
         $this->assertStringContainsString($belongsToInitCode, $props['code']['child_add']['method']);
-        
     }
 
     public function test_add_modal()
     {
-
         $this->component
             ->setStandardBelongsToRelation()
             ->pressNext(3)
@@ -229,7 +225,6 @@ EOT;
         $this->assertStringContainsString('wire:model.defer="item.brand_id"', $addModalCode);
         $this->assertStringContainsString("@error('item.brand_id')", $addModalCode);
         $this->assertStringContainsString('@foreach($brands as $c)', $addModalCode);
-
     }
 
     public function test_edit_modal()

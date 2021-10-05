@@ -2,9 +2,9 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
 use Illuminate\Support\Facades\App;
@@ -56,7 +56,6 @@ class HideColumnsTest extends TestCase
 
     public function test_code_is_added_to_component()
     {
-
         $this->component
             ->assertPropertyWired('advancedSettings.table_settings.showHideColumns')
             ->assertSet('advancedSettings.table_settings.showHideColumns', false)
@@ -77,7 +76,7 @@ class HideColumnsTest extends TestCase
             return $c['label'];
         })->toArray();
         $this->assertEquals(
-            ['Id', 'Name', 'Price', 'Sku', 'Brand', 'Categories', 'Tags', 'Tags Count', 'Categories Count'], 
+            ['Id', 'Name', 'Price', 'Sku', 'Brand', 'Categories', 'Tags', 'Tags Count', 'Categories Count'],
             $labels
         );
 

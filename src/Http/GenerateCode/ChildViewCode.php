@@ -15,7 +15,7 @@ class ChildViewCode extends BaseCode
 
     public function getDeleteModal()
     {
-        if (!$this->tallProperties->isDeleteFeatureEnabled()) {
+        if (! $this->tallProperties->isDeleteFeatureEnabled()) {
             return '';
         }
 
@@ -101,12 +101,13 @@ class ChildViewCode extends BaseCode
 
     public function getNormalFieldHtml($field)
     {
-
         switch ($field['attributes']['type']) {
             case 'checkbox':
                 $fieldTemplate = Template::getCheckboxField();
+                break;
             case 'select':
                 $fieldTemplate = Template::getSelectField();
+                break;
             case 'input':
             default:
                 $fieldTemplate = Template::getInputField();
