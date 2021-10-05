@@ -104,9 +104,11 @@ class ChildViewCode extends BaseCode
         switch ($field['attributes']['type']) {
             case 'checkbox':
                 $fieldTemplate = Template::getCheckboxField();
+
                 break;
             case 'select':
                 $fieldTemplate = Template::getSelectField();
+
                 break;
             case 'input':
             default:

@@ -2,11 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
-use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
-use Illuminate\Support\Facades\App;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Illuminate\Support\Facades\App;
+use Livewire\Livewire;
 
 class FlashMessageTest extends TestCase
 {

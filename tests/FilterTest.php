@@ -2,14 +2,14 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
-use Illuminate\Support\Facades\App;
 
 class FilterTest extends TestCase
 {
