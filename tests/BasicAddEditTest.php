@@ -123,7 +123,7 @@ EOT;
 
         $this->assertNotEmpty($props['code']['pagination_dropdown']['method']);
         $this->assertTrue($tallProperties->isPaginationDropdownEnabled());
-        $this->assertEquals(Template::getPaginationDropdownMethodTemplate(), $componentCode->getPaginationDropdownMethod());
+        $this->assertEquals(Template::getPaginationDropdownMethod(), $componentCode->getPaginationDropdownMethod());
 
         $this->assertNotEmpty($props['code']['pagination']['vars']);
         $this->assertEquals(15, $tallProperties->getRecordsPerPage());

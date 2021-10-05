@@ -51,8 +51,8 @@ class SortingTest extends TestCase
 
         $this->assertTrue($tallProperties->isSortingEnabled());
         $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
-        $this->assertEquals(Template::getSortingQueryTemplate(), $componentCode->getSortingQuery());
-        $this->assertEquals(Template::getSortingMethodTemplate(), $componentCode->getSortingMethod());
+        $this->assertEquals(Template::getSortingQuery(), $componentCode->getSortingQuery());
+        $this->assertEquals(Template::getSortingMethod(), $componentCode->getSortingMethod());
         $this->assertNotEmpty($sortCode['vars']);
 
     }

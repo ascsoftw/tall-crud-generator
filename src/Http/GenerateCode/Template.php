@@ -4,7 +4,7 @@ namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
 class Template
 {
-    public static function getSortingHeaderTemplate()
+    public static function getSortableHeader()
     {
         return <<<'EOT'
                     <div class="flex items-center">
@@ -14,7 +14,7 @@ class Template
 EOT;
     }
 
-    public static function getSearchBoxTemplate()
+    public static function getSearchInputField()
     {
         return <<<'EOT'
 
@@ -25,7 +25,7 @@ EOT;
 EOT;
     }
 
-    public static function getHideColumnDropdownTemplate()
+    public static function getHideColumnsDropdown()
     {
         return <<<'EOT'
 
@@ -45,7 +45,7 @@ EOT;
 EOT;
     }
 
-    public static function getPaginationDropdownTemplate()
+    public static function getPaginationSelectElement()
     {
         return <<<'EOT'
 
@@ -58,7 +58,7 @@ EOT;
 EOT;
     }
 
-    public static function getDeleteButtonTemplate()
+    public static function getDeleteButton()
     {
         return <<<'EOT'
 
@@ -68,7 +68,7 @@ EOT;
 EOT;
     }
 
-    public static function getAddButtonTemplate()
+    public static function getAddButton()
     {
         return <<<'EOT'
 
@@ -78,7 +78,7 @@ EOT;
 EOT;
     }
 
-    public static function getEditButtonTemplate()
+    public static function getEditButton()
     {
         return <<<'EOT'
 
@@ -88,7 +88,7 @@ EOT;
 EOT;
     }
 
-    public static function getDeleteMethodTemplate()
+    public static function getDeleteFeatureCode()
     {
         return <<<'EOT'
 
@@ -111,7 +111,7 @@ EOT;
 EOT;
     }
 
-    public static function getAddMethodTemplate()
+    public static function getAddFeatureCode()
     {
         return <<<'EOT'
  
@@ -141,7 +141,7 @@ EOT;
 EOT;
     }
 
-    public static function getEditMethodTemplate()
+    public static function getEditFeatureCode()
     {
         return <<<'EOT'
  
@@ -164,7 +164,7 @@ EOT;
 EOT;
     }
 
-    public static function getChildListenerTemplate()
+    public static function getListenerArray()
     {
         return <<<'EOT'
     /**
@@ -179,7 +179,7 @@ EOT;
 EOT;
     }
 
-    public static function getSortingMethodTemplate()
+    public static function getSortingMethod()
     {
         return <<<'EOT'
 
@@ -194,7 +194,7 @@ EOT;
 EOT;
     }
 
-    public static function getSearchMethodTemplate()
+    public static function getSearchMethod()
     {
         return <<<'EOT'
 
@@ -206,7 +206,7 @@ EOT;
 EOT;
     }
 
-    public static function getPaginationDropdownMethodTemplate()
+    public static function getPaginationDropdownMethod()
     {
         return <<<'EOT'
 
@@ -218,14 +218,14 @@ EOT;
 EOT;
     }
 
-    public static function getTableColumnTemplate()
+    public static function getTableColumnSlot()
     {
         return <<<'EOT'
 {{ $result->##COLUMN_NAME##}}
 EOT;
     }
 
-    public static function getSortingVarsTemplate()
+    public static function getSortingVariables()
     {
         return <<<'EOT'
 
@@ -242,7 +242,7 @@ EOT;
 EOT;
     }
 
-    public static function getSortingQueryTemplate()
+    public static function getSortingQuery()
     {
         return <<<'EOT'
 
@@ -250,7 +250,7 @@ EOT;
 EOT;
     }
 
-    public static function getDeleteVarsTemplate()
+    public static function getDeleteVariables()
     {
         return <<<'EOT'
     /**
@@ -266,7 +266,7 @@ EOT;
 EOT;
     }
 
-    public static function getAddVarsTemplate()
+    public static function getAddVariables()
     {
         return <<<'EOT'
 
@@ -278,7 +278,7 @@ EOT;
 EOT;
     }
 
-    public static function getEditVarsTemplate()
+    public static function getEditVariables()
     {
         return <<<'EOT'
 
@@ -289,7 +289,7 @@ EOT;
 EOT;
     }
 
-    public static function getSearchingVarsTemplate()
+    public static function getSearchVariables()
     {
         return <<<'EOT'
 
@@ -301,7 +301,7 @@ EOT;
 EOT;
     }
 
-    public static function getPaginationVarsTemplate()
+    public static function getPaginationVariables()
     {
         return <<<'EOT'
 
@@ -313,7 +313,7 @@ EOT;
 EOT;
     }
 
-    public static function getSearchQueryTemplate()
+    public static function getSearchQueryCode()
     {
         return <<<'EOT'
 
@@ -325,22 +325,22 @@ EOT;
 EOT;
     }
 
-    public static function getSearchQueryWhereTemplate()
+    public static function getSearchQueryWhereClause()
     {
         return <<<'EOT'
 ##QUERY##('##COLUMN##', 'like', '%' . $this->q . '%')
 EOT;
     }
 
-    public static function getChildItemTemplate()
-    {
-        return <<<'EOT'
+//     public static function getChildItemTemplate()
+//     {
+//         return <<<'EOT'
 
-    public $item;
-EOT;
-    }
+//     public $item;
+// EOT;
+//     }
 
-    public static function getChildRulesTemplate()
+    public static function getRulesArray()
     {
         return <<<'EOT'
 
@@ -353,14 +353,14 @@ EOT;
 EOT;
     }
 
-    public static function getChildFieldTemplate()
+    public static function getKeyValueTemplate()
     {
         return <<<'EOT'
 'item.##COLUMN_NAME##' => '##VALUE##',
 EOT;
     }
 
-    public static function getChildValidationAttributesTemplate()
+    public static function getValidationAttributesArray()
     {
         return <<<'EOT'
 
@@ -374,7 +374,7 @@ EOT;
 EOT;
     }
 
-    public static function getDeleteModalTemplate()
+    public static function getDeleteModal()
     {
         return <<<'EOT'
 
@@ -396,7 +396,7 @@ EOT;
 EOT;
     }
 
-    public static function getAddModalTemplate()
+    public static function getAddModal()
     {
         return <<<'EOT'
 
@@ -417,7 +417,7 @@ EOT;
 EOT;
     }
 
-    public static function getEditModalTemplate()
+    public static function getEditModal()
     {
         return <<<'EOT'
 
@@ -437,7 +437,7 @@ EOT;
 EOT;
     }
 
-    public static function getInputFieldTemplate()
+    public static function getInputField()
     {
         return <<<'EOT'
 
@@ -449,7 +449,7 @@ EOT;
 EOT;
     }
 
-    public static function getSelectFieldTemplate()
+    public static function getSelectField()
     {
         return <<<'EOT'
 
@@ -462,7 +462,7 @@ EOT;
 EOT;
     }
 
-    public static function getCheckboxFieldTemplate()
+    public static function getCheckboxField()
     {
         return <<<'EOT'
 
@@ -473,7 +473,7 @@ EOT;
 EOT;
     }
 
-    public static function getFlashTemplate()
+    public static function getFlashCode()
     {
         return <<<'EOT'
 
@@ -481,7 +481,7 @@ EOT;
 EOT;
     }
 
-    public static function getEmptyArrayTemplate()
+    public static function getEmptyArray()
     {
         return <<<'EOT'
     /**
@@ -492,7 +492,7 @@ EOT;
 EOT;
     }
 
-    public static function getSelfFilterInitTemplate()
+    public static function getSelfFilterInitCode()
     {
         return <<<'EOT'
         '##KEY##' => [
@@ -503,7 +503,7 @@ EOT;
 EOT;
     }
 
-    public static function getBtmInitTemplate()
+    public static function getBtmInitCode()
     {
         return <<<'EOT'
 
@@ -513,7 +513,7 @@ EOT;
 EOT;
     }
 
-    public static function getBtmAttachTemplate()
+    public static function getBtmAttachCode()
     {
         return <<<'EOT'
 
@@ -521,7 +521,7 @@ EOT;
 EOT;
     }
 
-    public static function getBtmFetchTemplate()
+    public static function getBtmFetchCode()
     {
         return <<<'EOT'
 
@@ -533,7 +533,7 @@ EOT;
 EOT;
     }
 
-    public static function getBtmUpdateTemplate()
+    public static function getBtmUpdateCode()
     {
         return <<<'EOT'
 
@@ -542,7 +542,7 @@ EOT;
 EOT;
     }
 
-    public static function getUseModelTemplate()
+    public static function getUseModelCode()
     {
         return <<<'EOT'
 
@@ -601,7 +601,7 @@ EOT;
 EOT;
     }
 
-    public static function getBelongsToInitTemplate()
+    public static function getBelongsToInitCode()
     {
         return <<<'EOT'
 
@@ -609,7 +609,7 @@ EOT;
 EOT;
     }
 
-    public static function getWithQueryTemplate()
+    public static function getWithQueryCode()
     {
         return <<<'EOT'
 
@@ -617,7 +617,7 @@ EOT;
 EOT;
     }
 
-    public static function getWithCountQueryTemplate()
+    public static function getWithCountQueryCode()
     {
         return <<<'EOT'
 
@@ -625,21 +625,21 @@ EOT;
 EOT;
     }
 
-    public static function getBelongsToManyTableSlotTemplate()
+    public static function getBtmTableSlot()
     {
         return <<<'EOT'
 ##RELATION##->implode('##DISPLAY_COLUMN##', ',')
 EOT;
     }
 
-    public static function getBelongsToTableSlotTemplate()
+    public static function getBelongsToTableSlot()
     {
         return <<<'EOT'
 ##RELATION##?->##DISPLAY_COLUMN##
 EOT;
     }
 
-    public static function getFlashComponentTemplate()
+    public static function getFlashComponent()
     {
         return <<<'EOT'
 
@@ -647,7 +647,7 @@ EOT;
 EOT;
     }
 
-    public static function getAllColumnsTemplate()
+    public static function getAllColumns()
     {
         return <<<'EOT'
 
@@ -659,14 +659,14 @@ EOT;
 EOT;
     }
 
-    public static function getHideColumnInitTemplate()
+    public static function getHideColumnInitCode()
     {
         return <<<'EOT'
         $this->selectedColumns = $this->columns;
 EOT;
     }
 
-    public static function getHideColumnMethodTemplate()
+    public static function getHideColumnMethod()
     {
         return <<<'EOT'
 
@@ -678,14 +678,14 @@ EOT;
 EOT;
     }
 
-    public static function getHideColumnIfTemplate()
+    public static function getHideColumnIfCondition()
     {
         return <<<'EOT'
 @if($this->showColumn('##LABEL##'))
 EOT;
     }
 
-    public static function getBulkActionMethodTemplate()
+    public static function getBulkActionMethod()
     {
         return <<<'EOT'
 
@@ -703,7 +703,7 @@ EOT;
 EOT;
     }
 
-    public static function getBulkActionTemplate()
+    public static function getBulkActionDropdown()
     {
         return <<<'EOT'
                 <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
@@ -719,7 +719,7 @@ EOT;
 EOT;
     }
 
-    public static function getBulkCheckboxTemplate()
+    public static function getBulkColumnCheckbox()
     {
         return <<<'EOT'
 

@@ -87,11 +87,11 @@ EOT;
         $this->assertStringContainsString($columnStr, $props['code']['hide_columns']['vars']);
         $this->assertStringContainsString('public $selectedColumns = []', $props['code']['hide_columns']['vars']);
 
-        $this->assertEquals(Template::getHideColumnInitTemplate(), $props['code']['hide_columns']['init']);
-        $this->assertEquals(Template::getHideColumnInitTemplate(), $componentCode->getHideColumnInitCode());
+        $this->assertEquals(Template::getHideColumnInitCode(), $props['code']['hide_columns']['init']);
+        $this->assertEquals(Template::getHideColumnInitCode(), $componentCode->getHideColumnInitCode());
 
-        $this->assertEquals(Template::getHideColumnMethodTemplate(), $props['code']['hide_columns']['method']);
-        $this->assertEquals(Template::getHideColumnMethodTemplate(), $componentCode->getHideColumnMethod());
+        $this->assertEquals(Template::getHideColumnMethod(), $props['code']['hide_columns']['method']);
+        $this->assertEquals(Template::getHideColumnMethod(), $componentCode->getHideColumnMethod());
     }
 
 
@@ -106,7 +106,7 @@ EOT;
 
         $props = $this->component->get('props');
 
-        $this->assertEquals(Template::getHideColumnDropdownTemplate(), $props['html']['hide_columns']);
+        $this->assertEquals(Template::getHideColumnsDropdown(), $props['html']['hide_columns']);
     }
 
     public function test_table_header_has_hide_columns_code()

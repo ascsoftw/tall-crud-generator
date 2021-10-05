@@ -499,11 +499,10 @@ class TallCrudGenerator extends Component
         $code['child_delete'] = $this->childComponentCode->getDeleteCode();
         $code['child_add'] = $this->childComponentCode->getAddCode();
         $code['child_edit'] = $this->childComponentCode->getEditCode();
-        $code['child_listeners'] = $this->childComponentCode->getChildListenersCode();
-        $code['child_item'] = $this->childComponentCode->getChildItemCode();
-        $code['child_rules'] = $this->childComponentCode->getChildRulesCode();
-        $code['child_validation_attributes'] = $this->childComponentCode->getChildValidationAttributes();
-        $code['child_other_models'] = $this->childComponentCode->getChildOtherModelsCode();
+        $code['child_listeners'] = $this->childComponentCode->getListenersArray();
+        $code['child_rules'] = $this->childComponentCode->getRulesArray();
+        $code['child_validation_attributes'] = $this->childComponentCode->getValidationAttributes();
+        $code['child_other_models'] = $this->childComponentCode->getOtherModelsCode();
         $code['child_vars'] = $this->childComponentCode->getRelationVars();
 
         return $code;

@@ -55,8 +55,8 @@ class SearchingTest extends TestCase
 
         $this->assertTrue($tallProperties->isSearchingEnabled());
         $this->assertEquals(['name'], $tallProperties->getSearchableColumns()->toArray());
-        $this->assertEquals(Template::getSearchingVarsTemplate(), $componentCode->getSearchVars());
-        $this->assertEquals(Template::getSearchMethodTemplate(), $componentCode->getSearchMethod());
+        $this->assertEquals(Template::getSearchVariables(), $componentCode->getSearchVars());
+        $this->assertEquals(Template::getSearchMethod(), $componentCode->getSearchMethod());
         $whereClauseStr = <<<'EOT'
 $query->where('name', 'like', '%' . $this->q . '%')
 EOT;
@@ -65,9 +65,4 @@ EOT;
         $this->assertNotEmpty($searchCode['query']);
 
     }
-
-    // public function test_search_on_two_columns()
-    // {
-
-    // }
 }

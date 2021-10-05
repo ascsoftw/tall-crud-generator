@@ -28,7 +28,7 @@ class ChildViewCode extends BaseCode
                 $this->tallProperties->getAdvancedSettingsText('cancelButton'),
                 $this->tallProperties->getAdvancedSettingsText('deleteButton'),
             ],
-            Template::getDeleteModalTemplate()
+            Template::getDeleteModal()
         );
     }
 
@@ -55,7 +55,7 @@ class ChildViewCode extends BaseCode
                 $this->tallProperties->getAdvancedSettingsText('createButton'),
                 $fieldsHtml->implode(''),
             ],
-            Template::getAddModalTemplate()
+            Template::getAddModal()
         );
     }
 
@@ -81,7 +81,7 @@ class ChildViewCode extends BaseCode
                 $this->tallProperties->getAdvancedSettingsText('editButton'),
                 $fieldsHtml->implode(''),
             ],
-            Template::getEditModalTemplate()
+            Template::getEditModal()
         );
     }
 
@@ -104,12 +104,12 @@ class ChildViewCode extends BaseCode
 
         switch ($field['attributes']['type']) {
             case 'checkbox':
-                $fieldTemplate = Template::getCheckboxFieldTemplate();
+                $fieldTemplate = Template::getCheckboxField();
             case 'select':
-                $fieldTemplate = Template::getSelectFieldTemplate();
+                $fieldTemplate = Template::getSelectField();
             case 'input':
             default:
-                $fieldTemplate = Template::getInputFieldTemplate();
+                $fieldTemplate = Template::getInputField();
         }
 
         $html = str_replace(

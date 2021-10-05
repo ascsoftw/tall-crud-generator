@@ -42,18 +42,18 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##SORT_COLUMN##',
             $this->tallProperties->getDefaultSortableColumn(),
-            Template::getSortingVarsTemplate()
+            Template::getSortingVariables()
         );
     }
 
     public function getSortingQuery()
     {
-        return Template::getSortingQueryTemplate();
+        return Template::getSortingQuery();
     }
 
     public function getSortingMethod()
     {
-        return Template::getSortingMethodTemplate();
+        return Template::getSortingMethod();
     }
 
     public function getSearchCode()
@@ -74,7 +74,7 @@ class ComponentCode extends BaseCode
 
     public function getSearchVars()
     {
-        return Template::getSearchingVarsTemplate();
+        return Template::getSearchVariables();
     }
 
     public function getSearchQuery()
@@ -84,7 +84,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##WHERE_CLAUSE##',
             $whereClause->prependAndJoin($this->newLines(1, 6), $this->indent(5)),
-            Template::getSearchQueryTemplate()
+            Template::getSearchQueryCode()
         );
     }
 
@@ -104,7 +104,7 @@ class ComponentCode extends BaseCode
                         $isFirst ? '$query->where' : '->orWhere',
                         $column,
                     ],
-                    Template::getSearchQueryWhereTemplate(),
+                    Template::getSearchQueryWhereClause(),
                 )
             );
             $isFirst = false;
@@ -114,7 +114,7 @@ class ComponentCode extends BaseCode
 
     public function getSearchMethod()
     {
-        return Template::getSearchMethodTemplate();
+        return Template::getSearchMethod();
     }
 
     public function getPaginationDropdownCode()
@@ -131,7 +131,7 @@ class ComponentCode extends BaseCode
 
     public function getPaginationDropdownMethod()
     {
-        return Template::getPaginationDropdownMethodTemplate();
+        return Template::getPaginationDropdownMethod();
     }
 
     public function getPaginationCode()
@@ -150,7 +150,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##PER_PAGE##',
             $this->tallProperties->getRecordsPerPage(),
-            Template::getPaginationVarsTemplate()
+            Template::getPaginationVariables()
         );
     }
 
@@ -164,7 +164,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##RELATIONS##',
             $this->wrapInQuotesAndJoin($models),
-            Template::getWithQueryTemplate()
+            Template::getWithQueryCode()
         );
     }
 
@@ -178,7 +178,7 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##RELATIONS##',
             $this->wrapInQuotesAndJoin($models),
-            Template::getWithCountQueryTemplate()
+            Template::getWithCountQueryCode()
         );
     }
 
@@ -214,13 +214,13 @@ class ComponentCode extends BaseCode
         return str_replace(
             '##COLUMNS##',
             $this->wrapInQuotesAndJoin($labels),
-            Template::getAllColumnsTemplate()
+            Template::getAllColumns()
         );
     }
 
     public function getHideColumnInitCode()
     {
-        return Template::getHideColumnInitTemplate();
+        return Template::getHideColumnInitCode();
     }
 
     public function getBulkActionsCode()
@@ -239,7 +239,7 @@ class ComponentCode extends BaseCode
 
     public function getHideColumnMethod()
     {
-        return Template::getHideColumnMethodTemplate();
+        return Template::getHideColumnMethod();
     }
 
     public function getBulkActionMethod()
@@ -255,7 +255,7 @@ class ComponentCode extends BaseCode
                 $this->tallProperties->getPrimaryKey(),
                 $this->tallProperties->getBulkActionColumn(),
             ],
-            Template::getBulkActionMethodTemplate()
+            Template::getBulkActionMethod()
         );
     }
 
@@ -316,7 +316,7 @@ class ComponentCode extends BaseCode
                         $this->getFilterLabelName($f),
                         $filterOptions->prependAndJoin($this->newLines(1, 5)),
                     ],
-                    Template::getSelfFilterInitTemplate()
+                    Template::getSelfFilterInitCode()
                 )
             );
         }

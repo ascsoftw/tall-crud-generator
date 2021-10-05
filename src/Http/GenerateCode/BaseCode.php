@@ -11,7 +11,7 @@ class BaseCode
         return str_replace(
             '##MODEL##',
             $modelPath,
-            Template::getUseModelTemplate()
+            Template::getUseModelCode()
         );
     }
 
@@ -33,7 +33,7 @@ class BaseCode
                 $name,
                 $type,
             ],
-            Template::getEmptyArrayTemplate()
+            Template::getEmptyArray()
         );
     }
 

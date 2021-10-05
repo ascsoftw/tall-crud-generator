@@ -8,7 +8,10 @@ use [model_path];[child_other_models]
 
 class [class] extends Component
 {
-[child_listeners][child_item][child_vars][child_rules][child_validation_attributes][child_delete_vars][child_add_vars][child_edit_vars]
+
+    public $item;
+
+[child_listeners][child_vars][child_rules][child_validation_attributes][child_delete_vars][child_add_vars][child_edit_vars]
 
     public function render(): View
     {

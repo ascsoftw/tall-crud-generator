@@ -55,7 +55,7 @@ class ChildComponentCode extends BaseCode
         return $code;
     }
 
-    public function getChildListenersCode()
+    public function getListenersArray()
     {
         if (!($this->tallProperties->isAddFeatureEnabled() ||
             $this->tallProperties->isDeleteFeatureEnabled() ||
@@ -74,23 +74,23 @@ class ChildComponentCode extends BaseCode
                 $this->tallProperties->isAddFeatureEnabled() ? 'showCreateForm' : '',
                 $this->tallProperties->isEditFeatureEnabled() ? 'showEditForm' : '',
             ],
-            Template::getChildListenerTemplate(),
+            Template::getListenerArray(),
         );
     }
 
-    public function getChildItemCode()
-    {
-        return Template::getChildItemTemplate();
-    }
+    // public function getChildItemCode()
+    // {
+    //     return Template::getChildItemTemplate();
+    // }
 
-    public function getChildRulesCode()
+    public function getRulesArray()
     {
         $fields = $this->tallProperties->getSelfFormFields();
         $rules = collect();
 
         foreach ($fields as $field) {
             $rules->push(
-                $this->getChildFieldCode(
+                $this->getKeyValueCode(
                     $field['column'],
                     Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
                 )
@@ -102,17 +102,17 @@ class ChildComponentCode extends BaseCode
         return str_replace(
             '##RULES##',
             $rules->filter()->prependAndJoin($this->newLines(1, 2)),
-            Template::getChildRulesTemplate()
+            Template::getRulesArray()
         );
     }
 
-    public function getChildValidationAttributes()
+    public function getValidationAttributes()
     {
         $fields = $this->tallProperties->getSelfFormFields();
         $attributes = collect();
         foreach ($fields as $field) {
             $attributes->push(
-                $this->getChildFieldCode(
+                $this->getKeyValueCode(
                     $field['column'],
                     $this->getLabel($field['label'], $field['column'])
                 )
@@ -124,11 +124,11 @@ class ChildComponentCode extends BaseCode
         return str_replace(
             '##ATTRIBUTES##',
             $attributes->filter()->prependAndJoin($this->newLines(1, 2)),
-            Template::getChildValidationAttributesTemplate()
+            Template::getValidationAttributesArray()
         );
     }
 
-    public function getChildOtherModelsCode()
+    public function getOtherModelsCode()
     {
 
         $fields = $this->tallProperties->getBtmRelations()->merge($this->tallProperties->getBelongsToRelations());
@@ -144,17 +144,17 @@ class ChildComponentCode extends BaseCode
 
     public function getDeleteVars()
     {
-        return Template::getDeleteVarsTemplate();
+        return Template::getDeleteVariables();
     }
 
     public function getAddVars()
     {
-        return Template::getAddVarsTemplate();
+        return Template::getAddVariables();
     }
 
     public function getEditVars()
     {
-        return Template::getEditVarsTemplate();
+        return Template::getEditVariables();
     }
 
     public function getDeleteMethod()
@@ -170,7 +170,7 @@ class ChildComponentCode extends BaseCode
                 $this->tallProperties->getComponentName(),
                 $this->getDeleteFlashCode(),
             ],
-            Template::getDeleteMethodTemplate()
+            Template::getDeleteFeatureCode()
         );
     }
 
@@ -198,7 +198,7 @@ class ChildComponentCode extends BaseCode
                 $this->getBelongsToInitCode(),
                 $this->getBelongsToSaveCode(),
             ],
-            Template::getAddMethodTemplate()
+            Template::getAddFeatureCode()
         );
     }
 
@@ -223,7 +223,7 @@ class ChildComponentCode extends BaseCode
                 $this->getBtmUpdateCode(),
                 $this->getBelongsToInitCode(false),
             ],
-            Template::getEditMethodTemplate()
+            Template::getEditFeatureCode()
         );
     }
 
@@ -267,7 +267,7 @@ class ChildComponentCode extends BaseCode
                     $this->getBtmFieldName($r['relationName']),
                     $r['displayColumn'],
                 ],
-                Template::getBtmInitTemplate()
+                Template::getBtmInitCode()
             );
         })->implode('');
     }
@@ -289,7 +289,7 @@ class ChildComponentCode extends BaseCode
                     $r['relationName'],
                     $this->getBtmFieldName($r['relationName']),
                 ],
-                Template::getBtmAttachTemplate()
+                Template::getBtmAttachCode()
             );
         })->implode('') . $this->newLines();
     }
@@ -319,7 +319,7 @@ class ChildComponentCode extends BaseCode
                     Str::lower($this->tallProperties->getModelName()),
                     $r['displayColumn'],
                 ],
-                Template::getBtmFetchTemplate()
+                Template::getBtmFetchCode()
             );
         })->prependAndJoin('', $this->newLines());
     }
@@ -341,7 +341,7 @@ class ChildComponentCode extends BaseCode
                     $r['relationName'],
                     $this->getBtmFieldName($r['relationName']),
                 ],
-                Template::getBtmUpdateTemplate()
+                Template::getBtmUpdateCode()
             );
         })->prependAndJoin($this->newLines());
     }
@@ -370,7 +370,7 @@ class ChildComponentCode extends BaseCode
                     $this->tallProperties->getModelName($r['modelPath']),
                     $r['displayColumn'],
                 ],
-                Template::getBelongsToInitTemplate()
+                Template::getBelongsToInitCode()
             );
         })->prependAndJoin($this->newLines());
     }
@@ -403,7 +403,7 @@ class ChildComponentCode extends BaseCode
         $fields = $this->tallProperties->getBelongsToRelations();
 
         return $fields->map(function ($r) {
-            return $this->getChildFieldCode($r['foreignKey'], 'required');
+            return $this->getKeyValueCode($r['foreignKey'], 'required');
         })->join($this->newLines(1, 2));
     }
 
@@ -412,7 +412,7 @@ class ChildComponentCode extends BaseCode
         $fields = $this->tallProperties->getBelongsToRelations();
 
         return $fields->map(function ($r) {
-            return $this->getChildFieldCode(
+            return $this->getKeyValueCode(
                 $r['foreignKey'],
                 Str::ucfirst($r['relationName'])
             );
@@ -472,7 +472,7 @@ class ChildComponentCode extends BaseCode
         return str_replace(
             '##MESSAGE##',
             $message,
-            Template::getFlashTemplate()
+            Template::getFlashCode()
         );
     }
 
@@ -481,7 +481,7 @@ class ChildComponentCode extends BaseCode
         return Str::plural($relation);
     }
 
-    public function getChildFieldCode($columnName, $value)
+    public function getKeyValueCode($columnName, $value)
     {
         return str_replace(
             [
@@ -492,7 +492,7 @@ class ChildComponentCode extends BaseCode
                 $columnName,
                 $value,
             ],
-            Template::getChildFieldTemplate()
+            Template::getKeyValueTemplate()
         );
     }
 }

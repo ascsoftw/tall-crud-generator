@@ -108,7 +108,7 @@ class BelongsToTest extends TestCase
 
         $otherModels = $tallProperties->getBelongsToRelations()->toArray();
         $this->assertCount(1, $otherModels);
-        $this->assertEquals("\nuse Ascsoftw\TallCrudGenerator\Tests\Models\Brand;", $childComponentCode->getChildOtherModelsCode());
+        $this->assertEquals("\nuse Ascsoftw\TallCrudGenerator\Tests\Models\Brand;", $childComponentCode->getOtherModelsCode());
         $this->assertEquals("\nuse Ascsoftw\TallCrudGenerator\Tests\Models\Brand;", $props['code']['child_other_models']);
     }
 

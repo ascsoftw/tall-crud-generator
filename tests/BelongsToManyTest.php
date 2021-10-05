@@ -119,7 +119,7 @@ class BelongsToManyTest extends TestCase
         $this->assertCount(2, $otherModels);
 
         $strToCheck = "\nuse Ascsoftw\TallCrudGenerator\Tests\Models\Tag;\nuse Ascsoftw\TallCrudGenerator\Tests\Models\Category;";
-        $this->assertEquals($strToCheck, $childComponentCode->getChildOtherModelsCode());
+        $this->assertEquals($strToCheck, $childComponentCode->getOtherModelsCode());
         $this->assertEquals($strToCheck, $props['code']['child_other_models']);
     }
 

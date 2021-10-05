@@ -20,7 +20,7 @@ class ViewCode extends BaseCode
         return str_replace(
             '##COMPONENT_NAME##',
             $this->tallProperties->getChildComponentName(),
-            Template::getAddButtonTemplate()
+            Template::getAddButton()
         );
     }
 
@@ -30,7 +30,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return Template::getSearchBoxTemplate();
+        return Template::getSearchInputField();
     }
 
     public function getPaginationDropdown()
@@ -39,7 +39,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return Template::getPaginationDropdownTemplate();
+        return Template::getPaginationSelectElement();
     }
 
     public function getHideColumnsDropdown()
@@ -48,7 +48,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return Template::getHideColumnDropdownTemplate();
+        return Template::getHideColumnsDropdown();
     }
 
     public function getBulkActionDropdown()
@@ -57,7 +57,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return Template::getBulkActionTemplate();
+        return Template::getBulkActionDropdown();
     }
 
     public function getFilterDropdown()
@@ -88,7 +88,7 @@ class ViewCode extends BaseCode
             return '';
         }
 
-        return Template::getFlashComponentTemplate();
+        return Template::getFlashComponent();
 
     }
 
@@ -176,7 +176,7 @@ class ViewCode extends BaseCode
                     $this->tallProperties->getChildComponentName(),
                     $this->tallProperties->getPrimaryKey(),
                 ],
-                Template::getEditButtonTemplate()
+                Template::getEditButton()
             ));
         }
 
@@ -190,7 +190,7 @@ class ViewCode extends BaseCode
                     $this->tallProperties->getChildComponentName(),
                     $this->tallProperties->getPrimaryKey(),
                 ],
-                Template::getDeleteButtonTemplate()
+                Template::getDeleteButton()
             ));
         }
 
@@ -203,7 +203,7 @@ class ViewCode extends BaseCode
             str_replace(
                 '##PRIMARY_KEY##',
                 $this->tallProperties->getPrimaryKey(),
-                Template::getBulkCheckboxTemplate()
+                Template::getBulkColumnCheckbox()
             );
 
     }
@@ -232,7 +232,7 @@ class ViewCode extends BaseCode
                     $label,
                     $this->getSortIconHtml($column),
                 ],
-                Template::getSortingHeaderTemplate()
+                Template::getSortableHeader()
             );
             $slot = $this->newLines().$html.$this->newLines(1, 4);
         } else {
@@ -256,7 +256,7 @@ class ViewCode extends BaseCode
                 str_replace(
                     '##COLUMN_NAME##',
                     $slot,
-                    Template::getTableColumnTemplate()
+                    Template::getTableColumnSlot()
                 )
         );
         return $this->encapsulateTableColumn($html, $f['label'], 5);
@@ -271,7 +271,7 @@ class ViewCode extends BaseCode
         $preTag = str_replace(
             '##LABEL##',
             $label,
-            Template::getHideColumnIfTemplate()
+            Template::getHideColumnIfCondition()
         ).$this->newLines(1, $indent);
         $postTag = $this->newLines(1, $indent).'@endif';
 
@@ -290,7 +290,7 @@ class ViewCode extends BaseCode
                     $field['relationName'],
                     $field['displayColumn'],
                 ],
-                Template::getBelongsToTableSlotTemplate()
+                Template::getBelongsToTableSlot()
             );
         }
 
@@ -303,7 +303,7 @@ class ViewCode extends BaseCode
                 $field['relationName'],
                 $field['displayColumn'],
             ],
-            Template::getBelongsToManyTableSlotTemplate()
+            Template::getBtmTableSlot()
         );
     }
 
