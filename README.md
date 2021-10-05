@@ -23,11 +23,7 @@ composer require ascsoftw/tall-crud-generator
 
 ## Usage
 
-After you have installed the package, navigate to Config Page at URL /tall-crud-generator. Once there Select your Model and Select all the Features. Just submit the Form and you will be provided with a Livewire Component that you can include in any View where you to display the CRUD Functionality.
-
-*Recommended way of Installation*
-
-Although Config Page is displayed at URL */tall-crud-generator* and is also configurable. It is recommended that you disable the Route from the Config File and in order to have better control you can display the Config Page by including the Livewire Component in any View.
+After you have installed the package, you can display the Config Page by including the Livewire Component in any View.
 
 ```php
 @livewire('tall-crud-generator')
@@ -38,20 +34,7 @@ This way you can display the Config Page using your Application Layout and can a
 
 ## Configurations
 
-If you want to override the configurations, you can publish the config file using below command
-
-```bash
-php artisan vendor:publish --provider="Ascsoftw\TallCrudGenerator\TallCrudGeneratorServiceProvider" --tag=config
-```
-
-This will publish the configuration file at `config/livewire-toast.php`. You can override any configurations.
-| Name             | Type          | Default              | Description                                                  |
-| ---------------- | ------------- | -------------------- | ------------------------------------------------------------ |
-| route            | String        | /tall-crud-generator | URL where the Config Page will be shown in your project      |
-| disable_route    | Boolean       | false                | Flag to disable the config page                              |
-
-
-You can also publish the View and Blade Components used using the below command
+If you want to override the configurations, you can publish the View and Blade Components used using the below command
 ```bash
 php artisan vendor:publish --provider="Ascsoftw\TallCrudGenerator\TallCrudGeneratorServiceProvider" --tag=views
 ```
