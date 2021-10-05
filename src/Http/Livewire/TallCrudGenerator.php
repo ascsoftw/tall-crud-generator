@@ -113,6 +113,12 @@ class TallCrudGenerator extends Component
     public $confirmingSorting = false;
     public $sortingMode = '';
 
+    protected $tallProperties;
+    protected $componentCode;
+    protected $childComponentCode;
+    protected $viewCode;
+    protected $childViewCode;
+
     public function render()
     {
         return view('tall-crud-generator::livewire.tall-crud-generator');

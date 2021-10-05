@@ -5,6 +5,9 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Illuminate\Support\Facades\App;
 
 class SortingTest extends TestCase
 {
@@ -45,8 +48,11 @@ class SortingTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
+        // $tallProperties = $this->component->get('tallProperties');
+        // $componentCode = $this->component->get('componentCode');
+
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
         $sortCode = $componentCode->getSortCode();
 
         $this->assertTrue($tallProperties->isSortingEnabled());
@@ -74,7 +80,7 @@ class SortingTest extends TestCase
             ->generateFiles();
 
         $props = $this->component->get('props');
-        $tallProperties = $this->component->get('tallProperties');
+        $tallProperties = App::make(TallProperties::class);
 
         $this->assertNotEmpty($props['code']['sort']['vars']);
         $this->assertNotEmpty($props['code']['sort']['query']);

@@ -4,6 +4,10 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Illuminate\Support\Facades\App;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
 
 class BelongsToManyTest extends TestCase
 {
@@ -111,8 +115,8 @@ class BelongsToManyTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $tallProperties = $this->component->get('tallProperties');
-        $childComponentCode = $this->component->get('childComponentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $otherModels = $tallProperties->getBtmRelations()->toArray();
@@ -130,7 +134,7 @@ class BelongsToManyTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $btmVars = $childComponentCode->getBtmVars();
@@ -153,7 +157,7 @@ class BelongsToManyTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $btmInitCode = $childComponentCode->getBtmInitCode();
@@ -184,7 +188,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $btmAttachCode = $childComponentCode->getBtmAttachCode();
@@ -206,7 +210,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $btmFetchCode = $childComponentCode->getBtmFetchCode();
@@ -239,7 +243,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $btmUpdateCode = $childComponentCode->getBtmUpdateCode();
@@ -268,7 +272,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childViewCode = $this->component->get('childViewCode');
+        $childViewCode = App::make(ChildViewCode::class);
         $addModalCode = $childViewCode->getAddModal();
 
         $this->assertStringContainsString('wire:model.defer="checkedTags"', $addModalCode);
@@ -290,7 +294,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childViewCode = $this->component->get('childViewCode');
+        $childViewCode = App::make(ChildViewCode::class);
         $editModalCode = $childViewCode->getEditModal();
 
         $this->assertStringContainsString('wire:model.defer="checkedTags"', $editModalCode);

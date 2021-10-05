@@ -6,6 +6,10 @@ use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Illuminate\Support\Str;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
+use Illuminate\Support\Facades\App;
 
 class FilterTest extends TestCase
 {
@@ -100,7 +104,7 @@ class FilterTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-            $tallProperties = $this->component->get('tallProperties');
+            $tallProperties = App::make(TallProperties::class);
             $props = $this->component->get('props');
     
             $this->assertTrue($tallProperties->isFilterEnabled());
@@ -264,8 +268,8 @@ class FilterTest extends TestCase
             ->pressNext()
             ->generateFiles();
         
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
         $otherModels = $tallProperties->getOtherModels()->toArray();
         $this->assertCount(2, $otherModels);
         $this->assertEquals(
@@ -286,7 +290,7 @@ class FilterTest extends TestCase
             ->pressNext()
             ->generateFiles();
         
-        $viewCode = $this->component->get('viewCode');
+        $viewCode = App::make(ViewCode::class);
         $this->assertEquals(Template::getFilterDropdownTemplate(), $viewCode->getFilterDropdown());
 
     }
@@ -298,8 +302,8 @@ class FilterTest extends TestCase
             ->pressNext()
             ->generateFiles();
         
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
         $props = $this->component->get('props');
 
         $this->assertTrue($tallProperties->isFilterEnabled());

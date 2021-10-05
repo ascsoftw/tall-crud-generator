@@ -4,6 +4,9 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Illuminate\Support\Facades\App;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
 
 class FlashMessageTest extends TestCase
 {
@@ -33,7 +36,7 @@ class FlashMessageTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
+        $tallProperties = App::make(TallProperties::class);
         $this->assertFalse($tallProperties->isFlashMessageEnabled());
     }
 
@@ -42,8 +45,8 @@ class FlashMessageTest extends TestCase
         $this->component
             ->pressNext()
             ->generateFiles();
-        $tallProperties = $this->component->get('tallProperties');
-        $childComponentCode = $this->component->get('childComponentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
 
         $this->assertTrue($tallProperties->isFlashMessageEnabled());
         $flashCodeStr = <<<'EOT'
@@ -63,8 +66,8 @@ EOT;
             ->set('flashMessages.text.add', '')
             ->pressNext()
             ->generateFiles();
-        $tallProperties = $this->component->get('tallProperties');
-        $childComponentCode = $this->component->get('childComponentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
 
         $this->assertTrue($tallProperties->isFlashMessageEnabled());
         $this->assertEmpty($childComponentCode->getAddFlashCode());

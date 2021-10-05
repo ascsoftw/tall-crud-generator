@@ -4,7 +4,9 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Illuminate\Support\Facades\App;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
 
 class DifferentAddEditFieldsTest extends TestCase
 {
@@ -26,7 +28,7 @@ class DifferentAddEditFieldsTest extends TestCase
             ->pressNext(4)
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
+        $tallProperties = App::make(TallProperties::class);
 
         $addColumns = $tallProperties->getAddFormFields()->map(function($f) {
             return $f['column'];
@@ -62,7 +64,7 @@ class DifferentAddEditFieldsTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
 
-            $childComponentCode = $this->component->get('childComponentCode');
+            $childComponentCode = App::make(ChildComponentCode::class);
 
             $btmInitCode = $childComponentCode->getBtmInitCode();
 
@@ -118,7 +120,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
 
-            $childComponentCode = $this->component->get('childComponentCode');
+            $childComponentCode = App::make(ChildComponentCode::class);
 
             $code = $childComponentCode->getBelongsToInitCode();
             $belongsToInitCode = <<<'EOT'
@@ -144,7 +146,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
 
-            $childComponentCode = $this->component->get('childComponentCode');
+            $childComponentCode = App::make(ChildComponentCode::class);
 
             $code = $childComponentCode->getBelongsToInitCode(false);
             $belongsToInitCode = <<<'EOT'

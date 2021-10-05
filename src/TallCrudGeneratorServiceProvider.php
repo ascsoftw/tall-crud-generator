@@ -67,19 +67,19 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
             return new TallProperties();
         });
 
-        $this->app->bind(ComponentCode::class, function ($app) {
+        $this->app->singleton(ComponentCode::class, function ($app) {
             return new ComponentCode($app->make(TallProperties::class));
         });
 
-        $this->app->bind(ChildComponentCode::class, function ($app) {
+        $this->app->singleton(ChildComponentCode::class, function ($app) {
             return new ChildComponentCode($app->make(TallProperties::class));
         });
 
-        $this->app->bind(ViewCode::class, function ($app) {
+        $this->app->singleton(ViewCode::class, function ($app) {
             return new ViewCode($app->make(TallProperties::class));
         });
 
-        $this->app->bind(ChildViewCode::class, function ($app) {
+        $this->app->singleton(ChildViewCode::class, function ($app) {
             return new ChildViewCode($app->make(TallProperties::class));
         });
     }

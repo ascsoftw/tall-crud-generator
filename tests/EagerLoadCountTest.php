@@ -4,6 +4,9 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Illuminate\Support\Facades\App;
 
 class EagerLoadCountTest extends TestCase
 {
@@ -86,8 +89,8 @@ class EagerLoadCountTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
         $props = $this->component->get('props');
 
         $this->assertEquals(['tags', 'categories'], $tallProperties->getEagerLoadCountModels()->toArray());
@@ -103,7 +106,7 @@ class EagerLoadCountTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
+        $tallProperties = App::make(TallProperties::class);
         $props = $this->component->get('props');
 
         $columns = $tallProperties->getListingColumns();

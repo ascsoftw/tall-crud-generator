@@ -5,6 +5,9 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Illuminate\Support\Facades\App;
 
 class HideColumnsTest extends TestCase
 {
@@ -28,8 +31,8 @@ class HideColumnsTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
 
         $this->assertFalse($tallProperties->isHideColumnsEnabled());
         $code = $componentCode->getHideColumnsCode();
@@ -47,7 +50,7 @@ class HideColumnsTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
+        $tallProperties = App::make(TallProperties::class);
         $this->assertTrue($tallProperties->isHideColumnsEnabled());
     }
 
@@ -61,8 +64,8 @@ class HideColumnsTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
         $props = $this->component->get('props');
 
         $code = $componentCode->getHideColumnsCode();

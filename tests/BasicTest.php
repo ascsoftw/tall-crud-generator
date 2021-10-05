@@ -4,6 +4,10 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Illuminate\Support\Facades\App;
 
 class BasicTest extends TestCase
 {
@@ -55,9 +59,9 @@ class BasicTest extends TestCase
     public function test_various_features()
     {
         $this->component->generateFiles();
-        $tallProperties = $this->component->get('tallProperties');
-        $componentCode = $this->component->get('componentCode');
-        $childComponentCode = $this->component->get('childComponentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $this->assertEmpty($props['code']['sort']['vars']);

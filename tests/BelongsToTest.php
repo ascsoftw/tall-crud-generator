@@ -4,6 +4,10 @@ namespace Ascsoftw\TallCrudGenerator\Tests;
 
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Illuminate\Support\Facades\App;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
 
 class BelongsToTest extends TestCase
 {
@@ -102,8 +106,8 @@ class BelongsToTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $tallProperties = $this->component->get('tallProperties');
-        $childComponentCode = $this->component->get('childComponentCode');
+        $tallProperties = App::make(TallProperties::class);
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $otherModels = $tallProperties->getBelongsToRelations()->toArray();
@@ -119,7 +123,7 @@ class BelongsToTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $this->assertStringContainsString("'item.brand_id' => 'required',", $childComponentCode->getRulesForBelongsToFields());
@@ -133,7 +137,7 @@ class BelongsToTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $this->assertStringContainsString("'item.brand_id' => 'Brand',", $childComponentCode->getAttributesForBelongsToFields());
@@ -147,7 +151,7 @@ class BelongsToTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $this->assertStringContainsString('public $brands = [];', $childComponentCode->getBelongsToVars());
@@ -161,7 +165,7 @@ class BelongsToTest extends TestCase
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $belongsToInitCode = <<<'EOT'
@@ -180,7 +184,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $belongsToInitCode = <<<'EOT'
@@ -199,7 +203,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childComponentCode = $this->component->get('childComponentCode');
+        $childComponentCode = App::make(ChildComponentCode::class);
         $props = $this->component->get('props');
 
         $belongsToInitCode = <<<'EOT'
@@ -219,7 +223,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childViewCode = $this->component->get('childViewCode');
+        $childViewCode = App::make(ChildViewCode::class);
         $addModalCode = $childViewCode->getAddModal();
 
         $this->assertStringContainsString('wire:model.defer="item.brand_id"', $addModalCode);
@@ -235,7 +239,7 @@ EOT;
             ->pressNext(3)
             ->generateFiles();
         
-        $childViewCode = $this->component->get('childViewCode');
+        $childViewCode = App::make(ChildViewCode::class);
         $editModalCode = $childViewCode->getEditModal();
 
         $this->assertStringContainsString('wire:model.defer="item.brand_id"', $editModalCode);
