@@ -2,38 +2,13 @@
 
 namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait WithHelpers
 {
-    public function getModelName($name = '')
-    {
-        if (empty($name)) {
-            $name = $this->modelPath;
-        }
-
-        return Arr::last(Str::of($name)->explode('\\')->all());
-    }
-
     public function getPrimaryKey()
     {
         return $this->modelProps['primaryKey'];
-    }
-
-    public function newLines($count = 1, $indent = 0)
-    {
-        return str_repeat("\n".$this->indent($indent), $count);
-    }
-
-    public function spaces($count = 1)
-    {
-        return str_repeat(' ', $count);
-    }
-
-    public function indent($step = 1)
-    {
-        return $this->spaces($step * 4);
     }
 
     public function getColumns($columns, $primaryKey)
@@ -166,11 +141,6 @@ trait WithHelpers
         return Str::kebab($this->componentName);
     }
 
-    public function getChildComponentName()
-    {
-        return $this->getComponentName().'-child';
-    }
-
     public function getNormalFormFields($addForm = true, $editForm = true)
     {
         if ($this->hasAddAndEditFeaturesDisabled()) {
@@ -212,16 +182,6 @@ trait WithHelpers
     public function getColumnForWithCount($relation = '')
     {
         return $relation.'_count';
-    }
-
-    public function getBtmFieldName($relation)
-    {
-        return 'checked'.Str::studly($relation);
-    }
-
-    public function getBelongsToVarName($relation)
-    {
-        return Str::plural($relation);
     }
 
     public function getListingFieldsToSort()
@@ -376,27 +336,12 @@ trait WithHelpers
         });
     }
 
-    public function isBelongsToManyRelation($relation)
+    public function isBelongsToRelation($relation)
     {
-        if (empty($this->allRelations['belongsToMany'])) {
+        if (empty($this->allRelations['belongsTo'])) {
             return false;
         }
-        foreach ($this->allRelations['belongsToMany'] as $k) {
-            if ($k['name'] == $relation) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isHasManyRelation($relation)
-    {
-        if (empty($this->allRelations['hasMany'])) {
-            return false;
-        }
-
-        foreach ($this->allRelations['hasMany'] as $k) {
+        foreach ($this->allRelations['belongsTo'] as $k) {
             if ($k['name'] == $relation) {
                 return true;
             }
@@ -439,35 +384,68 @@ trait WithHelpers
         return $belongsToCollection;
     }
 
-    public function getFilterColumnName($filter)
+    public function getListingColumns()
     {
-        return ($filter['type'] == 'None') ? $filter['column'] : $filter['foreignKey'];
-    }
+        $fields = $this->getSortedListingFields();
+        $headers = collect();
 
-    public function getFilterLabelName($filter)
-    {
-        if ($filter['type'] == 'None') {
-            return Str::ucfirst($filter['column']);
+        foreach ($fields as $f) {
+            $headers->push($this->getTableColumnProps($f));
         }
 
-        return Str::ucfirst($filter['relation']);
+        return $headers;
     }
 
-    public function getFilterOwnerKey($filter)
+    public function getTableColumnProps($field)
     {
-        if ($filter['type'] == 'BelongsTo') {
-            return $filter['ownerKey'];
+        $label = '';
+        $column = '';
+        $isSortable = false;
+        $slot = '';
+        $relationName = '';
+        $displayColumn = '';
+        $isBelongsToRelation = false;
+
+        switch ($field['type']) {
+            case 'primary':
+                $label = $this->getLabel($this->primaryKeyProps['label'], $this->getPrimaryKey());
+                $column = $this->getPrimaryKey();
+                $isSortable = $this->isPrimaryKeySortable();
+                $slot = $this->getPrimaryKey();
+
+                break;
+            case 'normal':
+                $label = $this->getLabel($field['label'], $field['column']);
+                $column = $field['column'];
+                $isSortable = $this->isColumnSortable($field['column']);
+                $slot = $field['column'];
+
+                break;
+            case 'with':
+                $label = $this->getLabelForWith($field['relationName']);
+                $relationName = $field['relationName'];
+                $displayColumn = $field['displayColumn'];
+                $isBelongsToRelation = $this->isBelongsToRelation($field['relationName']);
+
+                break;
+            case 'withCount':
+                $label = $this->getLabelForWithCount($field['relationName']);
+                $column = $this->getColumnForWithCount($field['relationName']);
+                $isSortable = $field['isSortable'];
+                $slot = $this->getColumnForWithCount($field['relationName']);
+
+                break;
         }
 
-        return $filter['relatedKey'];
-    }
-
-    public function getFilterForeignKey($filter)
-    {
-        if ($filter['type'] == 'BelongsTo') {
-            return $filter['foreignKey'];
-        }
-
-        return $filter['relation'].'_'.$filter['relatedKey'];
+        return [
+            'type' => $field['type'],
+            'label' => $label,
+            'column' => $column,
+            'isSortable' => $isSortable,
+            'slot' => $slot,
+            'relationName' => $relationName,
+            'displayColumn' => $displayColumn,
+            'isBelongsToRelation' => $isBelongsToRelation,
+        ];
     }
 }

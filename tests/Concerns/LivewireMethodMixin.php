@@ -7,27 +7,27 @@ use PHPUnit\Framework\Assert as PHPUnit;
 
 class LivewireMethodMixin
 {
-    public function assertReturnEquals(): Closure
-    {
-        return function (string $method, $expected, $message = '') {
-            $jsonResponse = json_decode($this->lastResponse->content());
-            $actual = $jsonResponse->effects->returns->$method;
-            PHPUnit::assertEquals($expected, $actual, $message);
+    // public function assertReturnEquals(): Closure
+    // {
+    //     return function (string $method, $expected, $message = '') {
+    //         $jsonResponse = json_decode($this->lastResponse->content());
+    //         $actual = $jsonResponse->effects->returns->$method;
+    //         PHPUnit::assertEquals($expected, $actual, $message);
 
-            return $this;
-        };
-    }
+    //         return $this;
+    //     };
+    // }
 
-    public function assertReturnCount()
-    {
-        return function (string $method, $expected, $message = '') {
-            $jsonResponse = json_decode($this->lastResponse->content());
-            $actual = $jsonResponse->effects->returns->$method;
-            PHPUnit::assertCount($expected, $actual, $message);
+    // public function assertReturnCount()
+    // {
+    //     return function (string $method, $expected, $message = '') {
+    //         $jsonResponse = json_decode($this->lastResponse->content());
+    //         $actual = $jsonResponse->effects->returns->$method;
+    //         PHPUnit::assertCount($expected, $actual, $message);
 
-            return $this;
-        };
-    }
+    //         return $this;
+    //     };
+    // }
 
     public function pressNext()
     {
@@ -40,7 +40,7 @@ class LivewireMethodMixin
         };
     }
 
-    public function step1()
+    public function finishStep1()
     {
         return function () {
             $this->set('modelPath', 'Ascsoftw\TallCrudGenerator\Tests\Models\Product')
@@ -99,6 +99,96 @@ class LivewireMethodMixin
                 ->set('fields.3.label', 'Is Active')
                 ->set('fields.3.inList', false)
                 ->set('fields.3.attributes.type', 'checkbox');
+
+            return $this;
+        };
+    }
+
+    public function setStandardFilters()
+    {
+        return function () {
+            $this->call('addField')
+                ->call('createNewFilter')
+                ->set('filter.type', 'None')
+                ->set('filter.column', 'name')
+                ->call('addFilter')
+
+                ->call('createNewFilter')
+                ->set('filter.type', 'BelongsTo')
+                ->set('filter.relation', 'brand')
+                ->set('filter.column', 'name')
+                ->call('addFilter')
+
+                ->call('createNewFilter')
+                ->set('filter.type', 'BelongsToMany')
+                ->set('filter.relation', 'categories')
+                ->set('filter.column', 'name')
+                ->call('addFilter');
+
+            return $this;
+        };
+    }
+
+    public function setStandardBelongsToRelation()
+    {
+        return function () {
+            $this->call('createNewBelongsToRelation')
+                ->set('belongsToRelation.name', 'brand')
+                ->set('belongsToRelation.displayColumn', 'name')
+                ->call('addBelongsToRelation');
+
+            return $this;
+        };
+    }
+
+    public function setStandardBtmRelations()
+    {
+        return function () {
+            $this->call('createNewBelongsToManyRelation')
+                ->set('belongsToManyRelation.name', 'tags')
+                ->set('belongsToManyRelation.displayColumn', 'name')
+                ->call('addBelongsToManyRelation')
+                ->call('createNewBelongsToManyRelation')
+
+                ->set('belongsToManyRelation.name', 'categories')
+                ->set('belongsToManyRelation.displayColumn', 'name')
+                ->set('belongsToManyRelation.isMultiSelect', true)
+                ->call('addBelongsToManyRelation');
+
+            return $this;
+        };
+    }
+
+    public function setStandardEagerLoadRelations()
+    {
+        return function () {
+            $this->call('createNewWithRelation')
+                ->set('withRelation.name', 'brand')
+                ->set('withRelation.displayColumn', 'name')
+                ->call('addWithRelation')
+                ->call('createNewWithRelation')
+                ->set('withRelation.name', 'categories')
+                ->set('withRelation.displayColumn', 'name')
+                ->call('addWithRelation')
+                ->call('createNewWithRelation')
+                ->set('withRelation.name', 'tags')
+                ->set('withRelation.displayColumn', 'name')
+                ->call('addWithRelation');
+
+            return $this;
+        };
+    }
+
+    public function setStandardEagerLoadCountRelations()
+    {
+        return function () {
+            $this->call('createNewWithCountRelation')
+                ->set('withCountRelation.name', 'tags')
+                ->call('addWithCountRelation')
+                ->call('createNewWithCountRelation')
+                ->set('withCountRelation.name', 'categories')
+                ->set('withCountRelation.isSortable', true)
+                ->call('addWithCountRelation');
 
             return $this;
         };

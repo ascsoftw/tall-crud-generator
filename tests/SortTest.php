@@ -12,7 +12,7 @@ class SortTest extends TestCase
         parent::setUp();
         // additional setup
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->pressNext()
             ->setStandardFields()
             ->pressNext(2);

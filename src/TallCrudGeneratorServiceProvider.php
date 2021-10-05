@@ -3,10 +3,14 @@
 namespace Ascsoftw\TallCrudGenerator;
 
 use Ascsoftw\TallCrudGenerator\Console\Commands\TallCrudGeneratorCommand;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ChildViewCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ViewCode;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -43,28 +47,39 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         Blade::component('tall-crud-generator::show-relations-table', 'tall-crud-show-relations-table');
         Blade::component('tall-crud-generator::dropdown', 'tall-crud-dropdown');
         Blade::component('tall-crud-generator::tooltip', 'tall-crud-tooltip');
-        Blade::component('tall-crud-generator::filter-icon', 'tall-crud-filter-icon');
+        Blade::component('tall-crud-generator::icon-filter', 'tall-crud-icon-filter');
+        Blade::component('tall-crud-generator::icon-add', 'tall-crud-icon-add');
+        Blade::component('tall-crud-generator::icon-edit', 'tall-crud-icon-edit');
+        Blade::component('tall-crud-generator::icon-delete', 'tall-crud-icon-delete');
 
         $this->defineMacros();
 
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/tall-crud-generator'),
         ], 'views');
-
-        $this->publishes([
-            __DIR__.'/../config/tall-crud-generator.php' => base_path('config/tall-crud-generator.php'),
-        ], 'config');
-
-        if (! config('tall-crud-generator.disable_route')) {
-            Route::get(config('tall-crud-generator.route'), function () {
-                return view('tall-crud-generator::tall-crud-generator');
-            })->middleware(['web', 'auth']);
-        }
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/tall-crud-generator.php', 'tall-crud-generator');
+        $this->app->singleton(TallProperties::class, function ($app) {
+            return new TallProperties();
+        });
+
+        $this->app->singleton(ComponentCode::class, function ($app) {
+            return new ComponentCode($app->make(TallProperties::class));
+        });
+
+        $this->app->singleton(ChildComponentCode::class, function ($app) {
+            return new ChildComponentCode($app->make(TallProperties::class));
+        });
+
+        $this->app->singleton(ViewCode::class, function ($app) {
+            return new ViewCode($app->make(TallProperties::class));
+        });
+
+        $this->app->singleton(ChildViewCode::class, function ($app) {
+            return new ChildViewCode($app->make(TallProperties::class));
+        });
     }
 
     public function defineMacros()

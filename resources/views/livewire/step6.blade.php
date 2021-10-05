@@ -78,14 +78,39 @@
                 <x:tall-crud-generator::select class="block mt-1 w-1/6 ml-2"
                     wire:model="advancedSettings.table_settings.bulkActionColumn">
                     <option value="">-Select Column-</option>
-                    @if (Arr::exists($this->modelProps, 'columns'))
-                    @foreach ($this->modelProps['columns'] as $column)
+                    @if (Arr::exists($modelProps, 'columns'))
+                    @foreach ($modelProps['columns'] as $column)
                     <option value="{{$column}}">{{$column}}</option>
                     @endforeach
                     @endif
                 </x:tall-crud-generator::select>
             </x:tall-crud-generator::checkbox-wrapper>
             @endif
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Class on th:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.classes.th" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Hover Class on tr:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.classes.trHover" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Even Row Class:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.classes.trEven" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Table Row Divide Class:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.classes.trBottomBorder" />
+            </div>
+            <div class="mt-4">
+                <x:tall-crud-generator::label>Class on td:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
+                    wire:model.defer="advancedSettings.table_settings.classes.td" />
+            </div>
         </x:tall-crud-generator::accordion-wrapper>
         <x:tall-crud-generator::accordion-header tab="4">
             Filters

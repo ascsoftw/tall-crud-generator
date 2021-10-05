@@ -2,7 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Illuminate\Support\Facades\App;
 use Livewire\Livewire;
 
 class SearchingTest extends TestCase
@@ -16,7 +20,7 @@ class SearchingTest extends TestCase
     public function test_component_is_generated()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -34,7 +38,7 @@ class SearchingTest extends TestCase
     public function test_search_is_setup()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -48,16 +52,19 @@ class SearchingTest extends TestCase
             ->assertSet('exitCode', 0)
             ->assertSet('isComplete', true);
 
-        $props = $this->component->get('props');
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
+        $searchCode = $componentCode->getSearchCode();
 
-        $this->assertNotEmpty($props['code']['search']['vars']);
-        $this->assertNotEmpty($props['code']['search']['query']);
-        $this->assertNotEmpty($props['code']['search']['method']);
-
-        $this->component->call('isSearchingEnabled')
-                ->assertReturnEquals('isSearchingEnabled', true);
-
-        $this->component->call('getSearchableColumns')
-                ->assertReturnCount('getSearchableColumns', 1);
+        $this->assertTrue($tallProperties->isSearchingEnabled());
+        $this->assertEquals(['name'], $tallProperties->getSearchableColumns()->toArray());
+        $this->assertEquals(Template::getSearchVariables(), $componentCode->getSearchVars());
+        $this->assertEquals(Template::getSearchMethod(), $componentCode->getSearchMethod());
+        $whereClauseStr = <<<'EOT'
+$query->where('name', 'like', '%' . $this->q . '%')
+EOT;
+        $this->assertEquals($whereClauseStr, $componentCode->getSearchWhereClause()->toArray()[0]);
+        $this->assertStringContainsString($whereClauseStr, $searchCode['query']);
+        $this->assertNotEmpty($searchCode['query']);
     }
 }

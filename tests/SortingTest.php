@@ -2,7 +2,11 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\ComponentCode;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\TallProperties;
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
+use Illuminate\Support\Facades\App;
 use Livewire\Livewire;
 
 class SortingTest extends TestCase
@@ -16,7 +20,7 @@ class SortingTest extends TestCase
     public function test_component_is_generated()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -33,7 +37,7 @@ class SortingTest extends TestCase
     public function test_primary_key_is_sortable()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->pressNext()
             ->call('addField')
@@ -44,26 +48,24 @@ class SortingTest extends TestCase
             ->pressNext()
             ->generateFiles();
 
-        $props = $this->component->get('props');
+        // $tallProperties = $this->component->get('tallProperties');
+        // $componentCode = $this->component->get('componentCode');
 
-        $this->assertNotEmpty($props['code']['sort']['vars']);
-        $this->assertNotEmpty($props['code']['sort']['query']);
-        $this->assertNotEmpty($props['code']['sort']['method']);
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
+        $sortCode = $componentCode->getSortCode();
 
-        $this->component->call('isSortingEnabled')
-            ->assertReturnEquals('isSortingEnabled', true);
-
-        $this->component->call('isPrimaryKeySortable')
-            ->assertReturnEquals('isPrimaryKeySortable', true);
-
-        $this->component->call('getDefaultSortableColumn')
-            ->assertReturnEquals('getDefaultSortableColumn', 'id');
+        $this->assertTrue($tallProperties->isSortingEnabled());
+        $this->assertEquals('id', $tallProperties->getDefaultSortableColumn());
+        $this->assertEquals(Template::getSortingQuery(), $componentCode->getSortingQuery());
+        $this->assertEquals(Template::getSortingMethod(), $componentCode->getSortingMethod());
+        $this->assertNotEmpty($sortCode['vars']);
     }
 
     public function test_other_column_is_sortable()
     {
         $this->component = Livewire::test(TallCrudGenerator::class)
-            ->step1()
+            ->finishStep1()
             ->disableModals()
             ->makePrimaryKeyUnsortable()
             ->pressNext()
@@ -77,18 +79,13 @@ class SortingTest extends TestCase
             ->generateFiles();
 
         $props = $this->component->get('props');
+        $tallProperties = App::make(TallProperties::class);
 
         $this->assertNotEmpty($props['code']['sort']['vars']);
         $this->assertNotEmpty($props['code']['sort']['query']);
         $this->assertNotEmpty($props['code']['sort']['method']);
 
-        $this->component->call('isSortingEnabled')
-            ->assertReturnEquals('isSortingEnabled', true);
-
-        $this->component->call('isPrimaryKeySortable')
-            ->assertReturnEquals('isPrimaryKeySortable', false);
-
-        $this->component->call('getDefaultSortableColumn')
-            ->assertReturnEquals('getDefaultSortableColumn', 'name');
+        $this->assertTrue($tallProperties->isSortingEnabled());
+        $this->assertEquals('name', $tallProperties->getDefaultSortableColumn());
     }
 }

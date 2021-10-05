@@ -13,15 +13,6 @@ trait WithFeatures
         return false;
     }
 
-    public function needsActionColumn()
-    {
-        if ($this->isEditFeatureEnabled() || $this->isDeleteFeatureEnabled()) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function needsPrimaryKeyInListing()
     {
         if ($this->primaryKeyProps['inList']) {
@@ -112,83 +103,9 @@ trait WithFeatures
         return false;
     }
 
-    public function isFlashMessageEnabled()
-    {
-        return $this->flashMessages['enable'];
-    }
-
-    public function isPaginationDropdownEnabled()
-    {
-        return $this->advancedSettings['table_settings']['showPaginationDropdown'];
-    }
-
-    public function isBtmEnabled()
-    {
-        return count($this->belongsToManyRelations) > 0;
-    }
-
-    public function isBtmAddEnabled()
-    {
-        $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('inAdd', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isBtmEditEnabled()
-    {
-        $collection = collect($this->belongsToManyRelations);
-        $c = $collection->firstWhere('inEdit', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isBelongsToEnabled()
-    {
-        return count($this->belongsToRelations) > 0;
-    }
-
-    public function isBelongsToAddEnabled()
-    {
-        $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('inAdd', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isBelongsToEditEnabled()
-    {
-        $collection = collect($this->belongsToRelations);
-        $c = $collection->firstWhere('inEdit', true);
-        if (is_null($c)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isHideColumnsEnabled()
-    {
-        return $this->advancedSettings['table_settings']['showHideColumns'];
-    }
-
     public function isBulkActionsEnabled()
     {
         return $this->advancedSettings['table_settings']['bulkActions'] &&
             ! empty($this->advancedSettings['table_settings']['bulkActionColumn']);
-    }
-
-    public function isFilterEnabled()
-    {
-        return count($this->filters) > 0;
     }
 }

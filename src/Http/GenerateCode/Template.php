@@ -1,10 +1,10 @@
 <?php
 
-namespace Ascsoftw\TallCrudGenerator\Http\Livewire;
+namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 
-trait WithTemplates
+class Template
 {
-    public function getSortingHeaderTemplate()
+    public static function getSortableHeader()
     {
         return <<<'EOT'
                     <div class="flex items-center">
@@ -14,7 +14,7 @@ trait WithTemplates
 EOT;
     }
 
-    public function getSearchBoxTemplate()
+    public static function getSearchInputField()
     {
         return <<<'EOT'
 
@@ -25,7 +25,7 @@ EOT;
 EOT;
     }
 
-    public function getHideColumnDropdownTemplate()
+    public static function getHideColumnsDropdown()
     {
         return <<<'EOT'
 
@@ -45,7 +45,7 @@ EOT;
 EOT;
     }
 
-    public function getPaginationDropdownTemplate()
+    public static function getPaginationSelectElement()
     {
         return <<<'EOT'
 
@@ -58,28 +58,37 @@ EOT;
 EOT;
     }
 
-    public function getDeleteButtonTemplate()
+    public static function getDeleteButton()
     {
         return <<<'EOT'
-wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm',  {{ $result->##PRIMARY_KEY##}});"
+
+                        <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm', {{ $result->##PRIMARY_KEY##}});" class="text-red-500">
+                            <x:tall-crud-generator::icon-delete />
+                        </button>
 EOT;
     }
 
-    public function getAddButtonTemplate()
+    public static function getAddButton()
     {
         return <<<'EOT'
-wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');"
+
+        <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');" class="text-blue-500">
+            <x:tall-crud-generator::icon-add />
+        </button>
 EOT;
     }
 
-    public function getEditButtonTemplate()
+    public static function getEditButton()
     {
         return <<<'EOT'
-wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm',  {{ $result->##PRIMARY_KEY##}});"
+
+                        <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm', {{ $result->##PRIMARY_KEY##}});" class="text-green-500">
+                            <x:tall-crud-generator::icon-edit />
+                        </button>
 EOT;
     }
 
-    public function getDeleteMethodTemplate()
+    public static function getDeleteFeatureCode()
     {
         return <<<'EOT'
 
@@ -102,7 +111,7 @@ EOT;
 EOT;
     }
 
-    public function getAddMethodTemplate()
+    public static function getAddFeatureCode()
     {
         return <<<'EOT'
  
@@ -125,14 +134,14 @@ EOT;
 EOT;
     }
 
-    public function getCreateFieldTemplate()
+    public static function getAddFieldTemplate()
     {
         return <<<'EOT'
 '##COLUMN##' => $this->item['##COLUMN##'] ?? ##DEFAULT_VALUE##, 
 EOT;
     }
 
-    public function getEditMethodTemplate()
+    public static function getEditFeatureCode()
     {
         return <<<'EOT'
  
@@ -140,14 +149,14 @@ EOT;
     {
         $this->resetErrorBag();
         $this->item = $##MODEL_VAR##;
-        $this->confirmingItemEdition = true;##BTM_FETCH####BELONGS_TO_INIT##
+        $this->confirmingItemEdit = true;##BTM_FETCH####BELONGS_TO_INIT##
     }
 
     public function editItem(): void
     {
         $this->validate();
         $this->item->save();##BTM_UPDATE##
-        $this->confirmingItemEdition = false;
+        $this->confirmingItemEdit = false;
         $this->primaryKey = '';
         $this->emitTo('##COMPONENT_NAME##', 'refresh');##FLASH_MESSAGE##
     }
@@ -155,7 +164,7 @@ EOT;
 EOT;
     }
 
-    public function getChildListenerTemplate()
+    public static function getListenerArray()
     {
         return <<<'EOT'
     /**
@@ -170,7 +179,7 @@ EOT;
 EOT;
     }
 
-    public function getSortingMethodTemplate()
+    public static function getSortingMethod()
     {
         return <<<'EOT'
 
@@ -185,7 +194,7 @@ EOT;
 EOT;
     }
 
-    public function getSearchingMethodTemplate()
+    public static function getSearchMethod()
     {
         return <<<'EOT'
 
@@ -197,7 +206,7 @@ EOT;
 EOT;
     }
 
-    public function getPaginationDropdownMethodTemplate()
+    public static function getPaginationDropdownMethod()
     {
         return <<<'EOT'
 
@@ -209,14 +218,14 @@ EOT;
 EOT;
     }
 
-    public function getTableColumnTemplate()
+    public static function getTableColumnSlot()
     {
         return <<<'EOT'
 {{ $result->##COLUMN_NAME##}}
 EOT;
     }
 
-    public function getSortingVarsTemplate()
+    public static function getSortingVariables()
     {
         return <<<'EOT'
 
@@ -233,7 +242,7 @@ EOT;
 EOT;
     }
 
-    public function getSortingQueryTemplate()
+    public static function getSortingQuery()
     {
         return <<<'EOT'
 
@@ -241,7 +250,7 @@ EOT;
 EOT;
     }
 
-    public function getDeleteVarsTemplate()
+    public static function getDeleteVariables()
     {
         return <<<'EOT'
     /**
@@ -257,7 +266,7 @@ EOT;
 EOT;
     }
 
-    public function getAddVarsTemplate()
+    public static function getAddVariables()
     {
         return <<<'EOT'
 
@@ -269,18 +278,18 @@ EOT;
 EOT;
     }
 
-    public function getEditVarsTemplate()
+    public static function getEditVariables()
     {
         return <<<'EOT'
 
     /**
      * @var bool
      */
-    public $confirmingItemEdition = false;
+    public $confirmingItemEdit = false;
 EOT;
     }
 
-    public function getSearchingVarsTemplate()
+    public static function getSearchVariables()
     {
         return <<<'EOT'
 
@@ -292,7 +301,7 @@ EOT;
 EOT;
     }
 
-    public function getPaginationVarsTemplate()
+    public static function getPaginationVariables()
     {
         return <<<'EOT'
 
@@ -304,34 +313,34 @@ EOT;
 EOT;
     }
 
-    public function getSearchinQueryTemplate()
+    public static function getSearchQueryCode()
     {
         return <<<'EOT'
 
             ->when($this->q, function ($query) {
                 return $query->where(function ($query) {
-##SEARCH_QUERY##;
+##WHERE_CLAUSE##;
                 });
             })
 EOT;
     }
 
-    public function getSearchingQueryWhereTemplate()
+    public static function getSearchQueryWhereClause()
     {
         return <<<'EOT'
 ##QUERY##('##COLUMN##', 'like', '%' . $this->q . '%')
 EOT;
     }
 
-    public function getChildItemTemplate()
-    {
-        return <<<'EOT'
+//     public static function getChildItemTemplate()
+//     {
+//         return <<<'EOT'
 
-    public $item;
-EOT;
-    }
+//     public $item;
+    // EOT;
+//     }
 
-    public function getChildRulesTemplate()
+    public static function getRulesArray()
     {
         return <<<'EOT'
 
@@ -344,14 +353,14 @@ EOT;
 EOT;
     }
 
-    public function getChildFieldTemplate()
+    public static function getKeyValueTemplate()
     {
         return <<<'EOT'
 'item.##COLUMN_NAME##' => '##VALUE##',
 EOT;
     }
 
-    public function getChildValidationAttributesTemplate()
+    public static function getValidationAttributesArray()
     {
         return <<<'EOT'
 
@@ -365,7 +374,7 @@ EOT;
 EOT;
     }
 
-    public function getDeleteModalTemplate()
+    public static function getDeleteModal()
     {
         return <<<'EOT'
 
@@ -387,7 +396,7 @@ EOT;
 EOT;
     }
 
-    public function getAddModalTemplate()
+    public static function getAddModal()
     {
         return <<<'EOT'
 
@@ -408,11 +417,11 @@ EOT;
 EOT;
     }
 
-    public function getEditModalTemplate()
+    public static function getEditModal()
     {
         return <<<'EOT'
 
-    <x:tall-crud-generator::dialog-modal wire:model="confirmingItemEdition">
+    <x:tall-crud-generator::dialog-modal wire:model="confirmingItemEdit">
         <x-slot name="title">
             Edit Record
         </x-slot>
@@ -421,14 +430,14 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdition', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
+            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdit', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
             <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EDIT_BTN_TEXT##</x:tall-crud-generator::button>
         </x-slot>
     </x:tall-crud-generator::dialog-modal>
 EOT;
     }
 
-    public function getInputFieldTemplate()
+    public static function getInputField()
     {
         return <<<'EOT'
 
@@ -440,7 +449,7 @@ EOT;
 EOT;
     }
 
-    public function getSelectFieldTemplate()
+    public static function getSelectField()
     {
         return <<<'EOT'
 
@@ -453,7 +462,7 @@ EOT;
 EOT;
     }
 
-    public function getCheckboxFieldTemplate()
+    public static function getCheckboxField()
     {
         return <<<'EOT'
 
@@ -464,20 +473,7 @@ EOT;
 EOT;
     }
 
-    public function getFieldTemplate($type = 'input')
-    {
-        switch ($type) {
-            case 'checkbox':
-                return $this->getCheckboxFieldTemplate();
-            case 'select':
-                return $this->getSelectFieldTemplate();
-            case 'input':
-            default:
-                return $this->getInputFieldTemplate();
-        }
-    }
-
-    public function getFlashTriggerTemplate()
+    public static function getFlashCode()
     {
         return <<<'EOT'
 
@@ -485,7 +481,7 @@ EOT;
 EOT;
     }
 
-    public function getArrayTemplate()
+    public static function getEmptyArray()
     {
         return <<<'EOT'
     /**
@@ -496,7 +492,7 @@ EOT;
 EOT;
     }
 
-    public function getNoRelationFilterInitTemplate()
+    public static function getSelfFilterInitCode()
     {
         return <<<'EOT'
         '##KEY##' => [
@@ -507,7 +503,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmInitTemplate()
+    public static function getBtmInitCode()
     {
         return <<<'EOT'
 
@@ -517,7 +513,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmAttachTemplate()
+    public static function getBtmAttachCode()
     {
         return <<<'EOT'
 
@@ -525,7 +521,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmFetchTemplate()
+    public static function getBtmFetchCode()
     {
         return <<<'EOT'
 
@@ -537,7 +533,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmUpdateTemplate()
+    public static function getBtmUpdateCode()
     {
         return <<<'EOT'
 
@@ -546,7 +542,7 @@ EOT;
 EOT;
     }
 
-    public function getOtherModelTemplate()
+    public static function getUseModelCode()
     {
         return <<<'EOT'
 
@@ -554,7 +550,7 @@ use ##MODEL##;
 EOT;
     }
 
-    public function getBtmFieldTemplate()
+    public static function getBtmFieldTemplate()
     {
         return <<<'EOT'
 
@@ -571,7 +567,7 @@ EOT;
 EOT;
     }
 
-    public function getBtmFieldMultiSelectTemplate()
+    public static function getBtmFieldMultiSelectTemplate()
     {
         return <<<'EOT'
 
@@ -585,7 +581,7 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToFieldTemplate()
+    public static function getBelongsToFieldTemplate()
     {
         return <<<'EOT'
 
@@ -605,7 +601,7 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToInitTemplate()
+    public static function getBelongsToInitCode()
     {
         return <<<'EOT'
 
@@ -613,7 +609,7 @@ EOT;
 EOT;
     }
 
-    public function getWithQueryTemplate()
+    public static function getWithQueryCode()
     {
         return <<<'EOT'
 
@@ -621,7 +617,7 @@ EOT;
 EOT;
     }
 
-    public function getWithCountQueryTemplate()
+    public static function getWithCountQueryCode()
     {
         return <<<'EOT'
 
@@ -629,63 +625,67 @@ EOT;
 EOT;
     }
 
-    public function getBelongsToManyTableSlotTemplate()
+    public static function getBtmTableSlot()
     {
         return <<<'EOT'
 ##RELATION##->implode('##DISPLAY_COLUMN##', ',')
 EOT;
     }
 
-    public function getBelongsToTableSlotTemplate()
+    public static function getBelongsToTableSlot()
     {
         return <<<'EOT'
 ##RELATION##?->##DISPLAY_COLUMN##
 EOT;
     }
 
-    public function getFlashComponentTemplate()
+    public static function getFlashComponent()
     {
         return <<<'EOT'
-@livewire('livewire-toast')
+
+    @livewire('livewire-toast')
 EOT;
     }
 
-    public function getHideColumnVarsTemplate()
+    public static function getAllColumns()
     {
         return <<<'EOT'
 
     /**
      * @var array
      */
-    public $columns = [
-##COLUMNS##
-    ];
+    public $columns = [##COLUMNS##];
 
 EOT;
     }
 
-    public function getArrayValueTemplate()
-    {
-        return <<<'EOT'
-'##VALUE##', 
-EOT;
-    }
-
-    public function getHideColumnInitCodeTemplate()
+    public static function getHideColumnInitCode()
     {
         return <<<'EOT'
         $this->selectedColumns = $this->columns;
 EOT;
     }
 
-    public function getHideColumnIfTemplate()
+    public static function getHideColumnMethod()
     {
         return <<<'EOT'
-@if(in_array('##LABEL##', $this->selectedColumns))
+
+
+    public function showColumn($column)
+    {
+        return in_array($column, $this->selectedColumns);
+    }
 EOT;
     }
 
-    public function getBulkActionMethodTemplate()
+    public static function getHideColumnIfCondition()
+    {
+        return <<<'EOT'
+@if($this->showColumn('##LABEL##'))
+EOT;
+    }
+
+    public static function getBulkActionMethod()
     {
         return <<<'EOT'
 
@@ -703,7 +703,7 @@ EOT;
 EOT;
     }
 
-    public function getBulkActionTemplate()
+    public static function getBulkActionDropdown()
     {
         return <<<'EOT'
                 <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
@@ -719,14 +719,16 @@ EOT;
 EOT;
     }
 
-    public function getBulkCheckboxTemplate()
+    public static function getBulkColumnCheckbox()
     {
         return <<<'EOT'
-<x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+
+                        <x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+
 EOT;
     }
 
-    public function getFilterInitTemplate()
+    public static function getFilterInitTemplate()
     {
         return <<<'EOT'
 
@@ -734,7 +736,7 @@ EOT;
 EOT;
     }
 
-    public function getRelationFilterInitTemplate()
+    public static function getRelationFilterInitTemplate()
     {
         return <<<'EOT'
 
@@ -747,21 +749,21 @@ EOT;
 EOT;
     }
 
-    public function getFilterOptionTemplate()
+    public static function getKeyLabelTemplate()
     {
         return <<<'EOT'
 ['key' => '##KEY##', 'label' => '##LABEL##'],
 EOT;
     }
 
-    public function getFilterDropdownTemplate()
+    public static function getFilterDropdownTemplate()
     {
         return <<<'EOT'
 
                 <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded ml-4 px-4 cursor-pointer" width="w-72">
                     <x-slot name="trigger">
                         <span class="flex">
-                        Filters <x:tall-crud-generator::filter-icon />
+                        Filters <x:tall-crud-generator::icon-filter />
                         </span>
                     </x-slot>
                 
@@ -786,7 +788,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterMethodTemplate()
+    public static function getFilterMethodTemplate()
     {
         return <<<'EOT'
 
@@ -811,7 +813,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterQueryTemplate()
+    public static function getFilterQueryTemplate()
     {
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {
@@ -820,7 +822,7 @@ EOT;
 EOT;
     }
 
-    public function getFilterQueryBtmTemplate()
+    public static function getFilterQueryBtmTemplate()
     {
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {
