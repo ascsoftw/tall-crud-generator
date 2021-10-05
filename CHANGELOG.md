@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2021-10-05
+- Refactored Code
+- Drop Support for php 7
+
 ## [1.6.0] - 2021-08-31
 - Implemented PhpUnit Test Cases
 - Minor Bug Fixes
