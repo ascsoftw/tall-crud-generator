@@ -2,9 +2,9 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 class SearchingTest extends TestCase
 {
@@ -63,6 +63,5 @@ EOT;
         $this->assertEquals($whereClauseStr, $componentCode->getSearchWhereClause()->toArray()[0]);
         $this->assertStringContainsString($whereClauseStr, $searchCode['query']);
         $this->assertNotEmpty($searchCode['query']);
-
     }
 }

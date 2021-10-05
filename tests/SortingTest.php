@@ -2,9 +2,9 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
+use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
-use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
 
 class SortingTest extends TestCase
 {
@@ -54,7 +54,6 @@ class SortingTest extends TestCase
         $this->assertEquals(Template::getSortingQuery(), $componentCode->getSortingQuery());
         $this->assertEquals(Template::getSortingMethod(), $componentCode->getSortingMethod());
         $this->assertNotEmpty($sortCode['vars']);
-
     }
 
     public function test_other_column_is_sortable()

@@ -115,7 +115,6 @@ class EagerLoadTest extends TestCase
 
     public function test_view_contain_eager_loaded_columns()
     {
-
         $this->component
             ->setStandardEagerLoadRelations()
             ->pressNext(3)
@@ -140,7 +139,6 @@ class EagerLoadTest extends TestCase
 
     public function test_slot_contain_eager_loaded_columns()
     {
-
         $this->component
             ->setStandardEagerLoadRelations()
             ->pressNext(3)

@@ -337,7 +337,7 @@ EOT;
 //         return <<<'EOT'
 
 //     public $item;
-// EOT;
+    // EOT;
 //     }
 
     public static function getRulesArray()

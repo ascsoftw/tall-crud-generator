@@ -16,6 +16,7 @@ class ComponentCode extends BaseCode
     public function getOtherModelsCode()
     {
         $models = $this->tallProperties->getOtherModels();
+
         return $models->map(function ($m) {
             return $this->getUseModelCode($m);
         })->implode('');
@@ -109,6 +110,7 @@ class ComponentCode extends BaseCode
             );
             $isFirst = false;
         }
+
         return $whereClause;
     }
 
@@ -211,6 +213,7 @@ class ComponentCode extends BaseCode
         $labels = $columns->map(function ($c) {
             return $c['label'];
         });
+
         return str_replace(
             '##COLUMNS##',
             $this->wrapInQuotesAndJoin($labels),
@@ -279,6 +282,7 @@ class ComponentCode extends BaseCode
             $code['query'] = $this->getFilterQuery();
             $code['method'] = $this->getFilterMethod();
         }
+
         return $code;
     }
 
@@ -287,6 +291,7 @@ class ComponentCode extends BaseCode
         $vars = collect();
         $vars->push(self::getEmtpyArray('filters'));
         $vars->push(self::getEmtpyArray('selectedFilters'));
+
         return $vars->prependAndJoin($this->newLines());
     }
 

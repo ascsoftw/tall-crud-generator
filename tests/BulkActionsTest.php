@@ -2,8 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests;
 
-use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Ascsoftw\TallCrudGenerator\Http\GenerateCode\Template;
+use Ascsoftw\TallCrudGenerator\Http\Livewire\TallCrudGenerator;
 use Livewire\Livewire;
 
 class BulkActionsTest extends TestCase

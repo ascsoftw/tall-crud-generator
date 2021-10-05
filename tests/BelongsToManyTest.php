@@ -174,7 +174,6 @@ EOT;
         $this->assertStringContainsString('$this->checkedTags = [];', $props['code']['child_add']['method']);
         $this->assertStringContainsString($categoryInitCode, $props['code']['child_add']['method']);
         $this->assertStringContainsString('$this->checkedCategories = [];', $props['code']['child_add']['method']);
-
     }
 
     public function test_attach_code()
@@ -196,7 +195,6 @@ EOT;
 
         $this->assertStringContainsString($tagAttachCode, $props['code']['child_add']['method']);
         $this->assertStringContainsString($categoryAttachCode, $props['code']['child_add']['method']);
-
     }
 
     public function test_fetch_code()
@@ -229,7 +227,6 @@ EOT;
         $this->assertStringContainsString($fetchTagCode, $props['code']['child_edit']['method']);
         $this->assertStringContainsString($checkedCategoriesCode, $props['code']['child_edit']['method']);
         $this->assertStringContainsString($fetchCategoryCode, $props['code']['child_edit']['method']);
-
     }
 
     public function test_update_code()
@@ -257,12 +254,10 @@ EOT;
         $this->assertStringContainsString($categorySyncCode, $props['code']['child_edit']['method']);
         $this->assertStringContainsString('$this->checkedTags = [];', $props['code']['child_edit']['method']);
         $this->assertStringContainsString('$this->checkedCategories = [];', $props['code']['child_edit']['method']);
-
     }
 
     public function test_add_modal()
     {
-
         $this->component
             ->setStandardBtmRelations()
             ->pressNext(3)
@@ -279,12 +274,10 @@ EOT;
         $this->assertStringContainsString('multiple="multiple" wire:model.defer="checkedCategories"', $addModalCode);
         $this->assertStringContainsString('<option value="{{ $c->id }}">{{$c->name}}</option>', $addModalCode);
         $this->assertStringContainsString('@foreach( $categories as $c)', $addModalCode);
-
     }
 
     public function test_edit_modal()
     {
-
         $this->component
             ->setStandardBtmRelations()
             ->pressNext(3)
@@ -301,6 +294,5 @@ EOT;
         $this->assertStringContainsString('multiple="multiple" wire:model.defer="checkedCategories"', $editModalCode);
         $this->assertStringContainsString('<option value="{{ $c->id }}">{{$c->name}}</option>', $editModalCode);
         $this->assertStringContainsString('@foreach( $categories as $c)', $editModalCode);
-
     }
 }

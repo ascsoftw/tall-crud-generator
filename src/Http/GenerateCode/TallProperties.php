@@ -5,9 +5,8 @@ namespace Ascsoftw\TallCrudGenerator\Http\GenerateCode;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class TallProperties 
+class TallProperties
 {
-
     public $modelPath;
     public $primaryKey;
     public $componentName;
@@ -142,8 +141,7 @@ class TallProperties
     public function setSearchableColumns($columns)
     {
         $this->searchableColumns = collect();
-        foreach($columns as $column)
-        {
+        foreach ($columns as $column) {
             $this->searchableColumns->push($column['column']);
         }
     }
@@ -252,13 +250,13 @@ class TallProperties
     public function setFilters($filters)
     {
         $filters = collect($filters);
-        $this->selfFilters = $filters->filter(function($item) {
+        $this->selfFilters = $filters->filter(function ($item) {
             return $item['type'] == 'None';
         });
-        $this->belongsToFilters = $filters->filter(function($item) {
+        $this->belongsToFilters = $filters->filter(function ($item) {
             return $item['type'] == 'BelongsTo';
         });
-        $this->btmFilters = $filters->filter(function($item) {
+        $this->btmFilters = $filters->filter(function ($item) {
             return $item['type'] == 'BelongsToMany';
         });
     }
@@ -321,14 +319,14 @@ class TallProperties
 
     public function getBtmAddFields()
     {
-        return $this->getAddFormFields()->filter(function($item) {
+        return $this->getAddFormFields()->filter(function ($item) {
             return $item['type'] == 'btm';
         });
     }
 
     public function getBtmEditFields()
     {
-        return $this->getEditFormFields()->filter(function($item) {
+        return $this->getEditFormFields()->filter(function ($item) {
             return $item['type'] == 'btm';
         });
     }
@@ -341,14 +339,14 @@ class TallProperties
 
     public function getBelongsToAddFields()
     {
-        return $this->getAddFormFields()->filter(function($item) {
+        return $this->getAddFormFields()->filter(function ($item) {
             return $item['type'] == 'belongsTo';
         });
     }
 
     public function getBelongsToEditFields()
     {
-        return $this->getEditFormFields()->filter(function($item) {
+        return $this->getEditFormFields()->filter(function ($item) {
             return $item['type'] == 'belongsTo';
         });
     }
@@ -405,14 +403,15 @@ class TallProperties
     public function getSelfFormFields()
     {
         $fields = $this->getAddFormFields()->merge($this->getEditFormFields());
-        return $fields->filter(function($field) {
+
+        return $fields->filter(function ($field) {
             return $field['type'] == 'normal';
         })->unique('column');
     }
 
     public function getSelfAddFields()
     {
-        return $this->getAddFormFields()->filter(function($item) {
+        return $this->getAddFormFields()->filter(function ($item) {
             return $item['type'] == 'normal';
         });
     }

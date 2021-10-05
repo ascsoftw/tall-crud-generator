@@ -138,7 +138,7 @@ trait WithFilters
             'filter.type' => 'required',
         ]);
 
-        if($this->filter['type'] != 'None') {
+        if ($this->filter['type'] != 'None') {
             $this->validateOnly('filter.relation', [
                 'filter.relation' => 'required',
             ]);

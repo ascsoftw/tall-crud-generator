@@ -131,7 +131,7 @@ class LivewireMethodMixin
 
     public function setStandardBelongsToRelation()
     {
-        return function() {
+        return function () {
             $this->call('createNewBelongsToRelation')
                 ->set('belongsToRelation.name', 'brand')
                 ->set('belongsToRelation.displayColumn', 'name')
@@ -143,7 +143,7 @@ class LivewireMethodMixin
 
     public function setStandardBtmRelations()
     {
-        return function() {
+        return function () {
             $this->call('createNewBelongsToManyRelation')
                 ->set('belongsToManyRelation.name', 'tags')
                 ->set('belongsToManyRelation.displayColumn', 'name')
@@ -189,6 +189,7 @@ class LivewireMethodMixin
                 ->set('withCountRelation.name', 'categories')
                 ->set('withCountRelation.isSortable', true)
                 ->call('addWithCountRelation');
+
             return $this;
         };
     }
