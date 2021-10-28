@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2021-10-28
+- Add Support for Multi Filters
+
 ## [2.0.0] - 2021-10-05
 - Refactored Code
 - Drop Support for php 7
