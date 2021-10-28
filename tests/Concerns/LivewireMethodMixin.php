@@ -2,33 +2,8 @@
 
 namespace Ascsoftw\TallCrudGenerator\Tests\Concerns;
 
-use Closure;
-use PHPUnit\Framework\Assert as PHPUnit;
-
 class LivewireMethodMixin
 {
-    // public function assertReturnEquals(): Closure
-    // {
-    //     return function (string $method, $expected, $message = '') {
-    //         $jsonResponse = json_decode($this->lastResponse->content());
-    //         $actual = $jsonResponse->effects->returns->$method;
-    //         PHPUnit::assertEquals($expected, $actual, $message);
-
-    //         return $this;
-    //     };
-    // }
-
-    // public function assertReturnCount()
-    // {
-    //     return function (string $method, $expected, $message = '') {
-    //         $jsonResponse = json_decode($this->lastResponse->content());
-    //         $actual = $jsonResponse->effects->returns->$method;
-    //         PHPUnit::assertCount($expected, $actual, $message);
-
-    //         return $this;
-    //     };
-    // }
-
     public function pressNext()
     {
         return function ($times = 1) {
@@ -106,7 +81,7 @@ class LivewireMethodMixin
 
     public function setStandardFilters()
     {
-        return function () {
+        return function ($isMultiple = false) {
             $this->call('addField')
                 ->call('createNewFilter')
                 ->set('filter.type', 'None')
@@ -117,12 +92,14 @@ class LivewireMethodMixin
                 ->set('filter.type', 'BelongsTo')
                 ->set('filter.relation', 'brand')
                 ->set('filter.column', 'name')
+                ->set('filter.isMultiple', $isMultiple)
                 ->call('addFilter')
 
                 ->call('createNewFilter')
                 ->set('filter.type', 'BelongsToMany')
                 ->set('filter.relation', 'categories')
                 ->set('filter.column', 'name')
+                ->set('filter.isMultiple', $isMultiple)
                 ->call('addFilter');
 
             return $this;

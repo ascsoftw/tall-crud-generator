@@ -248,10 +248,10 @@ class ViewCode extends BaseCode
 
         $html = $this->getTableColumnHtml(
             str_replace(
-                    '##COLUMN_NAME##',
-                    $slot,
-                    Template::getTableColumnSlot()
-                )
+                '##COLUMN_NAME##',
+                $slot,
+                Template::getTableColumnSlot()
+            )
         );
 
         return $this->encapsulateTableColumn($html, $f['label'], 5);

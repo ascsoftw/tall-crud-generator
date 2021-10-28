@@ -235,6 +235,10 @@
                     </x:tall-crud-generator::error-message> @enderror
                 </div>
                 @endif
+                <x:tall-crud-generator::checkbox-wrapper class="mt-4">
+                    <x:tall-crud-generator::label>Filter Multiple Values</x:tall-crud-generator::label>
+                    <x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="filter.isMultiple" />
+                </x:tall-crud-generator::checkbox-wrapper>
                 @endif
             </div>
             @endif

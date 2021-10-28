@@ -745,7 +745,24 @@ EOT;
             return ['key' => $k, 'label' => $i];
         })->toArray();
         $this->filters['##FOREIGN_KEY##']['label'] = '##LABEL##';
-        $this->filters['##FOREIGN_KEY##']['options'] = ['0' => ['key' => '', 'label' => 'Any']] + $##VAR##;
+        ##IS_MULTIPLE##$this->filters['##FOREIGN_KEY##']['multiple'] = true;
+        $this->filters['##FOREIGN_KEY##']['options'] = ##EMPTY_FILTER_KEY## $##VAR##;##RESET_MULTI_FILTER##
+EOT;
+    }
+
+    public static function getEmptyFilterKey()
+    {
+        return <<<'EOT'
+['0' => ['key' => '', 'label' => 'Any']] +
+
+EOT;
+    }
+
+    public static function getResetMultipleFilter()
+    {
+        return <<<'EOT'
+
+        $this->selectedFilters['##FOREIGN_KEY##'] = [];
 EOT;
     }
 
@@ -759,32 +776,7 @@ EOT;
     public static function getFilterDropdownTemplate()
     {
         return <<<'EOT'
-
-                <x:tall-crud-generator::dropdown class="flex justify-items items-center border border-rounded ml-4 px-4 cursor-pointer" width="w-72">
-                    <x-slot name="trigger">
-                        <span class="flex">
-                        Filters <x:tall-crud-generator::icon-filter />
-                        </span>
-                    </x-slot>
-                
-                    <x-slot name="content">
-                        @foreach($filters as $f => $filter)
-                        <div class="mt-4">
-                            <x:tall-crud-generator::label class="font-sm font-bold">
-                                {{ $filter['label'] }}
-                            </x:tall-crud-generator::label>
-                            <x:tall-crud-generator::select class="w-3/4" wire:model="selectedFilters.{{$f}}">
-                                @foreach($filter['options'] as $o)
-                                <option value="{{$o['key']}}">{{$o['label']}}</option>
-                                @endforeach
-                            </x:tall-crud-generator::select>
-                        </div>
-                        @endforeach
-                        <div class="my-4">
-                            <x:tall-crud-generator::button wire:click="resetFilters()">Reset</x:tall-crud-generator::button>
-                        </div>
-                    </x-slot>
-                </x:tall-crud-generator::dropdown>
+                <x:tall-crud-generator::filter :filters=$filters />
 EOT;
     }
 
@@ -798,17 +790,25 @@ EOT;
         $this->resetPage();
     }
 
-    public function isFilterSet(string $column): bool
+    private function isFilterSet(string $column): bool
     {
-        if( isset($this->selectedFilters[$column]) && $this->selectedFilters[$column] != '') {
-            return true;
+        if (isset($this->selectedFilters[$column])) {
+            if (is_array($this->selectedFilters[$column])) {
+                if (!empty($this->selectedFilters[$column])) {
+                    return true;
+                }
+            } else {
+                if ($this->selectedFilters[$column] != '') {
+                    return true;
+                }
+            }
         }
         return false;
     }
 
     public function resetFilters(): void
     {
-        $this->reset('selectedFilters');
+        $this->reset('selectedFilters');##RESET_MULTI_FILTER##
     }
 EOT;
     }
@@ -817,7 +817,7 @@ EOT;
     {
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {
-                return $query->where('##COLUMN##', $this->selectedFilters['##COLUMN##']);
+                return $query->##CLAUSE##('##COLUMN##', $this->selectedFilters['##COLUMN##']);
             })
 EOT;
     }
@@ -827,7 +827,7 @@ EOT;
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {
                 return $query->whereHas('##RELATION##', function($query) {
-                    return $query->where('##TABLE##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
+                    return $query->##CLAUSE##('##TABLE##.##RELATED_KEY##', $this->selectedFilters['##COLUMN##']);
                 });
             })
 EOT;
