@@ -23,6 +23,7 @@ trait WithFilters
             'type' => '',
             'isValid' => false,
             'relation' => '',
+            'isMultiple' => false,
             'column' => '',
             'columns' => [],
             'options' => '',
@@ -180,6 +181,7 @@ trait WithFilters
             'type' => $this->filter['type'],
             'column' => $this->filter['column'],
             'options' => $this->filter['options'],
+            'isMultiple' => false,
         ];
     }
 
@@ -192,6 +194,7 @@ trait WithFilters
             'modelPath' => $this->filter['modelPath'],
             'ownerKey' => $this->filter['ownerKey'],
             'foreignKey' => $this->filter['foreignKey'],
+            'isMultiple' => $this->filter['isMultiple'],
         ];
     }
 
@@ -204,6 +207,7 @@ trait WithFilters
             'modelPath' => $this->filter['modelPath'],
             'relatedKey' => $this->filter['relatedKey'],
             'relatedTableName' => $this->filter['relatedTableName'],
+            'isMultiple' => $this->filter['isMultiple'],
         ];
     }
 

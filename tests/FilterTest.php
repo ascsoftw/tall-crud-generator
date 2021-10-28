@@ -364,6 +364,36 @@ EOT;
         $this->assertStringContainsString($btmFilterQuery, $props['code']['filter']['query']);
 
         $this->assertNotEmpty($props['code']['filter']['method']);
-        $this->assertEquals(Template::getFilterMethodTemplate(), $componentCode->getFilterMethod());
+    }
+
+    public function test_multi_filters()
+    {
+        $this->component
+            ->setStandardFilters(true)
+            ->pressNext()
+            ->generateFiles();
+        
+        $props = $this->component->get('props');
+
+        $selfFilterQuery = <<<'EOT'
+            ->when($this->isFilterSet('name'), function($query) {
+                return $query->where('name', $this->selectedFilters['name']);
+            })
+EOT;
+        $belongsToFilterQuery = <<<'EOT'
+            ->when($this->isFilterSet('brand_id'), function($query) {
+                return $query->whereIn('brand_id', $this->selectedFilters['brand_id']);
+            })
+EOT;
+        $btmFilterQuery = <<<'EOT'
+            ->when($this->isFilterSet('categories_id'), function($query) {
+                return $query->whereHas('categories', function($query) {
+                    return $query->whereIn('categories.id', $this->selectedFilters['categories_id']);
+                });
+            })
+EOT;
+        $this->assertStringContainsString($selfFilterQuery, $props['code']['filter']['query']);
+        $this->assertStringContainsString($belongsToFilterQuery, $props['code']['filter']['query']);
+        $this->assertStringContainsString($btmFilterQuery, $props['code']['filter']['query']);
     }
 }

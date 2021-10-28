@@ -81,7 +81,7 @@ class LivewireMethodMixin
 
     public function setStandardFilters()
     {
-        return function () {
+        return function ($isMultiple = false) {
             $this->call('addField')
                 ->call('createNewFilter')
                 ->set('filter.type', 'None')
@@ -92,12 +92,14 @@ class LivewireMethodMixin
                 ->set('filter.type', 'BelongsTo')
                 ->set('filter.relation', 'brand')
                 ->set('filter.column', 'name')
+                ->set('filter.isMultiple', $isMultiple)
                 ->call('addFilter')
 
                 ->call('createNewFilter')
                 ->set('filter.type', 'BelongsToMany')
                 ->set('filter.relation', 'categories')
                 ->set('filter.column', 'name')
+                ->set('filter.isMultiple', $isMultiple)
                 ->call('addFilter');
 
             return $this;

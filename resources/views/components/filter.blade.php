@@ -11,11 +11,20 @@
             <x:tall-crud-generator::label class="font-sm font-bold">
                 {{ $filter['label'] }}
             </x:tall-crud-generator::label>
-            <x:tall-crud-generator::select class="w-3/4" wire:model="selectedFilters.{{$f}}">
+            @if(isset($filter['multiple']) && $filter['multiple'])
                 @foreach($filter['options'] as $o)
-                <option value="{{$o['key']}}">{{$o['label']}}</option>
+                <x:tall-crud-generator::checkbox-wrapper class="mt-2">
+                    <x:tall-crud-generator::checkbox wire:model="selectedFilters.{{$f}}" value="{{ $o['key'] }}" />
+                    <x:tall-crud-generator::label class="ml-2">{{$o['label']}}</x:tall-crud-generator::label>
+                </x:tall-crud-generator::checkbox-wrapper>
                 @endforeach
-            </x:tall-crud-generator::select>
+            @else 
+                <x:tall-crud-generator::select class="w-3/4" wire:model="selectedFilters.{{$f}}">
+                    @foreach($filter['options'] as $o)
+                    <option value="{{$o['key']}}">{{$o['label']}}</option>
+                    @endforeach
+                </x:tall-crud-generator::select>
+            @endif
         </div>
         @endforeach
         <div class="my-4">

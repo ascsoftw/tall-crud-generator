@@ -377,6 +377,9 @@ class ComponentCode extends BaseCode
                     '##OWNER_KEY##',
                     '##FOREIGN_KEY##',
                     '##LABEL##',
+                    '##EMPTY_FILTER_KEY##',
+                    '##IS_MULTIPLE##',
+                    '##RESET_MULTI_FILTER##'
                 ],
                 [
                     Str::plural($f['relation']),
@@ -385,6 +388,9 @@ class ComponentCode extends BaseCode
                     $this->getFilterOwnerKey($f),
                     $this->getFilterForeignKey($f),
                     $this->getFilterLabelName($f),
+                    $f['isMultiple'] ? '' : Template::getEmptyFilterKey(),
+                    $f['isMultiple'] ? '' : '//',
+                    $this->getResetMultipleFilter($f),
                 ],
                 Template::getRelationFilterInitTemplate()
             );
@@ -402,8 +408,14 @@ class ComponentCode extends BaseCode
 
         return $filters->map(function ($f) {
             return str_replace(
-                '##COLUMN##',
-                $this->getFilterColumnName($f),
+                [
+                    '##COLUMN##',
+                    '##CLAUSE##',
+                ],
+                [
+                    $this->getFilterColumnName($f),
+                    $f['isMultiple'] ? 'whereIn' : 'where',
+                ],
                 Template::getFilterQueryTemplate()
             );
         })->prependAndJoin($this->newLines());
@@ -420,12 +432,14 @@ class ComponentCode extends BaseCode
                     '##RELATION##',
                     '##RELATED_KEY##',
                     '##TABLE##',
+                    '##CLAUSE##',
                 ],
                 [
                     $f['relation'] . '_' . $f['relatedKey'],
                     $f['relation'],
                     $f['relatedKey'],
                     $f['relatedTableName'],
+                    $f['isMultiple'] ? 'whereIn' : 'where',
                 ],
                 Template::getFilterQueryBtmTemplate()
             );
@@ -434,7 +448,17 @@ class ComponentCode extends BaseCode
 
     public function getFilterMethod()
     {
-        return Template::getFilterMethodTemplate();
+        //todo test this.
+        $filters = $this->tallProperties->btmFilters->merge($this->tallProperties->belongsToFilters);
+        $resetMultiFilters = $filters->map(function ($f) {
+            return $this->getResetMultipleFilter($f);
+        })->implode('');
+
+        return str_replace(
+            '##RESET_MULTI_FILTER##',
+            $resetMultiFilters,
+            Template::getFilterMethodTemplate()
+        );
     }
 
     public function getFilterColumnName($filter)
@@ -467,5 +491,19 @@ class ComponentCode extends BaseCode
         }
 
         return $filter['relation'] . '_' . $filter['relatedKey'];
+    }
+
+    public function getResetMultipleFilter($filter)
+    {
+        if(!$filter['isMultiple']) {
+            return '';
+        }
+
+        return str_replace(
+            '##FOREIGN_KEY##',
+            $this->getFilterForeignKey($filter),
+            Template::getResetMultipleFilter()
+        );
+
     }
 }
