@@ -379,7 +379,7 @@ class ComponentCode extends BaseCode
                     '##LABEL##',
                     '##EMPTY_FILTER_KEY##',
                     '##IS_MULTIPLE##',
-                    '##RESET_MULTI_FILTER##'
+                    '##RESET_MULTI_FILTER##',
                 ],
                 [
                     Str::plural($f['relation']),
@@ -495,7 +495,7 @@ class ComponentCode extends BaseCode
 
     public function getResetMultipleFilter($filter)
     {
-        if(!$filter['isMultiple']) {
+        if (! $filter['isMultiple']) {
             return '';
         }
 
@@ -504,6 +504,5 @@ class ComponentCode extends BaseCode
             $this->getFilterForeignKey($filter),
             Template::getResetMultipleFilter()
         );
-
     }
 }
