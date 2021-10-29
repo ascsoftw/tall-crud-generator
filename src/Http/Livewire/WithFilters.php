@@ -108,7 +108,6 @@ trait WithFilters
         $this->filter['isValid'] = true;
         if ($this->filter['type'] == 'None' || $this->filter['type'] == 'Date') {
             $this->filter['columns'] = $this->modelProps['columns'];
-            
         }
 
         if ($this->filter['type'] == 'None') {
@@ -150,7 +149,7 @@ trait WithFilters
             'filter.type' => 'required',
         ]);
 
-        if (!in_array($this->filter['type'], ['None', 'Date'])) {
+        if (! in_array($this->filter['type'], ['None', 'Date'])) {
             $this->validateOnly('filter.relation', [
                 'filter.relation' => 'required',
             ]);

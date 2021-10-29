@@ -505,6 +505,5 @@ EOT;
         $this->assertStringContainsString($dateFilterQuery2, $props['code']['filter']['query']);
 
         $this->assertNotEmpty($props['code']['filter']['method']);
-        
     }
 }

@@ -359,7 +359,6 @@ class ComponentCode extends BaseCode
         }
 
         return $filter->prependAndJoin($this->newLines());
-
     }
 
     public function generateFilterOptionsFromJson($f)
