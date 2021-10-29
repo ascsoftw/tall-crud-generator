@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2021-10-29
+- Add Support for Date Filters
+
 ## [2.1.0] - 2021-10-28
 - Add Support for Multi Filters
 
