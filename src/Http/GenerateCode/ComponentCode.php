@@ -298,6 +298,7 @@ class ComponentCode extends BaseCode
     public function getFilterInitCode()
     {
         return $this->getSelfFilterInitCode() .
+            $this->getDateFilterInitCode() .
             $this->getRelationFilterInitCode();
     }
 
@@ -335,6 +336,30 @@ class ComponentCode extends BaseCode
             $filters->prependAndJoin($this->newLines(1, 1)) . $this->newLines(1, 2),
             Template::getFilterInitTemplate()
         );
+    }
+
+    public function getDateFilterInitCode()
+    {
+        $filter = $this->tallProperties->dateFilters->map(function ($f, $i) {
+            return str_replace(
+                [
+                    '##COLUMN##',
+                    '##LABEL##',
+                ],
+                [
+                    $f['column'] . '_' . $i,
+                    $f['label'],
+                ],
+                Template::getDateFilterInitCode()
+            );
+        })->filter();
+
+        if ($filter->isEmpty()) {
+            return '';
+        }
+
+        return $filter->prependAndJoin($this->newLines());
+
     }
 
     public function generateFilterOptionsFromJson($f)
@@ -399,12 +424,13 @@ class ComponentCode extends BaseCode
 
     public function getFilterQuery()
     {
-        return $this->getSelfFilterQuery() . $this->getBtmFilterQuery();
+        return $this->getSelfFilterQuery() . $this->getBtmFilterQuery() . $this->getDateFilterQuery();
     }
 
     public function getSelfFilterQuery()
     {
-        $filters = $this->tallProperties->selfFilters->merge($this->tallProperties->belongsToFilters);
+        $filters = $this->tallProperties->selfFilters
+            ->merge($this->tallProperties->belongsToFilters);
 
         return $filters->map(function ($f) {
             return str_replace(
@@ -446,9 +472,32 @@ class ComponentCode extends BaseCode
         })->prependAndJoin($this->newLines());
     }
 
+
+    public function getDateFilterQuery()
+    {
+        $filters = $this->tallProperties->dateFilters;
+
+        return $filters->map(function ($f, $i) {
+            return str_replace(
+                [
+                    '##LABEL##',
+                    '##COLUMN##',
+                    '##CLAUSE##',
+                    '##OPERATOR##',
+                ],
+                [
+                    $f['column'] . '_' . $i,
+                    $f['column'],
+                    $f['isMultiple'] ? 'whereIn' : 'where',
+                    $f['operator'],
+                ],
+                Template::getDateFilterQueryTemplate()
+            );
+        })->prependAndJoin($this->newLines());
+    }
+
     public function getFilterMethod()
     {
-        //todo test this.
         $filters = $this->tallProperties->btmFilters->merge($this->tallProperties->belongsToFilters);
         $resetMultiFilters = $filters->map(function ($f) {
             return $this->getResetMultipleFilter($f);
@@ -463,12 +512,12 @@ class ComponentCode extends BaseCode
 
     public function getFilterColumnName($filter)
     {
-        return ($filter['type'] == 'None') ? $filter['column'] : $filter['foreignKey'];
+        return (in_array($filter['type'], ['None', 'Date'])) ? $filter['column'] : $filter['foreignKey'];
     }
 
     public function getFilterLabelName($filter)
     {
-        if ($filter['type'] == 'None') {
+        if (in_array($filter['type'], ['None', 'Date'])) {
             return Str::ucfirst($filter['column']);
         }
 

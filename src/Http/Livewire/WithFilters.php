@@ -32,6 +32,8 @@ trait WithFilters
             'foreignKey' => '',
             'relatedKey' => '',
             'relatedTableName' => '',
+            'label' => '',
+            'operator' => '>=',
         ];
     }
 
@@ -104,9 +106,18 @@ trait WithFilters
     public function fillFilterFields()
     {
         $this->filter['isValid'] = true;
-        if ($this->filter['type'] == 'None') {
+        if ($this->filter['type'] == 'None' || $this->filter['type'] == 'Date') {
             $this->filter['columns'] = $this->modelProps['columns'];
+            
+        }
+
+        if ($this->filter['type'] == 'None') {
             $this->filter['options'] = '{"": "Any", "0" : "No", "1": "Yes"}';
+        }
+
+        if ($this->filter['type'] == 'Date') {
+            $this->filter['label'] = '';
+            $this->filter['operator'] = '>=';
         }
     }
 
@@ -139,7 +150,7 @@ trait WithFilters
             'filter.type' => 'required',
         ]);
 
-        if ($this->filter['type'] != 'None') {
+        if (!in_array($this->filter['type'], ['None', 'Date'])) {
             $this->validateOnly('filter.relation', [
                 'filter.relation' => 'required',
             ]);
@@ -155,6 +166,10 @@ trait WithFilters
                     return;
                 }
                 $this->addNoRelationFilter();
+
+                break;
+            case 'Date':
+                $this->addDateFilter();
 
                 break;
             case 'BelongsTo':
@@ -181,6 +196,17 @@ trait WithFilters
             'type' => $this->filter['type'],
             'column' => $this->filter['column'],
             'options' => $this->filter['options'],
+            'isMultiple' => false,
+        ];
+    }
+
+    public function addDateFilter()
+    {
+        $this->filters[] = [
+            'type' => $this->filter['type'],
+            'column' => $this->filter['column'],
+            'label' => $this->filter['label'],
+            'operator' => $this->filter['operator'],
             'isMultiple' => false,
         ];
     }

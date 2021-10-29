@@ -11,7 +11,9 @@
             <x:tall-crud-generator::label class="font-sm font-bold">
                 {{ $filter['label'] }}
             </x:tall-crud-generator::label>
-            @if(isset($filter['multiple']) && $filter['multiple'])
+            @if(isset($filter['type']) && $filter['type'] == 'date')
+                <x:tall-crud-generator::input class="block mt-1 w-full" type="date" wire:model="selectedFilters.{{$f}}" />
+            @elseif(isset($filter['multiple']) && $filter['multiple'])
                 @foreach($filter['options'] as $o)
                 <x:tall-crud-generator::checkbox-wrapper class="mt-2">
                     <x:tall-crud-generator::checkbox wire:model="selectedFilters.{{$f}}" value="{{ $o['key'] }}" />

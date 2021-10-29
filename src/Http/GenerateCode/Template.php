@@ -503,6 +503,14 @@ EOT;
 EOT;
     }
 
+    public static function getDateFilterInitCode()
+    {
+        return <<<'EOT'
+        $this->filters['##COLUMN##']['label'] = '##LABEL##';
+        $this->filters['##COLUMN##']['type'] = 'date';
+EOT;
+    }
+
     public static function getBtmInitCode()
     {
         return <<<'EOT'
@@ -818,6 +826,15 @@ EOT;
         return <<<'EOT'
             ->when($this->isFilterSet('##COLUMN##'), function($query) {
                 return $query->##CLAUSE##('##COLUMN##', $this->selectedFilters['##COLUMN##']);
+            })
+EOT;
+    }
+
+    public static function getDateFilterQueryTemplate()
+    {
+        return <<<'EOT'
+            ->when($this->isFilterSet('##LABEL##'), function($query) {
+                return $query->##CLAUSE##('##COLUMN##', '##OPERATOR##', $this->selectedFilters['##LABEL##']);
             })
 EOT;
     }

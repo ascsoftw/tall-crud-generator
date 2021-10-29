@@ -35,6 +35,7 @@ class TallProperties
 
     public $filterFlag;
     public $selfFilters;
+    public $dateFilters;
     public $belongsToFilters;
     public $btmFilters;
 
@@ -94,7 +95,7 @@ class TallProperties
     {
         $this->otherModels = collect();
         foreach ($filters as $f) {
-            if ($f['type'] == 'None') {
+            if (in_array($f['type'], ['None', 'Date'])) {
                 continue;
             }
             $this->otherModels->push($f['modelPath']);
@@ -252,6 +253,9 @@ class TallProperties
         $filters = collect($filters);
         $this->selfFilters = $filters->filter(function ($item) {
             return $item['type'] == 'None';
+        });
+        $this->dateFilters = $filters->filter(function ($item) {
+            return $item['type'] == 'Date';
         });
         $this->belongsToFilters = $filters->filter(function ($item) {
             return $item['type'] == 'BelongsTo';

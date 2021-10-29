@@ -82,8 +82,7 @@ class LivewireMethodMixin
     public function setStandardFilters()
     {
         return function ($isMultiple = false) {
-            $this->call('addField')
-                ->call('createNewFilter')
+            $this->call('createNewFilter')
                 ->set('filter.type', 'None')
                 ->set('filter.column', 'name')
                 ->call('addFilter')
@@ -100,6 +99,26 @@ class LivewireMethodMixin
                 ->set('filter.relation', 'categories')
                 ->set('filter.column', 'name')
                 ->set('filter.isMultiple', $isMultiple)
+                ->call('addFilter');
+
+            return $this;
+        };
+    }
+
+    public function setStandardDateFilters()
+    {
+        return function () {
+            $this->call('createNewFilter')
+                ->set('filter.type', 'Date')
+                ->set('filter.column', 'created_at')
+                ->set('filter.label', 'Created From')
+                ->call('addFilter')
+
+                ->call('createNewFilter')
+                ->set('filter.type', 'Date')
+                ->set('filter.column', 'created_at')
+                ->set('filter.label', 'Created Till')
+                ->set('filter.operator', '<=')
                 ->call('addFilter');
 
             return $this;

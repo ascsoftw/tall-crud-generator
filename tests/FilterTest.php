@@ -396,4 +396,115 @@ EOT;
         $this->assertStringContainsString($belongsToFilterQuery, $props['code']['filter']['query']);
         $this->assertStringContainsString($btmFilterQuery, $props['code']['filter']['query']);
     }
+
+    public function test_date_filter_shows_other_fields()
+    {
+        $this->component
+            ->call('createNewFilter')
+            ->set('filter.type', 'Date')
+            ->assertPropertyWired('filter.column')
+            ->assertPropertyWired('filter.label')
+            ->assertPropertyWired('filter.operator')
+            ->assertCount('filter.columns', 7)
+            ->assertSet('filter.operator', '>=');
+    }
+
+    public function test_column_is_required_for_filter()
+    {
+        $this->component
+            ->call('createNewFilter')
+            ->set('filter.type', 'Date')
+            ->call('addFilter')
+            ->assertHasErrors('filter.column')
+            ->assertSee('Please select a value.');
+    }
+
+    public function test_date_filter_can_be_added()
+    {
+        $this->component
+            ->call('createNewFilter')
+            ->set('filter.type', 'Date')
+            ->set('filter.column', 'created_at')
+            ->set('filter.label', 'Created From')
+            ->call('addFilter')
+            ->assertMethodWired('deleteFilter')
+            ->assertSeeInOrder(['Date', 'created_at']);
+    }
+
+    public function test_duplicate_date_filter_can_be_added()
+    {
+        $this->component
+            ->call('createNewFilter')
+            ->set('filter.type', 'Date')
+            ->set('filter.column', 'created_at')
+            ->set('filter.label', 'Created From')
+            ->call('addFilter')
+
+            ->call('createNewFilter')
+            ->set('filter.type', 'Date')
+            ->set('filter.column', 'created_at')
+            ->set('filter.label', 'Created Till')
+            ->set('filter.operator', '<=')
+            ->call('addFilter')
+
+            ->assertViewHas('filters')
+            ->assertCount('filters', 2);
+    }
+
+    public function test_date_filter_code_is_added_to_component()
+    {
+        $this->component
+            ->setStandardDateFilters()
+            ->pressNext()
+            ->generateFiles();
+        
+        $tallProperties = App::make(TallProperties::class);
+        $componentCode = App::make(ComponentCode::class);
+        $props = $this->component->get('props');
+
+        $this->assertTrue($tallProperties->isFilterEnabled());
+        
+        $this->assertNotEmpty($props['code']['filter']['vars']);
+        $this->assertStringContainsString('public $filters = [];', $props['code']['filter']['vars']);
+        $this->assertStringContainsString('public $selectedFilters = [];', $props['code']['filter']['vars']);
+
+        $this->assertNotEmpty($props['code']['filter']['init']);
+        $initCode1 = <<<'EOT'
+$this->filters['created_at_0']['label'] = 'Created From';
+EOT;
+        $initCode2 = <<<'EOT'
+$this->filters['created_at_0']['type'] = 'date';
+EOT;
+        $initCode3 = <<<'EOT'
+$this->filters['created_at_1']['label'] = 'Created Till';
+EOT;
+        $initCode4 = <<<'EOT'
+$this->filters['created_at_1']['type'] = 'date';
+EOT;
+
+        $this->assertStringContainsString($initCode1, $props['code']['filter']['init']);
+        $this->assertStringContainsString($initCode2, $props['code']['filter']['init']);
+        $this->assertStringContainsString($initCode3, $props['code']['filter']['init']);
+        $this->assertStringContainsString($initCode4, $props['code']['filter']['init']);
+
+        $this->assertCount(2, $tallProperties->dateFilters);
+
+        $this->assertNotEmpty($props['code']['filter']['query']);
+        $dateFilterQuery1 = <<<'EOT'
+            ->when($this->isFilterSet('created_at_0'), function($query) {
+                return $query->where('created_at', '>=', $this->selectedFilters['created_at_0']);
+            })
+EOT;
+
+        $dateFilterQuery2 = <<<'EOT'
+            ->when($this->isFilterSet('created_at_1'), function($query) {
+                return $query->where('created_at', '<=', $this->selectedFilters['created_at_1']);
+            })
+EOT;
+        $this->assertStringContainsString($dateFilterQuery1, $props['code']['filter']['query']);
+        $this->assertStringContainsString($dateFilterQuery2, $props['code']['filter']['query']);
+
+        $this->assertNotEmpty($props['code']['filter']['method']);
+        
+    }
 }

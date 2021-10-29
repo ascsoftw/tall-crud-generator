@@ -132,7 +132,10 @@
                 <tr>
                     <x:tall-crud-generator::table-column>{{$v['type']}}</x:tall-crud-generator::table-column>
                     <x:tall-crud-generator::table-column>
-                         @if($v['type'] == 'None')
+                         @if($v['type'] == 'None' || $v['type'] == 'Date' )
+                            @if($v['type'] == 'Date')
+                                {{ $v['operator'] }} 
+                            @endif
                             {{$v['column']}}
                          @elseif($v['type'] == 'BelongsTo' || $v['type'] == 'BelongsToMany')
                             {{$v['relation']. '.' . $v['column']}}
@@ -164,6 +167,7 @@
                     <option value="None">None</option>
                     <option value="BelongsTo">Belongs To</option>
                     <option value="BelongsToMany">Belongs To Many</option>
+                    <option value="Date">Date Filter</option>
                 </x:tall-crud-generator::select>
                 @error('filter.type') <x:tall-crud-generator::error-message>{{$message}}
                 </x:tall-crud-generator::error-message> @enderror
@@ -171,7 +175,7 @@
 
             @if ($filter['isValid'])
             <div class="mt-4 p-4 rounded border border-gray-300">
-                @if ( $filter['type'] == 'None')
+                @if ( $filter['type'] == 'None' || $filter['type'] == 'Date')
                 <div class="mt-4">
                     <x:tall-crud-generator::label>
                         Column
@@ -188,7 +192,25 @@
                     @error('filter.column') <x:tall-crud-generator::error-message>{{$message}}
                     </x:tall-crud-generator::error-message> @enderror
                 </div>
+                @endif
 
+                @if ( $filter['type'] == 'Date')
+                <div class="mt-4">
+                    <x:tall-crud-generator::label>Label</x:tall-crud-generator::label>
+                    <x:tall-crud-generator::input class="block mt-1 w-1/2" type="text" wire:model.defer="filter.label" />
+                </div>
+                <div class="mt-4">
+                    <x:tall-crud-generator::label>Operator</x:tall-crud-generator::label>
+                    <x:tall-crud-generator::select class="block mt-1 w-1/6" wire:model.lazy="filter.operator">
+                        <option value=">=">>=</option>
+                        <option value=">">></option>
+                        <option value="<"><</option>
+                        <option value="<="><=</option>
+                    </x:tall-crud-generator::select>
+                </div>
+                @endif
+
+                @if ( $filter['type'] == 'None')
                 <div class="mt-4">
                     <x:tall-crud-generator::label>Select Options (add as JSON)</x:tall-crud-generator::label>
                     <x:tall-crud-generator::input class="block mt-1 w-full" type="text" wire:model.defer="filter.options" />
