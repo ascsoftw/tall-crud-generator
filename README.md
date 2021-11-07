@@ -67,7 +67,7 @@ Following are some of the Features that are supported:
 - Validations
 - Configure the Order of Columns in Listing
 - Configure Field Type for Form
-- Configure the Orderiner for Form Fields
+- Configure the Order for Form Fields
 - Flash Messages
 - Configuring No. of Records Per Page
 - Display Dropdown to change no. of Records Per Page
@@ -76,20 +76,8 @@ Following are some of the Features that are supported:
 - Display Count of Related Fields in the Listing using Eager Loading Count
 - Having the Ability for User to Show / Hide Columns on Listing
 - Allow User to Define Filters
-
-## Roadmap
-
-Following Features are in the piepline:
-- ~~Support Model Relations~~
-- ~~Flash Messages~~
-- ~~Support for withCount~~
-- ~~Display BelongsToMany Relation as Multi-Select in Form~~
-- ~~Show / hide columns on Listing~~
-- ~~Sort Eager Loaded and Relation Fields~~
-- ~~Use Livewire Sorting for Sort ??~~
-- ~~Bulk Action~~
-- Add Date and Range Filters
-- Improve Test Suite
+- Bulk Action
+- Date Filters
 
 ## Testing
 
