@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2021-11-07
+- Reformat Filter Code for Generated Component
+
 ## [2.2.0] - 2021-10-29
 - Add Support for Date Filters
 
