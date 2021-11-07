@@ -109,7 +109,6 @@ class FilterTest extends TestCase
 
         $this->assertTrue($tallProperties->isFilterEnabled());
         $this->assertNotEmpty($props['code']['filter']['vars']);
-        $this->assertEmpty($props['code']['filter']['init']);
         $this->assertNotEmpty($props['code']['filter']['query']);
         $this->assertNotEmpty($props['code']['filter']['method']);
     }

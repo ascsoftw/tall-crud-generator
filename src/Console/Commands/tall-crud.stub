@@ -20,7 +20,7 @@ class [class] extends Component
 
     public function mount(): void
     {
-[hide_columns_init][filter_init]
+[hide_columns_init][filter_mount]
     }
 
     public function render(): View
@@ -36,5 +36,5 @@ class [class] extends Component
     public function query(): Builder
     {
         return [model]::query()[filter_query];
-    }
+    }[filter_init]
 }

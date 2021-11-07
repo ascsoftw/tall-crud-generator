@@ -492,6 +492,25 @@ EOT;
 EOT;
     }
 
+    public static function getInitFilterCode()
+    {
+        return <<<'EOT'
+
+    private function initFilters(): void
+    {
+##CODE##
+        $this->initMultiFilters();
+    }
+
+EOT;
+    }
+
+    public static function getFilterMountCode()
+    {
+        return <<<'EOT'
+        $this->initFilters();
+EOT;
+    }
     public static function getSelfFilterInitCode()
     {
         return <<<'EOT'
@@ -754,7 +773,7 @@ EOT;
         })->toArray();
         $this->filters['##FOREIGN_KEY##']['label'] = '##LABEL##';
         ##IS_MULTIPLE##$this->filters['##FOREIGN_KEY##']['multiple'] = true;
-        $this->filters['##FOREIGN_KEY##']['options'] = ##EMPTY_FILTER_KEY## $##VAR##;##RESET_MULTI_FILTER##
+        $this->filters['##FOREIGN_KEY##']['options'] = ##EMPTY_FILTER_KEY## $##VAR##;
 EOT;
     }
 
@@ -762,7 +781,6 @@ EOT;
     {
         return <<<'EOT'
 ['0' => ['key' => '', 'label' => 'Any']] +
-
 EOT;
     }
 
@@ -816,7 +834,13 @@ EOT;
 
     public function resetFilters(): void
     {
-        $this->reset('selectedFilters');##RESET_MULTI_FILTER##
+        $this->reset('selectedFilters');
+        $this->initMultiFilters();
+    }
+
+    private function initMultiFilters(): void
+    {
+##RESET_MULTI_FILTER##
     }
 EOT;
     }

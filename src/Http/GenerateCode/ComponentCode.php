@@ -275,12 +275,14 @@ class ComponentCode extends BaseCode
             'init' => '',
             'query' => '',
             'method' => '',
+            'mount' => '',
         ];
         if ($this->tallProperties->isFilterEnabled()) {
             $code['vars'] = $this->getFilterVars();
             $code['init'] = $this->getFilterInitCode();
             $code['query'] = $this->getFilterQuery();
             $code['method'] = $this->getFilterMethod();
+            $code['mount'] = $this->getFilterMount();
         }
 
         return $code;
@@ -297,9 +299,15 @@ class ComponentCode extends BaseCode
 
     public function getFilterInitCode()
     {
-        return $this->getSelfFilterInitCode() .
+        $code = $this->getSelfFilterInitCode() .
             $this->getDateFilterInitCode() .
             $this->getRelationFilterInitCode();
+
+        return str_replace(
+            '##CODE##',
+            $code,
+            Template::getInitFilterCode()
+        );
     }
 
     public function getSelfFilterInitCode()
@@ -403,7 +411,6 @@ class ComponentCode extends BaseCode
                     '##LABEL##',
                     '##EMPTY_FILTER_KEY##',
                     '##IS_MULTIPLE##',
-                    '##RESET_MULTI_FILTER##',
                 ],
                 [
                     Str::plural($f['relation']),
@@ -414,7 +421,6 @@ class ComponentCode extends BaseCode
                     $this->getFilterLabelName($f),
                     $f['isMultiple'] ? '' : Template::getEmptyFilterKey(),
                     $f['isMultiple'] ? '' : '//',
-                    $this->getResetMultipleFilter($f),
                 ],
                 Template::getRelationFilterInitTemplate()
             );
@@ -507,6 +513,11 @@ class ComponentCode extends BaseCode
             $resetMultiFilters,
             Template::getFilterMethodTemplate()
         );
+    }
+
+    public function getFilterMount()
+    {
+        return Template::getFilterMountCode();
     }
 
     public function getFilterColumnName($filter)

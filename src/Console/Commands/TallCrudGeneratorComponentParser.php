@@ -44,6 +44,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     '/\[filter_init\]/',
                     '/\[filter_query\]/',
                     '/\[filter_method\]/',
+                    '/\[filter_mount\]/',
                     '/\[other_models\]/',
                 ],
                 [
@@ -71,6 +72,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                     $props['code']['filter']['init'],
                     $props['code']['filter']['query'],
                     $props['code']['filter']['method'],
+                    $props['code']['filter']['mount'],
                     $props['code']['other_models'],
                 ],
                 $template
