@@ -518,6 +518,7 @@ class TallCrudGenerator extends Component
     {
         $code = [];
         $this->viewCode = App::make(ViewCode::class);
+        $code['alpine_code'] = $this->viewCode->getAlpineCode();
         $code['add_link'] = $this->viewCode->getAddLink();
         $code['search_box'] = $this->viewCode->getSearchBox();
         $code['pagination_dropdown'] = $this->viewCode->getPaginationDropdown();

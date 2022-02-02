@@ -63,7 +63,7 @@
                 </x:tall-crud-generator::select>
             </x:tall-crud-generator::checkbox-wrapper>
             <x:tall-crud-generator::checkbox-wrapper class="mt-4">
-                <x:tall-crud-generator::label>Allow User to Hide Column in Listing:</x:tall-crud-generator::label>
+                <x:tall-crud-generator::label>Allow User to Hide Column in Listing <span class="italic">(only works with Alpine v3):</span></x:tall-crud-generator::label>
                 <x:tall-crud-generator::checkbox class="ml-2"
                     wire:model.defer="advancedSettings.table_settings.showHideColumns" />
             </x:tall-crud-generator::checkbox-wrapper>

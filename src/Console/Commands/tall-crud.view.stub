@@ -1,4 +1,4 @@
-<div class="mt-8 min-h-screen">
+<div class="mt-8 min-h-screen"[alpine_code]>
     <div class="flex justify-between">
         <div class="text-2xl">[heading]</div>[add_link] 
     </div>

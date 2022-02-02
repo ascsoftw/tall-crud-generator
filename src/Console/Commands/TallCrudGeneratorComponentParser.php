@@ -135,6 +135,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
             $template = preg_replace_array(
                 [
                     '/\[heading\]/',
+                    '/\[alpine_code\]/',
                     '/\[add_link\]/',
                     '/\[search_box\]/',
                     '/\[table_header\]/',
@@ -152,6 +153,7 @@ class TallCrudGeneratorComponentParser extends ComponentParser
                 ],
                 [
                     $props['advancedSettings']['text']['title'],
+                    $props['html']['alpine_code'],
                     $props['html']['add_link'],
                     $props['html']['search_box'],
                     $props['html']['table_header'],

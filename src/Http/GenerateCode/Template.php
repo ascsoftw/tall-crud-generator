@@ -17,11 +17,7 @@ EOT;
     public static function getSearchInputField()
     {
         return <<<'EOT'
-
-                <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                <span class="ml-3 mt-2" wire:loading.delay wire:target="q">
-                    <x:tall-crud-generator::loading-indicator />
-                </span>
+                <x:tall-crud-generator::input-search />
 EOT;
     }
 
@@ -29,19 +25,24 @@ EOT;
     {
         return <<<'EOT'
 
-                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
-                    <x-slot name="trigger">
-                        Columns
-                    </x-slot>
+                <x:tall-crud-generator::columns-dropdown />
+EOT;
+    }
 
-                    <x-slot name="content">
-                        @foreach($columns as $c)
-                        <x:tall-crud-generator::checkbox-wrapper class="mt-2">
-                            <x:tall-crud-generator::checkbox wire:model="selectedColumns" value="{{ $c }}" /><x:tall-crud-generator::label class="ml-2">{{$c}}</x:tall-crud-generator::label>
-                        </x:tall-crud-generator::checkbox-wrapper>
-                        @endforeach
-                    </x-slot>
-                </x:tall-crud-generator::dropdown>
+    public static function getAlpineCode()
+    {
+        return <<<'EOT'
+x-data="{
+    selectedColumns: @entangle('selectedColumns').defer,
+    columns: @entangle('columns').defer,
+    hasColumn(column) {
+        var columns = this.selectedColumns;
+        var column = columns.find(e => {
+            return e.toLowerCase() === column.toLowerCase()
+        })
+        return column != undefined;
+    }
+}"
 EOT;
     }
 
@@ -49,12 +50,7 @@ EOT;
     {
         return <<<'EOT'
 
-                <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </x:tall-crud-generator::select>
+                <x:tall-crud-generator::page-dropdown />
 EOT;
     }
 
@@ -693,22 +689,10 @@ EOT;
 EOT;
     }
 
-    public static function getHideColumnMethod()
-    {
-        return <<<'EOT'
-
-
-    public function showColumn($column)
-    {
-        return in_array($column, $this->selectedColumns);
-    }
-EOT;
-    }
-
     public static function getHideColumnIfCondition()
     {
         return <<<'EOT'
-@if($this->showColumn('##LABEL##'))
+x-show="hasColumn('##LABEL##')"
 EOT;
     }
 

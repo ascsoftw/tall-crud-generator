@@ -52,6 +52,9 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         Blade::component('tall-crud-generator::icon-edit', 'tall-crud-icon-edit');
         Blade::component('tall-crud-generator::icon-delete', 'tall-crud-icon-delete');
         Blade::component('tall-crud-generator::filter', 'tall-crud-filter');
+        Blade::component('tall-crud-generator::input-search', 'tall-crud-input-search');
+        Blade::component('tall-crud-generator::columns-dropdown', 'tall-crud-columns-dropdown');
+        Blade::component('tall-crud-generator::page-dropdown', 'tall-crud-page-dropdown');
 
         $this->defineMacros();
 
