@@ -1,4 +1,4 @@
-<x:tall-crud-generator::dropdown {{ $attributes->merge(['class' => 'flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer']) }}>
+<x-tall-crud-dropdown {{ $attributes->merge(['class' => 'flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer']) }}>
     <x-slot name="trigger">
         Columns
     </x-slot>
@@ -11,4 +11,4 @@
             </div>
         </template>
     </x-slot>
-</x:tall-crud-generator::dropdown>
+</x-tall-crud-dropdown>

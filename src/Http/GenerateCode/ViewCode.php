@@ -220,7 +220,7 @@ class ViewCode extends BaseCode
 
     public function getSortIconHtml($column)
     {
-        return '<x:tall-crud-generator::sort-icon sortField="'.$column.'" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
+        return '<x-tall-crud-sort-icon sortField="'.$column.'" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
     }
 
     public function getHeaderHtml($label, $column = null, $isSortable = false)

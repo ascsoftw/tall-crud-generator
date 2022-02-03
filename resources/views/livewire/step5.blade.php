@@ -2,30 +2,30 @@
     <ul>
         <li class="flex">
             <span class="cursor-pointer text-blue-500 font-medium" wire:click="showSortDialog('listing')">Listing</span>
-            <x:tall-crud-generator::tooltip>
+            <x-tall-crud-tooltip>
                 Change the Order of Columns displayed in the Listing
-            </x:tall-crud-generator::tooltip>
+            </x-tall-crud-tooltip>
         </li>
         @if($this->addFeature)
         <li class="flex mt-4">
             <span class="cursor-pointer text-blue-500 font-medium" wire:click="showSortDialog('add')">Add Fields</span>
-            <x:tall-crud-generator::tooltip>
+            <x-tall-crud-tooltip>
                 Change the Order of Fields displayed in the Add Form
-            </x:tall-crud-generator::tooltip>
+            </x-tall-crud-tooltip>
         </li>
         @endif
         @if($this->editFeature)
         <li class="flex mt-4">
             <span class="cursor-pointer text-blue-500 font-medium" wire:click="showSortDialog('edit')">Edit Fields</span>
-            <x:tall-crud-generator::tooltip>
+            <x-tall-crud-tooltip>
                 Change the Order of Fields displayed in the Edit Form
-            </x:tall-crud-generator::tooltip>
+            </x-tall-crud-tooltip>
         </li>
         @endif
     </ul>
 </div>
 
-<x:tall-crud-generator::dialog-modal wire:model="confirmingSorting">
+<x-tall-crud-dialog-modal wire:model="confirmingSorting">
     <x-slot name="title">
         Sort Fields
     </x-slot>
@@ -44,9 +44,9 @@
     </x-slot>
 
     <x-slot name="footer">
-        <x:tall-crud-generator::button mode="add" wire:click="hideSortDialog()">Done</x:tall-crud-generator::button>
+        <x-tall-crud-button mode="add" wire:click="hideSortDialog()">Done</x-tall-crud-button>
     </x-slot>
-</x:tall-crud-generator::dialog-modal>
+</x-tall-crud-dialog-modal>
 
 <script>
     window.addEventListener('init-sort-events', event => {
