@@ -86,6 +86,7 @@
                 </x:tall-crud-generator::select>
             </x:tall-crud-generator::checkbox-wrapper>
             @endif
+            <div class="mt-4">The Table uses Blue Theme. You can change the theme by changing <span class="font-bold text-blue-700">blue</span> classes to other class from <a href="https://v2.tailwindcss.com/docs/customizing-colors" target="_blank" class="text-blue-300 cursor-pointer">v2</a> or <a class="text-blue-300 cursor-pointer" target="_blank" href="https://tailwindcss.com/docs/customizing-colors">v3</a></div>
             <div class="mt-4">
                 <x:tall-crud-generator::label>Class on th:</x:tall-crud-generator::label>
                 <x:tall-crud-generator::input type="text" class="mt-1 block w-1/4"
@@ -115,7 +116,7 @@
         <x:tall-crud-generator::accordion-header tab="4">
             Filters
             <x-slot name="help">
-                Define Filters for the Listing
+                Define Filters so that Users can Search throuth the data from your Listing
             </x-slot>
         </x:tall-crud-generator::accordion-header>
 

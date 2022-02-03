@@ -12,7 +12,7 @@
 [bulk_action][hide_columns][pagination_dropdown]
             </div>
         </div>
-        <table class="w-full whitespace-no-wrap mt-4 shadow-2xl" wire:loading.class.delay="opacity-50">
+        <table class="w-full whitespace-no-wrap mt-4 shadow-2xl text-xs" wire:loading.class.delay="opacity-50">
             <thead>
                 <tr class="[th_class]">
                 [table_header]
