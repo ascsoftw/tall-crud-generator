@@ -36,9 +36,9 @@ class TallCrudGenerator extends Component
     public $fields = [];
     public $sortFields = [];
 
-    public $attributeKey;
-    public $confirmingAttributes = false;
-    public $attributes = [
+    public $fieldAttributeKey;
+    public $confirmingFieldAttributes = false;
+    public $fieldAttributes = [
         'rules' => '',
         'type' => 'input',
         'options' => '',
@@ -249,7 +249,7 @@ class TallCrudGenerator extends Component
             'inList' => true,
             'inAdd' => true,
             'inEdit' => true,
-            'attributes' => [
+            'fieldAttributes' => [
                 'rules' => '',
                 'type' => 'input',
                 'options' => '{"1" : "Yes", "0": "No"}',
@@ -272,28 +272,28 @@ class TallCrudGenerator extends Component
         }
     }
 
-    public function showAttributes($i)
+    public function showFieldAttributes($i)
     {
-        $this->confirmingAttributes = true;
-        $this->attributes = $this->fields[$i]['attributes'];
-        $this->attributeKey = $i;
+        $this->confirmingFieldAttributes = true;
+        $this->fieldAttributes = $this->fields[$i]['fieldAttributes'];
+        $this->fieldAttributeKey = $i;
     }
 
     public function addRule($rule)
     {
-        $this->attributes['rules'] .= $rule.',';
+        $this->fieldAttributes['rules'] .= $rule.',';
     }
 
     public function clearRules()
     {
-        $this->attributes['rules'] = '';
+        $this->fieldAttributes['rules'] = '';
     }
 
-    public function setAttributes()
+    public function setFieldAttributes()
     {
-        $this->fields[$this->attributeKey]['attributes'] = $this->attributes;
-        $this->confirmingAttributes = false;
-        $this->attributeKey = false;
+        $this->fields[$this->fieldAttributeKey]['fieldAttributes'] = $this->fieldAttributes;
+        $this->confirmingFieldAttributes = false;
+        $this->fieldAttributeKey = false;
     }
 
     public function validateSettings()
@@ -518,6 +518,7 @@ class TallCrudGenerator extends Component
     {
         $code = [];
         $this->viewCode = App::make(ViewCode::class);
+        $code['alpine_code'] = $this->viewCode->getAlpineCode();
         $code['add_link'] = $this->viewCode->getAddLink();
         $code['search_box'] = $this->viewCode->getSearchBox();
         $code['pagination_dropdown'] = $this->viewCode->getPaginationDropdown();

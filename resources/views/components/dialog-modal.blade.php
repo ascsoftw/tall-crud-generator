@@ -1,6 +1,6 @@
 @props(['id' => null, 'maxWidth' => null])
 
-<x:tall-crud-generator::modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
+<x-tall-crud-modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
     <div class="px-6 py-4">
         <div class="text-lg">
             {{ $title }}
@@ -14,4 +14,4 @@
     <div class="px-6 py-4 bg-gray-100 text-right">
         {{ $footer }}
     </div>
-</x:tall-crud-generator::modal>
+</x-tall-crud-modal>

@@ -1,9 +1,9 @@
 <div>
     <div>
-        <x:tall-crud-generator::label>Name of your Livewire Component</x:tall-crud-generator::label>
-        <x:tall-crud-generator::input class="block mt-1 w-1/4" type="text" wire:model.defer="componentName" required />
-        @error('componentName') <x:tall-crud-generator::error-message>{{$message}}
-        </x:tall-crud-generator::error-message>@enderror
+        <x-tall-crud-label>Name of your Livewire Component</x-tall-crud-label>
+        <x-tall-crud-input class="block mt-1 w-1/4" type="text" wire:model.defer="componentName" required />
+        @error('componentName') <x-tall-crud-error-message>{{$message}}
+        </x-tall-crud-error-message>@enderror
     </div>
 
     @if($isComplete)
@@ -18,7 +18,7 @@
 
         </div>
         @else
-        <x:tall-crud-generator::error-message>Files Could not be Generated.</x:tall-crud-generator::error-message>
+        <x-tall-crud-error-message>Files Could not be Generated.</x-tall-crud-error-message>
         @endif
     </div>
     @endif

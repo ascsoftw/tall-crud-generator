@@ -194,7 +194,6 @@ class ComponentCode extends BaseCode
         if ($this->tallProperties->isHideColumnsEnabled()) {
             $code['vars'] = $this->getHideColumnVars();
             $code['init'] = $this->getHideColumnInitCode();
-            $code['method'] = $this->getHideColumnMethod();
         }
 
         return $code;
@@ -238,11 +237,6 @@ class ComponentCode extends BaseCode
         }
 
         return $code;
-    }
-
-    public function getHideColumnMethod()
-    {
-        return Template::getHideColumnMethod();
     }
 
     public function getBulkActionMethod()

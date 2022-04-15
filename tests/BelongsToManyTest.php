@@ -271,7 +271,7 @@ EOT;
         $addModalCode = $childViewCode->getAddModal();
 
         $this->assertStringContainsString('wire:model.defer="checkedTags"', $addModalCode);
-        $this->assertStringContainsString('{{$c->name}}</x:tall-crud-generator::label>', $addModalCode);
+        $this->assertStringContainsString('{{$c->name}}</x-tall-crud-label>', $addModalCode);
         $this->assertStringContainsString('@foreach( $tags as $c)', $addModalCode);
         $this->assertStringContainsString('value="{{ $c->id }}" ', $addModalCode);
 
@@ -291,7 +291,7 @@ EOT;
         $editModalCode = $childViewCode->getEditModal();
 
         $this->assertStringContainsString('wire:model.defer="checkedTags"', $editModalCode);
-        $this->assertStringContainsString('{{$c->name}}</x:tall-crud-generator::label>', $editModalCode);
+        $this->assertStringContainsString('{{$c->name}}</x-tall-crud-label>', $editModalCode);
         $this->assertStringContainsString('@foreach( $tags as $c)', $editModalCode);
         $this->assertStringContainsString('value="{{ $c->id }}" ', $editModalCode);
 

@@ -91,11 +91,7 @@ EOT;
 
         $this->assertEquals(Template::getHideColumnInitCode(), $props['code']['hide_columns']['init']);
         $this->assertEquals(Template::getHideColumnInitCode(), $componentCode->getHideColumnInitCode());
-
-        $this->assertEquals(Template::getHideColumnMethod(), $props['code']['hide_columns']['method']);
-        $this->assertEquals(Template::getHideColumnMethod(), $componentCode->getHideColumnMethod());
     }
-
 
     public function test_view_contains_dropdown()
     {
@@ -111,6 +107,20 @@ EOT;
         $this->assertEquals(Template::getHideColumnsDropdown(), $props['html']['hide_columns']);
     }
 
+    public function test_view_contains_alpine_code()
+    {
+        $this->component
+            ->assertPropertyWired('advancedSettings.table_settings.showHideColumns')
+            ->assertSet('advancedSettings.table_settings.showHideColumns', false)
+            ->set('advancedSettings.table_settings.showHideColumns', true)
+            ->pressNext()
+            ->generateFiles();
+
+        $props = $this->component->get('props');
+
+        $this->assertEquals(Template::getAlpineCode(), $props['html']['alpine_code']);
+    }
+
     public function test_table_header_has_hide_columns_code()
     {
         $this->component
@@ -121,7 +131,7 @@ EOT;
             ->generateFiles();
         
         $props = $this->component->get('props');
-        $this->assertEquals(9, substr_count($props['html']['table_header'], '@if($this->showColumn('));
+        $this->assertEquals(9, substr_count($props['html']['table_header'], 'hasColumn('));
     }
 
     public function test_table_slot_has_hide_columns_code()
@@ -134,6 +144,6 @@ EOT;
             ->generateFiles();
         
         $props = $this->component->get('props');
-        $this->assertEquals(9, substr_count($props['html']['table_slot'], '@if($this->showColumn('));
+        $this->assertEquals(9, substr_count($props['html']['table_slot'], 'hasColumn('));
     }
 }

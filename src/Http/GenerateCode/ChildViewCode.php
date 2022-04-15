@@ -101,7 +101,7 @@ class ChildViewCode extends BaseCode
 
     public function getNormalFieldHtml($field)
     {
-        switch ($field['attributes']['type']) {
+        switch ($field['fieldAttributes']['type']) {
             case 'checkbox':
                 $fieldTemplate = Template::getCheckboxField();
 
@@ -127,10 +127,10 @@ class ChildViewCode extends BaseCode
             $fieldTemplate
         );
 
-        if ($field['attributes']['type'] == 'select') {
+        if ($field['fieldAttributes']['type'] == 'select') {
             $html = str_replace(
                 '##OPTIONS##',
-                $this->getSelectOptionsHtml($field['attributes']['options']),
+                $this->getSelectOptionsHtml($field['fieldAttributes']['options']),
                 $html
             );
         }

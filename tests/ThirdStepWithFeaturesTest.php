@@ -185,18 +185,18 @@ class ThirdStepWithFeaturesTest extends TestCase
             ->call('addField')
             ->set('fields.0.column', 'name')
             ->assertSet('confirmingAttributes', false)
-            ->call('showAttributes', 0)
-            ->assertSet('confirmingAttributes', true)
-            ->assertSet('attributes.rules', '')
+            ->call('showFieldAttributes', 0)
+            ->assertSet('confirmingFieldAttributes', true)
+            ->assertSet('fieldAttributes.rules', '')
             ->assertSet('attributeKey', 0)
-            ->assertSet('attributes.type', 'input')
+            ->assertSet('fieldAttributes.type', 'input')
             ->call('addRule', 'required')
-            ->assertSet('attributes.rules', 'required,')
-            ->assertSet('fields.0.attributes.rules', '')
-            ->call('setAttributes')
-            ->assertSet('confirmingAttributes', false)
-            ->assertSet('attributeKey', false)
-            ->assertSet('fields.0.attributes.rules', 'required,');
+            ->assertSet('fieldAttributes.rules', 'required,')
+            ->assertSet('fields.0.fieldAttributes.rules', '')
+            ->call('setFieldAttributes')
+            ->assertSet('confirmingFieldAttributes', false)
+            ->assertSet('fieldAttributeKey', false)
+            ->assertSet('fields.0.fieldAttributes.rules', 'required,');
     }
 
     public function test_clear_options()
@@ -205,10 +205,10 @@ class ThirdStepWithFeaturesTest extends TestCase
         ->pressNext()
         ->call('addField')
         ->set('fields.0.column', 'name')
-        ->set('fields.0.attributes.rules', 'required')
-        ->call('showAttributes', 0)
-        ->assertSet('attributes.rules', 'required')
+        ->set('fields.0.fieldAttributes.rules', 'required')
+        ->call('showFieldAttributes', 0)
+        ->assertSet('fieldAttributes.rules', 'required')
         ->call('clearRules')
-        ->assertSet('attributes.rules', '');
+        ->assertSet('fieldAttributes.rules', '');
     }
 }

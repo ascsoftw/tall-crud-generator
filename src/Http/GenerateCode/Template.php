@@ -17,11 +17,7 @@ EOT;
     public static function getSearchInputField()
     {
         return <<<'EOT'
-
-                <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                <span class="ml-3 mt-2" wire:loading.delay wire:target="q">
-                    <x:tall-crud-generator::loading-indicator />
-                </span>
+                <x-tall-crud-input-search />
 EOT;
     }
 
@@ -29,19 +25,24 @@ EOT;
     {
         return <<<'EOT'
 
-                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
-                    <x-slot name="trigger">
-                        Columns
-                    </x-slot>
+                <x-tall-crud-columns-dropdown />
+EOT;
+    }
 
-                    <x-slot name="content">
-                        @foreach($columns as $c)
-                        <x:tall-crud-generator::checkbox-wrapper class="mt-2">
-                            <x:tall-crud-generator::checkbox wire:model="selectedColumns" value="{{ $c }}" /><x:tall-crud-generator::label class="ml-2">{{$c}}</x:tall-crud-generator::label>
-                        </x:tall-crud-generator::checkbox-wrapper>
-                        @endforeach
-                    </x-slot>
-                </x:tall-crud-generator::dropdown>
+    public static function getAlpineCode()
+    {
+        return <<<'EOT'
+x-data="{
+    selectedColumns: @entangle('selectedColumns').defer,
+    columns: @entangle('columns').defer,
+    hasColumn(column) {
+        var columns = this.selectedColumns;
+        var column = columns.find(e => {
+            return e.toLowerCase() === column.toLowerCase()
+        })
+        return column != undefined;
+    }
+}"
 EOT;
     }
 
@@ -49,12 +50,7 @@ EOT;
     {
         return <<<'EOT'
 
-                <x:tall-crud-generator::select class="block w-1/10" wire:model="per_page">
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </x:tall-crud-generator::select>
+                <x-tall-crud-page-dropdown />
 EOT;
     }
 
@@ -63,7 +59,7 @@ EOT;
         return <<<'EOT'
 
                         <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showDeleteForm', {{ $result->##PRIMARY_KEY##}});" class="text-red-500">
-                            <x:tall-crud-generator::icon-delete />
+                            <x-tall-crud-icon-delete />
                         </button>
 EOT;
     }
@@ -73,7 +69,7 @@ EOT;
         return <<<'EOT'
 
         <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showCreateForm');" class="text-blue-500">
-            <x:tall-crud-generator::icon-add />
+            <x-tall-crud-icon-add />
         </button>
 EOT;
     }
@@ -83,7 +79,7 @@ EOT;
         return <<<'EOT'
 
                         <button type="submit" wire:click="$emitTo('##COMPONENT_NAME##', 'showEditForm', {{ $result->##PRIMARY_KEY##}});" class="text-green-500">
-                            <x:tall-crud-generator::icon-edit />
+                            <x-tall-crud-icon-edit />
                         </button>
 EOT;
     }
@@ -221,7 +217,7 @@ EOT;
     public static function getTableColumnSlot()
     {
         return <<<'EOT'
-{{ $result->##COLUMN_NAME##}}
+{{ $result->##COLUMN_NAME## }}
 EOT;
     }
 
@@ -378,7 +374,7 @@ EOT;
     {
         return <<<'EOT'
 
-    <x:tall-crud-generator::confirmation-dialog wire:model="confirmingItemDeletion">
+    <x-tall-crud-confirmation-dialog wire:model="confirmingItemDeletion">
         <x-slot name="title">
             Delete Record
         </x-slot>
@@ -388,10 +384,10 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemDeletion', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="delete" wire:loading.attr="disabled" wire:click="deleteItem()">##DELETE_BTN_TEXT##</x:tall-crud-generator::button>
+            <x-tall-crud-button wire:click="$set('confirmingItemDeletion', false)">##CANCEL_BTN_TEXT##</x-tall-crud-button>
+            <x-tall-crud-button mode="delete" wire:loading.attr="disabled" wire:click="deleteItem()">##DELETE_BTN_TEXT##</x-tall-crud-button>
         </x-slot>
-    </x:tall-crud-generator::confirmation-dialog>
+    </x-tall-crud-confirmation-dialog>
 
 EOT;
     }
@@ -400,7 +396,7 @@ EOT;
     {
         return <<<'EOT'
 
-    <x:tall-crud-generator::dialog-modal wire:model="confirmingItemCreation">
+    <x-tall-crud-dialog-modal wire:model="confirmingItemCreation">
         <x-slot name="title">
             Add Record
         </x-slot>
@@ -409,10 +405,10 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemCreation', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="createItem()">##CREATE_BTN_TEXT##</x:tall-crud-generator::button>
+            <x-tall-crud-button wire:click="$set('confirmingItemCreation', false)">##CANCEL_BTN_TEXT##</x-tall-crud-button>
+            <x-tall-crud-button mode="add" wire:loading.attr="disabled" wire:click="createItem()">##CREATE_BTN_TEXT##</x-tall-crud-button>
         </x-slot>
-    </x:tall-crud-generator::dialog-modal>
+    </x-tall-crud-dialog-modal>
 
 EOT;
     }
@@ -421,7 +417,7 @@ EOT;
     {
         return <<<'EOT'
 
-    <x:tall-crud-generator::dialog-modal wire:model="confirmingItemEdit">
+    <x-tall-crud-dialog-modal wire:model="confirmingItemEdit">
         <x-slot name="title">
             Edit Record
         </x-slot>
@@ -430,10 +426,10 @@ EOT;
         </x-slot>
 
         <x-slot name="footer">
-            <x:tall-crud-generator::button wire:click="$set('confirmingItemEdit', false)">##CANCEL_BTN_TEXT##</x:tall-crud-generator::button>
-            <x:tall-crud-generator::button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EDIT_BTN_TEXT##</x:tall-crud-generator::button>
+            <x-tall-crud-button wire:click="$set('confirmingItemEdit', false)">##CANCEL_BTN_TEXT##</x-tall-crud-button>
+            <x-tall-crud-button mode="add" wire:loading.attr="disabled" wire:click="editItem()">##EDIT_BTN_TEXT##</x-tall-crud-button>
         </x-slot>
-    </x:tall-crud-generator::dialog-modal>
+    </x-tall-crud-dialog-modal>
 EOT;
     }
 
@@ -442,9 +438,9 @@ EOT;
         return <<<'EOT'
 
             <div class="mt-4">
-                <x:tall-crud-generator::label>##LABEL##</x:tall-crud-generator::label>
-                <x:tall-crud-generator::input class="block mt-1 w-1/2" type="text" wire:model.defer="item.##COLUMN##" />
-                @error('item.##COLUMN##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+                <x-tall-crud-label>##LABEL##</x-tall-crud-label>
+                <x-tall-crud-input class="block mt-1 w-1/2" type="text" wire:model.defer="item.##COLUMN##" />
+                @error('item.##COLUMN##') <x-tall-crud-error-message>{{$message}}</x-tall-crud-error-message> @enderror
             </div>
 EOT;
     }
@@ -454,10 +450,10 @@ EOT;
         return <<<'EOT'
 
             <div class="mt-4">
-                <x:tall-crud-generator::label>##LABEL##</x:tall-crud-generator::label>
-                <x:tall-crud-generator::select class="block mt-1 w-1/4" wire:model.defer="item.##COLUMN##">##OPTIONS##
-                </x:tall-crud-generator::select> 
-                @error('item.##COLUMN##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+                <x-tall-crud-label>##LABEL##</x-tall-crud-label>
+                <x-tall-crud-select class="block mt-1 w-1/4" wire:model.defer="item.##COLUMN##">##OPTIONS##
+                </x-tall-crud-select> 
+                @error('item.##COLUMN##') <x-tall-crud-error-message>{{$message}}</x-tall-crud-error-message> @enderror
             </div>
 EOT;
     }
@@ -466,10 +462,10 @@ EOT;
     {
         return <<<'EOT'
 
-            <x:tall-crud-generator::checkbox-wrapper class="mt-4">
-                <x:tall-crud-generator::label>##LABEL##:</x:tall-crud-generator::label><x:tall-crud-generator::checkbox class="ml-2" wire:model.defer="item.##COLUMN##" />
-            </x:tall-crud-generator::checkbox-wrapper>
-            @error('item.##COLUMN##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+            <x-tall-crud-checkbox-wrapper class="mt-4">
+                <x-tall-crud-label>##LABEL##:</x-tall-crud-label><x-tall-crud-checkbox class="ml-2" wire:model.defer="item.##COLUMN##" />
+            </x-tall-crud-checkbox-wrapper>
+            @error('item.##COLUMN##') <x-tall-crud-error-message>{{$message}}</x-tall-crud-error-message> @enderror
 EOT;
     }
 
@@ -585,10 +581,10 @@ EOT;
             <h2 class="mt-4">##HEADING##</h2>
             <div class="grid grid-cols-3">
                 @foreach( $##RELATION## as $c)
-                <x:tall-crud-generator::checkbox-wrapper class="mt-4">
-                    <x:tall-crud-generator::label>{{$c->##DISPLAY_COLUMN##}}</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::checkbox value="{{ $c->##RELATED_KEY## }}" class="ml-2" wire:model.defer="##FIELD_NAME##" />
-                </x:tall-crud-generator::checkbox-wrapper>
+                <x-tall-crud-checkbox-wrapper class="mt-4">
+                    <x-tall-crud-label>{{$c->##DISPLAY_COLUMN##}}</x-tall-crud-label>
+                    <x-tall-crud-checkbox value="{{ $c->##RELATED_KEY## }}" class="ml-2" wire:model.defer="##FIELD_NAME##" />
+                </x-tall-crud-checkbox-wrapper>
                 @endforeach
             </div>
 EOT;
@@ -600,11 +596,11 @@ EOT;
 
 
             <h2 class="mt-4">##HEADING##</h2>
-            <x:tall-crud-generator::select multiple="multiple" wire:model.defer="##FIELD_NAME##">
+            <x-tall-crud-select multiple="multiple" wire:model.defer="##FIELD_NAME##">
             @foreach( $##RELATION## as $c)
                 <option value="{{ $c->##RELATED_KEY## }}">{{$c->##DISPLAY_COLUMN##}}</option>
             @endforeach
-            </x:tall-crud-generator::select>
+            </x-tall-crud-select>
 EOT;
     }
 
@@ -615,14 +611,14 @@ EOT;
 
             <div class="grid grid-cols-3">
                 <div class="mt-4">
-                    <x:tall-crud-generator::label>##LABEL##</x:tall-crud-generator::label>
-                    <x:tall-crud-generator::select class="block mt-1 w-full" wire:model.defer="item.##FOREIGN_KEY##">
+                    <x-tall-crud-label>##LABEL##</x-tall-crud-label>
+                    <x-tall-crud-select class="block mt-1 w-full" wire:model.defer="item.##FOREIGN_KEY##">
                         <option value="">Please Select</option>
                         @foreach($##BELONGS_TO_VAR## as $c)
                         <option value="{{$c->##OWNER_KEY##}}">{{$c->##DISPLAY_COLUMN##}}</option>
                         @endforeach
-                    </x:tall-crud-generator::select>
-                    @error('item.##FOREIGN_KEY##') <x:tall-crud-generator::error-message>{{$message}}</x:tall-crud-generator::error-message> @enderror
+                    </x-tall-crud-select>
+                    @error('item.##FOREIGN_KEY##') <x-tall-crud-error-message>{{$message}}</x-tall-crud-error-message> @enderror
                 </div>
             </div>
 EOT;
@@ -693,22 +689,10 @@ EOT;
 EOT;
     }
 
-    public static function getHideColumnMethod()
-    {
-        return <<<'EOT'
-
-
-    public function showColumn($column)
-    {
-        return in_array($column, $this->selectedColumns);
-    }
-EOT;
-    }
-
     public static function getHideColumnIfCondition()
     {
         return <<<'EOT'
-@if($this->showColumn('##LABEL##'))
+x-show="hasColumn('##LABEL##')"
 EOT;
     }
 
@@ -733,7 +717,7 @@ EOT;
     public static function getBulkActionDropdown()
     {
         return <<<'EOT'
-                <x:tall-crud-generator::dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
+                <x-tall-crud-dropdown class="flex justify-items items-center mr-4 border border-rounded px-2 cursor-pointer">
                     <x-slot name="trigger">
                         Bulk Actions
                     </x-slot>
@@ -742,7 +726,7 @@ EOT;
                         <button wire:click="changeStatus(1)">Activate</button><br />
                         <button wire:click="changeStatus(0)">Deactivate</button>
                     </x-slot>
-                </x:tall-crud-generator::dropdown>
+                </x-tall-crud-dropdown>
 EOT;
     }
 
@@ -750,7 +734,7 @@ EOT;
     {
         return <<<'EOT'
 
-                        <x:tall-crud-generator::checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
+                        <x-tall-crud-checkbox class="mr-2 leading-tight" value="{{$result->##PRIMARY_KEY##}}" wire:model.defer="selectedItems" />
 
 EOT;
     }
@@ -802,7 +786,8 @@ EOT;
     public static function getFilterDropdownTemplate()
     {
         return <<<'EOT'
-                <x:tall-crud-generator::filter :filters=$filters />
+
+                <x-tall-crud-filter :filters=$filters />
 EOT;
     }
 

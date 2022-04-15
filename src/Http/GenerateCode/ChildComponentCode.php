@@ -92,7 +92,7 @@ class ChildComponentCode extends BaseCode
             $rules->push(
                 $this->getKeyValueCode(
                     $field['column'],
-                    Str::of($field['attributes']['rules'])->explode(',')->filter()->join('|')
+                    Str::of($field['fieldAttributes']['rules'])->explode(',')->filter()->join('|')
                 )
             );
         }
@@ -238,7 +238,7 @@ class ChildComponentCode extends BaseCode
                 ],
                 [
                     $field['column'],
-                    ($field['attributes']['type'] == 'checkbox') ? '0' : "''",
+                    ($field['fieldAttributes']['type'] == 'checkbox') ? '0' : "''",
                 ],
                 Template::getAddFieldTemplate()
             );

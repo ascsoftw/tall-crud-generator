@@ -11,6 +11,15 @@ class ViewCode extends BaseCode
         $this->tallProperties = $tallProperties;
     }
 
+    public function getAlpineCode()
+    {
+        if (! $this->tallProperties->isHideColumnsEnabled()) {
+            return '';
+        }
+
+        return Template::getAlpineCode();
+    }
+
     public function getAddLink()
     {
         if (! $this->tallProperties->isAddFeatureEnabled()) {
@@ -211,7 +220,7 @@ class ViewCode extends BaseCode
 
     public function getSortIconHtml($column)
     {
-        return '<x:tall-crud-generator::sort-icon sortField="'.$column.'" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
+        return '<x-tall-crud-sort-icon sortField="'.$column.'" :sort-by="$sortBy" :sort-asc="$sortAsc" />';
     }
 
     public function getHeaderHtml($label, $column = null, $isSortable = false)
@@ -235,7 +244,9 @@ class ViewCode extends BaseCode
             $slot = $label;
         }
 
-        return $this->encapsulateTableColumn($this->getTableColumnHtml($slot), $label, 4);
+        $params = $this->getHideColumnHtml($label);
+
+        return $this->getTableColumnHtml($slot, $params);
     }
 
     public function getTableSlotHtml($f)
@@ -246,31 +257,30 @@ class ViewCode extends BaseCode
             $slot = $f['slot'];
         }
 
+        $params = $this->getHideColumnHtml($f['label']);
         $html = $this->getTableColumnHtml(
             str_replace(
                 '##COLUMN_NAME##',
                 $slot,
                 Template::getTableColumnSlot()
-            )
+            ),
+            $params
         );
 
-        return $this->encapsulateTableColumn($html, $f['label'], 5);
+        return $html;
     }
 
-    public function encapsulateTableColumn($slot, $label, $indent = 4)
+    public function getHideColumnHtml($label)
     {
         if (! $this->tallProperties->isHideColumnsEnabled()) {
-            return $slot;
+            return '';
         }
 
-        $preTag = str_replace(
+        return str_replace(
             '##LABEL##',
             $label,
             Template::getHideColumnIfCondition()
-        ).$this->newLines(1, $indent);
-        $postTag = $this->newLines(1, $indent).'@endif';
-
-        return $preTag . $slot . $postTag;
+        );
     }
 
     public function getTableSlotForEagerLoad($field)
