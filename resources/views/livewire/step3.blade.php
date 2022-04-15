@@ -60,7 +60,7 @@
         </x-tall-crud-table-column>
         <x-tall-crud-table-column>
             @if (!$this->addAndEditDisabled)
-            <x-tall-crud-button wire:click.prevent="showAttributes({{$i}})" mode="edit" class="mr-8 mt-4">
+            <x-tall-crud-button wire:click.prevent="showFieldAttributes({{$i}})" mode="edit" class="mr-8 mt-4">
                 Attributes
             </x-tall-crud-button>
             @endif
@@ -80,7 +80,7 @@
 </div>
 
 @if (!$this->addAndEditDisabled)
-<x-tall-crud-dialog-modal wire:model="confirmingAttributes">
+<x-tall-crud-dialog-modal wire:model="confirmingFieldAttributes">
     <x-slot name="title">
         Attributes
     </x-slot>
@@ -91,7 +91,7 @@
                 <x-tall-crud-label>Enter Validations (Comma separated)
                     <x-tall-crud-tag wire:click="clearRules()">Clear Options</x-tall-crud-tag>
                 </x-tall-crud-label>
-                <x-tall-crud-input wire:model.defer="attributes.rules" class="block mt-1 w-full"
+                <x-tall-crud-input wire:model.defer="fieldAttributes.rules" class="block mt-1 w-full"
                     type="text" />
 
                 Popular Validations:
@@ -103,24 +103,24 @@
 
             <div class="mt-4">
                 <x-tall-crud-label>Field Type</x-tall-crud-label>
-                <x-tall-crud-select class="block mt-1 w-1/4" wire:model="attributes.type">
+                <x-tall-crud-select class="block mt-1 w-1/4" wire:model="fieldAttributes.type">
                     <option value="input">Input</option>
                     <option value="select">Select</option>
                     <option value="checkbox">Checkbox</option>
                 </x-tall-crud-select>
             </div>
 
-            @if ($attributes['type'] == 'select')
+            @if ($fieldAttributes['type'] == 'select')
             <x-tall-crud-label>Select Options (add as JSON)</x-tall-crud-label>
-            <x-tall-crud-input class="block mt-1 w-full" type="text" wire:model.defer="attributes.options" />
+            <x-tall-crud-input class="block mt-1 w-full" type="text" wire:model.defer="fieldAttributes.options" />
             @endif
         </div>
     </x-slot>
 
     <x-slot name="footer">
-        <x-tall-crud-button wire:click="$set('confirmingAttributes', false)">Cancel
+        <x-tall-crud-button wire:click="$set('confirmingFieldAttributes', false)">Cancel
         </x-tall-crud-button>
-        <x-tall-crud-button mode="add" wire:click="setAttributes()">Save</x-tall-crud-button>
+        <x-tall-crud-button mode="add" wire:click="setFieldAttributes()">Save</x-tall-crud-button>
     </x-slot>
 </x-tall-crud-dialog-modal>
 @endif
