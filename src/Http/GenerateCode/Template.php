@@ -217,7 +217,7 @@ EOT;
     public static function getTableColumnSlot()
     {
         return <<<'EOT'
-{{ $result->##COLUMN_NAME##}}
+{{ $result->##COLUMN_NAME## }}
 EOT;
     }
 
@@ -786,6 +786,7 @@ EOT;
     public static function getFilterDropdownTemplate()
     {
         return <<<'EOT'
+
                 <x-tall-crud-filter :filters=$filters />
 EOT;
     }
