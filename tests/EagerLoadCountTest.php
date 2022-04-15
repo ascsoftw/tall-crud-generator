@@ -130,7 +130,7 @@ class EagerLoadCountTest extends TestCase
 
         $props = $this->component->get('props');
 
-        $this->assertStringContainsString('{{ $result->tags_count}}</td>', $props['html']['table_slot']);
-        $this->assertStringContainsString('{{ $result->categories_count}}</td>', $props['html']['table_slot']);
+        $this->assertStringContainsString('{{ $result->tags_count }}</td>', $props['html']['table_slot']);
+        $this->assertStringContainsString('{{ $result->categories_count }}</td>', $props['html']['table_slot']);
     }
 }

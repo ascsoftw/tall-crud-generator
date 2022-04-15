@@ -150,13 +150,13 @@ class EagerLoadTest extends TestCase
         $props = $this->component->get('props');
 
         $brandSlotCode = <<<'EOT'
-{{ $result->brand?->name}}</td>
+{{ $result->brand?->name }}</td>
 EOT;
         $categorySlotCode = <<<'EOT'
-{{ $result->categories->implode('name', ',')}}</td>
+{{ $result->categories->implode('name', ',') }}</td>
 EOT;
         $tagSlotCode = <<<'EOT'
-{{ $result->tags->implode('name', ',')}}</td>
+{{ $result->tags->implode('name', ',') }}</td>
 EOT;
 
         $this->assertStringContainsString($brandSlotCode, $props['html']['table_slot']);
