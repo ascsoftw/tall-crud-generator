@@ -57,7 +57,7 @@ class BasicAddEditTest extends TestCase
     {
         $this->component
             ->call('addField')
-            ->assertMethodWired('showAttributes');
+            ->assertMethodWired('showFieldAttributes');
     }
 
     public function test_validation_can_be_applied()
@@ -65,18 +65,18 @@ class BasicAddEditTest extends TestCase
         $this->component
             ->call('addField')
             ->set('fields.0.column', 'name')
-            ->assertMethodWired('showAttributes')
-            ->call('showAttributes', 0)
-            ->assertPropertyWired('attributes.rules')
-            ->assertPropertyWired('attributes.type')
+            ->assertMethodWired('showFieldAttributes')
+            ->call('showFieldAttributes', 0)
+            ->assertPropertyWired('fieldAttributes.rules')
+            ->assertPropertyWired('fieldAttributes.type')
 
             ->call('addRule', 'required')
-            ->assertSet('attributes.rules', 'required,')
+            ->assertSet('fieldAttributes.rules', 'required,')
 
-            ->call('setAttributes');
+            ->call('setFieldAttributes');
 
         $fields = $this->component->get('fields');
-        $this->assertEquals('required,', $fields[0]['attributes']['rules']);
+        $this->assertEquals('required,', $fields[0]['fieldAttributes']['rules']);
     }
 
     public function test_field_type_can_be_changed()
@@ -84,13 +84,13 @@ class BasicAddEditTest extends TestCase
         $this->component
             ->call('addField')
             ->set('fields.0.column', 'name')
-            ->call('showAttributes', 0)
+            ->call('showFieldAttributes', 0)
             ->call('addRule', 'required')
-            ->set('attributes.type', 'checkbox')
-            ->call('setAttributes');
+            ->set('fieldAttributes.type', 'checkbox')
+            ->call('setFieldAttributes');
 
         $fields = $this->component->get('fields');
-        $this->assertEquals('checkbox', $fields[0]['attributes']['type']);
+        $this->assertEquals('checkbox', $fields[0]['fieldAttributes']['type']);
     }
 
     public function test_our_standard_format()
