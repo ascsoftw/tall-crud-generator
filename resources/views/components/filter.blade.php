@@ -15,10 +15,10 @@
                 <x-tall-crud-input class="block mt-1 w-full" type="date" wire:model="selectedFilters.{{$f}}" />
             @elseif(isset($filter['multiple']) && $filter['multiple'])
                 @foreach($filter['options'] as $o)
-                <x-tall-crud-checkbox-wrapper class="mt-2">
+                <x-tall-crud-label class="ml-2 mt-2">
                     <x-tall-crud-checkbox wire:model="selectedFilters.{{$f}}" value="{{ $o['key'] }}" />
-                    <x-tall-crud-label class="ml-2">{{$o['label']}}</x-tall-crud-label>
-                </x-tall-crud-checkbox-wrapper>
+                    {{$o['label']}}
+                </x-tall-crud-label>
                 @endforeach
             @else 
                 <x-tall-crud-select class="w-3/4" wire:model="selectedFilters.{{$f}}">

@@ -27,10 +27,10 @@
         </x-tall-crud-accordion-header>
 
         <x-tall-crud-accordion-wrapper ref="advancedTab2" tab="2">
-            <x-tall-crud-checkbox-wrapper>
-                <x-tall-crud-label>Enable Flash Messages:</x-tall-crud-label>
+            <x-tall-crud-label class="mt-2">
+                Enable Flash Messages:
                 <x-tall-crud-checkbox class="ml-2" wire:model.defer="flashMessages.enable" />
-            </x-tall-crud-checkbox-wrapper>
+            </x-tall-crud-label>
 
             @foreach (['add', 'edit', 'delete'] as $key)
             <div class="mt-4">
@@ -48,11 +48,10 @@
             </x-slot>
         </x-tall-crud-accordion-header>
         <x-tall-crud-accordion-wrapper ref="advancedTab3" tab="3">
-            <x-tall-crud-checkbox-wrapper>
-                <x-tall-crud-label>Show Pagination Dropdown:</x-tall-crud-label>
-                <x-tall-crud-checkbox class="ml-2"
-                    wire:model.defer="advancedSettings.table_settings.showPaginationDropdown" />
-            </x-tall-crud-checkbox-wrapper>
+            <x-tall-crud-label class="mt-2">
+                Show Pagination Dropdown:
+                <x-tall-crud-checkbox class="ml-2" wire:model.defer="advancedSettings.table_settings.showPaginationDropdown" />
+            </x-tall-crud-label>
             <x-tall-crud-checkbox-wrapper class="mt-4">
                 <x-tall-crud-label>Records Per Page: </x-tall-crud-label>
                 <x-tall-crud-select class="block mt-1 w-1/6 ml-2"
@@ -62,16 +61,14 @@
                     @endforeach
                 </x-tall-crud-select>
             </x-tall-crud-checkbox-wrapper>
-            <x-tall-crud-checkbox-wrapper class="mt-4">
-                <x-tall-crud-label>Allow User to Hide Column in Listing <span class="italic">(only works with Alpine v3):</span></x-tall-crud-label>
-                <x-tall-crud-checkbox class="ml-2"
-                    wire:model.defer="advancedSettings.table_settings.showHideColumns" />
-            </x-tall-crud-checkbox-wrapper>
-            <x-tall-crud-checkbox-wrapper class="mt-4">
-                <x-tall-crud-label>Enable Bulk Actions:</x-tall-crud-label>
-                <x-tall-crud-checkbox class="ml-2"
-                    wire:model="advancedSettings.table_settings.bulkActions" />
-            </x-tall-crud-checkbox-wrapper>
+            <x-tall-crud-label class="mt-4">
+                Allow User to Hide Column in Listing <span class="italic">(only works with Alpine v3):</span>
+                <x-tall-crud-checkbox class="ml-2" wire:model.defer="advancedSettings.table_settings.showHideColumns" />
+            </x-tall-crud-label>
+            <x-tall-crud-label class="mt-4">
+                Enable Bulk Actions
+                <x-tall-crud-checkbox class="ml-2" wire:model.defer="advancedSettings.table_settings.bulkActions" />
+            </x-tall-crud-label>
             @if($this->advancedSettings['table_settings']['bulkActions'])
             <x-tall-crud-checkbox-wrapper>
                 <x-tall-crud-label>Column to Change on Bulk Action: </x-tall-crud-label>
@@ -86,7 +83,7 @@
                 </x-tall-crud-select>
             </x-tall-crud-checkbox-wrapper>
             @endif
-            <div class="mt-4">The Table uses Blue Theme. You can change the theme by changing <span class="font-bold text-blue-700">blue</span> classes to other class from <a href="https://v2.tailwindcss.com/docs/customizing-colors" target="_blank" class="text-blue-300 cursor-pointer">v2</a> or <a class="text-blue-300 cursor-pointer" target="_blank" href="https://tailwindcss.com/docs/customizing-colors">v3</a></div>
+            <div class="mt-4">The Table uses Blue Theme. You can change the theme by changing <span class="font-bold text-blue-700">blue</span> classes to other class. Check <a href="https://v2.tailwindcss.com/docs/customizing-colors" target="_blank" class="text-blue-300 cursor-pointer">v2</a> or <a class="text-blue-300 cursor-pointer" target="_blank" href="https://tailwindcss.com/docs/customizing-colors">v3</a> for other classes.</div>
             <div class="mt-4">
                 <x-tall-crud-label>Class on th:</x-tall-crud-label>
                 <x-tall-crud-input type="text" class="mt-1 block w-1/4"
@@ -258,10 +255,10 @@
                     </x-tall-crud-error-message> @enderror
                 </div>
                 @endif
-                <x-tall-crud-checkbox-wrapper class="mt-4">
-                    <x-tall-crud-label>Filter Multiple Values</x-tall-crud-label>
+                <x-tall-crud-label class="mt-4">
+                    Filter Multiple Values
                     <x-tall-crud-checkbox class="ml-2" wire:model.defer="filter.isMultiple" />
-                </x-tall-crud-checkbox-wrapper>
+                </x-tall-crud-label>
                 @endif
             </div>
             @endif

@@ -115,21 +115,22 @@
             @if ($belongsToManyRelation['isValid'])
             <div class="mt-4 p-4 rounded border border-gray-300">
                 @if ($this->addFeature)
-                <x-tall-crud-checkbox-wrapper>
-                    <x-tall-crud-label>Show in Add Form:</x-tall-crud-label>
-                    <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inAdd" />
-                </x-tall-crud-checkbox-wrapper>
+                    <x-tall-crud-label class="mt-2">
+                        Show in Add Form:
+                        <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inAdd" />
+                    </x-tall-crud-label>
                 @endif
                 @if ($this->editFeature)
-                <x-tall-crud-checkbox-wrapper>
-                    <x-tall-crud-label>Show in Edit Form:</x-tall-crud-label>
-                    <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inEdit" />
-                </x-tall-crud-checkbox-wrapper>
+                    <x-tall-crud-label class="mt-2">
+                        Show in Edit Form:
+                        <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToManyRelation.inEdit" />
+                    </x-tall-crud-label>
                 @endif
-                <x-tall-crud-checkbox-wrapper class="mt-4">
-                    <x-tall-crud-label>Display as Multi-Select (Default is Checkboxes):</x-tall-crud-label>
+                <x-tall-crud-label class="mt-2">
+                    Display as Multi-Select (Default is Checkboxes):
                     <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToManyRelation.isMultiSelect" />
-                </x-tall-crud-checkbox-wrapper>
+                </x-tall-crud-label>
+
                 <div class="mt-4">
                     <x-tall-crud-label>Display Column</x-tall-crud-label>
                     <x-tall-crud-select class="block mt-1 w-1/2"
@@ -181,16 +182,16 @@
             @if ($belongsToRelation['isValid'])
             <div class="mt-4 p-4 rounded border border-gray-300">
                 @if ($this->addFeature)
-                <x-tall-crud-checkbox-wrapper>
-                    <x-tall-crud-label>Show in Add Form:</x-tall-crud-label>
-                    <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToRelation.inAdd" />
-                </x-tall-crud-checkbox-wrapper>
+                    <x-tall-crud-label class="mt-2">
+                        Show in Add Form:
+                        <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToRelation.inAdd" />
+                    </x-tall-crud-label>
                 @endif
                 @if ($this->editFeature)
-                <x-tall-crud-checkbox-wrapper>
-                    <x-tall-crud-label>Show in Edit Form:</x-tall-crud-label>
-                    <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToRelation.inEdit" />
-                </x-tall-crud-checkbox-wrapper>
+                    <x-tall-crud-label class="mt-2">
+                        Show in Edit Form:
+                        <x-tall-crud-checkbox class="ml-2" wire:model.defer="belongsToRelation.inEdit" />
+                    </x-tall-crud-label>
                 @endif
                 <div class="mt-4">
                     <x-tall-crud-label>Display Column</x-tall-crud-label>
@@ -290,10 +291,10 @@
             </div>
 
             @if ($withCountRelation['isValid'])
-            <x-tall-crud-checkbox-wrapper class="mt-4">
-                <x-tall-crud-label>Make Heading Sortable</x-tall-crud-label>
-                <x-tall-crud-checkbox class="ml-2" wire:model.defer="withCountRelation.isSortable" />
-            </x-tall-crud-checkbox-wrapper>
+                <x-tall-crud-label class="mt-2">
+                    Make Heading Sortable
+                    <x-tall-crud-checkbox class="ml-2" wire:model.defer="withCountRelation.isSortable" />
+                </x-tall-crud-label>
             @endif
         </div>
     </x-slot>
