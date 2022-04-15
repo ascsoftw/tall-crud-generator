@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.2.0] - 2021-11-07
+## [2.4.0] - 2022-04-15
+- Support for Laravel 9
+
+## [2.3.0] - 2021-11-07
 - Reformat Filter Code for Generated Component
 
 ## [2.2.0] - 2021-10-29
