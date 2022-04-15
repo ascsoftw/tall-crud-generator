@@ -91,7 +91,6 @@ EOT;
 
         $this->assertEquals(Template::getHideColumnInitCode(), $props['code']['hide_columns']['init']);
         $this->assertEquals(Template::getHideColumnInitCode(), $componentCode->getHideColumnInitCode());
-
     }
 
     public function test_view_contains_dropdown()

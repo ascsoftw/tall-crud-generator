@@ -88,7 +88,6 @@ class TallCrudGeneratorServiceProvider extends ServiceProvider
         Blade::component('tall-crud-generator::components.input-search', 'tall-crud-input-search');
         Blade::component('tall-crud-generator::components.columns-dropdown', 'tall-crud-columns-dropdown');
         Blade::component('tall-crud-generator::components.page-dropdown', 'tall-crud-page-dropdown');
-
     }
 
     public function defineMacros()

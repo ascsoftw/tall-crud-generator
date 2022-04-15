@@ -245,6 +245,7 @@ class ViewCode extends BaseCode
         }
 
         $params = $this->getHideColumnHtml($label);
+
         return $this->getTableColumnHtml($slot, $params);
     }
 
