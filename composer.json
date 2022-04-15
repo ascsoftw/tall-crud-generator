@@ -24,10 +24,10 @@
         }
     ],
     "require-dev": {
-        "livewire/livewire": "^2.10",
-        "orchestra/testbench": "^6.18",
+        "livewire/livewire": "^2.5|^2.10",
+        "orchestra/testbench": "^6.18|^7.0",
         "phpunit/phpunit": "^9.3",
-        "christophrumpel/missing-livewire-assertions": "^0.4.0"
+        "christophrumpel/missing-livewire-assertions": "^0.4.0|0.5.0"
     },
     "extra": {
         "laravel": {
